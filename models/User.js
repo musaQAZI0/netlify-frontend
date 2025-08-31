@@ -248,6 +248,7 @@ userSchema.methods.getAuthStatus = function() {
 
 // Method to get public profile
 userSchema.methods.getPublicProfile = function() {
+  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://yourdomain.com' : 'http://localhost:3001';
   return {
     id: this._id,
     email: this.email,
@@ -260,7 +261,9 @@ userSchema.methods.getPublicProfile = function() {
     isVerified: this.isVerified,
     createdAt: this.createdAt,
     loginMethod: this.loginMethod,
-    authStatus: this.getAuthStatus()
+    authStatus: this.getAuthStatus(),
+    profileUrl: `${baseUrl}/profile/${this._id}`,
+    apiEndpoint: `${baseUrl}/api/users/${this._id}`
   };
 };
 

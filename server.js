@@ -15,15 +15,15 @@ const app = express();
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const eventRoutes = require('./routes/events');
+const financeRoutes = require('./routes/finance');
+const appRoutes = require('./routes/apps');
+const dashboardRoutes = require('./routes/dashboard');
 const pageRoutes = require('./routes/pages');
 
 // Connect to MongoDB
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crowd_events', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/crowd_events');
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('MongoDB connection error:', error);
@@ -44,7 +44,7 @@ app.use(helmet({
       styleSrcAttr: ["'unsafe-inline'"], // Allow inline styles
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://api.google.com", "https://accounts.google.com"]
+      connectSrc: ["'self'", "https://api.google.com", "https://accounts.google.com", "https://crowd-backend-zxxp.onrender.com"]
     }
   }
 }));
@@ -112,6 +112,9 @@ app.use((req, res, next) => {
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/finance', financeRoutes);
+app.use('/api/apps', appRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // Page routes
 app.use('/', pageRoutes);
@@ -121,7 +124,17 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    server: `http://localhost:${PORT}`,
+    endpoints: {
+      auth: `http://localhost:${PORT}/api/auth`,
+      users: `http://localhost:${PORT}/api/users`,
+      events: `http://localhost:${PORT}/api/events`,
+      finance: `http://localhost:${PORT}/api/finance`,
+      apps: `http://localhost:${PORT}/api/apps`,
+      dashboard: `http://localhost:${PORT}/api/dashboard`,
+      frontend: `http://localhost:${PORT}`
+    }
   });
 });
 
@@ -143,6 +156,15 @@ app.use('*', (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📍 API endpoints available at:`);
+  console.log(`   • Health: http://localhost:${PORT}/api/health`);
+  console.log(`   • Auth: http://localhost:${PORT}/api/auth`);
+  console.log(`   • Users: http://localhost:${PORT}/api/users`);
+  console.log(`   • Events: http://localhost:${PORT}/api/events`);
+  console.log(`   • Finance: http://localhost:${PORT}/api/finance`);
+  console.log(`   • Apps: http://localhost:${PORT}/api/apps`);
+  console.log(`   • Dashboard: http://localhost:${PORT}/api/dashboard`);
+  console.log(`   • Frontend: http://localhost:${PORT}`);
 });

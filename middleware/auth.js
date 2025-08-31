@@ -197,7 +197,12 @@ const getUserAuthStatus = async (userId) => {
     if (!user) {
       return null;
     }
-    return user.getAuthStatus();
+    const baseUrl = process.env.NODE_ENV === 'production' ? 'https://yourdomain.com' : 'http://localhost:3001';
+    return {
+      ...user.getAuthStatus(),
+      profileUrl: `${baseUrl}/profile/${userId}`,
+      apiEndpoint: `${baseUrl}/api/users/${userId}`
+    };
   } catch (error) {
     console.error('Error getting auth status:', error);
     return null;
