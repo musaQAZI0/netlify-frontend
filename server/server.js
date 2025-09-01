@@ -11,6 +11,11 @@ require('dotenv').config();
 
 const app = express();
 
+// Trust proxy for production deployment (fixes rate limiting issues)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');

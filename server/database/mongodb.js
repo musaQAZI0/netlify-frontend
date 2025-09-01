@@ -11,10 +11,7 @@ class MongoDB {
   async connect() {
     try {
       const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/crowd_events';
-      this.connection = await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
+      this.connection = await mongoose.connect(uri);
       console.log(`MongoDB connected: ${this.baseUrl}/api/health`);
       return this.connection;
     } catch (error) {
