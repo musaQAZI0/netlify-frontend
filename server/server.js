@@ -49,7 +49,7 @@ app.use(helmet({
       styleSrcAttr: ["'unsafe-inline'"], // Allow inline styles
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://api.google.com", "https://accounts.google.com", "https://crowd-backend-zxxp.onrender.com"]
+      connectSrc: ["'self'", "https://api.google.com", "https://accounts.google.com", "https://crowd-backend-zxxp.onrender.com", "http://localhost:3002", "http://localhost:3001"]
     }
   }
 }));
@@ -70,7 +70,7 @@ const authLimiter = rateLimit({
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? process.env.FRONTEND_URL 
-    : ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:5500'],
+    : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8001', 'http://localhost:8080', 'http://127.0.0.1:5500'],
   credentials: true
 };
 app.use(cors(corsOptions));
@@ -126,19 +126,20 @@ app.use('/', pageRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
+  const currentPort = process.env.PORT || 3002;
   res.json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
     database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
-    server: `http://localhost:${PORT}`,
+    server: `http://localhost:${currentPort}`,
     endpoints: {
-      auth: `http://localhost:${PORT}/api/auth`,
-      users: `http://localhost:${PORT}/api/users`,
-      events: `http://localhost:${PORT}/api/events`,
-      finance: `http://localhost:${PORT}/api/finance`,
-      apps: `http://localhost:${PORT}/api/apps`,
-      dashboard: `http://localhost:${PORT}/api/dashboard`,
-      frontend: `http://localhost:${PORT}`
+      auth: `http://localhost:${currentPort}/api/auth`,
+      users: `http://localhost:${currentPort}/api/users`,
+      events: `http://localhost:${currentPort}/api/events`,
+      finance: `http://localhost:${currentPort}/api/finance`,
+      apps: `http://localhost:${currentPort}/api/apps`,
+      dashboard: `http://localhost:${currentPort}/api/dashboard`,
+      frontend: `http://localhost:${currentPort}`
     }
   });
 });
@@ -159,7 +160,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
