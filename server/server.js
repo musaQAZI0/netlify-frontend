@@ -69,7 +69,11 @@ const authLimiter = rateLimit({
 // CORS configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL 
+    ? [
+        'https://relaxed-syrniki-d198c9.netlify.app',
+        'https://serene-florentine-4e8889.netlify.app',
+        process.env.FRONTEND_URL
+      ].filter(Boolean) // Remove any undefined values
     : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8001', 'http://localhost:8080', 'http://127.0.0.1:5500'],
   credentials: true
 };
