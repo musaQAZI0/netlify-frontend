@@ -72,6 +72,8 @@ const corsOptions = {
     ? [
         'https://relaxed-syrniki-d198c9.netlify.app',
         'https://serene-florentine-4e8889.netlify.app',
+        'https://magnificent-haupia-4fdebf.netlify.app',
+        'https://dazzling-pithivier-2cf3ce.netlify.app',
         process.env.FRONTEND_URL
       ].filter(Boolean) // Remove any undefined values
     : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8001', 'http://localhost:8080', 'http://127.0.0.1:5500'],
