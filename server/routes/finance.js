@@ -354,6 +354,46 @@ router.get('/dashboard', authenticateToken, async (req, res) => {
   }
 });
 
+// Instant payout endpoint
+router.post('/payouts/instant', authenticateToken, async (req, res) => {
+  try {
+    const { accountId, amount, description } = req.body;
+    const userId = req.user.userId;
+
+    // Validate request data
+    if (!accountId || !amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid payout data'
+      });
+    }
+
+    // Mock payout processing (in real app, integrate with payment processor)
+    const payout = {
+      id: `payout_${Date.now()}`,
+      userId,
+      accountId,
+      amount,
+      description: description || 'Instant payout',
+      status: 'completed',
+      processedAt: new Date().toISOString(),
+      estimatedArrival: new Date(Date.now() + 60000).toISOString() // 1 minute from now
+    };
+
+    res.json({
+      success: true,
+      message: 'Instant payout processed successfully',
+      payout
+    });
+  } catch (error) {
+    console.error('Error processing instant payout:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error processing instant payout'
+    });
+  }
+});
+
 // Health check for finance API
 router.get('/health', (req, res) => {
   res.json({
@@ -363,6 +403,7 @@ router.get('/health', (req, res) => {
     endpoints: {
       accounts: `${baseUrl}/api/finance/accounts`,
       dashboard: `${baseUrl}/api/finance/dashboard`,
+      payouts: `${baseUrl}/api/finance/payouts/instant`,
       health: `${baseUrl}/api/finance/health`
     }
   });
