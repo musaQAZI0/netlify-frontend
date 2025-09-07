@@ -23,14 +23,69 @@ router.get('/', async (req, res) => {
       sortOrder = 'asc'
     } = req.query;
     
-    // Simplified query for debugging
-    let query = {};
+    // Build query object
+    let query = { 
+      status: 'published', 
+      isPublic: true,
+      startDate: { $gte: new Date() } // Only future events
+    };
     
-    // Skip all filtering for now - just get all events
-    const sortOptions = { _id: 1 };
+    // Filter by featured
+    if (featured === 'true') {
+      query.isFeatured = true;
+    }
     
-    // Execute query with pagination - simplified for debugging
+    // Filter by category
+    if (category) {
+      query.category = new RegExp(category, 'i');
+    }
+    
+    // Search by query (title, description, tags)
+    if (q) {
+      query.$or = [
+        { title: new RegExp(q, 'i') },
+        { description: new RegExp(q, 'i') },
+        { tags: { $in: [new RegExp(q, 'i')] } },
+        { category: new RegExp(q, 'i') }
+      ];
+    }
+    
+    // Filter by location
+    if (location) {
+      query.$or = [
+        { 'location.venue': new RegExp(location, 'i') },
+        { 'location.address.city': new RegExp(location, 'i') },
+        { 'location.address.state': new RegExp(location, 'i') },
+        { 'location.address.country': new RegExp(location, 'i') }
+      ];
+    }
+    
+    // Filter by date range
+    if (startDate) {
+      query.startDate.$gte = new Date(startDate);
+    }
+    if (endDate) {
+      query.startDate.$lte = new Date(endDate);
+    }
+    
+    // Filter by price
+    if (isFree === 'true') {
+      query.isFree = true;
+    } else {
+      if (minPrice || maxPrice) {
+        query['ticketTypes.price'] = {};
+        if (minPrice) query['ticketTypes.price'].$gte = parseFloat(minPrice);
+        if (maxPrice) query['ticketTypes.price'].$lte = parseFloat(maxPrice);
+      }
+    }
+    
+    // Sort options
+    const sortOptions = {};
+    sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
+    
+    // Execute query with pagination
     const events = await Event.find(query)
+      .populate('organizerId', 'name email')
       .sort(sortOptions)
       .skip((parseInt(page) - 1) * parseInt(limit))
       .limit(parseInt(limit));
@@ -38,11 +93,43 @@ router.get('/', async (req, res) => {
     // Get total count for pagination
     const totalEvents = await Event.countDocuments(query);
     
-    // Minimal response for debugging
+    // Format response
     const formattedEvents = events.map(event => ({
       id: event._id,
-      title: event.title || 'Untitled Event',
-      category: event.category || 'other'
+      title: event.title,
+      description: event.description,
+      category: event.category,
+      subcategory: event.subcategory,
+      organizer: {
+        id: event.organizerId || null,
+        name: event.organizerName || 'Unknown Organizer',
+        email: event.organizerEmail || 'No Email'
+      },
+      startDate: event.startDate,
+      endDate: event.endDate,
+      timezone: event.timezone,
+      location: event.location || {
+        type: 'physical',
+        venue: null,
+        address: null,
+        onlineDetails: null
+      },
+      images: event.images,
+      primaryImage: event.primaryImage || event.images?.[0]?.url,
+      ticketTypes: event.ticketTypes,
+      isFree: event.isFree,
+      totalCapacity: event.totalCapacity,
+      ticketsSold: event.ticketsSold,
+      ticketsAvailable: event.totalCapacity - event.ticketsSold,
+      isSoldOut: event.totalCapacity && event.ticketsSold >= event.totalCapacity,
+      isFeatured: event.isFeatured,
+      tags: event.tags,
+      views: event.views,
+      likes: event.likes,
+      publishedAt: event.publishedAt,
+      createdAt: event.createdAt,
+      eventUrl: `${req.protocol}://${req.get('host')}/event/${event._id}`,
+      slug: event.slug
     }));
     
     res.json({
