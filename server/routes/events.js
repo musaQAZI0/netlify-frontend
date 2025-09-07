@@ -209,7 +209,41 @@ router.get('/search', async (req, res) => {
       .sort({ startDate: 1 })
       .limit(parseInt(limit));
     
-    const formattedEvents = events.map(event => event.getPublicData());
+    const formattedEvents = events.map(event => ({
+      id: event._id,
+      title: event.title,
+      description: event.description,
+      category: event.category,
+      subcategory: event.subcategory,
+      organizer: event.organizerId ? {
+        id: event.organizerId._id,
+        name: event.organizerName || event.organizerId.name,
+        email: event.organizerEmail || event.organizerId.email
+      } : {
+        id: null,
+        name: event.organizerName || 'Unknown Organizer',
+        email: event.organizerEmail || 'No Email'
+      },
+      startDate: event.startDate,
+      endDate: event.endDate,
+      timezone: event.timezone,
+      location: event.location,
+      images: event.images,
+      primaryImage: event.primaryImage || event.images?.[0]?.url,
+      ticketTypes: event.ticketTypes,
+      isFree: event.isFree,
+      totalCapacity: event.totalCapacity,
+      ticketsSold: event.ticketsSold,
+      ticketsAvailable: event.totalCapacity - event.ticketsSold,
+      isSoldOut: event.totalCapacity && event.ticketsSold >= event.totalCapacity,
+      isFeatured: event.isFeatured,
+      tags: event.tags,
+      views: event.views,
+      likes: event.likes,
+      publishedAt: event.publishedAt,
+      createdAt: event.createdAt,
+      slug: event.slug
+    }));
     
     res.json({
       success: true,
@@ -310,13 +344,38 @@ router.get('/:idOrSlug', async (req, res) => {
     res.json({
       success: true,
       event: {
-        ...event.getPublicData(),
+        id: event._id,
+        title: event.title,
+        description: event.description,
+        category: event.category,
+        subcategory: event.subcategory,
         organizer: {
           id: event.organizerId._id,
           name: event.organizerName || event.organizerId.name,
           email: event.organizerEmail || event.organizerId.email,
           profilePicture: event.organizerId.profilePicture
-        }
+        },
+        startDate: event.startDate,
+        endDate: event.endDate,
+        timezone: event.timezone,
+        location: event.location,
+        images: event.images,
+        primaryImage: event.primaryImage || event.images?.[0]?.url,
+        ticketTypes: event.ticketTypes,
+        isFree: event.isFree,
+        totalCapacity: event.totalCapacity,
+        ticketsSold: event.ticketsSold,
+        ticketsAvailable: event.totalCapacity - event.ticketsSold,
+        isSoldOut: event.totalCapacity && event.ticketsSold >= event.totalCapacity,
+        isFeatured: event.isFeatured,
+        tags: event.tags,
+        goodToKnow: event.goodToKnow,
+        views: event.views,
+        likes: event.likes,
+        publishedAt: event.publishedAt,
+        createdAt: event.createdAt,
+        slug: event.slug,
+        eventUrl: `${req.protocol}://${req.get('host')}/event/${event._id}`
       }
     });
     
@@ -371,7 +430,35 @@ router.post('/', authenticateToken, async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Event created successfully',
-      event: event.getPublicData()
+      event: {
+        id: event._id,
+        title: event.title,
+        description: event.description,
+        category: event.category,
+        subcategory: event.subcategory,
+        organizerId: event.organizerId,
+        organizerName: event.organizerName,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        timezone: event.timezone,
+        location: event.location,
+        images: event.images,
+        primaryImage: event.primaryImage || event.images?.[0]?.url,
+        ticketTypes: event.ticketTypes,
+        isFree: event.isFree,
+        totalCapacity: event.totalCapacity,
+        ticketsSold: event.ticketsSold,
+        status: event.status,
+        isPublic: event.isPublic,
+        isFeatured: event.isFeatured,
+        tags: event.tags,
+        goodToKnow: event.goodToKnow,
+        views: event.views,
+        likes: event.likes,
+        publishedAt: event.publishedAt,
+        createdAt: event.createdAt,
+        slug: event.slug
+      }
     });
     
   } catch (error) {
@@ -423,7 +510,35 @@ router.put('/:id', authenticateToken, async (req, res) => {
     res.json({
       success: true,
       message: 'Event updated successfully',
-      event: event.getPublicData()
+      event: {
+        id: event._id,
+        title: event.title,
+        description: event.description,
+        category: event.category,
+        subcategory: event.subcategory,
+        organizerId: event.organizerId,
+        organizerName: event.organizerName,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        timezone: event.timezone,
+        location: event.location,
+        images: event.images,
+        primaryImage: event.primaryImage || event.images?.[0]?.url,
+        ticketTypes: event.ticketTypes,
+        isFree: event.isFree,
+        totalCapacity: event.totalCapacity,
+        ticketsSold: event.ticketsSold,
+        status: event.status,
+        isPublic: event.isPublic,
+        isFeatured: event.isFeatured,
+        tags: event.tags,
+        goodToKnow: event.goodToKnow,
+        views: event.views,
+        likes: event.likes,
+        publishedAt: event.publishedAt,
+        createdAt: event.createdAt,
+        slug: event.slug
+      }
     });
     
   } catch (error) {
@@ -505,7 +620,35 @@ router.patch('/:id/publish', authenticateToken, async (req, res) => {
     res.json({
       success: true,
       message: `Event ${publish ? 'published' : 'unpublished'} successfully`,
-      event: event.getPublicData()
+      event: {
+        id: event._id,
+        title: event.title,
+        description: event.description,
+        category: event.category,
+        subcategory: event.subcategory,
+        organizerId: event.organizerId,
+        organizerName: event.organizerName,
+        startDate: event.startDate,
+        endDate: event.endDate,
+        timezone: event.timezone,
+        location: event.location,
+        images: event.images,
+        primaryImage: event.primaryImage || event.images?.[0]?.url,
+        ticketTypes: event.ticketTypes,
+        isFree: event.isFree,
+        totalCapacity: event.totalCapacity,
+        ticketsSold: event.ticketsSold,
+        status: event.status,
+        isPublic: event.isPublic,
+        isFeatured: event.isFeatured,
+        tags: event.tags,
+        goodToKnow: event.goodToKnow,
+        views: event.views,
+        likes: event.likes,
+        publishedAt: event.publishedAt,
+        createdAt: event.createdAt,
+        slug: event.slug
+      }
     });
     
   } catch (error) {
@@ -569,7 +712,41 @@ router.get('/organizer/:organizerId', async (req, res) => {
     
     res.json({
       success: true,
-      events: events.map(event => event.getPublicData())
+      events: events.map(event => ({
+        id: event._id,
+        title: event.title,
+        description: event.description,
+        category: event.category,
+        subcategory: event.subcategory,
+        organizer: event.organizerId ? {
+          id: event.organizerId._id,
+          name: event.organizerName || event.organizerId.name,
+          email: event.organizerEmail || event.organizerId.email
+        } : {
+          id: null,
+          name: event.organizerName || 'Unknown Organizer',
+          email: event.organizerEmail || 'No Email'
+        },
+        startDate: event.startDate,
+        endDate: event.endDate,
+        timezone: event.timezone,
+        location: event.location,
+        images: event.images,
+        primaryImage: event.primaryImage || event.images?.[0]?.url,
+        ticketTypes: event.ticketTypes,
+        isFree: event.isFree,
+        totalCapacity: event.totalCapacity,
+        ticketsSold: event.ticketsSold,
+        ticketsAvailable: event.totalCapacity - event.ticketsSold,
+        isSoldOut: event.totalCapacity && event.ticketsSold >= event.totalCapacity,
+        isFeatured: event.isFeatured,
+        tags: event.tags,
+        views: event.views,
+        likes: event.likes,
+        publishedAt: event.publishedAt,
+        createdAt: event.createdAt,
+        slug: event.slug
+      }))
     });
     
   } catch (error) {
