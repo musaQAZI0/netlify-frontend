@@ -46,7 +46,7 @@ const eventSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['Business', 'Music', 'Food & Drink', 'Arts', 'Sports', 'Technology', 'Health', 'Travel', 'Education', 'Other']
+    enum: ['music', 'nightlife', 'arts', 'holidays', 'dating', 'hobbies', 'business', 'food', 'other']
   },
   subcategory: String,
   organizerId: {
@@ -88,7 +88,8 @@ const eventSchema = new mongoose.Schema({
       coordinates: {
         lat: Number,
         lng: Number
-      }
+      },
+      placeId: String // Google Places API place identifier
     },
     onlineDetails: {
       platform: String,
@@ -144,6 +145,21 @@ const eventSchema = new mongoose.Schema({
     minAge: Number,
     maxAge: Number,
     description: String
+  },
+  
+  // Good to Know Section
+  goodToKnow: {
+    highlights: [{
+      id: String,
+      type: String,
+      label: String,
+      content: String
+    }],
+    faqs: [{
+      id: String,
+      question: String,
+      answer: String
+    }]
   },
   
   // Analytics
@@ -243,6 +259,7 @@ eventSchema.methods.getPublicData = function() {
     isPublic: this.isPublic,
     isFeatured: this.isFeatured,
     tags: this.tags,
+    goodToKnow: this.goodToKnow,
     views: this.views,
     likes: this.likes,
     publishedAt: this.publishedAt,

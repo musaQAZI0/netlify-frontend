@@ -23,6 +23,7 @@ const eventRoutes = require('./routes/events');
 const financeRoutes = require('./routes/finance');
 const appRoutes = require('./routes/apps');
 const dashboardRoutes = require('./routes/dashboard');
+const organizerRoutes = require('./routes/organizer');
 const pageRoutes = require('./routes/pages');
 
 // Connect to MongoDB
@@ -49,7 +50,7 @@ app.use(helmet({
       styleSrcAttr: ["'unsafe-inline'"], // Allow inline styles
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://api.google.com", "https://accounts.google.com", "https://crowd-backend-zxxp.onrender.com", "http://localhost:3002", "http://localhost:3001"]
+      connectSrc: ["'self'", "https://api.google.com", "https://accounts.google.com", "https://crowd-backend-zxxp.onrender.com", "http://localhost:5000", "http://localhost:3004", "http://localhost:3003", "http://localhost:3002", "http://localhost:3001", "http://localhost:3000"]
     }
   }
 }));
@@ -76,7 +77,7 @@ const corsOptions = {
         'https://dazzling-pithivier-2cf3ce.netlify.app',
         process.env.FRONTEND_URL
       ].filter(Boolean) // Remove any undefined values
-    : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:8001', 'http://localhost:8080', 'http://127.0.0.1:5500'],
+    : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3001', 'http://localhost:8001', 'http://localhost:8080', 'http://127.0.0.1:8080', 'http://127.0.0.1:5500'],
   credentials: true
 };
 app.use(cors(corsOptions));
@@ -126,6 +127,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/apps', appRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/organizer', organizerRoutes);
 
 // Page routes
 app.use('/', pageRoutes);
@@ -145,6 +147,7 @@ app.get('/api/health', (req, res) => {
       finance: `http://localhost:${currentPort}/api/finance`,
       apps: `http://localhost:${currentPort}/api/apps`,
       dashboard: `http://localhost:${currentPort}/api/dashboard`,
+      organizer: `http://localhost:${currentPort}/api/organizer`,
       frontend: `http://localhost:${currentPort}`
     }
   });
@@ -178,5 +181,6 @@ app.listen(PORT, () => {
   console.log(`   • Finance: http://localhost:${PORT}/api/finance`);
   console.log(`   • Apps: http://localhost:${PORT}/api/apps`);
   console.log(`   • Dashboard: http://localhost:${PORT}/api/dashboard`);
+  console.log(`   • Organizer: http://localhost:${PORT}/api/organizer`);
   console.log(`   • Frontend: http://localhost:${PORT}`);
 });
