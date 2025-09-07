@@ -112,11 +112,11 @@ router.get('/', async (req, res) => {
       startDate: event.startDate,
       endDate: event.endDate,
       timezone: event.timezone,
-      location: {
-        type: event.location.type,
-        venue: event.location.venue,
-        address: event.location.address,
-        onlineDetails: event.location.onlineDetails
+      location: event.location || {
+        type: 'physical',
+        venue: null,
+        address: null,
+        onlineDetails: null
       },
       images: event.images,
       primaryImage: event.primaryImage || event.images?.[0]?.url,
