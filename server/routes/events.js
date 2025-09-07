@@ -23,65 +23,11 @@ router.get('/', async (req, res) => {
       sortOrder = 'asc'
     } = req.query;
     
-    // Build query object
-    let query = { 
-      status: 'published', 
-      isPublic: true,
-      startDate: { $gte: new Date() } // Only future events
-    };
+    // Simplified query for debugging
+    let query = {};
     
-    // Filter by featured
-    if (featured === 'true') {
-      query.isFeatured = true;
-    }
-    
-    // Filter by category
-    if (category) {
-      query.category = new RegExp(category, 'i');
-    }
-    
-    // Search by query (title, description, tags)
-    if (q) {
-      query.$or = [
-        { title: new RegExp(q, 'i') },
-        { description: new RegExp(q, 'i') },
-        { tags: { $in: [new RegExp(q, 'i')] } },
-        { category: new RegExp(q, 'i') }
-      ];
-    }
-    
-    // Filter by location
-    if (location) {
-      query.$or = [
-        { 'location.venue': new RegExp(location, 'i') },
-        { 'location.address.city': new RegExp(location, 'i') },
-        { 'location.address.state': new RegExp(location, 'i') },
-        { 'location.address.country': new RegExp(location, 'i') }
-      ];
-    }
-    
-    // Filter by date range
-    if (startDate) {
-      query.startDate.$gte = new Date(startDate);
-    }
-    if (endDate) {
-      query.startDate.$lte = new Date(endDate);
-    }
-    
-    // Filter by price
-    if (isFree === 'true') {
-      query.isFree = true;
-    } else {
-      if (minPrice || maxPrice) {
-        query['ticketTypes.price'] = {};
-        if (minPrice) query['ticketTypes.price'].$gte = parseFloat(minPrice);
-        if (maxPrice) query['ticketTypes.price'].$lte = parseFloat(maxPrice);
-      }
-    }
-    
-    // Sort options
-    const sortOptions = {};
-    sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
+    // Skip all filtering for now - just get all events
+    const sortOptions = { _id: 1 };
     
     // Execute query with pagination - simplified for debugging
     const events = await Event.find(query)
