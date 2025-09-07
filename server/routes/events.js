@@ -92,43 +92,11 @@ router.get('/', async (req, res) => {
     // Get total count for pagination
     const totalEvents = await Event.countDocuments(query);
     
-    // Format response
+    // Minimal response for debugging
     const formattedEvents = events.map(event => ({
       id: event._id,
-      title: event.title,
-      description: event.description,
-      category: event.category,
-      subcategory: event.subcategory,
-      organizer: {
-        id: event.organizerId || null,
-        name: event.organizerName || 'Unknown Organizer',
-        email: event.organizerEmail || 'No Email'
-      },
-      startDate: event.startDate,
-      endDate: event.endDate,
-      timezone: event.timezone,
-      location: event.location || {
-        type: 'physical',
-        venue: null,
-        address: null,
-        onlineDetails: null
-      },
-      images: event.images,
-      primaryImage: event.primaryImage || event.images?.[0]?.url,
-      ticketTypes: event.ticketTypes,
-      isFree: event.isFree,
-      totalCapacity: event.totalCapacity,
-      ticketsSold: event.ticketsSold,
-      ticketsAvailable: event.totalCapacity - event.ticketsSold,
-      isSoldOut: event.totalCapacity && event.ticketsSold >= event.totalCapacity,
-      isFeatured: event.isFeatured,
-      tags: event.tags,
-      views: event.views,
-      likes: event.likes,
-      publishedAt: event.publishedAt,
-      createdAt: event.createdAt,
-      eventUrl: `${req.protocol}://${req.get('host')}/event/${event._id}`,
-      slug: event.slug
+      title: event.title || 'Untitled Event',
+      category: event.category || 'other'
     }));
     
     res.json({
