@@ -83,9 +83,8 @@ router.get('/', async (req, res) => {
     const sortOptions = {};
     sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
     
-    // Execute query with pagination
+    // Execute query with pagination - simplified for debugging
     const events = await Event.find(query)
-      .populate('organizerId', 'name email')
       .sort(sortOptions)
       .skip((parseInt(page) - 1) * parseInt(limit))
       .limit(parseInt(limit));
@@ -100,12 +99,8 @@ router.get('/', async (req, res) => {
       description: event.description,
       category: event.category,
       subcategory: event.subcategory,
-      organizer: event.organizerId ? {
-        id: event.organizerId._id,
-        name: event.organizerName || event.organizerId.name,
-        email: event.organizerEmail || event.organizerId.email
-      } : {
-        id: null,
+      organizer: {
+        id: event.organizerId || null,
         name: event.organizerName || 'Unknown Organizer',
         email: event.organizerEmail || 'No Email'
       },
