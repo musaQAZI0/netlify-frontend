@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food & Drink Events in Punjab, Pakistan | Crowd</title>
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2d2d2d;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 60px;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+            margin-right: 1.5rem;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f05537;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 600px;
+            margin-right: 1rem;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 0.5rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: #f05537;
+            box-shadow: 0 0 0 2px rgba(240, 85, 55, 0.1);
+        }
+
+        .search-icon {
+            color: #716b7a;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 14px;
+            color: #3a3247;
+            min-width: 0;
+        }
+
+        .search-input::placeholder {
+            color: #716b7a;
+        }
+
+        .location-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 0 0.75rem;
+            border-left: 1px solid #ddd;
+            min-width: 180px;
+        }
+
+        .location-icon {
+            color: #716b7a;
+            margin-right: 0.5rem;
+        }
+
+        .location-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 0.5rem 0;
+            font-size: 14px;
+            color: #3a3247;
+            width: 100%;
+        }
+
+        .location-input::placeholder {
+            color: #716b7a;
+        }
+
+        .search-btn {
+            background: #f05537;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .search-btn:hover {
+            background: #e04429;
+        }
+
+        /* Logged Out Navigation */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #39364f;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: color 0.2s;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: #f05537;
+            background: #f8f8f8;
+        }
+
+        .nav-link.primary {
+            background: #f05537;
+            color: white;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+
+        .nav-link.primary:hover {
+            background: #e04429;
+            color: white;
+        }
+
+        /* Logged In Navigation */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        .nav-action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #39364f;
+            transition: color 0.2s;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-action-item:hover {
+            color: #f05537;
+        }
+
+        .nav-action-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-action-text {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+            cursor: pointer;
+            color: #39364f;
+            position: relative;
+        }
+
+        .user-menu:hover {
+            background: #f8f8f8;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f05537;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #585163;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #716b7a;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            z-index: 1000;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .user-dropdown a:hover {
+            background: #f8f8f8;
+        }
+
+        .user-dropdown a:last-child {
+            border-bottom: none;
+            color: #f05537;
+        }
+
+        /* User Profile Dropdown */
+        .user-profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #39364f;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            white-space: nowrap;
+        }
+
+        .user-profile-btn:hover {
+            color: #f05537;
+            background: rgba(240, 85, 55, 0.05);
+        }
+
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #f05537;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .user-dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            min-width: 220px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            border: 1px solid #e8e8e8;
+            z-index: 9999;
+            padding: 12px 0;
+            margin-top: 6px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .user-dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid white;
+        }
+
+        .user-dropdown-content a {
+            color: #39364f;
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .user-dropdown-content a:last-child {
+            border-bottom: none;
+            color: #f05537;
+        }
+
+        .user-dropdown-content a:hover {
+            background-color: #f8f9fa;
+            color: #f05537;
+            padding-left: 24px;
+        }
+
+        .user-profile-dropdown.active .user-dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Top Notification */
+        .top-notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            z-index: 10000;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .top-notification.show {
+            transform: translateY(0);
+        }
+
+        .top-notification.error {
+            background: #f44336;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: #f8f9fa;
+            padding: 15px 0;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb-nav a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb-nav a:hover {
+            color: #f05537;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #240f4c 0%, #3a1f5c 100%);
+            color: white;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fc86bc;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero-text .location {
+            color: #fff58c;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            color: #fff58c;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .hero-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Filters */
+        .filters {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border: 1px solid #d0d0d0;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tag:hover {
+            border-color: #f05537;
+            background: #fff5f3;
+        }
+
+        .filter-tag.active {
+            border-color: #f05537;
+            background: #f05537;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 50px 0;
+            min-height: 60vh;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* Event Cards */
+        .event-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .event-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .event-date {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            color: #f05537;
+        }
+
+        .event-content {
+            padding: 20px;
+        }
+
+        .event-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d2d2d;
+        }
+
+        .event-location {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .event-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f05537;
+        }
+
+        .event-attendees {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Loading Cards */
+        .loading-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .loading-placeholder {
+            background: #f0f0f0;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-placeholder::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .loading-image {
+            height: 200px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .loading-content {
+            padding: 20px;
+        }
+
+        .loading-title {
+            height: 20px;
+            margin-bottom: 12px;
+            width: 80%;
+        }
+
+        .loading-subtitle {
+            height: 16px;
+            margin-bottom: 8px;
+            width: 60%;
+        }
+
+        .loading-price {
+            height: 16px;
+            width: 40%;
+        }
+
+        /* Footer */
+        .footer {
+            background: #39364f;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #f05537;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #555;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .footer-meta a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-meta a:hover {
+            color: white;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .search-container {
+                order: 2;
+                max-width: 100%;
+                margin: 0;
+            }
+            
+            .nav-actions,
+            .nav-links {
+                order: 3;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 36px;
+            }
+
+            .hero-text .location {
+                font-size: 20px;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero {
+                padding: 40px 0;
+            }
+
+            .main-content {
+                padding: 30px 0;
+            }
+        }
+
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #2d2d2d;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2d2d2d;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #f05537;
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: #f05537;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .auth-btn:hover {
+            background: #e04429;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .auth-toggle a {
+            color: #f05537;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        /* Help Center Dropdown */
+        .help-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .help-dropdown-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #39364f;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            white-space: nowrap;
+        }
+
+        .help-dropdown-btn:hover {
+            color: #f05537;
+            background: rgba(240, 85, 55, 0.05);
+        }
+
+        .help-dropdown-content {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: white;
+            min-width: 220px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            border: 1px solid #e8e8e8;
+            z-index: 9999;
+            padding: 12px 0;
+            margin-top: 6px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .help-dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid white;
+        }
+
+        .help-dropdown-content a {
+            color: #39364f;
+            padding: 14px 20px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f8f9fa;
+        }
+
+        .help-dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .help-dropdown-content a:hover {
+            background-color: #f8f9fa;
+            color: #f05537;
+            padding-left: 24px;
+        }
+
+        .help-dropdown .dropdown-arrow {
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        /* Show dropdown when active */
+        .help-dropdown.active .help-dropdown-content {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .help-dropdown.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display: none; align-items: center; gap: 0.25rem;">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">crowd</span>
+                </div>
+            </a>
+
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search events...">
+                    <div class="location-wrapper">
+                        <span class="location-icon">📍</span>
+                        <input type="text" class="location-input" placeholder="Punjab, Pakistan" value="Punjab, Pakistan">
+                    </div>
+                    <button class="search-btn" onclick="handleSearch()">
+                        <span>🔍</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Navigation Links -->
+            <div class="nav-links" id="navLinks">
+                <a href="contact_sales.html" class="nav-link">Contact Sales</a>
+                <a href="create-events.html" class="nav-link">Create Events</a>
+                <a href="#" class="nav-link secondary">Find my tickets</a>
+                <div class="help-dropdown" id="helpDropdown">
+                    <button class="help-dropdown-btn" id="helpDropdownBtn" type="button">
+                        <span>Help Center</span>
+                        <span class="dropdown-arrow">▾</span>
+                    </button>
+                    <div class="help-dropdown-content" id="helpDropdownContent">
+                        <a href="Help_center.html">Help Center</a>
+                        <a href="Help_Center_sub_parts/Your_tickets_new.html">Find your tickets</a>
+                        <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event organizer</a>
+                    </div>
+                </div>
+                <a href="login.html" class="nav-link secondary login-link">Log In</a>
+                <a href="signup.html" class="nav-link primary signup-link">Sign Up</a>
+            </div>
+
+        </nav>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="index.html">Home</a> / 
+                <a href="#" onclick="goToCountry()">Pakistan</a> / 
+                <a href="#" onclick="goToRegion()">Punjab</a> / 
+                <a href="#" onclick="goToEvents()">Events</a> / 
+                <span>Food & Drink</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Food & Drink Events</h1>
+                    <div class="location">in Punjab, Pakistan</div>
+                    <p>Discover amazing culinary experiences and food events in your area</p>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop" 
+                         alt="Food & Drink Events" 
+                         loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="filter-tags">
+                <div class="filter-tag" onclick="toggleFilter(this, 'location')">
+                    <span>Punjab</span>
+                    <span>▼</span>
+                </div>
+                <div class="filter-tag" onclick="toggleFilter(this, 'date')">
+                    <span>Date</span>
+                    <span>▼</span>
+                </div>
+                <div class="filter-tag" onclick="toggleFilter(this, 'price')">
+                    <span>Price</span>
+                    <span>▼</span>
+                </div>
+                <div class="filter-tag" onclick="toggleFilter(this, 'category')">
+                    <span>Category</span>
+                    <span>▼</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="events-grid" id="eventsGrid">
+                <!-- Loading cards initially -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAuthModal()">×</button>
+            <h2 class="modal-title" id="modalTitle">Log In</h2>
+            <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <button type="submit" class="auth-btn" id="authButton">Log In</button>
+            </form>
+            <div class="auth-toggle">
+                <span id="authToggleText">Don't have an account?</span>
+                <a href="#" onclick="toggleAuthMode()" id="authToggleLink">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Use Crowd</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showCreateEvents()">Create Events</a></li>
+                        <li><a href="#" onclick="showPricing()">Pricing</a></li>
+                        <li><a href="#" onclick="showMarketing()">Event Marketing</a></li>
+                        <li><a href="#" onclick="showMobileApp()">Mobile App</a></li>
+                        <li><a href="#" onclick="showCheckIn()">Check-In App</a></li>
+                        <li><a href="#" onclick="showHelp()">Help Center</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Plan Events</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showSellTickets()">Sell Tickets Online</a></li>
+                        <li><a href="#" onclick="showEventManagement()">Event Management</a></li>
+                        <li><a href="#" onclick="showPayment()">Payment Solutions</a></li>
+                        <li><a href="#" onclick="showVirtual()">Virtual Events</a></li>
+                        <li><a href="#" onclick="showQR()">QR Check-In</a></li>
+                        <li><a href="#" onclick="showAnalytics()">Analytics</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Find Events</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showFoodEvents()">Food & Drink Events</a></li>
+                        <li><a href="#" onclick="showMusicEvents()">Music Events</a></li>
+                        <li><a href="#" onclick="showBusinessEvents()">Business Events</a></li>
+                        <li><a href="#" onclick="showArtsEvents()">Arts Events</a></li>
+                        <li><a href="#" onclick="showSportsEvents()">Sports Events</a></li>
+                        <li><a href="#" onclick="browseAll()">Browse All</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="contactSupport()">Contact Support</a></li>
+                        <li><a href="#" onclick="contactSales()">Contact Sales</a></li>
+                        <li><a href="#" onclick="openFacebook()">Facebook</a></li>
+                        <li><a href="#" onclick="openTwitter()">Twitter</a></li>
+                        <li><a href="#" onclick="openInstagram()">Instagram</a></li>
+                        <li><a href="#" onclick="openLinkedIn()">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2025 Crowd</div>
+                <div class="footer-meta">
+                    <a href="#" onclick="showAbout()">About</a>
+                    <a href="#" onclick="showPrivacy()">Privacy</a>
+                    <a href="#" onclick="showTerms()">Terms</a>
+                    <a href="#" onclick="showSecurity()">Security</a>
+                    <a href="#" onclick="showAccessibility()">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global state
+        let isLoggedIn = false;
+        let currentUser = null;
+        let events = [];
+        let filteredEvents = [];
+        let currentAuthMode = 'login';
+
+        // Sample events data
+        const sampleEvents = [
+            {
+                id: 1,
+                title: "Karachi Food Festival 2025",
+                location: "Expo Centre, Karachi",
+                date: "Mar 15",
+                price: "PKR 500",
+                image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=200&fit=crop",
+                attendees: 245,
+                category: "festival"
+            },
+            {
+                id: 2,
+                title: "Lahore Street Food Tour",
+                location: "Food Street, Lahore",
+                date: "Mar 18",
+                price: "PKR 750",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=200&fit=crop",
+                attendees: 89,
+                category: "tour"
+            },
+            {
+                id: 3,
+                title: "Traditional Punjabi Cooking Class",
+                location: "Culinary Institute, Islamabad",
+                date: "Mar 20",
+                price: "PKR 1,200",
+                image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop",
+                attendees: 32,
+                category: "class"
+            },
+            {
+                id: 4,
+                title: "Wine Tasting Evening",
+                location: "Pearl Continental, Lahore",
+                date: "Mar 22",
+                price: "PKR 2,500",
+                image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&h=200&fit=crop",
+                attendees: 67,
+                category: "tasting"
+            },
+            {
+                id: 5,
+                title: "BBQ Championship",
+                location: "Liberty Market, Lahore",
+                date: "Mar 25",
+                price: "Free",
+                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=200&fit=crop",
+                attendees: 156,
+                category: "competition"
+            },
+            {
+                id: 6,
+                title: "Dessert Making Workshop",
+                location: "Baking Studio, Karachi",
+                date: "Mar 28",
+                price: "PKR 800",
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=200&fit=crop",
+                attendees: 28,
+                category: "workshop"
+            }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            events = [...sampleEvents];
+            filteredEvents = [...events];
+            loadEvents();
+            checkAuthStateFromURL();
+            attachDropdownListener();
+        });
+
+
+        function toggleHelpDropdown(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const helpDropdown = document.getElementById('helpDropdown');
+            if (helpDropdown) {
+                helpDropdown.classList.toggle('active');
+            }
+        }
+
+        // Help Center functions
+        function showHelpCenter() {
+            alert('Opening Help Center...\n\nHere you can find:\n• Frequently Asked Questions\n• User Guides\n• Account Help\n• Technical Support');
+        }
+
+        function findTickets() {
+            if (isLoggedIn) {
+                alert('Finding your tickets...\n\nShowing all tickets associated with your account.');
+            } else {
+                alert('To find your tickets, please:\n\n1. Log in to your account, or\n2. Check your email confirmation, or\n3. Enter your order number');
+            }
+        }
+
+        function contactOrganizer() {
+            alert('Contact Event Organizer:\n\n1. Go to the event page\n2. Click "Contact Organizer"\n3. Send your message directly\n\nOrganizers typically respond within 24 hours.');
+        }
+
+        // Authentication functions
+        function checkAuthStateFromURL() {
+            // Check URL parameters first
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromLoggedIn = urlParams.get('from') === 'logged_in';
+            
+            if (fromLoggedIn) {
+                // Coming from logged-in version, check for real user data
+                const authToken = localStorage.getItem('authToken');
+                const currentUserData = localStorage.getItem('currentUser');
+                
+                if (authToken && currentUserData) {
+                    // Use real authenticated user data
+                    try {
+                        currentUser = JSON.parse(currentUserData);
+                        isLoggedIn = true;
+                        updateNavigation();
+                        console.log('Loaded authenticated user from database:', currentUser.name || currentUser.email);
+                        return;
+                    } catch (error) {
+                        console.error('Error parsing user data:', error);
+                    }
+                }
+                
+                // Fallback: Check for alternative user storage
+                const crowdUserData = localStorage.getItem('crowdUser');
+                if (crowdUserData) {
+                    try {
+                        currentUser = JSON.parse(crowdUserData);
+                        isLoggedIn = true;
+                        updateNavigation();
+                        console.log('Loaded user from crowdUser storage:', currentUser.name || currentUser.email);
+                        return;
+                    } catch (error) {
+                        console.error('Error parsing crowdUser data:', error);
+                    }
+                }
+                
+                // If no valid user data found, redirect to login
+                console.warn('No valid user data found, user should log in');
+                alert('Please log in to access this page.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Otherwise check localStorage as normal
+            checkAuthState();
+        }
+
+        function checkAuthState() {
+            // Check primary auth token and user data (from main app)
+            const authToken = localStorage.getItem('authToken');
+            const currentUserData = localStorage.getItem('currentUser');
+            
+            if (authToken && currentUserData) {
+                try {
+                    currentUser = JSON.parse(currentUserData);
+                    isLoggedIn = true;
+                    updateNavigation();
+                    return;
+                } catch (error) {
+                    console.error('Error parsing currentUser data:', error);
+                }
+            }
+            
+            // Fallback to crowdUser storage
+            const userData = localStorage.getItem('crowdUser');
+            if (userData) {
+                try {
+                    currentUser = JSON.parse(userData);
+                    isLoggedIn = true;
+                    updateNavigation();
+                } catch (error) {
+                    console.error('Error parsing crowdUser data:', error);
+                }
+            }
+        }
+
+        function updateNavigation() {
+            const navLinks = document.querySelector('.nav-links');
+
+            if (isLoggedIn && currentUser) {
+                navLinks.innerHTML = `
+                    <a href="contact_sales.html" class="nav-link">Contact Sales</a>
+                    <a href="create-events.html" class="nav-link">Create Events</a>
+                    <a href="tickets-profile.html" class="nav-link secondary">My Tickets</a>
+                    <div class="help-dropdown" id="helpDropdown">
+                        <button class="help-dropdown-btn" id="helpDropdownBtn" type="button">
+                            <span>Help Center</span>
+                            <span class="dropdown-arrow">▾</span>
+                        </button>
+                        <div class="help-dropdown-content" id="helpDropdownContent">
+                            <a href="Help_center.html">Help Center</a>
+                            <a href="Help_Center_sub_parts/Your_tickets_new.html">Find your tickets</a>
+                            <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event organizer</a>
+                        </div>
+                    </div>
+                    <div class="user-profile-dropdown">
+                        <button class="nav-link secondary user-profile-btn">
+                            <span class="user-avatar">${currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}</span>
+                            <span>${currentUser.name || currentUser.email || 'User'}</span>
+                            <span>▾</span>
+                        </button>
+                        <div class="user-dropdown-content">
+                            <a href="settings-new.html">Account Settings</a>
+                            <a href="organizer-dashboard.html">Organizer Dashboard</a>
+                            <a href="#" onclick="logout()">Log Out</a>
+                        </div>
+                    </div>
+                `;
+            } else {
+                navLinks.innerHTML = `
+                    <a href="contact_sales.html" class="nav-link">Contact Sales</a>
+                    <a href="create-events.html" class="nav-link">Create Events</a>
+                    <a href="#" class="nav-link secondary">Find my tickets</a>
+                    <div class="help-dropdown" id="helpDropdown">
+                        <button class="help-dropdown-btn" id="helpDropdownBtn" type="button">
+                            <span>Help Center</span>
+                            <span class="dropdown-arrow">▾</span>
+                        </button>
+                        <div class="help-dropdown-content" id="helpDropdownContent">
+                            <a href="Help_center.html">Help Center</a>
+                            <a href="Help_Center_sub_parts/Your_tickets_new.html">Find your tickets</a>
+                            <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event organizer</a>
+                        </div>
+                    </div>
+                    <a href="login.html" class="nav-link secondary login-link">Log In</a>
+                    <a href="signup.html" class="nav-link primary signup-link">Sign Up</a>
+                `;
+            }
+            
+            // Reattach dropdown listeners after updating navigation
+            attachDropdownListener();
+        }
+
+        function attachDropdownListener() {
+            const helpDropdownBtn = document.getElementById('helpDropdownBtn');
+            if (helpDropdownBtn) {
+                helpDropdownBtn.removeEventListener('click', toggleHelpDropdown);
+                helpDropdownBtn.addEventListener('click', toggleHelpDropdown);
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(event) {
+                const helpDropdown = document.getElementById('helpDropdown');
+                const userDropdown = document.querySelector('.user-profile-dropdown');
+                
+                if (helpDropdown && !helpDropdown.contains(event.target)) {
+                    helpDropdown.classList.remove('active');
+                }
+
+                if (userDropdown && !userDropdown.contains(event.target)) {
+                    userDropdown.classList.remove('active');
+                }
+            });
+
+            // Handle keyboard navigation
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    const helpDropdown = document.getElementById('helpDropdown');
+                    const userDropdown = document.querySelector('.user-profile-dropdown');
+                    
+                    if (helpDropdown) helpDropdown.classList.remove('active');
+                    if (userDropdown) userDropdown.classList.remove('active');
+                }
+            });
+
+            // Add user profile dropdown listener
+            const userProfileBtn = document.querySelector('.user-profile-btn');
+            if (userProfileBtn) {
+                userProfileBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const userDropdown = document.querySelector('.user-profile-dropdown');
+                    if (userDropdown) {
+                        userDropdown.classList.toggle('active');
+                    }
+                });
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('crowdUser');
+            isLoggedIn = false;
+            currentUser = null;
+
+            showTopNotification('You have been logged out successfully!', 'success');
+
+            setTimeout(() => {
+                updateNavigation();
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        // Notification Functions
+        function showTopNotification(message, type = 'info') {
+            let notification = document.getElementById('topNotification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'topNotification';
+                notification.className = 'top-notification';
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <span id="notificationMessage"></span>
+                        <button class="notification-close" onclick="hideTopNotification()">×</button>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+            }
+
+            document.getElementById('notificationMessage').textContent = message;
+            notification.className = `top-notification ${type}`;
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => hideTopNotification(), 4000);
+        }
+
+        function hideTopNotification() {
+            const notification = document.getElementById('topNotification');
+            if (notification) {
+                notification.classList.remove('show');
+            }
+        }
+
+        function showLogin() {
+            currentAuthMode = 'login';
+            document.getElementById('modalTitle').textContent = 'Log In';
+            document.getElementById('authButton').textContent = 'Log In';
+            document.getElementById('nameGroup').style.display = 'none';
+            document.getElementById('authToggleText').textContent = "Don't have an account?";
+            document.getElementById('authToggleLink').textContent = 'Sign Up';
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function showSignup() {
+            currentAuthMode = 'signup';
+            document.getElementById('modalTitle').textContent = 'Sign Up';
+            document.getElementById('authButton').textContent = 'Sign Up';
+            document.getElementById('nameGroup').style.display = 'block';
+            document.getElementById('authToggleText').textContent = 'Already have an account?';
+            document.getElementById('authToggleLink').textContent = 'Log In';
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function toggleAuthMode() {
+            if (currentAuthMode === 'login') {
+                showSignup();
+            } else {
+                showLogin();
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            document.getElementById('authForm').reset();
+        }
+
+        function handleAuthSubmit(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+
+            if (currentAuthMode === 'signup') {
+                if (!name) {
+                    alert('Please enter your full name');
+                    return;
+                }
+                
+                const newUser = { email, name, joinDate: new Date().toISOString() };
+                localStorage.setItem('crowdUser', JSON.stringify(newUser));
+                currentUser = newUser;
+                isLoggedIn = true;
+                
+                alert('Account created successfully! Welcome to Crowd.');
+            } else {
+                // Simulate login
+                const user = { email, name: email.split('@')[0], joinDate: new Date().toISOString() };
+                localStorage.setItem('crowdUser', JSON.stringify(user));
+                currentUser = user;
+                isLoggedIn = true;
+                
+                alert('Logged in successfully! Welcome back.');
+            }
+
+            updateNavigation();
+            closeAuthModal();
+        }
+
+
+        // Search functionality
+        function handleSearch() {
+            const searchInput = document.querySelector('.search-input');
+            const locationInput = document.querySelector('.location-input');
+            const query = searchInput.value.trim().toLowerCase();
+            const location = locationInput.value.trim();
+            
+            if (query) {
+                filteredEvents = events.filter(event => 
+                    event.title.toLowerCase().includes(query) ||
+                    event.location.toLowerCase().includes(query)
+                );
+                loadEvents();
+                alert(`Found ${filteredEvents.length} events matching "${query}"`);
+            } else {
+                filteredEvents = [...events];
+                loadEvents();
+            }
+        }
+
+        // Enter key search
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') handleSearch();
+        });
+        document.querySelector('.location-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') handleSearch();
+        });
+
+        // Filter functionality
+        function toggleFilter(element, filterType) {
+            element.classList.toggle('active');
+            
+            switch(filterType) {
+                case 'location':
+                    alert('Location filter: Punjab, Pakistan selected');
+                    break;
+                case 'date':
+                    alert('Date filter options: Today, This Week, This Month');
+                    break;
+                case 'price':
+                    alert('Price filter: Free, Under 1000, 1000-2000, Above 2000');
+                    break;
+                case 'category':
+                    alert('Category filter: Festival, Workshop, Tour, Tasting, Competition');
+                    break;
+            }
+        }
+
+        // Load events
+        function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            
+            // Show loading first
+            showLoading();
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                eventsGrid.innerHTML = '';
+                
+                if (filteredEvents.length === 0) {
+                    eventsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">No events found. Try adjusting your search or filters.</p>';
+                    return;
+                }
+                
+                filteredEvents.forEach(event => {
+                    const eventCard = createEventCard(event);
+                    eventsGrid.appendChild(eventCard);
+                });
+            }, 1000);
+        }
+
+        function showLoading() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            eventsGrid.innerHTML = '';
+            
+            for (let i = 0; i < 6; i++) {
+                const loadingCard = document.createElement('div');
+                loadingCard.className = 'loading-card';
+                loadingCard.innerHTML = `
+                    <div class="loading-placeholder loading-image"></div>
+                    <div class="loading-content">
+                        <div class="loading-placeholder loading-title"></div>
+                        <div class="loading-placeholder loading-subtitle"></div>
+                        <div class="loading-placeholder loading-price"></div>
+                    </div>
+                `;
+                eventsGrid.appendChild(loadingCard);
+            }
+        }
+
+        function createEventCard(event) {
+            const card = document.createElement('div');
+            card.className = 'event-card';
+            card.onclick = () => showEventDetails(event);
+            
+            card.innerHTML = `
+                <div class="event-image" style="background-image: url('${event.image}')">
+                    <div class="event-date">${event.date}</div>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-location">📍 ${event.location}</div>
+                    <div class="event-price">${event.price}</div>
+                    <div class="event-attendees">👥 ${event.attendees} attending</div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function showEventDetails(event) {
+            alert(`Event: ${event.title}\nLocation: ${event.location}\nDate: ${event.date}\nPrice: ${event.price}\n\n${event.attendees} people are attending this event.`);
+        }
+
+        // User menu functionality
+        function toggleUserMenu(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            const isVisible = dropdown.style.display === 'block';
+            
+            dropdown.style.display = isVisible ? 'none' : 'block';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = event.target.closest('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            
+            if (!userMenu && dropdown) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Close auth modal when clicking outside
+        document.getElementById('authModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeAuthModal();
+            }
+        });
+
+        // Navigation functions
+        function showCreateEvent() {
+            if (!isLoggedIn) {
+                alert('Please log in to create an event.');
+                showLogin();
+                return;
+            }
+            alert('Opening event creation wizard...');
+        }
+
+        function showLikes() {
+            if (!isLoggedIn) {
+                alert('Please log in to view your likes.');
+                showLogin();
+                return;
+            }
+            alert('Showing your liked events...');
+        }
+
+        function showTickets() {
+            if (!isLoggedIn) {
+                alert('Please log in to view your tickets.');
+                showLogin();
+                return;
+            }
+            alert('Showing your tickets...');
+        }
+
+        function showSettings() {
+            alert('Opening account settings...');
+        }
+
+        function showDashboard() {
+            alert('Opening organizer dashboard...');
+        }
+
+        // Breadcrumb navigation
+        function goHome() { window.location.href = 'index.html'; }
+        function goToCountry() { alert('Showing events in Pakistan...'); }
+        function goToRegion() { alert('Showing events in Punjab...'); }
+        function goToEvents() { alert('Showing all events...'); }
+
+        // Footer functions
+        function showContactSales() { window.location.href = 'contact_sales.html'; }
+        function showCreateEvents() { window.location.href = 'create-events.html'; }
+        function showPricing() { alert('Opening pricing page...'); }
+        function showMarketing() { alert('Opening event marketing page...'); }
+        function showMobileApp() { alert('Opening mobile app download...'); }
+        function showCheckIn() { alert('Opening check-in app info...'); }
+        function showHelp() { window.location.href = 'Help_center.html'; }
+        function showSellTickets() { alert('Opening sell tickets page...'); }
+        function showEventManagement() { alert('Opening event management page...'); }
+        function showPayment() { alert('Opening payment solutions page...'); }
+        function showVirtual() { alert('Opening virtual events page...'); }
+        function showQR() { alert('Opening QR check-in info...'); }
+        function showAnalytics() { alert('Opening analytics page...'); }
+        function showFoodEvents() { alert('You are already viewing food events!'); }
+        function showMusicEvents() { window.location.href = 'Music events.html'; }
+        function showBusinessEvents() { window.location.href = 'business_events.html'; }
+        function showArtsEvents() { window.location.href = 'Performing & Visual Arts projects.html'; }
+        function showSportsEvents() { alert('Sports events coming soon...'); }
+        function browseAll() { alert('Opening all events...'); }
+        function contactSupport() { alert('Opening contact support...'); }
+        function contactSales() { alert('Opening contact sales...'); }
+        function openFacebook() { window.open('https://facebook.com', '_blank'); }
+        function openTwitter() { window.open('https://twitter.com', '_blank'); }
+        function openInstagram() { window.open('https://instagram.com', '_blank'); }
+        function openLinkedIn() { window.open('https://linkedin.com', '_blank'); }
+        function showAbout() { alert('Opening about page...'); }
+        function showPrivacy() { alert('Opening privacy policy...'); }
+        function showTerms() { alert('Opening terms of service...'); }
+        function showSecurity() { alert('Opening security info...'); }
+        function showAccessibility() { alert('Opening accessibility info...'); }
+    </script>
+</body>
+</html>

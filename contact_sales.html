@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact the Crowd Sales Team with Your Event Goals | Crowd</title>
+    <meta name="description"
+        content="Tap into the world's largest events marketplace and reach consumers looking for events like yours using our industry leading event marketing tools" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="js/data-manager.js"></script>
+
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .main-header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .global-nav {
+            background-color: #fff;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff5010;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #ff5010;
+        }
+
+        /* Logged Out Navigation */
+        .nav-logged-out {
+            display: flex;
+        }
+
+        /* Logged In Navigation */
+        .nav-logged-in {
+            display: none;
+        }
+
+        /* User Profile */
+        .user-profile-container {
+            position: relative;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: 1px solid #e5e7eb;
+        }
+
+        .user-info:hover {
+            background: #e9ecef;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 280px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ff5010;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .user-email {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-icon {
+            width: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Organizer Navigation */
+        .organizer-nav {
+            background-color: #f8f7fa;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .organizer-nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .organizer-logo {
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .organizer-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .organizer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .organizer-links a:hover {
+            color: #ff5010;
+        }
+
+        .organizer-cta {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .organizer-cta a {
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .cta-button {
+            background: #ff5010;
+            color: white !important;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .cta-button:hover {
+            background: #e44509;
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background-color: #f8f7fa;
+            padding: 10px 0;
+        }
+
+        .breadcrumbs ol {
+            list-style: none;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .breadcrumbs li {
+            color: #666;
+        }
+
+        .breadcrumbs li:not(:last-child)::after {
+            content: " / ";
+            margin: 0 10px;
+        }
+
+        .breadcrumbs a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            color: #ff5010;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 160px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-color: #211d1a;
+            padding: 80px 0;
+            color: #f5f5f0;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.3rem, 10vw, 3.25rem);
+            line-height: clamp(2.7rem, 16px + 7vw, 4rem);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .mobile-cta {
+            display: none;
+        }
+
+        .subheading {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .subheading p {
+            margin-bottom: 20px;
+        }
+
+        .subheading a {
+            color: #f5f5f0;
+            text-decoration: underline;
+        }
+
+        .customer-support-notice {
+            border: 2px solid #f5f5f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+            color: #f5f5f0;
+        }
+
+        .customer-support-notice a {
+            color: #ff5010;
+        }
+
+        .ratings {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            font-size: clamp(1rem, 3vw, 1rem);
+            line-height: clamp(1.6rem, 3vw, 2rem);
+        }
+
+        .ratings .stars {
+            max-width: 90px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .badges img {
+            max-width: max(4.8rem, 5.4vw, 4.8rem);
+            height: auto;
+        }
+
+        /* Contact Form */
+        .hero-form {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form {
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #33475b;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cbd6e2;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #33475b;
+            background-color: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgba(82, 168, 236, 0.8);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #ff5010;
+            color: #fff;
+            border: 1px solid #ff7a59;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff8f73;
+            border-color: #ff8f73;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background-color: #1e0a3c;
+            padding: 80px 0;
+            color: #fff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 5.25rem;
+            font-weight: 800;
+            line-height: 6.5rem;
+            color: #ff5010;
+            margin-bottom: 15px;
+        }
+
+        .stat-description {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        /* Trusted By Section */
+        .trusted-by-section {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+
+        .trusted-by-section h2 {
+            font-size: clamp(1.3rem, 8vw, 2.8rem);
+            line-height: clamp(2.7rem, 16px + 7vw, 4rem);
+            color: #211d1a;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 60px;
+        }
+
+        .logos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+            gap: 40px 24px;
+            justify-items: center;
+            align-items: center;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .logos-grid .logo-placeholder {
+            width: 120px;
+            height: 60px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Features Section */
+        .features-section {
+            background-color: #1e0a3c;
+            padding: 80px 0;
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .feature-card {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            color: #1e0a3c;
+            box-shadow: 0px 1px 17px rgba(40, 44, 53, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.875rem;
+            line-height: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card p {
+            font-size: 1.125rem;
+            line-height: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-link {
+            color: #1e0a3c;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid #f05537;
+            font-size: 1.125rem;
+        }
+
+        /* Final CTA Section */
+        .final-cta-section {
+            background-color: #f8f7fa;
+            padding: 80px 0;
+        }
+
+        .cta-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .cta-text h2 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            margin-bottom: 20px;
+            color: #211d1a;
+        }
+
+        .cta-text p {
+            font-size: 1.125rem;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        .cta-image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* Footer */
+        .main-footer {
+            background-color: #333;
+            color: #fff;
+            padding: 60px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.125rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: #ff5010;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #ff5010;
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            max-width: 400px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.notification-error {
+            background: #f44336;
+        }
+
+        .notification-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 792px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .organizer-nav {
+                display: none;
+            }
+
+            .main-content {
+                margin-top: 80px;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-form {
+                order: 2;
+            }
+
+            .hero-text {
+                order: 1;
+            }
+
+            .mobile-cta {
+                display: block;
+                margin: 20px 0;
+            }
+
+            .hero-text h1 {
+                font-size: clamp(1.8rem, 8vw, 3rem);
+                line-height: clamp(2.4rem, 12px + 7vw, 4rem);
+            }
+
+            .badges {
+                text-align: center;
+                padding-top: 20px;
+            }
+
+            .badges img {
+                width: 23%;
+                height: auto;
+                padding-right: 4px;
+            }
+
+            .badges img:last-child {
+                padding-right: 0;
+            }
+
+            .ratings {
+                text-align: center;
+                max-width: 80%;
+                margin: auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .cta-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .user-name {
+                display: none;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .hero-section {
+                padding: 30px 0;
+            }
+
+            .hero-text h1 {
+                font-size: 25px !important;
+                line-height: 32px !important;
+            }
+
+            .mobile-cta a,
+            .mobile-cta button {
+                width: 100% !important;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Animation Classes */
+        .animate-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-element.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Header Scrolled State */
+        .main-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Mobile Menu Active States */
+        .nav-links.active {
+            display: flex;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Form Focus States */
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #ff5010;
+            box-shadow: 0 0 0 3px rgba(255, 80, 16, 0.1);
+        }
+
+        /* Button Disabled State */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Feature Cards Hover Effect */
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(40, 44, 53, 0.2);
+        }
+
+        /* Stats Animation */
+        .stat-item.animate-in .stat-number {
+            animation: countUp 1s ease-out;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Dropdown Dividers */
+        .dropdown-divider {
+            height: 1px;
+            background: #e5e7eb;
+            margin: 8px 0;
+        }
+
+        .logout-item {
+            color: #dc2626;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 8px;
+        }
+
+        .logout-item:hover {
+            background: #fef2f2;
+        }
+
+        /* Additional Responsive Adjustments */
+        @media (max-width: 1024px) {
+            .organizer-links {
+                display: none;
+            }
+
+            .organizer-nav-content {
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                position: relative;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .profile-dropdown {
+                right: -20px;
+                width: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <nav class="global-nav">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="index.html" aria-label="Home">
+                        <span class="logo-text">Crowd</span>
+                    </a>
+                </div>
+
+                <!-- Logged Out Navigation -->
+                <ul class="nav-links nav-logged-out">
+                    <li><a href="contact_sales.html">Contact Sales</a></li>
+                    <li><a href="login.html?redirect=contact_sales_logged_version.html">Create Events</a></li>
+                    <li><a href="#">Help Center ▾</a></li>
+                    <li><a href="login.html?redirect=contact_sales_logged_version.html">Find my tickets</a></li>
+                    <li><a href="login.html?redirect=contact_sales_logged_version.html">Log In</a></li>
+                    <li><a href="signup.html">Sign Up</a></li>
+                </ul>
+
+                <!-- Logged In Navigation -->
+                <ul class="nav-links nav-logged-in">
+                    <li>
+                        <a href="#">
+                            Solutions
+                            <span style="margin-left: 5px;">▾</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Industry
+                            <span style="margin-left: 5px;">▾</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Event Types
+                            <span style="margin-left: 5px;">▾</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Resources
+                            <span style="margin-left: 5px;">▾</span>
+                        </a>
+                    </li>
+                    <li><a href="#">Pricing</a></li>
+                    <li>
+                        <div class="user-profile-container">
+                            <div class="user-info" onclick="toggleProfileDropdown()">
+                                👤 <span id="userEmailDisplay"></span> ▼
+                            </div>
+                            <div class="profile-dropdown" id="profileDropdown">
+                                <div class="dropdown-header">
+                                    <div class="user-avatar">👤</div>
+                                    <div class="user-details">
+                                        <div class="user-name" id="dropdownUserName">User Name</div>
+                                        <div class="user-email" id="dropdownUserEmail">user@email.com</div>
+                                    </div>
+                                </div>
+                                <a href="dashboard-home.html" class="dropdown-item">
+                                    <span class="dropdown-icon">🏠</span>
+                                    Browse events
+                                </a>
+                                <a href="event_create.html" class="dropdown-item">
+                                    <span class="dropdown-icon">📅</span>
+                                    Create an event
+                                </a>
+                                <a href="#" class="dropdown-item" onclick="logout()">
+                                    <span class="dropdown-icon">🚪</span>
+                                    Log out
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- Mobile menu button -->
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Organizer Sub Nav - Only shown when logged out -->
+        <nav class="organizer-nav" id="organizerNav">
+            <div class="organizer-nav-content">
+                <a href="#" class="organizer-logo">Organizer</a>
+                <ul class="organizer-links">
+                    <li><a href="#">Solutions</a></li>
+                    <li><a href="#">Industry</a></li>
+                    <li><a href="#">Event Types</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Organizer Resource Hub</a></li>
+                    <li><a href="#">Pricing</a></li>
+                </ul>
+                <div class="organizer-cta">
+                    <a href="contact_sales.html">Contact Sales</a>
+                    <a href="index.html" class="cta-button">Get Started</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" id="breadcrumbMiddle">Create Events</a></li>
+                <li>Crowd Sales +1 628-600-1786</li>
+            </ol>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="contact-section" class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Reach 90 million unique ticket-buyers on Crowd</h1>
+
+                        <div class="mobile-cta">
+                            <a href="#form-container" class="btn btn-primary">Contact Sales</a>
+                        </div>
+
+                        <div class="subheading">
+                            <p>Tap into the world's largest events marketplace and reach more consumers looking for
+                                events like yours with our industry-leading event marketing tools. Ready to bring your
+                                next event to life?</p>
+
+                            <p>Our dedicated <strong>Sales Team</strong> is here to show you how Crowd can amplify your
+                                events and help you achieve your event goals. Reach out to us directly at <a
+                                    href="tel:+1 628-600-1786"><strong>+1 628-600-1786</strong></a> to get started, or
+                                if you prefer, complete the Contact Us form and someone from our Sales team will be in
+                                touch shortly.</p>
+                        </div>
+
+                        <div class="customer-support-notice">
+                            Current Crowd customers can <a href="/help/contact-us/">contact customer support</a>. Your
+                            support options are based on your plan or package.
+                        </div>
+
+                        <div class="ratings">
+                            <svg width="90" height="18" viewBox="0 0 90 18" class="stars">
+                                <g fill="#FFD700">
+                                    <polygon
+                                        points="9,0 11.7,6.6 18,6.6 13.2,10.8 15.9,17.4 9,13.2 2.1,17.4 4.8,10.8 0,6.6 6.3,6.6" />
+                                    <polygon
+                                        points="27,0 29.7,6.6 36,6.6 31.2,10.8 33.9,17.4 27,13.2 20.1,17.4 22.8,10.8 18,6.6 24.3,6.6" />
+                                    <polygon
+                                        points="45,0 47.7,6.6 54,6.6 49.2,10.8 51.9,17.4 45,13.2 38.1,17.4 40.8,10.8 36,6.6 42.3,6.6" />
+                                    <polygon
+                                        points="63,0 65.7,6.6 72,6.6 67.2,10.8 69.9,17.4 63,13.2 56.1,17.4 58.8,10.8 54,6.6 60.3,6.6" />
+                                    <polygon
+                                        points="81,0 83.7,6.6 90,6.6 85.2,10.8 87.9,17.4 81,13.2 74.1,17.4 76.8,10.8 72,6.6 78.3,6.6" />
+                                </g>
+                            </svg>
+                            <span>4.6 star rating on Capterra from 4664 reviews</span>
+                        </div>
+
+                        <div class="badges">
+                            <div
+                                style="width: 77px; height: 50px; background-color: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #666;">
+                                Leader</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-form">
+                        <div id="form-container">
+                            <form class="contact-form" id="contact-form">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email *</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="company">Company</label>
+                                    <input type="text" id="company" name="company">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="eventType">Event Type</label>
+                                    <select id="eventType" name="eventType">
+                                        <option value="">Select event type</option>
+                                        <option value="conference">Conference</option>
+                                        <option value="concert">Concert</option>
+                                        <option value="festival">Festival</option>
+                                        <option value="workshop">Workshop</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="message">Tell us about your event goals</label>
+                                    <textarea id="message" name="message" rows="4"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block">Contact Sales</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">200M+</div>
+                        <div class="stat-description">searches from people looking for things to do on Crowd in 2022
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">30%</div>
+                        <div class="stat-description">of total tickets sold are driven by Crowd discovery</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2X</div>
+                        <div class="stat-description">more the consumer reach of our closest competitor</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trusted By Section -->
+        <section class="trusted-by-section">
+            <div class="container">
+                <h2>Trusted by</h2>
+                <div class="logos-grid">
+                    <div class="logo-placeholder">Company 1</div>
+                    <div class="logo-placeholder">Company 2</div>
+                    <div class="logo-placeholder">Company 3</div>
+                    <div class="logo-placeholder">Company 4</div>
+                    <div class="logo-placeholder">Company 5</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>You've got the supply, we've got the demand</h3>
+                        <p>Tap into Crowd's active event-going base of 90 million people. And directly connect with them
+                            using targeted marketing tools.</p>
+                        <a href="#event-demand" class="feature-link">Explore how to →</a>
+                    </div>
+                    <div class="feature-card">
+                        <h3>The growth you want, the support you deserve</h3>
+                        <p>Crowd powered—and supported—5 million events last year. Grow your business with our expert
+                            team by your side.</p>
+                        <a href="#scale-business" class="feature-link">Explore how to →</a>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Seamless payments for them, early payouts for you</h3>
+                        <p>Provide a fast, safe checkout experience for buyers, and access ticket revenue whenever you
+                            need it.</p>
+                        <a href="#get-paid" class="feature-link">Explore how to →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="final-cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <div class="cta-text">
+                        <h2>Power your events business. Partner with Crowd</h2>
+                        <p>Grow your business, your brand, and your fanbase on Crowd—and get unparalleled support from
+                            our expert in-house team.</p>
+                        <a href="#contact-section" class="btn btn-primary">Connect with Sales</a>
+                    </div>
+                    <div class="cta-image">
+                        <div
+                            style="width: 100%; height: 300px; background: linear-gradient(45deg, #ff6b6b, #4ecdc4); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: bold;">
+                            Grow Eventfully
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Use Crowd</h3>
+                    <ul>
+                        <li><a href="#">Create Events</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Event Marketing Platform</a></li>
+                        <li><a href="#">Crowd Mobile Ticket App</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Plan Events</h3>
+                    <ul>
+                        <li><a href="#">Sell Tickets Online</a></li>
+                        <li><a href="#">Sell Concert Tickets Online</a></li>
+                        <li><a href="#">Event Payment System</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Find Events</h3>
+                    <ul>
+                        <li><a href="#">New York Events</a></li>
+                        <li><a href="#">Chicago Events</a></li>
+                        <li><a href="#">Los Angeles Events</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="contact_sales.html">Contact Sales</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-copyright">© 2025 Crowd</div>
+                <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Help</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let dropdownOpen = false;
+
+        // Initialize page on load
+        document.addEventListener('DOMContentLoaded', function () {
+            initializePage();
+            setupEventListeners();
+        });
+
+        // Main initialization function
+        function initializePage() {
+            // Check authentication status and update UI accordingly
+            updateUIBasedOnAuth();
+
+            // Pre-fill form with user data if logged in
+            prefillFormWithUserData();
+
+            // Initialize scroll animations
+            initScrollAnimations();
+        }
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Contact form submission
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', handleFormSubmit);
+            }
+
+            // Mobile menu functionality
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            }
+
+            // Smooth scrolling for anchor links
+            const anchorLinks = document.querySelectorAll('a[href^="#"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', handleSmoothScroll);
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', handleOutsideClick);
+
+            // Header scroll effect
+            window.addEventListener('scroll', handleHeaderScroll);
+
+            // Phone number formatting
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', formatPhoneNumber);
+            }
+        }
+
+        // Update UI based on authentication status
+        function updateUIBasedOnAuth() {
+            const isAuthenticated = window.dataManager && window.dataManager.isAuthenticated();
+
+            if (isAuthenticated) {
+                showLoggedInUI();
+            } else {
+                showLoggedOutUI();
+            }
+        }
+
+        // Show logged-in UI elements
+        function showLoggedInUI() {
+            const user = window.dataManager.getCurrentUser();
+
+            // Hide logged-out elements
+            document.querySelector('.nav-logged-out').style.display = 'none';
+            document.getElementById('organizerNav').style.display = 'none';
+
+            // Show logged-in elements
+            document.querySelector('.nav-logged-in').style.display = 'flex';
+
+            // Update breadcrumb
+            const breadcrumbMiddle = document.getElementById('breadcrumbMiddle');
+            breadcrumbMiddle.textContent = 'Organizer Overview';
+            breadcrumbMiddle.href = '/organizer/overview/';
+
+            // Update user information
+            if (user) {
+                document.getElementById('userEmailDisplay').textContent = user.email;
+                document.getElementById('dropdownUserEmail').textContent = user.email;
+                document.getElementById('dropdownUserName').textContent = user.name || user.email.split('@')[0];
+            }
+
+            console.log('Contact Sales page loaded for authenticated user:', user?.email);
+        }
+
+        // Show logged-out UI elements
+        function showLoggedOutUI() {
+            // Show logged-out elements
+            document.querySelector('.nav-logged-out').style.display = 'flex';
+            document.getElementById('organizerNav').style.display = 'block';
+
+            // Hide logged-in elements
+            document.querySelector('.nav-logged-in').style.display = 'none';
+
+            console.log('Contact Sales page loaded for anonymous user');
+        }
+
+        // Pre-fill form with user data if available
+        function prefillFormWithUserData() {
+            if (window.dataManager && window.dataManager.isAuthenticated()) {
+                const user = window.dataManager.getCurrentUser();
+                if (user) {
+                    // Pre-fill email
+                    const emailInput = document.getElementById('email');
+                    if (emailInput && user.email) {
+                        emailInput.value = user.email;
+                    }
+
+                    // Pre-fill name if available
+                    if (user.name) {
+                        const nameParts = user.name.split(' ');
+                        const firstNameInput = document.getElementById('firstName');
+                        const lastNameInput = document.getElementById('lastName');
+
+                        if (firstNameInput && nameParts[0]) {
+                            firstNameInput.value = nameParts[0];
+                        }
+
+                        if (lastNameInput && nameParts.length > 1) {
+                            lastNameInput.value = nameParts.slice(1).join(' ');
+                        }
+                    }
+                }
+            }
+        }
+
+        // Profile dropdown functions
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            if (dropdownOpen) {
+                closeProfileDropdown();
+            } else {
+                openProfileDropdown();
+            }
+        }
+
+        function openProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.add('show');
+            dropdownOpen = true;
+        }
+
+        function closeProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.remove('show');
+            dropdownOpen = false;
+        }
+
+        // Logout function
+        function logout() {
+            try {
+                closeProfileDropdown();
+
+                if (window.dataManager) {
+                    window.dataManager.logout();
+                }
+
+                // Clear additional storage
+                localStorage.removeItem('user');
+                localStorage.removeItem('authToken');
+                sessionStorage.clear();
+
+                // Update UI to logged-out state
+                showLoggedOutUI();
+
+                // Show success message
+                showNotification('Successfully logged out', 'success');
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('Error during logout:', error);
+                showLoggedOutUI();
+            }
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('active');
+        }
+
+        // Handle smooth scrolling
+        function handleSmoothScroll(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+
+            if (targetSection) {
+                const headerHeight = document.querySelector('.main-header').offsetHeight;
+                const targetPosition = targetSection.offsetTop - headerHeight - 20;
+
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Handle clicks outside dropdown
+        function handleOutsideClick(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const userInfo = document.querySelector('.user-info');
+
+            if (dropdown && !dropdown.contains(event.target) &&
+                (!userInfo || !userInfo.contains(event.target))) {
+                closeProfileDropdown();
+            }
+        }
+
+        // Handle header scroll effect
+        function handleHeaderScroll() {
+            const header = document.querySelector('.main-header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // Format phone number input
+        function formatPhoneNumber(e) {
+            let value = e.target.value.replace(/\D/g, '');
+
+            if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{3})/, '($1) $2');
+            }
+
+            e.target.value = value;
+        }
+
+        // Form submission handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const formValues = Object.fromEntries(formData);
+
+            // Validate form
+            if (!validateForm(formValues)) {
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            e.target.classList.add('loading');
+
+            // Track form submission
+            trackEvent('Contact Sales Form Submitted', {
+                userAuthenticated: window.dataManager && window.dataManager.isAuthenticated(),
+                eventType: formValues.eventType,
+                hasCompany: !!formValues.company,
+                timestamp: new Date().toISOString()
+            });
+
+            // Simulate form submission
+            setTimeout(() => {
+                // Reset form
+                e.target.reset();
+
+                // Show success message
+                showNotification('Thank you! Our sales team will contact you within 24 hours.', 'success');
+
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                e.target.classList.remove('loading');
+
+                // Re-fill user data if logged in
+                setTimeout(prefillFormWithUserData, 100);
+            }, 2000);
+        }
+
+        // Form validation
+        function validateForm(values) {
+            const required = ['firstName', 'lastName', 'email'];
+            const errors = [];
+
+            // Check required fields
+            required.forEach(field => {
+                if (!values[field] || values[field].trim() === '') {
+                    errors.push(`${getFieldLabel(field)} is required`);
+                }
+            });
+
+            // Validate email format
+            if (values.email && !isValidEmail(values.email)) {
+                errors.push('Please enter a valid email address');
+            }
+
+            // Validate phone format if provided
+            if (values.phone && values.phone.trim() && !isValidPhone(values.phone)) {
+                errors.push('Please enter a valid phone number');
+            }
+
+            // Show errors if any
+            if (errors.length > 0) {
+                showNotification(errors.join('\n'), 'error');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Get user-friendly field labels
+        function getFieldLabel(field) {
+            const labels = {
+                firstName: 'First Name',
+                lastName: 'Last Name',
+                email: 'Email',
+                phone: 'Phone Number',
+                company: 'Company',
+                eventType: 'Event Type',
+                message: 'Message'
+            };
+            return labels[field] || field;
+        }
+
+        // Email validation helper
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Phone validation helper
+        function isValidPhone(phone) {
+            const phoneRegex = /^\(?[\d\s\-\(\)]{10,}$/;
+            return phoneRegex.test(phone);
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <p>${message}</p>
+                    <button class="notification-close">&times;</button>
+                </div>
+            `;
+
+            // Add close functionality
+            const closeBtn = notification.querySelector('.notification-close');
+            closeBtn.addEventListener('click', () => notification.remove());
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
+        }
+
+        // Scroll animations
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+
+                        // Trigger counter animation for stats
+                        if (entry.target.classList.contains('stats-section')) {
+                            animateCounters();
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            const animateElements = document.querySelectorAll('.stat-item, .feature-card, .stats-section');
+            animateElements.forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+
+            counters.forEach(counter => {
+                const target = counter.textContent;
+                const numericValue = parseInt(target.replace(/\D/g, ''));
+                const suffix = target.replace(/\d/g, '');
+
+                let current = 0;
+                const increment = numericValue / 50;
+
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= numericValue) {
+                        counter.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current) + suffix;
+                    }
+                }, 40);
+            });
+        }
+
+        // Analytics tracking
+        function trackEvent(eventName, eventData = {}) {
+            console.log('Event tracked:', eventName, eventData);
+
+            // Here you would integrate with your analytics service
+            // Example: gtag('event', eventName, eventData);
+            // Example: analytics.track(eventName, eventData);
+        }
+
+        // Track CTA clicks
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctaButtons = document.querySelectorAll('.btn-primary');
+            ctaButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    trackEvent('CTA Clicked', {
+                        buttonText: this.textContent.trim(),
+                        page: 'contact-sales',
+                        userAuthenticated: window.dataManager && window.dataManager.isAuthenticated()
+                    });
+                });
+            });
+        });
+
+        // Debug function
+        function checkAuthStatus() {
+            console.log('Data Manager available:', !!window.dataManager);
+            console.log('User authenticated:', window.dataManager ? window.dataManager.isAuthenticated() : false);
+            if (window.dataManager && window.dataManager.isAuthenticated()) {
+                console.log('Current user:', window.dataManager.getCurrentUser());
+            }
+        }
+
+        // Auto-check auth status after a delay to ensure data manager is loaded
+        setTimeout(checkAuthStatus, 1000);
+
+        // Additional utility functions
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) {
+                // Page became visible, refresh auth status
+                updateUIBasedOnAuth();
+            }
+        });
+
+        // Handle browser back button
+        window.addEventListener('popstate', function () {
+            updateUIBasedOnAuth();
+        });
+
+        // Auto-save form data to prevent loss
+        function autoSaveFormData() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            // Only save if user is typing (has some data)
+            if (Object.values(data).some(value => value.trim())) {
+                localStorage.setItem('contactFormDraft', JSON.stringify(data));
+            }
+        }
+
+        // Restore form data if available  
+        function restoreFormData() {
+            const savedData = localStorage.getItem('contactFormDraft');
+            if (!savedData) return;
+
+            try {
+                const data = JSON.parse(savedData);
+                const form = document.getElementById('contact-form');
+
+                Object.entries(data).forEach(([key, value]) => {
+                    const field = form.querySelector(`[name="${key}"]`);
+                    if (field && !field.value) {
+                        field.value = value;
+                    }
+                });
+            } catch (error) {
+                console.error('Error restoring form data:', error);
+            }
+        }
+
+        // Clear saved form data after successful submission
+        function clearSavedFormData() {
+            localStorage.removeItem('contactFormDraft');
+        }
+
+        // Enhanced form submission with auto-save integration
+        function handleFormSubmitEnhanced(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const formValues = Object.fromEntries(formData);
+
+            // Validate form
+            if (!validateForm(formValues)) {
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            e.target.classList.add('loading');
+
+            // Track form submission
+            trackEvent('Contact Sales Form Submitted', {
+                userAuthenticated: window.dataManager && window.dataManager.isAuthenticated(),
+                eventType: formValues.eventType,
+                hasCompany: !!formValues.company,
+                hasPhone: !!formValues.phone,
+                messageLength: formValues.message ? formValues.message.length : 0,
+                timestamp: new Date().toISOString()
+            });
+
+            // Simulate API call
+            simulateFormSubmission(formValues)
+                .then(() => {
+                    // Success
+                    e.target.reset();
+                    clearSavedFormData();
+                    showNotification('Thank you! Our sales team will contact you within 24 hours.', 'success');
+
+                    // Re-fill user data if logged in
+                    setTimeout(prefillFormWithUserData, 100);
+                })
+                .catch((error) => {
+                    // Error
+                    console.error('Form submission error:', error);
+                    showNotification('There was an error submitting your form. Please try again.', 'error');
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    e.target.classList.remove('loading');
+                });
+        }
+
+        // Simulate form submission API call
+        function simulateFormSubmission(formData) {
+            return new Promise((resolve, reject) => {
+                // Simulate network delay
+                setTimeout(() => {
+                    // Simulate random success/failure for demo
+                    if (Math.random() > 0.1) { // 90% success rate
+                        resolve({ success: true, id: Date.now() });
+                    } else {
+                        reject(new Error('Network error'));
+                    }
+                }, 2000);
+            });
+        }
+
+        // Enhanced validation with better UX
+        function validateFormEnhanced(values) {
+            const errors = [];
+
+            // Required field validation
+            const requiredFields = [
+                { field: 'firstName', label: 'First Name' },
+                { field: 'lastName', label: 'Last Name' },
+                { field: 'email', label: 'Email' }
+            ];
+
+            requiredFields.forEach(({ field, label }) => {
+                const value = values[field];
+                if (!value || value.trim() === '') {
+                    errors.push(`${label} is required`);
+                    highlightField(field, true);
+                } else {
+                    highlightField(field, false);
+                }
+            });
+
+            // Email validation
+            if (values.email && !isValidEmail(values.email)) {
+                errors.push('Please enter a valid email address');
+                highlightField('email', true);
+            }
+
+            // Phone validation if provided
+            if (values.phone && values.phone.trim() && !isValidPhone(values.phone)) {
+                errors.push('Please enter a valid phone number');
+                highlightField('phone', true);
+            }
+
+            // Company name validation (optional but if provided, should be reasonable)
+            if (values.company && values.company.length > 100) {
+                errors.push('Company name is too long (max 100 characters)');
+                highlightField('company', true);
+            }
+
+            // Message length validation
+            if (values.message && values.message.length > 1000) {
+                errors.push('Message is too long (max 1000 characters)');
+                highlightField('message', true);
+            }
+
+            if (errors.length > 0) {
+                showNotification(errors.join('\n'), 'error');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Highlight invalid fields
+        function highlightField(fieldName, isError) {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            if (!field) return;
+
+            if (isError) {
+                field.style.borderColor = '#f44336';
+                field.style.boxShadow = '0 0 0 3px rgba(244, 67, 54, 0.1)';
+            } else {
+                field.style.borderColor = '';
+                field.style.boxShadow = '';
+            }
+        }
+
+        // Real-time field validation
+        function setupRealTimeValidation() {
+            const fields = ['firstName', 'lastName', 'email', 'phone', 'company', 'message'];
+
+            fields.forEach(fieldName => {
+                const field = document.querySelector(`[name="${fieldName}"]`);
+                if (!field) return;
+
+                field.addEventListener('blur', function () {
+                    const value = this.value.trim();
+
+                    if (fieldName === 'email' && value) {
+                        highlightField(fieldName, !isValidEmail(value));
+                    } else if (fieldName === 'phone' && value) {
+                        highlightField(fieldName, !isValidPhone(value));
+                    } else if (['firstName', 'lastName'].includes(fieldName)) {
+                        highlightField(fieldName, !value);
+                    }
+                });
+
+                // Auto-save on input
+                field.addEventListener('input', function () {
+                    clearTimeout(this.autoSaveTimeout);
+                    this.autoSaveTimeout = setTimeout(autoSaveFormData, 1000);
+                });
+            });
+        }
+
+        // Initialize enhanced features
+        document.addEventListener('DOMContentLoaded', function () {
+            // Replace basic form handler with enhanced version
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.removeEventListener('submit', handleFormSubmit);
+                contactForm.addEventListener('submit', handleFormSubmitEnhanced);
+            }
+
+            // Setup additional features
+            setupRealTimeValidation();
+            restoreFormData();
+
+            // Character counter for message field
+            const messageField = document.querySelector('[name="message"]');
+            if (messageField) {
+                setupCharacterCounter(messageField, 1000);
+            }
+        });
+
+        // Character counter for textarea
+        function setupCharacterCounter(textarea, maxLength) {
+            const counter = document.createElement('div');
+            counter.style.cssText = `
+                font-size: 12px;
+                color: #666;
+                text-align: right;
+                margin-top: 5px;
+            `;
+
+            textarea.parentNode.appendChild(counter);
+
+            function updateCounter() {
+                const remaining = maxLength - textarea.value.length;
+                counter.textContent = `${remaining} characters remaining`;
+                counter.style.color = remaining < 50 ? '#f44336' : '#666';
+            }
+
+            textarea.addEventListener('input', updateCounter);
+            updateCounter();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            // Ctrl/Cmd + Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const form = document.getElementById('contact-form');
+                if (form && document.activeElement && form.contains(document.activeElement)) {
+                    e.preventDefault();
+                    form.dispatchEvent(new Event('submit'));
+                }
+            }
+
+            // Escape to close dropdown
+            if (e.key === 'Escape') {
+                closeProfileDropdown();
+            }
+        });
+
+        // Enhanced analytics with user journey tracking
+        function trackUserJourney() {
+            // Track page entry source
+            const referrer = document.referrer;
+            const urlParams = new URLSearchParams(window.location.search);
+
+            trackEvent('Contact Sales Page Viewed', {
+                referrer: referrer || 'direct',
+                userAuthenticated: window.dataManager && window.dataManager.isAuthenticated(),
+                utmSource: urlParams.get('utm_source'),
+                utmMedium: urlParams.get('utm_medium'),
+                utmCampaign: urlParams.get('utm_campaign'),
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Track form interaction
+        function trackFormInteraction() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+
+            let interactionStarted = false;
+
+            form.addEventListener('focusin', function () {
+                if (!interactionStarted) {
+                    interactionStarted = true;
+                    trackEvent('Contact Form Interaction Started', {
+                        userAuthenticated: window.dataManager && window.dataManager.isAuthenticated(),
+                        timestamp: new Date().toISOString()
+                    });
+                }
+            });
+        }
+
+        // Initialize tracking
+        setTimeout(() => {
+            trackUserJourney();
+            trackFormInteraction();
+        }, 1000);
+
+        // Error boundary for graceful error handling
+        window.addEventListener('error', function (e) {
+            console.error('Contact Sales Page Error:', e.error);
+
+            // Track error for monitoring
+            trackEvent('Contact Sales Page Error', {
+                error: e.error.message,
+                stack: e.error.stack,
+                filename: e.filename,
+                lineno: e.lineno,
+                timestamp: new Date().toISOString()
+            });
+        });
+
+        // Performance monitoring
+        window.addEventListener('load', function () {
+            setTimeout(() => {
+                const perfData = performance.timing;
+                const loadTime = perfData.loadEventEnd - perfData.navigationStart;
+
+                trackEvent('Contact Sales Page Performance', {
+                    loadTime: loadTime,
+                    userAuthenticated: window.dataManager && window.dataManager.isAuthenticated(),
+                    timestamp: new Date().toISOString()
+                });
+            }, 0);
+        });
+    </script>
+</body>
+
+</html>
