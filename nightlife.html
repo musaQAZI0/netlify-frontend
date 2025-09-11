@@ -1256,9 +1256,113 @@
             }
         }
 
-        /* Mobile responsive adjustments - desktop navigation only */
+        /* Mobile Header Styles for Logged-Out Users */
+        .mobile-utility {
+            display: none;
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1003;
+        }
+
+        .mobile-utility .utility-inner {
+            display: flex;
+            justify-content: center;
+            padding: 8px 1rem;
+        }
+
+        .mobile-utility .utility-links a {
+            margin: 0 0.75rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Mobile inline search styles for logged-out users */
+        .header-search-mobile {
+            display: none;
+            padding: 10px 16px;
+            width: 100%;
+            box-sizing: border-box;
+            background: transparent;
+        }
+
+        .header-search-mobile .search-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .header-search-mobile .search-section {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            background: #fff;
+            border-radius: 999px;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+            border: 1px solid rgba(16, 24, 40, 0.06);
+            flex: 1 1 auto;
+        }
+
+        .header-search-mobile .search-section .search-icon {
+            width: 18px;
+            height: 18px;
+            color: rgba(16, 24, 40, 0.45);
+            margin-right: 8px;
+            flex: 0 0 auto;
+        }
+
+        .header-search-mobile .search-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: transparent;
+        }
+
+        .header-search-mobile .search-button {
+            background: var(--primary-color);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(240, 86, 64, 0.12);
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        .header-search-mobile .search-button .search-button-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        /* Mobile responsive adjustments */
         @media (max-width: 768px) {
+            /* Show mobile utility row for logged-out users */
+            .mobile-utility {
+                display: block;
+            }
+
+            /* Show inline mobile search for logged-out users */
+            .header-search-mobile {
+                display: block;
+            }
+
             .desktop-only {
+                display: none;
+            }
+
+            /* Hide desktop navigation on mobile */
+            .nav-container {
                 display: none;
             }
         }
@@ -1266,6 +1370,35 @@
 </head>
 
 <body class="logged-out category-page" id="mainBody">
+    <!-- Mobile utility top row for logged-out users -->
+    <div class="mobile-utility">
+        <div class="utility-inner">
+            <div class="utility-links">
+                <a href="#">Contact Sales</a>
+                <a href="#">Create Events</a>
+                <a href="#">Find my tickets</a>
+                <a href="#">Help</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile inline search for logged-out users -->
+    <div class="header-search-mobile">
+        <div class="search-container">
+            <div class="search-section">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"></path>
+                </svg>
+                <input type="text" class="search-input" placeholder="Search events" aria-label="Search events">
+            </div>
+            <button class="search-button" onclick="handleSearch()" aria-label="Search">
+                <svg class="search-button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
@@ -1859,6 +1992,12 @@
             if (userEmailEl) {
                 userEmailEl.textContent = user.email || 'user@example.com';
             }
+            
+            // Update mobile navigation container email
+            const mobileUserEmailEl = document.getElementById('mobileUserEmail');
+            if (mobileUserEmailEl) {
+                mobileUserEmailEl.textContent = user.email || 'user@example.com';
+            }
         }
 
         // Mobile Header Dropdown Toggle (for logged-in users)
@@ -1944,12 +2083,39 @@
             window.location.href = 'index.html';
         }
 
+        // Function to toggle mobile dropdown for logged-in users
+        function toggleMobileDropdown(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('mobileUserDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+
         // Initialize all functionality
         document.addEventListener('DOMContentLoaded', function () {
             // Check authentication status first
             checkAuthenticationStatus();
             
             // Initialize mobile dropdown for logged-in users
+            const mobileUserProfile = document.querySelector('.mobile-nav-container .user-profile');
+            const mobileDropdown = document.getElementById('mobileUserDropdown');
+
+            if (mobileUserProfile && mobileDropdown) {
+                mobileUserProfile.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    toggleMobileDropdown();
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!mobileUserProfile.contains(e.target)) {
+                        mobileDropdown.classList.remove('show');
+                    }
+                });
+            }
+            
+            // Initialize desktop dropdown for logged-in users
             const userProfile = document.getElementById('userProfile');
             const dropdown = document.getElementById('dropdown');
 
