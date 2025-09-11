@@ -1255,150 +1255,10 @@
                 transition-duration: 0.01ms !important;
             }
         }
-
-        /* Mobile Header Styles for Logged-Out Users */
-        .mobile-utility {
-            display: none;
-            background: var(--white);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1003;
-        }
-
-        .mobile-utility .utility-inner {
-            display: flex;
-            justify-content: center;
-            padding: 8px 1rem;
-        }
-
-        .mobile-utility .utility-links a {
-            margin: 0 0.75rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* Mobile inline search styles for logged-out users */
-        .header-search-mobile {
-            display: none;
-            padding: 10px 16px;
-            width: 100%;
-            box-sizing: border-box;
-            background: transparent;
-        }
-
-        .header-search-mobile .search-container {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            width: 100%;
-        }
-
-        .header-search-mobile .search-section {
-            display: flex;
-            align-items: center;
-            padding: 10px 12px;
-            background: #fff;
-            border-radius: 999px;
-            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
-            border: 1px solid rgba(16, 24, 40, 0.06);
-            flex: 1 1 auto;
-        }
-
-        .header-search-mobile .search-section .search-icon {
-            width: 18px;
-            height: 18px;
-            color: rgba(16, 24, 40, 0.45);
-            margin-right: 8px;
-            flex: 0 0 auto;
-        }
-
-        .header-search-mobile .search-input {
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 14px;
-            color: var(--text-dark);
-            background: transparent;
-        }
-
-        .header-search-mobile .search-button {
-            background: var(--primary-color);
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(240, 86, 64, 0.12);
-            cursor: pointer;
-            flex: 0 0 auto;
-        }
-
-        .header-search-mobile .search-button .search-button-icon {
-            width: 20px;
-            height: 20px;
-            color: white;
-        }
-
-        /* Mobile responsive adjustments */
-        @media (max-width: 768px) {
-            /* Show mobile utility row for logged-out users */
-            .mobile-utility {
-                display: block;
-            }
-
-            /* Show inline mobile search for logged-out users */
-            .header-search-mobile {
-                display: block;
-            }
-
-            .desktop-only {
-                display: none;
-            }
-
-            /* Hide desktop navigation on mobile */
-            .nav-container {
-                display: none;
-            }
-        }
     </style>
 </head>
 
 <body class="logged-out category-page" id="mainBody">
-    <!-- Mobile utility top row for logged-out users -->
-    <div class="mobile-utility">
-        <div class="utility-inner">
-            <div class="utility-links">
-                <a href="#">Contact Sales</a>
-                <a href="#">Create Events</a>
-                <a href="#">Find my tickets</a>
-                <a href="#">Help</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile inline search for logged-out users -->
-    <div class="header-search-mobile">
-        <div class="search-container">
-            <div class="search-section">
-                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"></path>
-                </svg>
-                <input type="text" class="search-input" placeholder="Search events" aria-label="Search events">
-            </div>
-            <button class="search-button" onclick="handleSearch()" aria-label="Search">
-                <svg class="search-button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"></path>
-                </svg>
-            </button>
-        </div>
-    </div>
-
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
@@ -1426,79 +1286,163 @@
                 </div>
             </div>
 
+            <div class="mobile-controls">
+                <button class="mobile-search-toggle" id="mobileSearchToggle" aria-label="Toggle mobile search">
+                    <span class="search-icon" aria-hidden="true"></span>
+                </button>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
             <!-- Logged Out Navigation -->
-                <div class="nav-links" id="loggedOutNav">
-                    <a href="#" class="nav-link">Contact Sales</a>
-                    <a href="#" class="nav-link">Create Events</a>
-                    <a href="#" class="nav-link secondary">Find my tickets</a>
+            <div class="nav-links" id="loggedOutNav">
+                <a href="#" class="nav-link">Contact Sales</a>
+                <a href="#" class="nav-link">Create Events</a>
+                <a href="#" class="nav-link secondary">Find my tickets</a>
 
-                    <div class="help-dropdown" id="helpDropdown">
-                        <button class="help-dropdown-btn" id="helpDropdownBtn" type="button">
-                            <span>Help Center</span>
-                            <span class="dropdown-arrow">▾</span>
-                        </button>
-                        <div class="help-dropdown-content" id="helpDropdownContent">
-                            <a href="#help-center">Help Center</a>
-                            <a href="#find-tickets">Find your tickets</a>
-                            <a href="#contact-organizer">Contact your event organizer</a>
-                        </div>
+                <div class="help-dropdown" id="helpDropdown">
+                    <button class="help-dropdown-btn" id="helpDropdownBtn" type="button">
+                        <span>Help Center</span>
+                        <span class="dropdown-arrow">▾</span>
+                    </button>
+                    <div class="help-dropdown-content" id="helpDropdownContent">
+                        <a href="#help-center">Help Center</a>
+                        <a href="#find-tickets">Find your tickets</a>
+                        <a href="#contact-organizer">Contact your event organizer</a>
                     </div>
-
-                    <a href="login.html" class="nav-link secondary login-link">Log In</a>
-                    <a href="signup.html" class="nav-link primary">Sign Up</a>
                 </div>
+
+                <a href="login.html" class="nav-link secondary login-link">Log In</a>
+                <a href="signup.html" class="nav-link primary">Sign Up</a>
+            </div>
 
             <!-- Logged In Navigation -->
-                <div class="nav-actions" id="loggedInNav">
-                    <a href="#" class="nav-action-item">
-                        <span class="nav-action-icon">+</span>
-                        <span class="nav-action-text">Create an event</span>
-                    </a>
+            <div class="nav-actions" id="loggedInNav">
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">+</span>
+                    <span class="nav-action-text">Create an event</span>
+                </a>
 
-                    <a href="#" class="nav-action-item">
-                        <span class="nav-action-icon">♡</span>
-                        <span class="nav-action-text">Likes</span>
-                    </a>
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">♡</span>
+                    <span class="nav-action-text">Likes</span>
+                </a>
 
-                    <a href="#" class="nav-action-item">
-                        <span class="nav-action-icon">🎫</span>
-                        <span class="nav-action-text">Tickets</span>
-                    </a>
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">🎫</span>
+                    <span class="nav-action-text">Tickets</span>
+                </a>
 
-                    <div class="user-menu" id="userMenuButton" onclick="toggleUserMenu(event)">
-                        <div class="user-avatar" id="userAvatar">U</div>
-                        <div>
-                            <div class="user-email" id="userEmailDesktop">Loading...</div>
+                <div class="user-menu" id="userMenuButton" onclick="toggleUserMenu(event)">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div>
+                        <div class="user-email" id="userEmail">Loading...</div>
+                    </div>
+                    <span class="dropdown-arrow">▾</span>
+
+                    <!-- Enhanced User Dropdown Menu -->
+                    <div class="user-dropdown" id="userDropdown">
+                        <div class="dropdown-section">
+                            <div class="dropdown-group">
+                                <a href="logged_in_Version.html" role="menuitem">Browse events</a>
+                                <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                                <a href="#" role="menuitem">Tickets</a>
+                                <a href="#" role="menuitem">Liked</a>
+                                <a href="#" role="menuitem">Following</a>
+                                <a href="#" role="menuitem">Interests</a>
+                            </div>
                         </div>
-                        <span class="dropdown-arrow">▾</span>
-
-                        <!-- Enhanced User Dropdown Menu -->
-                        <div class="user-dropdown" id="userDropdown">
-                            <div class="dropdown-section">
-                                <div class="dropdown-group">
-                                    <a href="logged_in_Version.html" role="menuitem">Browse events</a>
-                                    <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
-                                    <a href="#" role="menuitem">Tickets</a>
-                                    <a href="#" role="menuitem">Liked</a>
-                                    <a href="#" role="menuitem">Following</a>
-                                    <a href="#" role="menuitem">Interests</a>
-                                </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-section">
+                            <a href="settings.html" role="menuitem">Account settings</a>
+                            <div class="user-info">
+                                <span class="user-email-display" id="dropdownUserEmail">Loading...</span>
                             </div>
-                            
-                            <div class="dropdown-divider"></div>
-                            
-                            <div class="dropdown-section">
-                                <a href="settings.html" role="menuitem">Account settings</a>
-                                <div class="user-info">
-                                    <span class="user-email-display" id="dropdownUserEmail">Loading...</span>
-                                </div>
-                                <a href="#" onclick="handleMenuClick('logout')" role="menuitem" class="logout-link" id="logoutLink">Log out</a>
-                            </div>
+                            <a href="#" onclick="handleMenuClick('logout')" role="menuitem" class="logout-link" id="logoutLink">Log out</a>
                         </div>
                     </div>
                 </div>
+            </div>
         </nav>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <a href="index.html" class="mobile-logo">
+                    <img src="logo.jpg" alt="Crowd Logo" class="mobile-logo-img"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="mobile-logo-fallback" style="display: none;">
+                        <span class="logo-icon" aria-hidden="true"></span>
+                        <span class="logo-text">crowd</span>
+                    </div>
+                </a>
+                <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close mobile menu"></button>
+            </div>
+
+            <div class="mobile-search-container" id="mobileSearchContainer">
+                <div class="mobile-search-wrapper">
+                    <input type="text" class="mobile-search-input" placeholder="Search events"
+                        aria-label="Search events">
+                    <div class="mobile-location-wrapper">
+                        <span class="location-icon" aria-hidden="true"></span>
+                        <input type="text" class="mobile-location-input" placeholder="Punjab" value="Punjab"
+                            aria-label="Location">
+                    </div>
+                    <button class="mobile-search-btn" onclick="handleMobileSearch()">Search</button>
+                </div>
+            </div>
+
+            <div class="mobile-menu-links">
+                <!-- Logged Out Links -->
+                <div class="mobile-nav-section" id="mobileLoggedOutNav">
+                    <a href="#" class="mobile-nav-link">Contact Sales</a>
+                    <a href="#" class="mobile-nav-link">Create Events</a>
+                    <a href="#" class="mobile-nav-link">Find my tickets</a>
+                    <div class="mobile-help-section">
+                        <span class="mobile-section-title">Help Center</span>
+                        <a href="#help-center" class="mobile-nav-link sub">Help Center</a>
+                        <a href="#find-tickets" class="mobile-nav-link sub">Find your tickets</a>
+                        <a href="#contact-organizer" class="mobile-nav-link sub">Contact your event organizer</a>
+                    </div>
+                    <a href="login.html" class="mobile-nav-link login">Log In</a>
+                    <a href="signup.html" class="mobile-nav-link primary">Sign Up</a>
+                </div>
+
+                <!-- Logged In Links -->
+                <div class="mobile-nav-section" id="mobileLoggedInNav" style="display: none;">
+                    <a href="#" class="mobile-nav-action">
+                        <span class="mobile-action-icon">+</span>
+                        <span>Create an event</span>
+                    </a>
+                    <a href="#" class="mobile-nav-action">
+                        <span class="mobile-action-icon">♡</span>
+                        <span>Likes</span>
+                    </a>
+                    <a href="#" class="mobile-nav-action">
+                        <span class="mobile-action-icon">🎫</span>
+                        <span>Tickets</span>
+                    </a>
+                    <div class="mobile-user-section">
+                        <div class="mobile-user-info">
+                            <div class="mobile-user-avatar" id="mobileUserAvatar">U</div>
+                            <div class="mobile-user-email" id="mobileUserEmail">Loading...</div>
+                        </div>
+                        <a href="settings-new.html" class="mobile-nav-link">Account Settings</a>
+                        <a href="dashboard-home.html" class="mobile-nav-link">Organizer Dashboard</a>
+                        <a href="#" class="mobile-nav-link logout" onclick="handleMenuClick('logout')">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
@@ -1607,34 +1551,29 @@
         // Global state management with login detection
         let isLoggedIn = false;
 
-        // Check authentication status on page load with database integration
-        async function checkAuthenticationStatusLegacy() {
-            try {
-                const response = await fetch('/api/auth/verify', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+        // Check authentication status on page load
+        function checkAuthenticationStatus() {
+            const userStr = localStorage.getItem('currentUser');
+            const token = localStorage.getItem('authToken');
 
-                if (response.ok) {
-                    const user = await response.json();
+            if (token && userStr) {
+                try {
+                    const user = JSON.parse(userStr);
                     isLoggedIn = true;
                     console.log('User is logged in:', user.name || user.email);
 
                     // Switch to logged-in version
                     switchToLoggedInVersion(user);
                     return true;
-                } else {
-                    console.log('User is not logged in');
-                    return false;
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
                 }
-            } catch (error) {
-                console.error('Error checking authentication status:', error);
-                console.log('User is not logged in');
-                return false;
             }
+
+            console.log('User is not logged in');
+            return false;
         }
 
         // Switch to logged-in navigation version
@@ -1807,26 +1746,21 @@
             closeMobileMenu();
         }
 
-        // Logout function with full database integration
-        async function logoutLegacy() {
-            console.log('Legacy logout function called');
+        // Logout function with database integration
+        async function logout() {
+            console.log('Logout function called');
 
             try {
-                const response = await fetch('/api/auth/logout', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    console.log('Logout successful');
-                    // Update UI to logged-out state
-                    const body = document.getElementById('mainBody');
-                    body.className = 'logged-out category-page';
+                // Call the MongoDB auth API logout endpoint if available
+                if (window.mongoAuthAPI || window.authAPI) {
+                    const authAPI = window.mongoAuthAPI || window.authAPI;
+                    console.log('Using auth API for logout');
+                    await authAPI.logout();
                 } else {
-                    console.error('Logout failed:', response.statusText);
+                    console.log('No auth API available, using fallback');
+                    // Fallback to local storage cleanup
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
                 }
 
                 console.log('Logout successful, redirecting...');
@@ -1834,6 +1768,9 @@
                 window.location.href = 'index.html';
             } catch (error) {
                 console.error('Logout error:', error);
+                // Still clear local storage and redirect on error
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
                 alert('Logout completed with error: ' + error.message);
                 window.location.href = 'index.html';
             }
@@ -1871,33 +1808,27 @@
                 body.style.overflow = '';
             }
 
-            // Update mobile menu authentication state with database integration
-            async function updateMobileMenuAuth() {
-                try {
-                    const response = await fetch('/api/auth/verify', {
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
+            // Update mobile menu authentication state
+            function updateMobileMenuAuth() {
+                const userStr = localStorage.getItem('currentUser');
+                const token = localStorage.getItem('authToken');
 
-                    if (response.ok) {
-                        const user = await response.json();
+                if (token && userStr) {
+                    try {
+                        const user = JSON.parse(userStr);
                         // Show logged in navigation
                         if (mobileLoggedInNav) mobileLoggedInNav.style.display = 'block';
                         if (mobileLoggedOutNav) mobileLoggedOutNav.style.display = 'none';
 
                         // Update user info in mobile menu
                         updateUserNavigation(user);
-                    } else {
+                    } catch (error) {
                         // Show logged out navigation
                         if (mobileLoggedInNav) mobileLoggedInNav.style.display = 'none';
                         if (mobileLoggedOutNav) mobileLoggedOutNav.style.display = 'block';
                     }
-                } catch (error) {
-                    console.error('Error updating mobile menu auth:', error);
-                    // Show logged out navigation on error
+                } else {
+                    // Show logged out navigation
                     if (mobileLoggedInNav) mobileLoggedInNav.style.display = 'none';
                     if (mobileLoggedOutNav) mobileLoggedOutNav.style.display = 'block';
                 }
@@ -1968,250 +1899,10 @@
             });
         }
 
-        // Authentication Status Management - Full MongoDB Integration
-        // Note: This requires the backend to implement /api/auth/verify endpoint
-        // that checks session/cookie authentication and returns user data
-        async function checkAuthenticationStatus() {
-            const body = document.getElementById('mainBody');
-            
-            try {
-                const response = await fetch('/api/auth/verify', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (response.ok) {
-                    const user = await response.json();
-                    // Set body class to logged-in
-                    body.className = 'logged-in category-page';
-                    
-                    // Update mobile header user info
-                    updateMobileUserInfo(user);
-                    
-                    // Update desktop user info
-                    updateDesktopUserInfo(user);
-                    
-                    console.log('User is logged in:', user.name || user.email);
-                    return true;
-                } else {
-                    // User is not authenticated
-                    body.className = 'logged-out category-page';
-                    console.log('User is not logged in');
-                    return false;
-                }
-            } catch (error) {
-                console.error('Error checking authentication status:', error);
-                // Set body class to logged-out on error
-                body.className = 'logged-out category-page';
-                return false;
-            }
-        }
-
-        // Update mobile header user information
-        function updateMobileUserInfo(user) {
-            const userEmailEl = document.getElementById('userEmail');
-            if (userEmailEl) {
-                userEmailEl.textContent = user.email || 'user@example.com';
-            }
-            
-            // Update mobile navigation container email
-            const mobileUserEmailEl = document.getElementById('mobileUserEmail');
-            if (mobileUserEmailEl) {
-                mobileUserEmailEl.textContent = user.email || 'user@example.com';
-            }
-        }
-        
-        // Update desktop user information
-        function updateDesktopUserInfo(user) {
-            // Update user email in desktop dropdown
-            const userEmailDesktop = document.getElementById('userEmailDesktop');
-            if (userEmailDesktop) {
-                userEmailDesktop.textContent = user.email || 'user@example.com';
-            }
-            
-            // Update user avatar with first letter of name/email
-            const userAvatar = document.getElementById('userAvatar');
-            if (userAvatar) {
-                const firstLetter = (user.name || user.email || 'U').charAt(0).toUpperCase();
-                userAvatar.textContent = firstLetter;
-            }
-        }
-
-        // Mobile Header Dropdown Toggle (for logged-in users)
-        function toggleMobileDropdown() {
-            const dropdown = document.getElementById('dropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('show');
-            }
-        }
-
-        // Mobile Menu Toggle Functions (for logged-out users)
-        function toggleMobileMenu() {
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            const mobileMenu = document.querySelector('.mobile-menu');
-            
-            if (mobileMenu && mobileMenuToggle) {
-                const isActive = mobileMenu.classList.contains('active');
-                
-                if (isActive) {
-                    mobileMenu.classList.remove('active');
-                    mobileMenuToggle.classList.remove('active');
-                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                    document.body.classList.remove('mobile-menu-open');
-                } else {
-                    mobileMenu.classList.add('active');
-                    mobileMenuToggle.classList.add('active');
-                    mobileMenuToggle.setAttribute('aria-expanded', 'true');
-                    document.body.classList.add('mobile-menu-open');
-                }
-            }
-        }
-
-        function toggleSubmenu(menuId) {
-            const submenu = document.getElementById(menuId + '-submenu');
-            const menuItem = submenu.previousElementSibling;
-
-            if (submenu.classList.contains('show')) {
-                submenu.classList.remove('show');
-                menuItem.classList.remove('expanded');
-            } else {
-                submenu.classList.add('show');
-                menuItem.classList.add('expanded');
-            }
-        }
-
-        // Search functionality
-        function performSearch() {
-            const searchInput = document.getElementById('mobileSearchInput');
-            if (searchInput) {
-                const query = searchInput.value.trim();
-                if (query) {
-                    console.log('Searching for:', query);
-                    alert('Searching for: ' + query);
-                } else {
-                    alert('Please enter a search term');
-                }
-            }
-        }
-
-        // Logout function
-        async function logout() {
-            console.log('Logout function called');
-            
-            try {
-                const response = await fetch('/api/auth/logout', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (response.ok) {
-                    console.log('Logout successful');
-                    // Update UI to logged-out state
-                    const body = document.getElementById('mainBody');
-                    body.className = 'logged-out category-page';
-                    // Redirect to home page
-                    alert('Logged out successfully!');
-                    window.location.href = 'index.html';
-                } else {
-                    console.error('Logout failed:', response.statusText);
-                    // Still redirect even if logout request failed
-                    alert('Logged out successfully!');
-                    window.location.href = 'index.html';
-                }
-            } catch (error) {
-                console.error('Logout error:', error);
-                // Redirect even on error
-                alert('Logged out successfully!');
-                window.location.href = 'index.html';
-            }
-        }
-
-        // Function to toggle mobile dropdown for logged-in users
-        function toggleMobileDropdown(event) {
-            if (event) event.stopPropagation();
-            const dropdown = document.getElementById('mobileUserDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('show');
-            }
-        }
-
         // Initialize all functionality
-        document.addEventListener('DOMContentLoaded', async function () {
-            // Check authentication status first (async)
-            await checkAuthenticationStatus();
-            
-            // Initialize mobile dropdown for logged-in users
-            const mobileUserProfile = document.querySelector('.mobile-nav-container .user-profile');
-            const mobileDropdown = document.getElementById('mobileUserDropdown');
-
-            if (mobileUserProfile && mobileDropdown) {
-                mobileUserProfile.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    toggleMobileDropdown();
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function (e) {
-                    if (!mobileUserProfile.contains(e.target)) {
-                        mobileDropdown.classList.remove('show');
-                    }
-                });
-            }
-            
-            // Initialize desktop dropdown for logged-in users
-            const userProfile = document.getElementById('userProfile');
-            const dropdown = document.getElementById('dropdown');
-
-            if (userProfile && dropdown) {
-                userProfile.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    toggleMobileDropdown();
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function (e) {
-                    if (!userProfile.contains(e.target)) {
-                        dropdown.classList.remove('show');
-                    }
-                });
-            }
-            
-            // Initialize mobile menu toggle for logged-out users
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            if (mobileMenuToggle) {
-                mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-            }
-
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function(e) {
-                const mobileMenu = document.querySelector('.mobile-menu');
-                const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-                if (mobileMenu && mobileMenu.classList.contains('active')) {
-                    if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
-                        toggleMobileMenu();
-                    }
-                }
-            });
-
-            // Handle window resize for mobile menu
-            window.addEventListener('resize', function () {
-                if (window.innerWidth > 768) {
-                    const mobileMenu = document.querySelector('.mobile-menu');
-                    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-                    if (mobileMenu && mobileMenu.classList.contains('active')) {
-                        mobileMenu.classList.remove('active');
-                        mobileMenuToggle.classList.remove('active');
-                        mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                        document.body.classList.remove('mobile-menu-open');
-                    }
-                }
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check authentication status first
+            checkAuthenticationStatus();
 
             // Initialize all components
             initializeMobileMenu();
