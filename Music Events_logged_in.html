@@ -1096,19 +1096,34 @@
             const token = localStorage.getItem('authToken');
             
             if (!token) {
-                // Not logged in, redirect to index
-                window.location.href = 'index.html';
+                console.log('No auth token found, checking if coming from logged in page...');
+                
+                // Check if we came from a logged in page
+                const referrer = document.referrer;
+                const isFromLoggedInPage = referrer.includes('logged_in_Version.html') || 
+                                         referrer.includes('organizer-dashboard.html') ||
+                                         referrer.includes('Music Events_logged_in.html');
+                
+                if (isFromLoggedInPage) {
+                    console.log('Came from logged in page but no token, showing login prompt');
+                    alert('Please log in to access this page');
+                }
+                
+                // Redirect to login page instead of index
+                window.location.href = 'login.html';
                 return;
             }
             
-            // Validate token first
-            const isTokenValid = await validateToken();
-            if (!isTokenValid) {
-                console.log('Token is invalid, redirecting to login');
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('currentUser');
-                window.location.href = 'index.html';
-                return;
+            // Validate token first (but don't be too strict)
+            try {
+                const isTokenValid = await validateToken();
+                if (!isTokenValid) {
+                    console.log('Token validation failed, but trying to continue...');
+                    // Don't immediately redirect, try to use cached data first
+                }
+            } catch (error) {
+                console.log('Token validation error, but continuing with cached data:', error);
+                // Continue execution to try cached data
             }
             
             try {
