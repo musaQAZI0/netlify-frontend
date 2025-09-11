@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,7 +65,7 @@
         .logo-text {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #f05537;
+            color: #3a3247;
         }
 
         .search-container {
@@ -89,8 +88,8 @@
         }
 
         .search-wrapper:focus-within {
-            border-color: #f05537;
-            box-shadow: 0 0 0 2px rgba(240, 85, 55, 0.1);
+            border-color: #3a3247;
+            box-shadow: 0 0 0 2px rgba(58, 50, 71, 0.1);
         }
 
         .search-icon {
@@ -142,7 +141,7 @@
         }
 
         .search-btn {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border: none;
             border-radius: 50%;
@@ -158,7 +157,7 @@
         }
 
         .search-btn:hover {
-            background: #e04429;
+            background: #2d2a3f;
         }
 
         .nav-actions {
@@ -180,7 +179,7 @@
         }
 
         .nav-action-item:hover {
-            color: #f05537;
+            color: #3a3247;
         }
 
         .nav-action-icon {
@@ -213,7 +212,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #f05537;
+            background: #3a3247;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -237,29 +236,64 @@
             top: 100%;
             right: 0;
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
+            border: 1px solid #e8e6ea;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            min-width: 280px;
             z-index: 1000;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .dropdown-section {
+            padding: 4px 0;
+        }
+
+        .dropdown-group {
+            margin-bottom: 4px;
         }
 
         .user-dropdown a {
-            display: block;
-            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
             text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
+            color: #39364f;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
         }
 
         .user-dropdown a:hover {
-            background-color: #f8f8f8;
+            background-color: #f8f9fa;
+            color: #3a3247;
         }
 
-        .user-dropdown a:last-child {
-            border-bottom: none;
-            color: #f05537;
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e8e6ea;
+            margin: 8px 16px;
+        }
+
+        .user-info {
+            padding: 8px 20px;
+            margin: 0 8px;
+        }
+
+        .user-email-display {
+            font-size: 12px;
+            color: #6f7287;
+            font-weight: 500;
+        }
+
+        .logout-link {
+            color: #3a3247 !important;
+            font-weight: 500;
+        }
+
+        .logout-link:hover {
+            color: #e53e3e !important;
+            background-color: #fef2f2 !important;
         }
 
         /* Breadcrumbs */
@@ -384,7 +418,7 @@
             background: white;
             padding: 32px 24px;
             border-bottom: 1px solid #e8e6ea;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .filters-container {
@@ -430,7 +464,7 @@
         }
 
         .filter-count {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             font-size: 12px;
             padding: 2px 6px;
@@ -472,7 +506,7 @@
             left: 0;
             width: 60px;
             height: 4px;
-            background: linear-gradient(135deg, #f05537, #ff6b6b);
+            background: linear-gradient(135deg, #3a3247, #2d2a3f);
             border-radius: 2px;
         }
 
@@ -501,7 +535,7 @@
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             cursor: pointer;
             border: 1px solid #f0f0f0;
@@ -509,7 +543,7 @@
 
         .event-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
         }
 
         .event-image {
@@ -530,7 +564,7 @@
             position: absolute;
             top: 16px;
             left: 16px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             padding: 8px 12px;
             border-radius: 8px;
@@ -543,7 +577,7 @@
             position: absolute;
             top: 16px;
             right: 16px;
-            background: #f05537;
+            background: #3a3247;
             color: white;
             padding: 6px 12px;
             border-radius: 20px;
@@ -694,9 +728,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #f05537;
+            color: #3a3247;
             font-size: 20px;
-            background: linear-gradient(135deg, #fff5f5, #fef2f2);
+            background: linear-gradient(135deg, #f8f9fa, #f1f3f4);
             border-radius: 12px;
         }
 
@@ -790,7 +824,7 @@
                 max-width: 100%;
                 margin: 0;
             }
-
+            
             .nav-actions {
                 order: 3;
                 justify-content: center;
@@ -874,7 +908,7 @@
                 gap: 0.5rem;
                 width: 100%;
             }
-
+            
             .nav-action-item {
                 padding: 0.5rem;
                 text-align: center;
@@ -892,75 +926,85 @@
         }
     </style>
 </head>
-
-<body class="category-page">
+<body>
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <a href="#" class="logo">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">crowd</span>
+            </a>
 
             <div class="search-container">
                 <div class="search-wrapper">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <path d="M21 21l-4.35-4.35" />
+                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="21 21l-4.35-4.35"/>
                     </svg>
                     <input type="text" class="search-input" placeholder="Search holiday events">
-
+                    
                     <div class="location-wrapper">
-                        <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                            <circle cx="12" cy="10" r="3" />
+                        <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
                         </svg>
                         <input type="text" class="location-input" placeholder="Punjab" value="Punjab">
                     </div>
-
+                    
                     <button class="search-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="M21 21l-4.35-4.35" />
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="21 21l-4.35-4.35"/>
                         </svg>
                     </button>
                 </div>
             </div>
 
-            <div class="nav-links">
-                <div class="nav-actions">
-                    <a href="#" class="nav-action-item">
-                        <span class="nav-action-icon">➕</span>
-                        <span class="nav-action-text">Create an event</span>
-                    </a>
-
-                    <a href="#" class="nav-action-item">
-                        <span class="nav-action-icon">♡</span>
-                        <span class="nav-action-text">Likes</span>
-                    </a>
-
-                    <a href="#" class="nav-action-item">
-                        <span class="nav-action-icon">🎫</span>
-                        <span class="nav-action-text">Tickets</span>
-                    </a>
-
-                    <div class="user-menu" onclick="toggleUserMenu()">
-                        <div class="user-avatar" id="userAvatar">U</div>
-                        <div>
-                            <div class="user-email" id="userEmail">Loading...</div>
-                        </div>
-                        <span class="dropdown-arrow">▾</span>
+            <div class="nav-actions">
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">➕</span>
+                    <span class="nav-action-text">Create an event</span>
+                </a>
+                
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">♡</span>
+                    <span class="nav-action-text">Likes</span>
+                </a>
+                
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">🎫</span>
+                    <span class="nav-action-text">Tickets</span>
+                </a>
+                
+                <div class="user-menu" onclick="toggleUserMenu()">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div>
+                        <div class="user-email" id="userEmail">Loading...</div>
                     </div>
-
-                    <!-- User Dropdown Menu -->
+                    <span class="dropdown-arrow">▾</span>
+                    
+                    <!-- Enhanced User Dropdown Menu -->
                     <div class="user-dropdown" id="userDropdown" style="display: none;">
-                        <a href="#">Account Settings</a>
-                        <a href="#">Organizer Dashboard</a>
-                        <a href="#" onclick="logout()">Log Out</a>
+                        <div class="dropdown-section">
+                            <div class="dropdown-group">
+                                <a href="logged_in_Version.html" role="menuitem">Browse events</a>
+                                <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                                <a href="#" role="menuitem">Tickets</a>
+                                <a href="#" role="menuitem">Liked</a>
+                                <a href="#" role="menuitem">Following</a>
+                                <a href="#" role="menuitem">Interests</a>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-section">
+                            <a href="settings.html" role="menuitem">Account settings</a>
+                            <div class="user-info">
+                                <span class="user-email-display" id="dropdownUserEmail">Loading...</span>
+                            </div>
+                            <a href="#" onclick="logout()" role="menuitem" class="logout-link">Log out</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -989,9 +1033,7 @@
                 <p class="hero-description">Discover the best Holiday events in your area and online</p>
             </div>
             <aside class="hero-image">
-                <img fetchpriority="high" class="full-width-img" loading="eager"
-                    src="https://cdn.evbstatic.com/s3-build/fe/build/images/9a0b58d881d91b3bff1eafabcdb2da97-holiday.webp"
-                    alt="Holiday celebrations with animated decorations and festive elements">
+                <img fetchpriority="high" class="full-width-img" loading="eager" src="https://cdn.evbstatic.com/s3-build/fe/build/images/9a0b58d881d91b3bff1eafabcdb2da97-holiday.webp" alt="Holiday celebrations with animated decorations and festive elements">
             </aside>
         </div>
     </section>
@@ -1003,25 +1045,25 @@
                 <span>Punjab</span>
                 <span class="filter-count">82</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
             <div class="filter-dropdown" tabindex="0" role="button" aria-label="Filter by date">
                 <span>Date</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
             <div class="filter-dropdown" tabindex="0" role="button" aria-label="Filter by event type">
                 <span>Event Type</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
             <div class="filter-dropdown" tabindex="0" role="button" aria-label="Filter by price">
                 <span>Price</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
         </div>
@@ -1036,7 +1078,7 @@
                 <a href="#" class="view-all-btn">
                     View All
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M8 4l8 8-8 8" />
+                        <path d="M8 4l8 8-8 8"/>
                     </svg>
                 </a>
             </div>
@@ -1049,21 +1091,18 @@
                     </div>
                     <div class="event-content">
                         <h3 class="event-title">Christmas Celebration 2025</h3>
-                        <p class="event-description">Join us for a magical Christmas celebration with live music,
-                            delicious food, and festive activities for the whole family.</p>
+                        <p class="event-description">Join us for a magical Christmas celebration with live music, delicious food, and festive activities for the whole family.</p>
                         <div class="event-meta">
                             <div class="event-time">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                                 </svg>
                                 6:00 PM
                             </div>
                             <div class="event-location">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
                                 Lahore
                             </div>
@@ -1077,8 +1116,7 @@
                             <a href="#" class="btn-primary">Get Tickets</a>
                             <a href="#" class="btn-secondary">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </a>
                         </div>
@@ -1092,21 +1130,18 @@
                     </div>
                     <div class="event-content">
                         <h3 class="event-title">New Year's Eve Party</h3>
-                        <p class="event-description">Ring in 2026 with an unforgettable New Year's Eve party featuring
-                            DJ performances, countdown celebrations, and midnight fireworks.</p>
+                        <p class="event-description">Ring in 2026 with an unforgettable New Year's Eve party featuring DJ performances, countdown celebrations, and midnight fireworks.</p>
                         <div class="event-meta">
                             <div class="event-time">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                                 </svg>
                                 9:00 PM
                             </div>
                             <div class="event-location">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
                                 Islamabad
                             </div>
@@ -1120,8 +1155,7 @@
                             <a href="#" class="btn-primary">Get Tickets</a>
                             <a href="#" class="btn-secondary">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </a>
                         </div>
@@ -1135,21 +1169,18 @@
                     </div>
                     <div class="event-content">
                         <h3 class="event-title">Halloween Spooktacular</h3>
-                        <p class="event-description">Get ready for a frightfully fun Halloween event with costume
-                            contests, haunted house tours, and spooky treats for all ages.</p>
+                        <p class="event-description">Get ready for a frightfully fun Halloween event with costume contests, haunted house tours, and spooky treats for all ages.</p>
                         <div class="event-meta">
                             <div class="event-time">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                                 </svg>
                                 7:00 PM
                             </div>
                             <div class="event-location">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
                                 Karachi
                             </div>
@@ -1163,8 +1194,7 @@
                             <a href="#" class="btn-primary">Get Tickets</a>
                             <a href="#" class="btn-secondary">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </a>
                         </div>
@@ -1288,30 +1318,36 @@
         function loadUserData() {
             const userStr = localStorage.getItem('currentUser');
             const token = localStorage.getItem('authToken');
-
+            
             if (!token || !userStr) {
                 // Not logged in, redirect to index
                 window.location.href = 'index.html';
                 return;
             }
-
+            
             try {
                 const user = JSON.parse(userStr);
                 const userEmailEl = document.getElementById('userEmail');
                 const userAvatarEl = document.getElementById('userAvatar');
-
+                const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
+                
                 if (userEmailEl) {
                     // Show name if available, otherwise email
                     const displayText = user.name || user.email || 'User';
                     userEmailEl.textContent = displayText;
                 }
-
+                
+                if (dropdownUserEmailEl) {
+                    // Show email in dropdown
+                    dropdownUserEmailEl.textContent = user.email || 'user@example.com';
+                }
+                
                 if (userAvatarEl) {
                     // Set avatar to first letter of name or email
                     const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
                     userAvatarEl.textContent = avatarText;
                 }
-
+                
                 console.log('User loaded:', user.name || user.email);
             } catch (error) {
                 console.error('Error loading user data:', error);
@@ -1321,7 +1357,7 @@
                 window.location.href = 'index.html';
             }
         }
-
+        
         // Toggle user dropdown menu
         function toggleUserMenu() {
             const dropdown = document.getElementById('userDropdown');
@@ -1331,7 +1367,7 @@
                 dropdown.style.display = 'none';
             }
         }
-
+        
         // Logout function
         function logout() {
             localStorage.removeItem('authToken');
@@ -1339,12 +1375,12 @@
             alert('Logged out successfully!');
             window.location.href = 'index.html';
         }
-
+        
         // Close dropdown when clicking outside
-        document.addEventListener('click', function (event) {
+        document.addEventListener('click', function(event) {
             const userMenu = event.target.closest('.user-menu');
             const dropdown = document.getElementById('userDropdown');
-
+            
             if (!userMenu && dropdown) {
                 dropdown.style.display = 'none';
             }
@@ -1391,7 +1427,7 @@
                         image: "halloween-event.jpg"
                     }
                 ];
-
+                
                 this.init();
             }
 
@@ -1460,15 +1496,13 @@
         }
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Load user data
             loadUserData();
-
+            
             // Initialize holiday event platform
             new HolidayEventPlatform();
         });
     </script>
-    <script src="js/mobile-menu.js"></script>
 </body>
-
 </html>

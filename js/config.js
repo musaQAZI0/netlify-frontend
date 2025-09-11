@@ -3,10 +3,14 @@ const Config = {
     // Auto-detect environment based on current domain
     isDevelopment: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1',
     
+    // Port configurations
+    FRONTEND_PORT: 8080,  // Frontend runs on port 8080
+    BACKEND_PORT: 3002,   // Backend runs on port 3002
+    
     // API base URL - Use local or production based on environment
     get API_BASE_URL() {
         if (this.isDevelopment) {
-            return 'http://localhost:3003/api'; // Local development server
+            return `http://localhost:${this.BACKEND_PORT}/api`; // Local backend server
         } else {
             return 'https://crowd-backend-zxxp.onrender.com/api'; // Production backend
         }

@@ -1296,7 +1296,7 @@
                 emptyState.style.display = 'none';
 
                 // Make API call to get user's liked events - fixed API URL
-                const apiUrl = window.Config ? `${window.Config.API_BASE_URL}/users/likes` : 'http://localhost:3003/api/users/likes';
+                const apiUrl = window.Config ? `${window.Config.API_BASE_URL}/users/likes` : 'http://localhost:3002/api/users/likes';
                 console.log('Making API call to:', apiUrl);
 
                 const response = await fetch(apiUrl, {
@@ -1500,7 +1500,7 @@
 
             try {
                 // Make API call to unlike event - fixed API URL
-                const apiUrl = window.Config ? `${window.Config.API_BASE_URL}/users/likes/${eventId}` : `http://localhost:3003/api/users/likes/${eventId}`;
+                const apiUrl = window.Config ? `${window.Config.API_BASE_URL}/users/likes/${eventId}` : `http://localhost:3002/api/users/likes/${eventId}`;
                 console.log('Unliking event via API:', apiUrl);
 
                 const response = await fetch(apiUrl, {

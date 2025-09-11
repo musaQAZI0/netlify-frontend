@@ -4,7 +4,7 @@ class MongoAuthAPI {
         // Use global Config if available, otherwise fallback
         this.baseURL = window.Config ? window.Config.API_BASE_URL : 
             (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-                ? 'http://localhost:3003/api'
+                ? 'http://localhost:3002/api'
                 : 'https://crowd-backend-zxxp.onrender.com/api');
     }
     

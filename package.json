@@ -1,19 +1,17 @@
 {
   "name": "crowd-frontend",
   "version": "1.0.0",
-  "description": "Event platform frontend",
-  "main": "frontend-server.js",
+  "description": "Crowd Event Platform Frontend",
+  "main": "index.html",
   "scripts": {
-    "start": "node frontend-server.js",
-    "dev": "node frontend-server.js",
-    "serve": "http-server -p 3000 -c-1"
+    "start": "npx http-server . -p 8080 -c-1 --cors",
+    "dev": "npx http-server . -p 8080 -c-1 --cors -o",
+    "test": "echo \"No tests specified\" && exit 0"
   },
+  "keywords": ["events", "platform", "frontend"],
+  "author": "Crowd Platform",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
     "http-server": "^14.1.1"
-  },
-  "devDependencies": {},
-  "keywords": ["frontend", "events", "platform"],
-  "author": "",
-  "license": "MIT"
+  }
 }

@@ -62,13 +62,13 @@
 
         .logo-icon {
             font-size: 1.2rem;
-            color: #f05537;
+            color: #3a3247;
         }
 
         .logo-text {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #f05537;
+            color: #3a3247;
             transition: font-size 0.3s ease;
         }
 
@@ -408,7 +408,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #f05537;
+            background: #3a3247;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -427,35 +427,75 @@
             top: 100%;
             right: 0;
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
+            border: 1px solid #e8e6ea;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            min-width: 280px;
             z-index: 1000;
-            display: none;
+            padding: 8px 0;
+            font-size: 14px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
             margin-top: 5px;
         }
 
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-section {
+            padding: 4px 0;
+        }
+
+        .dropdown-group {
+            margin-bottom: 4px;
+        }
+
         .user-dropdown a {
-            display: block;
-            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
             text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
+            color: #39364f;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
         }
 
         .user-dropdown a:hover {
-            background: #f8f8f8;
+            background-color: #f8f9fa;
+            color: #3a3247;
         }
 
-        .user-dropdown a:last-child {
-            border-bottom: none;
-            color: #f05537;
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e8e6ea;
+            margin: 8px 16px;
         }
 
-        .user-dropdown a:last-child:hover {
-            background: #fff5f4;
+        .user-info {
+            padding: 8px 20px;
+            margin: 0 8px;
+        }
+
+        .user-email-display {
+            font-size: 12px;
+            color: #6f7287;
+            font-weight: 500;
+        }
+
+        .logout-link {
+            color: #3a3247 !important;
+            font-weight: 500;
+        }
+
+        .logout-link:hover {
+            color: #e53e3e !important;
+            background-color: #fef2f2 !important;
         }
 
         /* Toggle visibility based on login status */
@@ -606,7 +646,7 @@
         }
 
         .mobile-search-btn {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border: none;
             border-radius: 8px;
@@ -619,7 +659,7 @@
         }
 
         .mobile-search-btn:hover {
-            background: #e04428;
+            background: #2d2a3f;
         }
 
         .mobile-menu-links {
@@ -647,7 +687,7 @@
 
         .mobile-nav-link:hover,
         .mobile-nav-action:hover {
-            color: #f05537;
+            color: #3a3247;
         }
 
         .mobile-nav-link.sub {
@@ -657,7 +697,7 @@
         }
 
         .mobile-nav-link.primary {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border-radius: 8px;
             margin: 1rem 0;
@@ -668,7 +708,7 @@
         }
 
         .mobile-nav-link.login {
-            color: #f05537;
+            color: #3a3247;
             font-weight: 600;
         }
 
@@ -1200,7 +1240,7 @@
         .nav-link:focus,
         .category-filter:focus,
         .filter-button:focus {
-            outline: 2px solid #f05537;
+            outline: 2px solid #3a3247;
             outline-offset: 2px;
         }
 
@@ -1304,10 +1344,28 @@
                     </div>
                     <span class="dropdown-arrow">▾</span>
 
+                    <!-- Enhanced User Dropdown Menu -->
                     <div class="user-dropdown" id="userDropdown">
-                        <a href="settings-new.html">Account Settings</a>
-                        <a href="dashboard-home.html">Organizer Dashboard</a>
-                        <a href="#" onclick="handleMenuClick('logout')" id="logoutLink">Log Out</a>
+                        <div class="dropdown-section">
+                            <div class="dropdown-group">
+                                <a href="logged_in_Version.html" role="menuitem">Browse events</a>
+                                <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                                <a href="#" role="menuitem">Tickets</a>
+                                <a href="#" role="menuitem">Liked</a>
+                                <a href="#" role="menuitem">Following</a>
+                                <a href="#" role="menuitem">Interests</a>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-section">
+                            <a href="settings.html" role="menuitem">Account settings</a>
+                            <div class="user-info">
+                                <span class="user-email-display" id="dropdownUserEmail">Loading...</span>
+                            </div>
+                            <a href="#" onclick="handleMenuClick('logout')" role="menuitem" class="logout-link" id="logoutLink">Log out</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1533,12 +1591,18 @@
         function updateUserNavigation(user) {
             const userEmailEl = document.getElementById('userEmail');
             const userAvatarEl = document.getElementById('userAvatar');
+            const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
             const mobileUserEmailEl = document.getElementById('mobileUserEmail');
             const mobileUserAvatarEl = document.getElementById('mobileUserAvatar');
 
             if (userEmailEl) {
                 const displayText = user.name || user.email || 'User';
                 userEmailEl.textContent = displayText;
+            }
+
+            if (dropdownUserEmailEl) {
+                // Show email in dropdown
+                dropdownUserEmailEl.textContent = user.email || 'user@example.com';
             }
 
             if (userAvatarEl) {
@@ -1653,12 +1717,10 @@
             const dropdown = document.getElementById('userDropdown');
             if (!dropdown) return;
 
-            const isVisible = dropdown.style.display === 'block';
-
-            if (isVisible) {
-                dropdown.style.display = 'none';
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
             } else {
-                dropdown.style.display = 'block';
+                dropdown.classList.add('show');
             }
         }
 
@@ -1679,7 +1741,7 @@
             }
             const dropdown = document.getElementById('userDropdown');
             if (dropdown) {
-                dropdown.style.display = 'none';
+                dropdown.classList.remove('show');
             }
             closeMobileMenu();
         }
@@ -1911,7 +1973,7 @@
             const userMenu = event.target.closest('.user-menu');
             const dropdown = document.getElementById('userDropdown');
             if (!userMenu && dropdown) {
-                dropdown.style.display = 'none';
+                dropdown.classList.remove('show');
             }
         });
     </script>

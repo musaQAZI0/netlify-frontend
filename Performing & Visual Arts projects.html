@@ -71,7 +71,7 @@
         .logo-text {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #f05537;
+            color: #3a3247;
         }
 
         .search-container {
@@ -94,8 +94,8 @@
         }
 
         .search-wrapper:focus-within {
-            border-color: #f05537;
-            box-shadow: 0 0 0 2px rgba(240, 85, 55, 0.1);
+            border-color: #3a3247;
+            box-shadow: 0 0 0 2px rgba(58, 50, 71, 0.1);
         }
 
         .search-icon {
@@ -147,7 +147,7 @@
         }
 
         .search-btn {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border: none;
             border-radius: 50%;
@@ -163,7 +163,7 @@
         }
 
         .search-btn:hover {
-            background: #e04429;
+            background: #2f2a3c;
         }
 
         /* Logged Out Header Styles */
@@ -184,14 +184,14 @@
         }
 
         .nav-link:hover {
-            color: #f05537;
+            color: #3a3247;
             background: #f8f8f8;
             padding: 8px 12px;
             border-radius: 6px;
         }
 
         .nav-link.primary {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border-radius: 20px;
             padding: 8px 16px;
@@ -199,7 +199,7 @@
         }
 
         .nav-link.primary:hover {
-            background: #e04429;
+            background: #2f2a3c;
             color: white;
         }
 
@@ -231,8 +231,8 @@
         }
 
         .help-dropdown-btn:hover {
-            color: #f05537;
-            background: rgba(240, 85, 55, 0.05);
+            color: #3a3247;
+            background: rgba(58, 50, 71, 0.05);
         }
 
         .help-dropdown-content {
@@ -282,7 +282,7 @@
 
         .help-dropdown-content a:hover {
             background-color: #f8f9fa;
-            color: #f05537;
+            color: #3a3247;
             padding-left: 24px;
         }
 
@@ -321,7 +321,7 @@
         }
 
         .nav-action-item:hover {
-            color: #f05537;
+            color: #3a3247;
         }
 
         .nav-action-icon {
@@ -354,7 +354,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #f05537;
+            background: #3a3247;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -397,7 +397,7 @@
 
         .user-dropdown a:last-child {
             border-bottom: none;
-            color: #f05537;
+            color: #3a3247;
         }
 
         .user-dropdown a:last-child:hover {
@@ -476,7 +476,7 @@
         }
 
         .breadcrumb-item a:hover {
-            color: #f6682f;
+            color: #3a3247;
         }
 
         /* Page Header */
@@ -555,8 +555,8 @@
         }
 
         .filter-tag:hover {
-            border-color: #f6682f;
-            background: #fef7f5;
+            border-color: #3a3247;
+            background: #f8f8f8;
         }
 
         /* Project Grid */
@@ -644,7 +644,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #f6682f, #ff8a5c);
+            background: linear-gradient(90deg, #3a3247, #585163);
             border-radius: 4px;
             transition: width 0.3s ease;
         }
@@ -710,7 +710,7 @@
         }
 
         .footer-section ul li a:hover {
-            color: #f6682f;
+            color: #716b7a;
         }
 
         .footer-bottom {
@@ -719,6 +719,167 @@
             padding-top: 24px;
             text-align: center;
             color: #888;
+        }
+
+        /* Mobile Navigation Updates */
+        .mobile-nav-container {
+            display: none;
+            /* Hidden by default */
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                display: none !important;
+                /* Hide desktop nav completely */
+            }
+
+            .mobile-nav-container {
+                display: grid !important;
+                /* 3 columns: logo | search | profile */
+                grid-template-columns: auto 1fr auto;
+                align-items: center;
+                padding: 12px 16px;
+                gap: 12px;
+                background-color: white;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .mobile-nav-container .logo img {
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+            }
+
+            .mobile-nav-container .search-container {
+                justify-self: center;
+                width: 100%;
+                max-width: 420px;
+                margin: 0;
+                position: relative;
+            }
+
+            .mobile-nav-container .search-bar {
+                width: 100%;
+                padding: 10px 16px 10px 40px;
+                border: 1px solid #d0d0d0;
+                border-radius: 25px;
+                font-size: 14px;
+                outline: none;
+                background-color: #f8f8f8;
+            }
+
+            .mobile-nav-container .search-bar:focus {
+                border-color: #3a3247;
+                background-color: white;
+            }
+
+            .mobile-nav-container .search-icon {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 16px;
+            }
+
+            .mobile-nav-container .search-button {
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: #3a3247;
+                border: none;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .mobile-nav-container .user-profile {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background-color: #f0f0f0;
+                border: 1px solid #d0d0d0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                position: relative;
+                font-size: 18px;
+                justify-self: end;
+            }
+
+            .mobile-nav-container .user-profile:hover {
+                background-color: #e8e8e8;
+            }
+
+            .mobile-nav-container .dropdown {
+                position: fixed !important;
+                top: 65px !important;
+                left: 5px !important;
+                right: 5px !important;
+                width: calc(100vw - 10px) !important;
+                max-width: calc(100vw - 10px) !important;
+                max-height: calc(100vh - 80px) !important;
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 12px !important;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+                z-index: 1500 !important;
+                display: none;
+                margin: 0 !important;
+                overflow-y: auto;
+            }
+
+            .mobile-nav-container .dropdown.show {
+                display: block;
+            }
+
+            .mobile-nav-container .dropdown-item {
+                padding: 16px 20px !important;
+                cursor: pointer;
+                border-bottom: 1px solid #f0f0f0;
+                font-size: 15px !important;
+                color: #333;
+                display: flex;
+                align-items: center;
+                line-height: 1.5 !important;
+                min-height: 50px !important;
+                text-decoration: none !important;
+            }
+            
+            .mobile-nav-container .dropdown-item:visited {
+                color: #333 !important;
+            }
+
+            .mobile-nav-container .dropdown-item:hover {
+                background-color: #f8f8f8;
+            }
+
+            .mobile-nav-container .dropdown-item:last-child {
+                border-bottom: none;
+            }
+
+            .mobile-nav-container .dropdown-item.email {
+                color: #666;
+                font-size: 13px;
+                cursor: default;
+            }
+
+            .mobile-nav-container .dropdown-item.email:hover {
+                background-color: white;
+            }
+
+            .mobile-nav-container .dropdown-divider {
+                height: 1px;
+                background-color: #e0e0e0;
+                margin: 8px 0;
+            }
         }
 
         /* Mobile Responsive */
@@ -890,14 +1051,58 @@
                     </div>
                     <span class="dropdown-arrow">▾</span>
 
-                    <div class="user-dropdown" id="userDropdown">
-                        <a href="#" onclick="handleMenuClick('settings')">Account Settings</a>
-                        <a href="#" onclick="handleMenuClick('dashboard')">Organizer Dashboard</a>
-                        <a href="#" onclick="handleMenuClick('logout')" id="logoutLink">Log Out</a>
+                    <div class="user-dropdown" id="userDropdown" role="menu" aria-hidden="true">
+                        <div class="menu-group">
+                            <a href="logged_in_Version.html" role="menuitem">Browse events</a>
+                            <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                            <a href="tickets-profile.html" role="menuitem">Tickets</a>
+                            <a href="likes.html" role="menuitem">Liked</a>
+                            <a href="tickets-profile.html" role="menuitem">Following</a>
+                            <a href="intrest.html" role="menuitem">Interests</a>
+                        </div>
+                        <div class="divider" aria-hidden="true"></div>
+                        <div class="menu-group">
+                            <a href="settings-new.html" role="menuitem">Account settings</a>
+                            <!-- Show user's email as a non-interactive item -->
+                            <div style="padding:10px 16px;color:#6b6b6b;font-size:14px;">
+                                <span id="dropdownUserEmail">Loading...</span>
+                            </div>
+                            <a href="#" id="logoutLink" role="menuitem">Log out</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </nav>
+
+        <!-- Mobile Navigation Container (shown on mobile only) -->
+        <div class="mobile-nav-container">
+            <a href="logged_in_Version.html" class="logo" aria-label="Crowd - Home">
+                <img src="logo.jpg" alt="Crowd Logo" style="width: 32px; height: 32px; object-fit: contain;">
+            </a>
+
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-bar" placeholder="Search events">
+                <button class="search-button">🔍</button>
+            </div>
+
+            <div class="user-profile" id="userProfile">
+                👤
+                <div class="dropdown" id="dropdown">
+                    <a href="logged_in_Version.html" class="dropdown-item">Browse events</a>
+                    <a href="organizer-dashboard.html" class="dropdown-item">Manage my events</a>
+                    <a href="tickets-profile.html" class="dropdown-item">Tickets</a>
+                    <a href="likes.html" class="dropdown-item">Liked</a>
+                    <a href="tickets-profile.html" class="dropdown-item">Following</a>
+                    <a href="intrest.html" class="dropdown-item">Interests</a>
+                    <a href="settings-new.html" class="dropdown-item">Account settings</a>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item email" id="mobileDropdownUserEmail">Loading...</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item" onclick="logout()">Log out</div>
+                </div>
+            </div>
+        </div>
     </header>
 
     <!-- Breadcrumb -->
@@ -1167,58 +1372,632 @@
     </footer>
 
     <script>
-        // Initialize authentication state from server-side data
-        let isLoggedIn = false;
-
-        // Check for authentication from multiple sources
-        function checkAuthenticationState() {
-            // First check if user data exists in memory (no localStorage in artifacts)
-            const urlParams = new URLSearchParams(window.location.search);
-            const authToken = urlParams.get('token');
-
-            // For demo purposes, you can simulate authentication
-            // In a real app, this would check with your backend
-            if (authToken === 'demo') {
-                isLoggedIn = true;
-                const user = { name: 'John Doe', email: 'john.doe@email.com' };
-                updateUserDisplay(user);
+        // Database-Integrated Authentication System
+        const API_CONFIG = {
+            BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                ? 'http://localhost:3002' 
+                : 'https://crowd-backend-zxxp.onrender.com',
+            ENDPOINTS: {
+                LOGIN: '/api/auth/login',
+                VERIFY: '/api/auth/verify-token',
+                PROFILE: '/api/auth/profile',
+                LOGOUT: '/api/auth/logout'
             }
+        };
+        
+        const STORAGE_KEYS = {
+            SESSION_TOKEN: 'crowd_session_token',
+            USER_ID: 'crowd_user_id',
+            LOGIN_TIME: 'crowd_login_time',
+            // Legacy keys for migration
+            LEGACY_TOKEN: 'authToken',
+            LEGACY_USER: 'currentUser',
+            OLD_TOKEN: 'crowd_auth_token',
+            OLD_USER: 'crowd_user_data'
+        };
 
-            // Update UI based on authentication state
-            updateAuthenticationState(isLoggedIn);
+        // Global authentication state
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        async function checkAuthenticationState() {
+            console.log('🔐 Starting comprehensive database authentication check...');
+            
+            try {
+                // Method 1: Check URL parameters (highest priority)
+                const urlAuth = await checkURLParameters();
+                if (urlAuth.success) {
+                    console.log('✅ Authentication via URL parameters successful');
+                    return await setupAuthState(urlAuth.user, urlAuth.token, 'URL navigation');
+                }
+                
+                // Method 2: Verify current session token with database
+                const sessionAuth = await checkSessionToken();
+                if (sessionAuth.success) {
+                    console.log('✅ Authentication via session token successful');
+                    return await setupAuthState(sessionAuth.user, sessionAuth.token, 'Session verification');
+                }
+                
+                // Method 3: Migrate legacy authentication data
+                const legacyAuth = await attemptLegacyMigration();
+                if (legacyAuth.success) {
+                    console.log('✅ Authentication via legacy migration successful');
+                    return await setupAuthState(legacyAuth.user, legacyAuth.token, 'Legacy migration');
+                }
+                
+                // Method 4: Create demo session if coming from logged_in_Version.html
+                const demoAuth = await createDemoSessionIfNeeded();
+                if (demoAuth.success) {
+                    console.log('✅ Demo session created for testing');
+                    return await setupAuthState(demoAuth.user, demoAuth.token, 'Demo session');
+                }
+                
+                console.log('❌ No valid authentication found - staying in guest mode');
+                await clearAuthState();
+                return false;
+                
+            } catch (error) {
+                console.error('🚨 Authentication check failed:', error);
+                await clearAuthState();
+                return false;
+            }
+        }
+        
+        async function checkURLParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            const userData = urlParams.get('user');
+            const fromPage = urlParams.get('from');
+            
+            console.log('🔗 Checking URL parameters:', { token: !!token, userData: !!userData, fromPage });
+            
+            // First check if we have user data from logged_in_Version.html
+            if (userData && fromPage === 'logged_in') {
+                console.log('✅ Processing REAL user authentication from logged_in_Version.html');
+                
+                try {
+                    const user = JSON.parse(decodeURIComponent(userData));
+                    console.log('🎯 Real user data found:', user.email || user.name || 'Unknown');
+                    
+                    // Use the real user data directly - no need to verify with database
+                    // since this is coming from our own logged_in_Version.html page
+                    const realToken = token || 'auth_token_' + Date.now();
+                    
+                    // Clean URL after processing
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    
+                    return { success: true, user, token: realToken };
+                } catch (error) {
+                    console.error('❌ URL parameter processing error:', error);
+                    console.log('📋 Raw user data:', userData);
+                }
+            } else if (token && fromPage === 'logged_in') {
+                // Handle case where we have token but no user data
+                console.log('⚠️ Token without user data from logged_in page - trying database verification');
+                
+                try {
+                    const verified = await verifyTokenAndGetUser(token);
+                    if (verified.success) {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        return { success: true, user: verified.user, token };
+                    }
+                } catch (error) {
+                    console.error('Database verification error:', error);
+                }
+            }
+            
+            return { success: false };
+        }
+        
+        async function checkSessionToken() {
+            const token = sessionStorage.getItem(STORAGE_KEYS.SESSION_TOKEN) || 
+                         localStorage.getItem(STORAGE_KEYS.OLD_TOKEN);
+            const loginTime = localStorage.getItem(STORAGE_KEYS.LOGIN_TIME);
+            
+            if (!token) return { success: false };
+            
+            // Check if session is expired (24 hours)
+            if (loginTime && isSessionExpired(loginTime)) {
+                console.log('⏰ Session expired, clearing auth data');
+                await clearSession();
+                return { success: false };
+            }
+            
+            const verified = await verifyTokenAndGetUser(token);
+            if (verified.success) {
+                return { success: true, user: verified.user, token };
+            }
+            
+            // If database is unavailable but we have stored user data, try using local storage
+            if (verified.error === 'database_unavailable') {
+                console.log('🔄 Database unavailable, trying local user data fallback');
+                const storedUserId = sessionStorage.getItem(STORAGE_KEYS.USER_ID);
+                const legacyUser = localStorage.getItem(STORAGE_KEYS.LEGACY_USER);
+                
+                if (legacyUser) {
+                    try {
+                        const user = JSON.parse(legacyUser);
+                        console.log('✅ Using cached user data due to database unavailability');
+                        return { success: true, user, token };
+                    } catch (error) {
+                        console.error('Error parsing cached user data:', error);
+                    }
+                }
+            }
+            
+            return { success: false };
+        }
+        
+        async function attemptLegacyMigration() {
+            const legacyToken = localStorage.getItem(STORAGE_KEYS.LEGACY_TOKEN);
+            const legacyUser = localStorage.getItem(STORAGE_KEYS.LEGACY_USER);
+            
+            if (legacyToken && legacyUser) {
+                console.log('🔄 Attempting legacy data migration');
+                
+                try {
+                    const user = JSON.parse(legacyUser);
+                    const verified = await verifyTokenAndGetUser(legacyToken);
+                    
+                    if (verified.success) {
+                        // Migrate to new storage format
+                        await createUserSession(verified.user, legacyToken);
+                        
+                        // Clean up legacy data
+                        localStorage.removeItem(STORAGE_KEYS.LEGACY_TOKEN);
+                        localStorage.removeItem(STORAGE_KEYS.LEGACY_USER);
+                        
+                        return { success: true, user: verified.user, token: legacyToken };
+                    } else if (verified.error === 'database_unavailable') {
+                        console.log('🔄 Database unavailable during migration, using cached user data');
+                        // Use cached user data when database is unavailable
+                        return { success: true, user, token: legacyToken };
+                    }
+                } catch (error) {
+                    console.error('Legacy migration error:', error);
+                }
+            }
+            
+            return { success: false };
+        }
+        
+        async function createDemoSessionIfNeeded() {
+            const referrer = document.referrer;
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromPage = urlParams.get('from');
+            const isFromLoggedIn = referrer && referrer.includes('logged_in_Version.html');
+            
+            // Only create demo session if coming from logged_in_Version.html but NO URL parameters
+            // This ensures real user data from URL parameters takes priority
+            if (isFromLoggedIn && fromPage !== 'logged_in') {
+                console.log('🎭 Creating demo session for testing (no URL auth data found)');
+                
+                const demoUser = {
+                    id: 'demo_user_001',
+                    email: 'demo@example.com',
+                    name: 'Demo User',
+                    avatar: null,
+                    created_at: new Date().toISOString()
+                };
+                
+                const demoToken = 'demo_token_' + Date.now();
+                await createUserSession(demoUser, demoToken);
+                
+                return { success: true, user: demoUser, token: demoToken };
+            } else if (isFromLoggedIn && fromPage === 'logged_in') {
+                console.log('🚫 Skipping demo session - real user data should be in URL parameters');
+            }
+            
+            return { success: false };
+        }
+        
+        async function verifyTokenAndGetUser(token) {
+            try {
+                console.log('🔍 Verifying token with database...');
+                
+                const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.VERIFY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ token })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.user) {
+                        console.log('✅ Token verified, user data retrieved from database');
+                        return { success: true, user: data.user };
+                    }
+                }
+                
+                console.log('❌ Token verification failed');
+                return { success: false };
+                
+            } catch (error) {
+                console.error('Database verification error:', error);
+                console.log('⚠️ Database access failed - using fallback authentication');
+                
+                // Return failure so other auth methods can be tried
+                return { success: false, error: 'database_unavailable' };
+            }
+        }
+        
+        async function createUserSession(user, token) {
+            console.log('💾 Creating secure user session...');
+            
+            // Store in sessionStorage for security
+            sessionStorage.setItem(STORAGE_KEYS.SESSION_TOKEN, token);
+            sessionStorage.setItem(STORAGE_KEYS.USER_ID, user.id);
+            
+            // Store login time in localStorage for expiry check
+            localStorage.setItem(STORAGE_KEYS.LOGIN_TIME, new Date().toISOString());
+            
+            console.log('✅ Session created successfully');
+        }
+        
+        async function setupAuthState(user, token, method) {
+            console.log(`🎯 Setting up authentication state via ${method}`);
+            
+            // Update global state
+            isLoggedIn = true;
+            currentUser = user;
+            
+            // Create session
+            await createUserSession(user, token);
+            
+            // Update UI
+            updateAuthenticationState(true);
+            updateUserDisplay(user);
+            
+            // Show welcome notification
+            const userName = user.name || user.email?.split('@')[0] || 'User';
+            showTopNotification(`Welcome back, ${userName}! 🎭`, 'success');
+            
+            console.log('✅ Authentication state setup complete');
+            return true;
+        }
+        
+        async function clearAuthState() {
+            console.log('🧹 Clearing authentication state...');
+            
+            // Update global state
+            isLoggedIn = false;
+            currentUser = null;
+            
+            // Clear session data
+            await clearSession();
+            
+            // Update UI
+            updateAuthenticationState(false);
+            
+            console.log('✅ Authentication state cleared');
+        }
+        
+        function isSessionExpired(loginTime) {
+            if (!loginTime) return true;
+            
+            try {
+                const loginDate = new Date(loginTime);
+                const now = new Date();
+                const diffHours = (now - loginDate) / (1000 * 60 * 60);
+                
+                return diffHours > 24; // 24-hour expiry
+            } catch (error) {
+                return true; // Expire on error
+            }
+        }
+        
+        async function clearSession() {
+            // Clear all storage keys
+            Object.values(STORAGE_KEYS).forEach(key => {
+                sessionStorage.removeItem(key);
+                localStorage.removeItem(key);
+            });
+            
+            console.log('🗑️ Session data cleared');
         }
 
-        // Function to update user display in header
+        // Enhanced user display with real database data
         function updateUserDisplay(user) {
             const userEmailEl = document.getElementById('userEmail');
             const userAvatarEl = document.getElementById('userAvatar');
+            const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+            const mobileDropdownUserEmail = document.getElementById('mobileDropdownUserEmail');
 
-            if (userEmailEl) {
+            if (userEmailEl && user) {
                 const displayText = user.name || user.email || 'User';
                 userEmailEl.textContent = displayText;
             }
 
-            if (userAvatarEl) {
+            if (userAvatarEl && user) {
                 const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
                 userAvatarEl.textContent = avatarText;
             }
+
+            // Update dropdown email displays
+            if (dropdownUserEmail && user) {
+                dropdownUserEmail.textContent = user.email || user.name || 'user@example.com';
+            }
+
+            if (mobileDropdownUserEmail && user) {
+                mobileDropdownUserEmail.textContent = user.email || user.name || 'user@example.com';
+            }
+            
+            console.log('👤 User display updated with database data:', user?.email);
         }
 
         // Function to update header based on authentication status
         function updateAuthenticationState(loggedIn) {
             isLoggedIn = loggedIn;
-            const body = document.getElementById('body');
+            const body = document.body; // Fixed: Use document.body instead of getElementById
+            
+            console.log(`🔄 Updating authentication state: ${loggedIn ? 'LOGGED IN' : 'LOGGED OUT'}`);
 
             if (isLoggedIn) {
                 body.classList.add('is-logged-in');
+                console.log('✅ Added is-logged-in class - showing logged-in header');
             } else {
                 body.classList.remove('is-logged-in');
+                console.log('❌ Removed is-logged-in class - showing logged-out header');
+            }
+            
+            // Force header visibility update
+            updateHeaderVisibility();
+        }
+        
+        // Enhanced header visibility update function
+        function updateHeaderVisibility() {
+            const loggedOutHeader = document.querySelector('.logged-out-header');
+            const loggedInHeader = document.querySelector('.logged-in-header');
+            
+            if (isLoggedIn) {
+                if (loggedOutHeader) {
+                    loggedOutHeader.style.display = 'none';
+                    console.log('🚫 Hidden logged-out header');
+                }
+                if (loggedInHeader) {
+                    loggedInHeader.style.display = 'block';
+                    console.log('✅ Showing logged-in header');
+                }
+            } else {
+                if (loggedOutHeader) {
+                    loggedOutHeader.style.display = 'block';
+                    console.log('✅ Showing logged-out header');
+                }
+                if (loggedInHeader) {
+                    loggedInHeader.style.display = 'none';
+                    console.log('🚫 Hidden logged-in header');
+                }
             }
         }
 
+        // Enhanced database profile fetching functionality
+        async function fetchUserProfileFromDatabase(userId, token) {
+            console.log('👤 Fetching user profile from database...');
+            
+            try {
+                const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const profileData = await response.json();
+                    if (profileData.success && profileData.user) {
+                        console.log('✅ User profile fetched from database:', profileData.user.email);
+                        return {
+                            success: true,
+                            user: {
+                                id: profileData.user.id,
+                                email: profileData.user.email,
+                                name: profileData.user.name || profileData.user.firstName || profileData.user.email.split('@')[0],
+                                firstName: profileData.user.firstName,
+                                lastName: profileData.user.lastName,
+                                avatar: profileData.user.avatar,
+                                created_at: profileData.user.created_at,
+                                updated_at: profileData.user.updated_at
+                            }
+                        };
+                    }
+                }
+                
+                console.log('❌ Failed to fetch user profile from database');
+                return { success: false };
+                
+            } catch (error) {
+                console.error('Database profile fetch error:', error);
+                return { success: false };
+            }
+        }
+        
+        // Enhanced logout with database integration
+        async function logout() {
+            console.log('🚪 Logging out user...');
+            
+            try {
+                const token = sessionStorage.getItem(STORAGE_KEYS.SESSION_TOKEN);
+                
+                if (token && !token.startsWith('demo_token_')) {
+                    // Notify backend of logout
+                    await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LOGOUT}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Backend logout error:', error);
+            }
+            
+            await clearAuthState();
+            showTopNotification('Successfully logged out', 'info');
+            
+            // Redirect to login page
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+        
+        // Real-time profile updates from database
+        async function syncUserProfileData() {
+            if (!isLoggedIn || !currentUser) return;
+            
+            const token = sessionStorage.getItem(STORAGE_KEYS.SESSION_TOKEN);
+            if (!token || token.startsWith('demo_token_')) return;
+            
+            try {
+                const profileResult = await fetchUserProfileFromDatabase(currentUser.id, token);
+                if (profileResult.success) {
+                    // Update current user with fresh database data
+                    currentUser = profileResult.user;
+                    
+                    // Update UI with fresh data
+                    updateUserDisplay(currentUser);
+                    
+                    console.log('🔄 User profile synced with database');
+                }
+            } catch (error) {
+                console.error('Profile sync error:', error);
+            }
+        }
+        
+        // Top notification system
+        function showTopNotification(message, type = 'info') {
+            let notification = document.getElementById('topNotification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'topNotification';
+                notification.className = 'top-notification';
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <span id="notificationMessage"></span>
+                        <button class="notification-close" onclick="hideTopNotification()">×</button>
+                    </div>
+                `;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: -100px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: white;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    padding: 15px 20px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 10000;
+                    min-width: 300px;
+                    text-align: center;
+                    transition: top 0.3s ease;
+                `;
+                document.body.appendChild(notification);
+            }
+
+            document.getElementById('notificationMessage').textContent = message;
+            notification.className = `top-notification ${type}`;
+            
+            if (type === 'success') {
+                notification.style.borderColor = '#28a745';
+                notification.style.color = '#155724';
+            } else if (type === 'error') {
+                notification.style.borderColor = '#dc3545';
+                notification.style.color = '#721c24';
+            } else {
+                notification.style.borderColor = '#17a2b8';
+                notification.style.color = '#0c5460';
+            }
+
+            setTimeout(() => notification.style.top = '20px', 100);
+            setTimeout(() => hideTopNotification(), 4000);
+        }
+        
+        function hideTopNotification() {
+            const notification = document.getElementById('topNotification');
+            if (notification) {
+                notification.style.top = '-100px';
+            }
+        }
+        
+        // Periodic profile sync (every 10 minutes)
+        setInterval(syncUserProfileData, 10 * 60 * 1000);
+        
+        // Handle auth state changes from other tabs
+        window.addEventListener('storage', function(e) {
+            if (e.key === STORAGE_KEYS.SESSION_TOKEN && !e.newValue) {
+                // Token was removed, user logged out
+                isLoggedIn = false;
+                currentUser = null;
+                updateAuthenticationState(false);
+                showTopNotification('You have been logged out from another tab', 'info');
+            } else if (e.key === STORAGE_KEYS.SESSION_TOKEN && e.newValue) {
+                // Token was added, user logged in
+                checkAuthenticationState();
+            }
+        });
+
+        // Navigation function for logged_in_Version.html to call this page
+        function navigateToArtsPage() {
+            const token = localStorage.getItem('authToken') || sessionStorage.getItem('crowd_session_token');
+            const currentUser = localStorage.getItem('currentUser') || sessionStorage.getItem('crowd_user_data');
+            
+            console.log('🎭 Navigating to Arts page with authentication data');
+            
+            if (token && currentUser) {
+                // Pass user data via URL parameters for immediate authentication
+                const userDataEncoded = encodeURIComponent(currentUser);
+                const targetUrl = `Performing & Visual Arts projects.html?token=${token}&user=${userDataEncoded}&from=logged_in`;
+                console.log('✅ Navigating with authentication parameters');
+                window.location.href = targetUrl;
+            } else {
+                // Navigate without parameters - will try other auth methods
+                console.log('⚠️ No auth data found, navigating without parameters');
+                window.location.href = 'Performing & Visual Arts projects.html';
+            }
+        }
+        
+        // Enhanced authentication state update with forced header toggle
+        function forceHeaderToggle() {
+            console.log('🔄 Force toggling headers based on current auth state');
+            console.log('Current isLoggedIn state:', isLoggedIn);
+            
+            // Force update even if state seems unchanged
+            updateAuthenticationState(isLoggedIn);
+            
+            // Double-check header visibility
+            setTimeout(() => {
+                const loggedInHeader = document.querySelector('.logged-in-header');
+                const loggedOutHeader = document.querySelector('.logged-out-header');
+                
+                console.log('Header visibility check:');
+                console.log('Logged-in header display:', loggedInHeader ? getComputedStyle(loggedInHeader).display : 'not found');
+                console.log('Logged-out header display:', loggedOutHeader ? getComputedStyle(loggedOutHeader).display : 'not found');
+                
+                if (isLoggedIn && loggedInHeader && getComputedStyle(loggedInHeader).display === 'none') {
+                    console.log('🚨 Logged-in header not showing when it should - forcing display');
+                    loggedInHeader.style.display = 'block !important';
+                    if (loggedOutHeader) loggedOutHeader.style.display = 'none !important';
+                }
+            }, 100);
+        }
+        
         // Call authentication check on page load
         document.addEventListener('DOMContentLoaded', function () {
-            checkAuthenticationState();
+            console.log('🚀 Initializing Performing & Visual Arts page with database authentication...');
+            
+            checkAuthenticationState().then((authResult) => {
+                console.log('🎯 Auth check complete, result:', authResult);
+                
+                // Force header toggle after auth check
+                setTimeout(() => {
+                    forceHeaderToggle();
+                }, 200);
+            });
         });
 
         // Search functionality
@@ -1330,6 +2109,31 @@
             }
         });
 
+        // Handle menu clicks for user dropdown
+        function handleMenuClick(action) {
+            console.log('📋 Menu action:', action);
+            
+            switch (action) {
+                case 'settings':
+                    window.location.href = 'settings-new.html';
+                    break;
+                case 'dashboard':
+                    window.location.href = 'organizer-dashboard.html';
+                    break;
+                case 'logout':
+                    logout();
+                    break;
+                default:
+                    console.log('Unknown menu action:', action);
+            }
+            
+            // Close dropdown after action
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.style.display = 'none';
+            }
+        }
+
         // Handle keyboard navigation
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
@@ -1358,8 +2162,8 @@
         // Filter functionality
         document.querySelectorAll('.filter-tag').forEach(filter => {
             filter.addEventListener('click', () => {
-                filter.style.borderColor = '#f6682f';
-                filter.style.background = '#fef7f5';
+                filter.style.borderColor = '#3a3247';
+                filter.style.background = '#f8f8f8';
 
                 // Reset other filters
                 document.querySelectorAll('.filter-tag').forEach(otherFilter => {
@@ -1369,6 +2173,94 @@
                     }
                 });
             });
+        });
+
+        // Mobile Navigation - Dropdown functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const userProfile = document.getElementById('userProfile');
+            const dropdown = document.getElementById('dropdown');
+
+            if (userProfile && dropdown) {
+                userProfile.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!userProfile.contains(e.target)) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+
+                // Handle dropdown item clicks
+                const dropdownItems = document.querySelectorAll('.mobile-nav-container .dropdown-item:not(.email)');
+                dropdownItems.forEach(item => {
+                    item.addEventListener('click', function () {
+                        console.log('Mobile dropdown clicked:', this.textContent);
+                        dropdown.classList.remove('show');
+
+                        // Add navigation logic for mobile header dropdown
+                        const itemText = this.textContent.trim();
+                        switch (itemText) {
+                            case 'Browse events':
+                                window.location.href = 'logged_in_Version.html';
+                                break;
+                            case 'Manage my events':
+                                window.location.href = 'organizer-dashboard.html';
+                                break;
+                            case 'Tickets':
+                                window.location.href = 'tickets-profile.html';
+                                break;
+                            case 'Liked':
+                                window.location.href = 'likes.html';
+                                break;
+                            case 'Following':
+                                window.location.href = 'tickets-profile.html';
+                                break;
+                            case 'Interests':
+                                window.location.href = 'intrest.html';
+                                break;
+                            case 'Account settings':
+                                window.location.href = 'settings-new.html';
+                                break;
+                            case 'Log out':
+                                if (window.logout) {
+                                    window.logout();
+                                } else {
+                                    localStorage.removeItem('authToken');
+                                    localStorage.removeItem('currentUser');
+                                    window.location.href = 'index.html';
+                                }
+                                break;
+                        }
+                    });
+                });
+
+                // Mobile Search functionality
+                const searchBar = document.querySelector('.mobile-nav-container .search-bar');
+                const searchButton = document.querySelector('.mobile-nav-container .search-button');
+
+                if (searchButton && searchBar) {
+                    searchButton.addEventListener('click', function () {
+                        const searchTerm = searchBar.value.trim();
+                        if (searchTerm) {
+                            console.log('Mobile search for:', searchTerm);
+                            handleSearch();
+                        }
+                    });
+
+                    searchBar.addEventListener('keypress', function (e) {
+                        if (e.key === 'Enter') {
+                            const searchTerm = this.value.trim();
+                            if (searchTerm) {
+                                console.log('Mobile search for:', searchTerm);
+                                handleSearch();
+                            }
+                        }
+                    });
+                }
+            }
         });
     </script>
 </body>

@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Holiday Events in Punjab, Pakistan - Celebrate Special Days | CRWOD</title>
-    <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="css/responsive.css">
     <style>
         * {
             margin: 0;
@@ -19,10 +16,6 @@
             line-height: 1.6;
             color: #333;
             background-color: #fafafa;
-        }
-
-        body.category-page {
-            min-height: 100vh;
         }
 
         .container {
@@ -72,13 +65,6 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: #f05537;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            max-width: 120px;
-            object-fit: contain;
         }
 
         .search-container {
@@ -490,9 +476,9 @@
         }
 
         .cta-button {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255,255,255,0.3);
             color: white;
             padding: 14px 28px;
             border-radius: 50px;
@@ -502,7 +488,7 @@
         }
 
         .cta-button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255,255,255,0.3);
             transform: translateY(-2px);
         }
 
@@ -541,7 +527,7 @@
             background: white;
             padding: 32px 24px;
             border-bottom: 1px solid #e8e6ea;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .filters-container {
@@ -658,7 +644,7 @@
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             cursor: pointer;
             border: 1px solid #f0f0f0;
@@ -666,7 +652,7 @@
 
         .event-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.15);
         }
 
         .event-image {
@@ -687,7 +673,7 @@
             position: absolute;
             top: 16px;
             left: 16px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             padding: 8px 12px;
             border-radius: 8px;
@@ -1086,97 +1072,29 @@
         }
 
         /* Icon styles for different categories */
-        .category-card[data-category="business"] .category-icon {
-            color: #f05537;
-        }
-
-        .category-card[data-category="health"] .category-icon {
-            color: #10b981;
-        }
-
-        .category-card[data-category="science"] .category-icon {
-            color: #3b82f6;
-        }
-
-        .category-card[data-category="family"] .category-icon {
-            color: #8b5cf6;
-        }
-
-        .category-card[data-category="community"] .category-icon {
-            color: #f59e0b;
-        }
-
-        .category-card[data-category="spirituality"] .category-icon {
-            color: #ec4899;
-        }
-
-        .category-card[data-category="charity"] .category-icon {
-            color: #ef4444;
-        }
-
-        .category-card[data-category="performing"] .category-icon {
-            color: #6366f1;
-        }
-
-        .category-card[data-category="hobbies"] .category-icon {
-            color: #14b8a6;
-        }
-
-        .category-card[data-category="food"] .category-icon {
-            color: #f97316;
-        }
-
-        .category-card[data-category="home"] .category-icon {
-            color: #84cc16;
-        }
-
-        .category-card[data-category="government"] .category-icon {
-            color: #64748b;
-        }
-
-        .category-card[data-category="sports"] .category-icon {
-            color: #dc2626;
-        }
-
-        .category-card[data-category="fashion"] .category-icon {
-            color: #db2777;
-        }
-
-        .category-card[data-category="school"] .category-icon {
-            color: #2563eb;
-        }
-
-        .category-card[data-category="film"] .category-icon {
-            color: #7c3aed;
-        }
-
-        .category-card[data-category="music"] .category-icon {
-            color: #059669;
-        }
-
-        .category-card[data-category="nightlife"] .category-icon {
-            color: #7c2d12;
-        }
-
-        .category-card[data-category="seasonal"] .category-icon {
-            color: #ca8a04;
-        }
-
-        .category-card[data-category="dating"] .category-icon {
-            color: #be185d;
-        }
-
-        .category-card[data-category="travel"] .category-icon {
-            color: #0891b2;
-        }
-
-        .category-card[data-category="holidays"] .category-icon {
-            color: #dc2626;
-        }
-
-        .category-card[data-category="auto"] .category-icon {
-            color: #374151;
-        }
+        .category-card[data-category="business"] .category-icon { color: #f05537; }
+        .category-card[data-category="health"] .category-icon { color: #10b981; }
+        .category-card[data-category="science"] .category-icon { color: #3b82f6; }
+        .category-card[data-category="family"] .category-icon { color: #8b5cf6; }
+        .category-card[data-category="community"] .category-icon { color: #f59e0b; }
+        .category-card[data-category="spirituality"] .category-icon { color: #ec4899; }
+        .category-card[data-category="charity"] .category-icon { color: #ef4444; }
+        .category-card[data-category="performing"] .category-icon { color: #6366f1; }
+        .category-card[data-category="hobbies"] .category-icon { color: #14b8a6; }
+        .category-card[data-category="food"] .category-icon { color: #f97316; }
+        .category-card[data-category="home"] .category-icon { color: #84cc16; }
+        .category-card[data-category="government"] .category-icon { color: #64748b; }
+        .category-card[data-category="sports"] .category-icon { color: #dc2626; }
+        .category-card[data-category="fashion"] .category-icon { color: #db2777; }
+        .category-card[data-category="school"] .category-icon { color: #2563eb; }
+        .category-card[data-category="film"] .category-icon { color: #7c3aed; }
+        .category-card[data-category="music"] .category-icon { color: #059669; }
+        .category-card[data-category="nightlife"] .category-icon { color: #7c2d12; }
+        .category-card[data-category="seasonal"] .category-icon { color: #ca8a04; }
+        .category-card[data-category="dating"] .category-icon { color: #be185d; }
+        .category-card[data-category="travel"] .category-icon { color: #0891b2; }
+        .category-card[data-category="holidays"] .category-icon { color: #dc2626; }
+        .category-card[data-category="auto"] .category-icon { color: #374151; }
 
         .view-more {
             text-align: center;
@@ -1244,7 +1162,6 @@
             0% {
                 background-position: -200% 0;
             }
-
             100% {
                 background-position: 200% 0;
             }
@@ -1432,7 +1349,6 @@
 
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
-
             .format-card,
             .time-card,
             .category-card,
@@ -1496,21 +1412,19 @@
             background: #a8a8a8;
         }
     </style>
-    <!-- Mobile Menu Functionality -->
-    <script src="js/mobile-menu.js"></script>
 </head>
-
-<body class="category-page">
+<body>
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">crowd</span>
+            </a>
+
             <div class="search-section" data-search-component>
                 <!-- Search component will be rendered here by JavaScript -->
             </div>
-
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
-                <span>☰</span>
-            </button>
 
             <div class="nav-links" id="navLinks">
                 <a href="contact_sales.html" class="nav-link">Contact Sales</a>
@@ -1523,8 +1437,7 @@
                     <div class="help-dropdown-content" id="helpDropdownContent">
                         <a href="Help_center_logged_in.html">Help Center</a>
                         <a href="Help_Center_sub_parts/Your_tickets_new.html">Find your tickets</a>
-                        <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event
-                            organizer</a>
+                        <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event organizer</a>
                     </div>
                 </div>
                 <a href="#" class="nav-link secondary">Find my tickets</a>
@@ -1556,9 +1469,7 @@
                 <p class="hero-description">Discover the best Holiday events in your area and online</p>
             </div>
             <aside class="hero-image">
-                <img fetchpriority="high" class="full-width-img" loading="eager"
-                    src="https://cdn.evbstatic.com/s3-build/fe/build/images/9a0b58d881d91b3bff1eafabcdb2da97-holiday.webp"
-                    alt="Holiday celebrations with animated decorations and festive elements">
+                <img fetchpriority="high" class="full-width-img" loading="eager" src="https://cdn.evbstatic.com/s3-build/fe/build/images/9a0b58d881d91b3bff1eafabcdb2da97-holiday.webp" alt="Holiday celebrations with animated decorations and festive elements">
             </aside>
         </div>
     </section>
@@ -1570,25 +1481,25 @@
                 <span>Punjab</span>
                 <span class="filter-count">82</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
             <div class="filter-dropdown" tabindex="0" role="button" aria-label="Filter by date">
                 <span>Date</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
             <div class="filter-dropdown" tabindex="0" role="button" aria-label="Filter by event type">
                 <span>Event Type</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
             <div class="filter-dropdown" tabindex="0" role="button" aria-label="Filter by price">
                 <span>Price</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
         </div>
@@ -1603,7 +1514,7 @@
                 <a href="#" class="view-all-btn">
                     View All
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M8 4l8 8-8 8" />
+                        <path d="M8 4l8 8-8 8"/>
                     </svg>
                 </a>
             </div>
@@ -1616,21 +1527,18 @@
                     </div>
                     <div class="event-content">
                         <h3 class="event-title">Christmas Celebration 2025</h3>
-                        <p class="event-description">Join us for a magical Christmas celebration with live music,
-                            delicious food, and festive activities for the whole family.</p>
+                        <p class="event-description">Join us for a magical Christmas celebration with live music, delicious food, and festive activities for the whole family.</p>
                         <div class="event-meta">
                             <div class="event-time">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                                 </svg>
                                 6:00 PM
                             </div>
                             <div class="event-location">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
                                 Lahore
                             </div>
@@ -1644,8 +1552,7 @@
                             <a href="#" class="btn-primary">Get Tickets</a>
                             <a href="#" class="btn-secondary">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </a>
                         </div>
@@ -1659,21 +1566,18 @@
                     </div>
                     <div class="event-content">
                         <h3 class="event-title">New Year's Eve Party</h3>
-                        <p class="event-description">Ring in 2026 with an unforgettable New Year's Eve party featuring
-                            DJ performances, countdown celebrations, and midnight fireworks.</p>
+                        <p class="event-description">Ring in 2026 with an unforgettable New Year's Eve party featuring DJ performances, countdown celebrations, and midnight fireworks.</p>
                         <div class="event-meta">
                             <div class="event-time">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                                 </svg>
                                 9:00 PM
                             </div>
                             <div class="event-location">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
                                 Islamabad
                             </div>
@@ -1687,8 +1591,7 @@
                             <a href="#" class="btn-primary">Get Tickets</a>
                             <a href="#" class="btn-secondary">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </a>
                         </div>
@@ -1702,21 +1605,18 @@
                     </div>
                     <div class="event-content">
                         <h3 class="event-title">Halloween Spooktacular</h3>
-                        <p class="event-description">Get ready for a frightfully fun Halloween event with costume
-                            contests, haunted house tours, and spooky treats for all ages.</p>
+                        <p class="event-description">Get ready for a frightfully fun Halloween event with costume contests, haunted house tours, and spooky treats for all ages.</p>
                         <div class="event-meta">
                             <div class="event-time">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                                 </svg>
                                 7:00 PM
                             </div>
                             <div class="event-location">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                                 </svg>
                                 Karachi
                             </div>
@@ -1730,8 +1630,7 @@
                             <a href="#" class="btn-primary">Get Tickets</a>
                             <a href="#" class="btn-secondary">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path
-                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </a>
                         </div>
@@ -1761,8 +1660,7 @@
                     <div class="format-icon">🏢</div>
                     <div class="format-content">
                         <div class="format-title">Conferences</div>
-                        <div class="format-description">Professional holiday networking events and industry celebrations
-                        </div>
+                        <div class="format-description">Professional holiday networking events and industry celebrations</div>
                     </div>
                 </div>
                 <div class="format-card seminars" tabindex="0" role="button">
@@ -2012,15 +1910,15 @@
         function toggleHelpDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
-
+            
             const dropdown = event.target.closest('.help-dropdown');
             const isActive = dropdown.classList.contains('active');
-
+            
             // Close all other dropdowns
             document.querySelectorAll('.help-dropdown.active').forEach(dd => {
                 dd.classList.remove('active');
             });
-
+            
             // Toggle current dropdown
             if (!isActive) {
                 dropdown.classList.add('active');
@@ -2077,14 +1975,14 @@
                         image: "halloween-event.jpg"
                     }
                 ];
-
+                
                 this.filters = {
                     location: 'all',
                     date: 'all',
                     eventType: 'all',
                     price: 'all'
                 };
-
+                
                 this.init();
             }
 
@@ -2100,7 +1998,7 @@
                 // Search functionality
                 const searchInput = document.querySelector('.search-input');
                 const searchBtn = document.querySelector('.search-btn');
-
+                
                 searchInput.addEventListener('input', this.handleSearch.bind(this));
                 searchBtn.addEventListener('click', this.performSearch.bind(this));
                 searchInput.addEventListener('keypress', (e) => {
@@ -2172,7 +2070,7 @@
                 // Debounced search
                 let searchTimeout;
                 const searchInput = document.querySelector('.search-input');
-
+                
                 searchInput.addEventListener('input', (e) => {
                     clearTimeout(searchTimeout);
                     searchTimeout = setTimeout(() => {
@@ -2221,13 +2119,13 @@
                 window.addEventListener('scroll', () => {
                     const header = document.querySelector('.header');
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
+                    
                     if (scrollTop > lastScrollTop && scrollTop > 100) {
                         header.style.transform = 'translateY(-100%)';
                     } else {
                         header.style.transform = 'translateY(0)';
                     }
-
+                    
                     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
                 });
 
@@ -2238,7 +2136,7 @@
             loadEvents() {
                 // Simulate loading events
                 this.showLoadingState();
-
+                
                 setTimeout(() => {
                     this.hideLoadingState();
                     this.renderEvents(this.events);
@@ -2248,7 +2146,7 @@
             showLoadingState() {
                 const eventsGrid = document.querySelector('.events-grid');
                 eventsGrid.innerHTML = '';
-
+                
                 for (let i = 0; i < 3; i++) {
                     const loadingCard = document.createElement('div');
                     loadingCard.className = 'loading-card';
@@ -2269,7 +2167,7 @@
 
             renderEvents(events) {
                 const eventsGrid = document.querySelector('.events-grid');
-
+                
                 if (events.length === 0) {
                     this.showNoResults();
                     return;
@@ -2322,7 +2220,7 @@
                 document.querySelectorAll('.event-card').forEach((card, index) => {
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(20px)';
-
+                    
                     setTimeout(() => {
                         card.style.transition = 'all 0.6s ease';
                         card.style.opacity = '1';
@@ -2334,7 +2232,7 @@
             showNoResults() {
                 const noResults = document.querySelector('.no-results');
                 const eventsSection = document.querySelector('.events-section');
-
+                
                 eventsSection.style.display = 'none';
                 noResults.style.display = 'block';
             }
@@ -2342,21 +2240,21 @@
             hideNoResults() {
                 const noResults = document.querySelector('.no-results');
                 const eventsSection = document.querySelector('.events-section');
-
+                
                 noResults.style.display = 'none';
                 eventsSection.style.display = 'block';
             }
 
             performSearch(query = '') {
                 const searchTerm = query || document.querySelector('.search-input').value;
-
+                
                 if (!searchTerm.trim()) {
                     this.renderEvents(this.events);
                     this.hideNoResults();
                     return;
                 }
 
-                const filteredEvents = this.events.filter(event =>
+                const filteredEvents = this.events.filter(event => 
                     event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     event.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -2364,7 +2262,7 @@
                 );
 
                 this.renderEvents(filteredEvents);
-
+                
                 if (filteredEvents.length === 0) {
                     this.showNoResults();
                 } else {
@@ -2388,19 +2286,19 @@
             handleFilterClick(e) {
                 const dropdown = e.currentTarget;
                 const filterType = dropdown.textContent.trim().toLowerCase();
-
+                
                 dropdown.classList.toggle('active');
-
+                
                 // Show filter options (would typically be a dropdown)
                 this.showFilterOptions(filterType, dropdown);
-
+                
                 this.trackEvent('filter_click', { type: filterType });
             }
 
             showFilterOptions(filterType, dropdown) {
                 // This would typically show a dropdown with filter options
                 console.log(`Showing ${filterType} filter options`);
-
+                
                 // For demo purposes, just toggle the active state
                 setTimeout(() => {
                     dropdown.classList.remove('active');
@@ -2409,25 +2307,25 @@
 
             handleCardClick(e) {
                 const card = e.currentTarget;
-                const cardType = card.className.includes('category-card') ? 'category' :
-                    card.className.includes('format-card') ? 'format' : 'time';
+                const cardType = card.className.includes('category-card') ? 'category' : 
+                               card.className.includes('format-card') ? 'format' : 'time';
                 const cardTitle = card.querySelector('.category-title, .format-title, .time-title').textContent;
-
+                
                 // Add click animation
                 card.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     card.style.transform = '';
                 }, 150);
-
+                
                 this.trackEvent('card_click', { type: cardType, title: cardTitle });
-
+                
                 console.log(`Clicked ${cardType}: ${cardTitle}`);
             }
 
             handleTicketPurchase(e) {
                 const eventId = e.target.getAttribute('data-event-id');
                 const event = this.events.find(e => e.id == eventId);
-
+                
                 if (event) {
                     this.showTicketModal(event);
                     this.trackEvent('ticket_purchase_start', { eventId, eventTitle: event.title });
@@ -2437,18 +2335,18 @@
             handleFavorite(e) {
                 const eventId = e.target.closest('.btn-secondary').getAttribute('data-event-id');
                 const heartIcon = e.target.closest('.btn-secondary').querySelector('svg path');
-
+                
                 // Toggle favorite state
                 const isFavorited = heartIcon.getAttribute('fill') === '#ff6b6b';
                 heartIcon.setAttribute('fill', isFavorited ? 'currentColor' : '#ff6b6b');
-
+                
                 // Add animation
                 const button = e.target.closest('.btn-secondary');
                 button.style.transform = 'scale(1.2)';
                 setTimeout(() => {
                     button.style.transform = '';
                 }, 200);
-
+                
                 this.trackEvent('favorite_toggle', { eventId, favorited: !isFavorited });
             }
 
@@ -2483,9 +2381,9 @@
                         </div>
                     </div>
                 `;
-
+                
                 document.body.appendChild(modal);
-
+                
                 // Add modal styles
                 const modalStyles = `
                     .modal-overlay {
@@ -2543,17 +2441,17 @@
                         margin-top: 8px;
                     }
                 `;
-
+                
                 const styleSheet = document.createElement('style');
                 styleSheet.textContent = modalStyles;
                 document.head.appendChild(styleSheet);
-
+                
                 // Animate modal in
                 setTimeout(() => {
                     modal.style.opacity = '1';
                     modal.querySelector('.modal-content').style.transform = 'scale(1)';
                 }, 10);
-
+                
                 // Handle modal interactions
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal || e.target.classList.contains('modal-close') || e.target.classList.contains('modal-cancel')) {
@@ -2568,7 +2466,7 @@
             closeModal(modal, styleSheet) {
                 modal.style.opacity = '0';
                 modal.querySelector('.modal-content').style.transform = 'scale(0.9)';
-
+                
                 setTimeout(() => {
                     modal.remove();
                     styleSheet.remove();
@@ -2580,7 +2478,7 @@
                 const confirmButton = modal.querySelector('.modal-confirm');
                 confirmButton.textContent = 'Processing...';
                 confirmButton.disabled = true;
-
+                
                 setTimeout(() => {
                     this.showSuccessMessage(event);
                     this.closeModal(modal, styleSheet);
@@ -2598,7 +2496,7 @@
                         <p>Your tickets for "${event.title}" have been purchased successfully.</p>
                     </div>
                 `;
-
+                
                 const successStyles = `
                     .success-message {
                         position: fixed;
@@ -2621,17 +2519,17 @@
                         margin-bottom: 8px;
                     }
                 `;
-
+                
                 const styleSheet = document.createElement('style');
                 styleSheet.textContent = successStyles;
                 document.head.appendChild(styleSheet);
-
+                
                 document.body.appendChild(message);
-
+                
                 setTimeout(() => {
                     message.style.transform = 'translateX(0)';
                 }, 10);
-
+                
                 setTimeout(() => {
                     message.style.transform = 'translateX(100%)';
                     setTimeout(() => {
@@ -2643,9 +2541,9 @@
 
             showLocationSelector() {
                 const locations = ['Punjab', 'Lahore', 'Karachi', 'Islamabad', 'Rawalpindi', 'Multan', 'Faisalabad'];
-
+                
                 console.log('Available locations:', locations);
-
+                
                 // This would typically show a location selection modal or dropdown
                 // For demo purposes, just log the action
                 this.trackEvent('location_selector_open');
@@ -2668,7 +2566,7 @@
             trackEvent(eventName, data = {}) {
                 // Analytics tracking
                 console.log(`Event tracked: ${eventName}`, data);
-
+                
                 // In a real application, you would send this to your analytics service
                 if (typeof gtag !== 'undefined') {
                     gtag('event', eventName, data);
@@ -2680,26 +2578,26 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Add click event listener to close dropdowns when clicking outside
             document.addEventListener('click', closeDropdownsOnOutsideClick);
-
+            
             new EventPlatform();
         });
 
         // Additional utility functions
         function addRippleEffect(element) {
-            element.addEventListener('click', function (e) {
+            element.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-
+                
                 ripple.style.width = ripple.style.height = size + 'px';
                 ripple.style.left = x + 'px';
                 ripple.style.top = y + 'px';
                 ripple.classList.add('ripple');
-
+                
                 this.appendChild(ripple);
-
+                
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
@@ -2744,7 +2642,7 @@
                 }
             }
         `;
-
+        
         const rippleStyleSheet = document.createElement('style');
         rippleStyleSheet.textContent = rippleStyles;
         document.head.appendChild(rippleStyleSheet);
@@ -2754,15 +2652,15 @@
     <script src="js/redirect-to-login.js"></script>
     <script>
         // Update login links to use smart redirection
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const loginLinks = document.querySelectorAll('.login-link, a[href="login.html"]');
             loginLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
+                link.addEventListener('click', function(e) {
                     e.preventDefault();
                     redirectToLogin('Holiday events.html');
                 });
             });
-
+            
             // Check if user is already logged in and redirect to logged-in version
             if (isLoggedIn()) {
                 redirectToLoggedInVersion();
@@ -2770,5 +2668,4 @@
         });
     </script>
 </body>
-
 </html>

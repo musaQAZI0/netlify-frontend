@@ -1,6 +1,38 @@
 // API Integration for Crowd Platform
 // Shows only events created by registered organizers
 
+// Global error handler for unhandled promise rejections (helps with browser extension errors)
+window.addEventListener('unhandledrejection', function(event) {
+    // Check if it's a browser extension related error
+    if (event.reason && event.reason.message && 
+        (event.reason.message.includes('message channel') || 
+         event.reason.message.includes('Extension context invalidated'))) {
+        // Suppress browser extension errors as they don't affect app functionality
+        console.debug('Browser extension error suppressed:', event.reason.message);
+        event.preventDefault();
+        return;
+    }
+    
+    // Log other unhandled rejections for debugging
+    console.warn('Unhandled promise rejection:', event.reason);
+});
+
+// Global error handler for general errors
+window.addEventListener('error', function(event) {
+    // Check if it's a browser extension related error
+    if (event.message && 
+        (event.message.includes('message channel') || 
+         event.message.includes('Extension context invalidated') ||
+         event.message.includes('chrome-extension'))) {
+        // Suppress browser extension errors
+        console.debug('Browser extension error suppressed:', event.message);
+        return;
+    }
+    
+    // Log other errors for debugging
+    console.warn('Global error:', event.error || event.message);
+});
+
 class CrowdAPI {
     constructor() {
         // Use configuration from config.js

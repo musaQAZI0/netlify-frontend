@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crowd - Discover Events Near You</title>
+    <link rel="stylesheet" href="css/footer.css">
     <style>
         /* Reset and Base Styles */
         * {
@@ -258,6 +259,113 @@
             .city-name {
                 font-size: 20px;
             }
+
+            /* Compact header on small screens */
+            .nav-container {
+                min-height: 56px;
+                padding: 8px 12px;
+            }
+
+            .logo-img {
+                height: 34px;
+            }
+
+            /* Mobile-only hero adjustments to match screenshot */
+            .hero {
+                min-height: 420px;
+                /* shorter than desktop but tall enough for mobile image */
+                margin: 0;
+                border-radius: 0;
+                overflow: hidden;
+            }
+
+            .banner-slide img {
+                object-position: center top;
+                border-radius: 0;
+            }
+
+            .hero-overlay {
+                display: block;
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, rgba(8, 7, 15, 0.18) 20%, rgba(8, 7, 15, 0.55) 70%);
+                z-index: 2;
+                border-radius: 0;
+            }
+
+            .hero-content {
+                padding: 20px 16px;
+                max-width: 100%;
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                height: 100%;
+            }
+
+            .hero-badge {
+                display: none;
+            }
+
+            .hero-title-main {
+                font-size: 28px;
+                line-height: 1.05;
+                color: #ffffff;
+                text-align: left;
+                margin-bottom: 10px;
+            }
+
+            .hero-highlight {
+                color: #ffffff;
+            }
+
+            .hero-subtitle {
+                color: rgba(255, 255, 255, 0.95);
+                font-size: 14px;
+                text-align: left;
+                margin-bottom: 16px;
+            }
+
+            .hero-actions {
+                justify-content: flex-start;
+                gap: 12px;
+                margin-bottom: 12px;
+                flex-wrap: nowrap;
+            }
+
+            .hero-btn.primary {
+                padding: 10px 18px;
+                border-radius: 999px;
+                font-size: 14px;
+                box-shadow: 0 6px 18px rgba(240, 85, 55, 0.28);
+            }
+
+            .hero-btn.secondary {
+                background: rgba(255, 255, 255, 0.12);
+                color: #fff;
+                padding: 10px 18px;
+                border-radius: 999px;
+                font-size: 14px;
+            }
+
+            .hero-stats {
+                margin-top: 18px;
+                gap: 18px;
+            }
+
+            .stat-number {
+                font-size: 18px;
+                color: #fff;
+            }
+
+            .stat-label {
+                color: rgba(255, 255, 255, 0.85);
+                font-size: 12px;
+            }
+
+            .banner-dots {
+                display: none;
+            }
         }
 
         /* Enhanced Responsive Header */
@@ -475,139 +583,147 @@
             color: var(--text-dark);
         }
 
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
+        /* Mobile menu and toggle removed — mobile navigation handled inline */
+
+        /* Mobile utility top row */
+        .mobile-utility {
             display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 44px;
-            height: 44px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            z-index: 1002;
-            transition: var(--transition);
-            margin-left: auto;
-        }
-
-        .mobile-menu-toggle span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--text-dark);
-            margin: 3px 0;
-            transition: var(--transition);
-            border-radius: 2px;
-        }
-
-        .mobile-menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .mobile-menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
             background: var(--white);
+            border-bottom: 1px solid var(--border-color);
             box-shadow: var(--shadow);
-            border-top: 1px solid var(--border-color);
-            z-index: 999;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: var(--transition);
-            visibility: hidden;
-            pointer-events: none;
+            position: sticky;
+            top: 0;
+            z-index: 1003;
         }
 
-        .mobile-menu.active {
-            opacity: 1;
-            transform: translateY(0);
-            visibility: visible;
-            pointer-events: all;
+        .mobile-utility .utility-inner {
+            display: flex;
+            justify-content: center;
+            padding: 8px 1rem;
         }
 
-        .mobile-search {
-            padding: 1rem;
-            border-bottom: 1px solid #f0f0f0;
+        .mobile-utility .utility-links a {
+            margin: 0 0.75rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
         }
 
-        .mobile-search .search-wrapper {
-            margin-bottom: 0.75rem;
-            border-radius: var(--border-radius);
-        }
-
-        .mobile-search .location-wrapper {
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius);
-            margin-bottom: 0.75rem;
-            padding: 0.5rem;
-            border-left: 2px solid var(--border-color);
-        }
-
-        .mobile-search-btn {
+        /* Mobile search layout similar to screenshot */
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             width: 100%;
+            background: #fff;
+            border-radius: 999px;
+            padding: 6px 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+
+        .search-button {
             background: var(--primary-color);
             color: var(--white);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             border: none;
-            border-radius: var(--border-radius);
-            padding: 0.75rem;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
         }
 
-        .mobile-search-btn:hover {
-            background: var(--primary-dark);
+        .search-button-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--white);
         }
 
-        .mobile-nav-links {
-            padding: 1rem 0;
+        /* mobile-menu.active removed */
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+            font-size: 14px;
+            color: #333;
         }
 
-        .mobile-nav-link {
-            display: block;
-            padding: 1rem 1.5rem;
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            font-size: 16px;
-            border-bottom: 1px solid #f8f8f8;
-            transition: var(--transition);
-        }
-
-        .mobile-nav-link:hover {
-            background: #f8f8f8;
-            color: var(--text-dark);
-            padding-left: 2rem;
-        }
-
-        .mobile-nav-link.primary {
-            /* Neutral mobile primary styling to match desktop */
-            background: transparent;
-            color: var(--text-dark);
-            font-weight: 600;
-            margin: 1rem 1.5rem 0.5rem 1.5rem;
-            border-radius: var(--border-radius);
-            text-align: center;
+        .menu-item:last-child {
             border-bottom: none;
         }
 
-        .mobile-nav-link.primary:hover {
-            background: rgba(0, 0, 0, 0.03);
-            padding-left: 1.5rem;
+        .menu-item:hover {
+            background-color: #f8f9fa;
         }
+
+        .menu-item.expandable {
+            justify-content: space-between;
+        }
+
+        .menu-item .icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-item .text {
+            flex: 1;
+        }
+
+        .menu-item .arrow {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-item.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            background-color: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            display: none;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .submenu-item {
+            padding: 10px 16px 10px 44px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .submenu-item:last-child {
+            border-bottom: none;
+        }
+
+        .submenu-item:hover {
+            background-color: #f0f0f0;
+        }
+
 
         /* Help Center Dropdown */
         .help-dropdown {
@@ -703,6 +819,165 @@
         .help-dropdown.active .dropdown-arrow {
             transform: rotate(180deg);
         }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1002;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-dark);
+            margin: 3px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            right: 12px;
+            width: 200px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1100;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        /* Mobile inline search styles (header) */
+        .header-search-mobile {
+            display: none;
+            padding: 10px 16px;
+            width: 100%;
+            box-sizing: border-box;
+            background: transparent;
+        }
+
+        .header-search-mobile .search-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .header-search-mobile .search-section {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            background: #fff;
+            border-radius: 999px;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+            border: 1px solid rgba(16, 24, 40, 0.06);
+            flex: 1 1 auto;
+        }
+
+        .header-search-mobile .search-section .search-icon {
+            width: 18px;
+            height: 18px;
+            color: rgba(16, 24, 40, 0.45);
+            margin-right: 8px;
+            flex: 0 0 auto;
+        }
+
+        .header-search-mobile .search-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: transparent;
+        }
+
+        .header-search-mobile .search-button {
+            background: var(--primary-color);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(240, 86, 64, 0.12);
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        .header-search-mobile .search-button .search-button-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+
+            /* show mobile utility row */
+            .mobile-utility {
+                display: block;
+            }
+
+            /* show inline mobile search */
+            .header-search-mobile {
+                display: block;
+            }
+
+            .desktop-search {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: inline-flex;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+
+            body.mobile-menu-open {
+                overflow: hidden;
+            }
+        }
+
+        /* mobile menu rules removed */
 
 
 
@@ -1479,8 +1754,10 @@
                 display: none;
             }
 
-            .mobile-menu-toggle {
-                display: flex;
+            /* mobile menu toggle removed */
+
+            .mobile-utility {
+                display: block;
             }
 
             .logo-img {
@@ -1492,7 +1769,8 @@
             }
 
             .hero {
-                min-height: 60vh;
+                min-height: 50vh;
+                padding-top: 0;
             }
 
             .hero-content {
@@ -1814,30 +2092,11 @@
             }
         }
 
-        /* Mobile Menu Specific Styles */
-        @media (max-width: 768px) {
-            .mobile-menu.active {
-                position: fixed;
-                top: 60px;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: var(--white);
-                z-index: 999;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            body.mobile-menu-open {
-                overflow: hidden;
-            }
-        }
+        /* Mobile menu styles removed */
 
         /* Print Styles */
         @media print {
 
-            .mobile-menu-toggle,
-            .mobile-menu,
             .hero-actions {
                 display: none;
             }
@@ -1906,8 +2165,7 @@
         .nav-link:focus,
         .hero-btn:focus,
         .filter-tab:focus,
-        .interest-tag:focus,
-        .mobile-menu-toggle:focus {
+        .interest-tag:focus {
             /* neutral focus ring instead of orange */
             outline: 2px solid rgba(0, 0, 0, 0.12);
             outline-offset: 2px;
@@ -1932,11 +2190,44 @@
 
     <!-- Header -->
     <header class="header">
+        <!-- Mobile utility links (visible on small screens) -->
+        <div class="mobile-utility" aria-hidden="false">
+            <div class="container utility-inner">
+                <nav class="utility-links" aria-label="Mobile utility">
+                    <a href="tickets-profile.html">Find my tickets</a>
+                    <a href="login.html">Log In</a>
+                    <a href="signup.html">Sign Up</a>
+                </nav>
+            </div>
+        </div>
         <div class="nav-container">
             <!-- Logo -->
             <a href="index.html" class="logo" aria-label="Crowd - Home">
-                <img src="logo.jpg" alt="Crowd" class="logo-img">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img">
             </a>
+
+            <!-- Mobile inline search (visible on small screens) -->
+            <div class="header-search-mobile" aria-hidden="true">
+                <div class="search-container">
+                    <div class="search-section">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search events" id="mobileSearchInput"
+                            aria-label="Search events">
+                    </div>
+                    <button class="search-button" type="button" onclick="performSearch()" aria-label="Search">
+                        <svg class="search-button-icon" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
 
             <!-- Desktop Search -->
             <div class="desktop-search">
@@ -1984,9 +2275,18 @@
                         <span class="dropdown-arrow">▾</span>
                     </button>
                     <div class="help-dropdown-content" id="helpDropdownContent" role="menu">
+                        <a href="Find events.html" role="menuitem">Find events</a>
                         <a href="Help_center.html" role="menuitem">Help Center</a>
                         <a href="tickets-profile.html" role="menuitem">Find your tickets</a>
-                        <a href="Contact_organizer.html" role="menuitem">Contact your event organizer</a>
+                        <a href="Contact_organizer.html" role="menuitem">Contact organizer</a>
+                        <a href="Buy_and_register.html" role="menuitem">Buy & register</a>
+                        <a href="Request a refund.html" role="menuitem">Request refund</a>
+                        <a href="Managing orders.html" role="menuitem">Manage orders</a>
+                        <a href="Create and edit ticket types.html" role="menuitem">Create tickets</a>
+                        <a href="Add images and video to your event.html" role="menuitem">Add media</a>
+                        <a href="Marketing_an_event_help_center.html" role="menuitem">Marketing events</a>
+                        <a href="Payouts and taxes.html" role="menuitem">Payouts & taxes</a>
+                        <a href="Terms and policies.html" role="menuitem">Terms & policies</a>
                     </div>
                 </div>
                 <a href="login.html" class="nav-link secondary">Log In</a>
@@ -2003,28 +2303,77 @@
 
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
-            <!-- Mobile Search -->
-            <div class="mobile-search">
-                <div class="search-wrapper">
-                    <span class="search-icon" role="img" aria-label="Search">🔍</span>
-                    <input type="text" class="search-input" placeholder="Search events..." aria-label="Search events">
+            <!-- Find Events -->
+            <div class="menu-item" onclick="window.location.href='Find events.html'">
+                <div class="icon">
+                    <svg class="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
                 </div>
-                <div class="location-wrapper">
-                    <span class="location-icon" role="img" aria-label="Location">📍</span>
-                    <input type="text" class="location-input" placeholder="Location" aria-label="Location">
-                </div>
-                <button class="mobile-search-btn">Search</button>
+                <span class="text">Find Events</span>
             </div>
 
-            <!-- Mobile Navigation Links -->
-            <nav class="mobile-nav-links">
-                <a href="food_events.html" class="mobile-nav-link">Find Events</a>
-                <a href="create-events.html" class="mobile-nav-link">Create Events</a>
-                <a href="tickets-profile.html" class="mobile-nav-link">Find my tickets</a>
-                <a href="Help_center.html" class="mobile-nav-link">Help Center</a>
-                <a href="login.html" class="mobile-nav-link">Log In</a>
-                <a href="signup.html" class="mobile-nav-link primary">Sign Up</a>
-            </nav>
+            <!-- Create Events (Expandable) -->
+            <div class="menu-item expandable" onclick="toggleSubmenu('create-events')">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <span class="text">Create Events</span>
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+            </div>
+
+            <!-- Create Events Submenu -->
+            <div class="submenu show" id="create-events-submenu">
+                <div class="submenu-item" onclick="window.location.href='organizer-resource-hub.html'">Organizer Resource Hub</div>
+                <div class="submenu-item">Create Events</div>
+                <div class="submenu-item">Contact Sales</div>
+            </div>
+
+            <!-- Get Started -->
+            <div class="menu-item">
+                <div class="icon"></div>
+                <span class="text">Get Started</span>
+            </div>
+
+            <!-- Help Center (Expandable) -->
+            <div class="menu-item expandable" onclick="toggleSubmenu('help-center')">
+                <div class="icon">
+                    <svg class="help-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m9,9a3,3 0 1,1 6,0c0,2 -3,3 -3,3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <span class="text">Help Center</span>
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+            </div>
+
+            <!-- Help Center Submenu (Hidden by default) -->
+            <div class="submenu" id="help-center-submenu">
+                <div class="submenu-item" onclick="window.location.href='Help_center.html'">Help Center</div>
+                <div class="submenu-item" onclick="window.location.href='tickets-profile.html'">Find your tickets</div>
+                <div class="submenu-item" onclick="window.location.href='Contact_organizer.html'">Contact organizer</div>
+                <div class="submenu-item" onclick="window.location.href='Buy_and_register.html'">Buy & register</div>
+                <div class="submenu-item" onclick="window.location.href='Request a refund.html'">Request refund</div>
+                <div class="submenu-item" onclick="window.location.href='Managing orders.html'">Manage orders</div>
+                <div class="submenu-item" onclick="window.location.href='Create and edit ticket types.html'">Create tickets</div>
+                <div class="submenu-item" onclick="window.location.href='Add images and video to your event.html'">Add media</div>
+                <div class="submenu-item" onclick="window.location.href='Marketing_an_event_help_center.html'">Marketing events</div>
+                <div class="submenu-item" onclick="window.location.href='Payouts and taxes.html'">Payouts & taxes</div>
+                <div class="submenu-item" onclick="window.location.href='Terms and policies.html'">Terms & policies</div>
+            </div>
         </div>
     </header>
 
@@ -2599,31 +2948,22 @@
             }
         }
 
-        // Mobile Navigation Toggle
-        function toggleMobileMenu() {
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            const mobileMenu = document.querySelector('.mobile-menu');
-
-            if (mobileMenu && mobileMenuToggle) {
-                const isActive = mobileMenu.classList.contains('active');
-
-                if (isActive) {
-                    mobileMenu.classList.remove('active');
-                    mobileMenuToggle.classList.remove('active');
-                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                    document.body.classList.remove('mobile-menu-open');
-                } else {
-                    mobileMenu.classList.add('active');
-                    mobileMenuToggle.classList.add('active');
-                    mobileMenuToggle.setAttribute('aria-expanded', 'true');
-                    document.body.classList.add('mobile-menu-open');
-                }
-            }
-        }
+        // Mobile navigation removed; toggle function removed
 
         function performSearch() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const location = document.getElementById('locationInput').value;
+            // Prefer mobile input if present and has value
+            const mobileEl = document.getElementById('mobileSearchInput');
+            const desktopEl = document.getElementById('searchInput');
+            const locationEl = document.getElementById('locationInput');
+
+            let searchTerm = '';
+            if (mobileEl && mobileEl.value.trim() !== '') {
+                searchTerm = mobileEl.value;
+            } else if (desktopEl) {
+                searchTerm = desktopEl.value;
+            }
+
+            const location = locationEl ? locationEl.value : '';
 
             if (searchTerm.trim() === '' && location.trim() === '') {
                 showTopNotification('Please enter a search term or location', 'warning');
@@ -2836,14 +3176,7 @@
                 if (btn) btn.setAttribute('aria-expanded', 'false');
             }
 
-            // Close mobile menu
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            if (mobileMenu && mobileMenu.classList.contains('active')) {
-                if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
-                    toggleMobileMenu();
-                }
-            }
+            // Mobile menu was removed; nothing to do here.
         }
 
         // Handle keyboard navigation
@@ -2860,11 +3193,7 @@
                     }
                 }
 
-                // Close mobile menu
-                const mobileMenu = document.querySelector('.mobile-menu');
-                if (mobileMenu && mobileMenu.classList.contains('active')) {
-                    toggleMobileMenu();
-                }
+                // Mobile menu was removed; nothing to do here.
             }
         }
 
@@ -2880,22 +3209,7 @@
                 helpDropdownBtn.addEventListener('click', toggleHelpDropdown);
             }
 
-            // Initialize mobile menu
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            if (mobileMenuToggle) {
-                mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-            }
-
-            // Close mobile menu when clicking on links
-            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-            mobileNavLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    const mobileMenu = document.querySelector('.mobile-menu');
-                    if (mobileMenu && mobileMenu.classList.contains('active')) {
-                        toggleMobileMenu();
-                    }
-                });
-            });
+            // Mobile menu functionality removed earlier; no initialization needed.
 
             // Add global event listeners
             document.addEventListener('click', handleOutsideClicks);
@@ -2913,6 +3227,29 @@
                 initializeAPI();
             }
 
+            // Initialize the Create Events submenu as expanded (as shown in the example)
+            const createEventsMenu = document.querySelector('.menu-item.expandable');
+            if (createEventsMenu) {
+                createEventsMenu.classList.add('expanded');
+            }
+
+            // Initialize mobile menu toggle
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+            }
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const mobileMenu = document.querySelector('.mobile-menu');
+                const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+                if (mobileMenu && mobileMenu.classList.contains('active')) {
+                    if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                        toggleMobileMenu();
+                    }
+                }
+            });
+
             // Handle window resize for mobile menu
             window.addEventListener('resize', function () {
                 if (window.innerWidth > 768) {
@@ -2928,9 +3265,46 @@
             });
         });
 
+        // Toggle Submenu Function
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId + '-submenu');
+            const menuItem = submenu.previousElementSibling;
+
+            if (submenu.classList.contains('show')) {
+                submenu.classList.remove('show');
+                menuItem.classList.remove('expanded');
+            } else {
+                submenu.classList.add('show');
+                menuItem.classList.add('expanded');
+            }
+        }
+
+        // Mobile Menu Toggle Function
+        function toggleMobileMenu() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            
+            if (mobileMenu && mobileMenuToggle) {
+                const isActive = mobileMenu.classList.contains('active');
+                
+                if (isActive) {
+                    mobileMenu.classList.remove('active');
+                    mobileMenuToggle.classList.remove('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                    document.body.classList.remove('mobile-menu-open');
+                } else {
+                    mobileMenu.classList.add('active');
+                    mobileMenuToggle.classList.add('active');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'true');
+                    document.body.classList.add('mobile-menu-open');
+                }
+            }
+        }
+
         // Make functions available globally
         window.toggleHelpDropdown = toggleHelpDropdown;
         window.toggleMobileMenu = toggleMobileMenu;
+        window.toggleSubmenu = toggleSubmenu;
         window.showTopNotification = showTopNotification;
         window.hideTopNotification = hideTopNotification;
     </script>

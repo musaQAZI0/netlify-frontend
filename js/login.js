@@ -17,101 +17,136 @@ const pageMapping = {
 
 // Function to get the intended redirect URL
 function getRedirectUrl() {
+    console.log('getRedirectUrl called');
+    console.log('Current URL:', window.location.href);
+
     // Check URL parameters first
     const urlParams = new URLSearchParams(window.location.search);
+    console.log('URL parameters:', Object.fromEntries(urlParams));
+
     const returnTo = urlParams.get('returnTo');
-    
+    const redirect = urlParams.get('redirect');
+
+    console.log('returnTo parameter:', returnTo);
+    console.log('redirect parameter:', redirect);
+
     if (returnTo) {
         // Decode the return URL and map it to logged-in version
         const decodedUrl = decodeURIComponent(returnTo);
         const fileName = decodedUrl.split('/').pop() || decodedUrl;
-        return pageMapping[fileName] || pageMapping[''] || 'logged_in_Version.html';
+        const mappedUrl = pageMapping[fileName] || pageMapping[''] || 'logged_in_Version.html';
+        console.log('Using returnTo parameter, mapped to:', mappedUrl);
+        return mappedUrl;
     }
-    
-    // Check sessionStorage as fallback
+
+    if (redirect) {
+        // Direct redirect - no mapping needed, return as is
+        console.log('Found redirect parameter:', redirect);
+        return redirect;
+    }
+
+    // Highest-priority: explicit post-login redirect stored by pages (cleared after use)
+    try {
+        const postLogin = sessionStorage.getItem('postLoginRedirect');
+        console.log('sessionStorage postLoginRedirect:', postLogin);
+        if (postLogin) {
+            // clear it so it isn't accidentally reused
+            sessionStorage.removeItem('postLoginRedirect');
+            return postLogin;
+        }
+    } catch (err) {
+        console.warn('Could not access sessionStorage.postLoginRedirect', err);
+    }
+
+    // Check sessionStorage as fallback (legacy flow)
     const referrer = sessionStorage.getItem('loginReferrer');
+    console.log('sessionStorage referrer:', referrer);
     if (referrer) {
         const fileName = referrer.split('/').pop() || referrer;
-        return pageMapping[fileName] || pageMapping[''] || 'logged_in_Version.html';
+        const mappedUrl = pageMapping[fileName] || pageMapping[''] || 'logged_in_Version.html';
+        console.log('Using sessionStorage referrer, mapped to:', mappedUrl);
+        return mappedUrl;
     }
-    
+
     // Default fallback
+    console.log('Using default fallback: logged_in_Version.html');
     return 'logged_in_Version.html';
 }
 
 // Handle login form submission
 async function handleLogin(event) {
     event.preventDefault();
-    
+
     if (loginInProgress) return false;
-    
+
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const loginBtn = document.getElementById('loginBtn');
     const errorMessage = document.getElementById('errorMessage');
     const successMessage = document.getElementById('successMessage');
-    
+
     // Validate inputs
     if (!email || !password) {
         showError('Please fill in all fields');
         return false;
     }
-    
+
     if (!isValidEmail(email)) {
         showError('Please enter a valid email address');
         return false;
     }
-    
+
     loginInProgress = true;
     loginBtn.disabled = true;
     loginBtn.textContent = 'Signing In...';
-    
+
     clearMessages();
-    
+
     try {
         console.log('Starting login process...');
         console.log('Email:', email);
         console.log('window.mongoAuthAPI exists:', typeof window.mongoAuthAPI);
         console.log('window.authAPI exists:', typeof window.authAPI);
-        
+
         // Use our MongoDB authAPI for login
         const authAPI = window.mongoAuthAPI || window.authAPI;
-        
+
         if (!authAPI) {
             console.error('No auth API available!');
             showError('Authentication system not available. Please refresh the page.');
             return false;
         }
-        
+
         console.log('Using auth API:', authAPI.constructor.name || 'Unknown');
         console.log('Calling authAPI.login...');
-        
+
         const result = await authAPI.login(email, password);
-        
+
         console.log('Login result:', result);
-        
+
         if (result && result.success) {
             console.log('Login successful, user:', result.user);
             showSuccess('Login successful! Redirecting...');
             showTopNotification(`Welcome back, ${result.user.name}!`, 'success');
-            
+
             const redirectUrl = getRedirectUrl();
+            console.log('Login successful! Redirect URL determined:', redirectUrl);
             console.log(`Redirecting to ${redirectUrl} in 1.5 seconds...`);
             setTimeout(() => {
-                console.log('Executing redirect now...');
+                console.log('Executing redirect now to:', redirectUrl);
                 window.location.href = redirectUrl;
             }, 1500);
         } else {
             console.log('Login failed, result:', result);
             showError('Login failed. Please check your credentials.');
         }
-        
+
     } catch (error) {
         console.error('Login error details:', error);
         console.error('Error message:', error.message);
         console.error('Error stack:', error.stack);
         showError(error.message || 'Invalid email or password');
-        
+
         // Fallback: Try demo login if API fails
         console.log('Attempting fallback demo login...');
         handleDemoLogin(email, password);
@@ -120,7 +155,7 @@ async function handleLogin(event) {
         loginBtn.disabled = false;
         loginBtn.textContent = 'Sign In';
     }
-    
+
     return false;
 }
 
@@ -134,14 +169,14 @@ async function attemptApiLogin(email, password) {
             },
             body: JSON.stringify({ email, password })
         });
-        
+
         if (response.ok) {
             const data = await response.json();
-            
+
             // Store authentication data
             localStorage.setItem('authToken', data.token);
             localStorage.setItem('currentUser', JSON.stringify(data.user));
-            
+
             showTopNotification('Welcome back! Login successful.', 'success');
             return true;
         } else {
@@ -163,9 +198,9 @@ function handleDemoLogin(email, password) {
         { email: 'organizer@crowd.com', password: 'organizer123', name: 'Event Organizer', role: 'organizer' },
         { email: 'demo@example.com', password: 'demo123', name: 'Demo User', role: 'user' }
     ];
-    
+
     const user = demoCredentials.find(cred => cred.email === email && cred.password === password);
-    
+
     if (user) {
         // Create demo token and user data
         const demoToken = 'demo_token_' + Date.now();
@@ -176,16 +211,18 @@ function handleDemoLogin(email, password) {
             role: user.role,
             isDemo: true
         };
-        
+
         // Store authentication data
         localStorage.setItem('authToken', demoToken);
         localStorage.setItem('currentUser', JSON.stringify(userData));
-        
+
         showSuccess('Login successful! Redirecting...');
         showTopNotification(`Welcome back, ${user.name}!`, 'success');
-        
+
         const redirectUrl = getRedirectUrl();
+        console.log('Demo login successful! Redirect URL determined:', redirectUrl);
         setTimeout(() => {
+            console.log('Demo login - executing redirect now to:', redirectUrl);
             window.location.href = redirectUrl;
         }, 1500);
     } else {
@@ -196,14 +233,14 @@ function handleDemoLogin(email, password) {
 // Social login handlers
 function socialLogin(provider) {
     console.log('socialLogin called with provider:', provider);
-    
+
     try {
         if (provider === 'google') {
             console.log('Redirecting to Google OAuth...');
             // Use the config-based API URL for proper environment detection
-            const url = `${window.Config ? window.Config.API_BASE_URL : 'http://localhost:3003/api'}/auth/google`;
+            const url = `${window.Config ? window.Config.API_BASE_URL : 'http://localhost:3002/api'}/auth/google`;
             console.log('Target URL:', url);
-            
+
             // Try multiple redirect methods
             if (window.location.href) {
                 console.log('Using window.location.href');
@@ -239,28 +276,28 @@ function isValidEmail(email) {
 function showError(message) {
     const errorElement = document.getElementById('errorMessage');
     const successElement = document.getElementById('successMessage');
-    
+
     if (errorElement) {
         errorElement.textContent = message;
         errorElement.style.display = 'block';
     }
-    
+
     if (successElement) {
         successElement.style.display = 'none';
     }
-    
+
     showTopNotification(message, 'error');
 }
 
 function showSuccess(message) {
     const errorElement = document.getElementById('errorMessage');
     const successElement = document.getElementById('successMessage');
-    
+
     if (successElement) {
         successElement.textContent = message;
         successElement.style.display = 'block';
     }
-    
+
     if (errorElement) {
         errorElement.style.display = 'none';
     }
@@ -269,11 +306,11 @@ function showSuccess(message) {
 function clearMessages() {
     const errorElement = document.getElementById('errorMessage');
     const successElement = document.getElementById('successMessage');
-    
+
     if (errorElement) {
         errorElement.style.display = 'none';
     }
-    
+
     if (successElement) {
         successElement.style.display = 'none';
     }
@@ -293,21 +330,21 @@ function showTopNotification(message, type = 'info') {
             </div>
         `;
         document.body.insertBefore(notification, document.body.firstChild);
-        
+
         // Add event listener for the dynamically created close button
         const closeBtn = notification.querySelector('.notification-close');
         if (closeBtn) {
             closeBtn.addEventListener('click', hideTopNotification);
         }
     }
-    
+
     const messageEl = document.getElementById('notificationMessage');
     messageEl.textContent = message;
-    
+
     notification.className = `top-notification ${type}`;
     notification.style.display = 'block';
     document.body.classList.add('notification-shown');
-    
+
     // Auto-hide after 4 seconds
     setTimeout(() => {
         hideTopNotification();
@@ -327,21 +364,21 @@ function hideTopNotification() {
 }
 
 // Check if user is already logged in when the page loads
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem('authToken');
     const user = localStorage.getItem('currentUser');
-    
+
     // Debug: Verify functions are available
     console.log('Page loaded - Function checks:');
     console.log('socialLogin function:', typeof socialLogin);
     console.log('window.socialLogin:', typeof window.socialLogin);
-    
+
     // Make sure socialLogin is globally available
     if (typeof window.socialLogin === 'undefined') {
         window.socialLogin = socialLogin;
         console.log('socialLogin attached to window');
     }
-    
+
     // Add event listener for login form
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
@@ -351,29 +388,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listeners for social buttons
     const socialButtons = document.querySelectorAll('.social-btn');
     socialButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
+        button.addEventListener('click', function (e) {
             e.preventDefault();
             const provider = this.getAttribute('data-provider');
             console.log('Social button clicked:', provider);
             socialLogin(provider);
         });
     });
-    
+
     // Add event listener for forgot password
     const forgotPasswordLink = document.getElementById('forgotPasswordLink');
     if (forgotPasswordLink) {
-        forgotPasswordLink.addEventListener('click', function(e) {
+        forgotPasswordLink.addEventListener('click', function (e) {
             e.preventDefault();
             forgotPassword();
         });
     }
-    
+
     // Add event listener for existing notification close button
     const existingCloseBtn = document.getElementById('notificationCloseBtn');
     if (existingCloseBtn) {
         existingCloseBtn.addEventListener('click', hideTopNotification);
     }
-    
+
     if (token && user) {
         // User is already logged in, redirect to logged in version
         showTopNotification('You are already logged in! Redirecting...', 'info');

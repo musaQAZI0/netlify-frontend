@@ -1,7 +1,15 @@
 // Events API Integration
 class EventsAPI {
     constructor() {
-        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
+        // Use Config if available, otherwise detect environment
+        if (window.Config && window.Config.API_BASE_URL) {
+            this.baseURL = window.Config.API_BASE_URL;
+        } else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            this.baseURL = 'http://localhost:3002/api';
+        } else {
+            this.baseURL = 'https://crowd-backend-zxxp.onrender.com/api';
+        }
+        console.log('EventsAPI initialized with baseURL:', this.baseURL);
     }
 
     // Get all published events

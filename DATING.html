@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home & Lifestyle: Dating Events & Tickets in Punjab, Pakistan | CRWOD</title>
-    <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="css/responsive.css">
     <style>
         * {
             margin: 0;
@@ -60,14 +58,7 @@
         .logo-text {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #f05537;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            max-width: 120px;
-            object-fit: contain;
+            color: #3a3247;
         }
 
         .search-container {
@@ -90,8 +81,8 @@
         }
 
         .search-wrapper:focus-within {
-            border-color: #f05537;
-            box-shadow: 0 0 0 2px rgba(240, 85, 55, 0.1);
+            border-color: #3a3247;
+            box-shadow: 0 0 0 2px rgba(58, 50, 71, 0.1);
         }
 
         .search-icon {
@@ -143,7 +134,7 @@
         }
 
         .search-btn {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border: none;
             border-radius: 50%;
@@ -159,7 +150,7 @@
         }
 
         .search-btn:hover {
-            background: #e04429;
+            background: #2d2a3f;
         }
 
         /* Logged Out Navigation */
@@ -180,14 +171,14 @@
         }
 
         .nav-link:hover {
-            color: #f05537;
+            color: #3a3247;
             background: #f8f8f8;
             padding: 8px 12px;
             border-radius: 6px;
         }
 
         .nav-link.primary {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border-radius: 20px;
             padding: 8px 16px;
@@ -195,7 +186,7 @@
         }
 
         .nav-link.primary:hover {
-            background: #e04429;
+            background: #2d2a3f;
             color: white;
         }
 
@@ -227,8 +218,8 @@
         }
 
         .help-dropdown-btn:hover {
-            color: #f05537;
-            background: rgba(240, 85, 55, 0.05);
+            color: #3a3247;
+            background: rgba(58, 50, 71, 0.05);
         }
 
         .help-dropdown-content {
@@ -278,7 +269,7 @@
 
         .help-dropdown-content a:hover {
             background-color: #f8f9fa;
-            color: #f05537;
+            color: #3a3247;
             padding-left: 24px;
         }
 
@@ -317,7 +308,7 @@
         }
 
         .nav-action-item:hover {
-            color: #f05537;
+            color: #3a3247;
         }
 
         .nav-action-icon {
@@ -350,7 +341,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #f05537;
+            background: #3a3247;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -366,38 +357,76 @@
 
         .user-dropdown {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 8px);
             right: 0;
+            width: 220px;
             background: white;
-            border: 1px solid #ddd;
+            border: 1px solid #eee;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            min-width: 200px;
-            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            padding: 8px 0;
+            z-index: 1200;
             display: none;
-            margin-top: 5px;
+        }
+
+        .user-dropdown.show {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+            pointer-events: all !important;
+            display: block !important;
+        }
+        .user-dropdown .menu-group {
+            padding: 4px 0;
         }
 
         .user-dropdown a {
             display: block;
-            padding: 12px 16px;
+            padding: 8px 12px;
             text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
+            color: #111 !important;
+            font-size: 13px;
+            transition: background 0.12s;
         }
-
         .user-dropdown a:hover {
-            background: #f8f8f8;
+            background: #fcfcfd;
+            color: #111 !important;
         }
-
+        .user-dropdown a#logoutLink,
         .user-dropdown a:last-child {
-            border-bottom: none;
-            color: #f05537;
+            color: #111 !important;
         }
 
-        .user-dropdown a:last-child:hover {
-            background: #fff5f4;
+        .user-dropdown .divider {
+            height: 1px;
+            background: #f0f0f2;
+            margin: 4px 0;
+        }
+
+        .user-info {
+            padding: 8px 20px;
+            margin: 0 8px;
+        }
+
+        .user-email-display {
+            font-size: 12px;
+            color: #6f7287;
+            font-weight: 500;
+        }
+
+        .logout-link {
+            color: #3a3247 !important;
+            font-weight: 500;
+        }
+
+        .logout-link:hover {
+            color: #e53e3e !important;
+            background-color: #fef2f2 !important;
         }
 
         /* Hidden elements */
@@ -485,7 +514,7 @@
         }
 
         .location-tag:hover {
-            border-color: #f05537;
+            border-color: #3a3247;
         }
 
         .hero-image {
@@ -533,7 +562,7 @@
         }
 
         .filter-btn:hover {
-            border-color: #f05537;
+            border-color: #3a3247;
         }
 
         .filter-btn.active {
@@ -832,17 +861,13 @@
     </style>
 </head>
 
-<body class="category-page">
+<body>
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div style="display: none; align-items: center; gap: 0.25rem;">
-                    <span class="logo-icon">🎟️</span>
-                    <span class="logo-text">crowd</span>
-                </div>
+            <a href="#" class="logo">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">crowd</span>
             </a>
 
             <button class="mobile-nav-toggle" onclick="toggleMobileNav()">☰</button>
@@ -884,7 +909,7 @@
             </div>
 
             <!-- Logged In Navigation -->
-            <div class="nav-actions hidden" id="loggedInNav">
+            <div class="nav-actions" id="loggedInNav">
                 <a href="#" class="nav-action-item">
                     <span class="nav-action-icon">➕</span>
                     <span class="nav-action-text">Create an event</span>
@@ -900,18 +925,33 @@
                     <span class="nav-action-text">Tickets</span>
                 </a>
 
-                <div class="user-menu" id="userMenuButton" onclick="toggleUserMenu(event)">
+                <div class="user-menu" id="userMenuButton">
                     <div class="user-avatar" id="userAvatar">U</div>
                     <div>
                         <div class="user-email" id="userEmail">Loading...</div>
                     </div>
                     <span class="dropdown-arrow">▾</span>
 
-                    <!-- User Dropdown Menu -->
-                    <div class="user-dropdown" id="userDropdown">
-                        <a href="settings-new.html" onclick="handleMenuClick('settings')">Account Settings</a>
-                        <a href="dashboard-home.html" onclick="handleMenuClick('dashboard')">Organizer Dashboard</a>
-                        <a href="#" onclick="handleMenuClick('logout')" id="logoutLink">Log Out</a>
+                    <!-- User Dropdown Menu (matching logged_in_Version.html) -->
+                    <div class="user-dropdown" id="userDropdown" role="menu" aria-hidden="true">
+                        <div class="menu-group">
+                            <a href="Find events.html" role="menuitem">Find events</a>
+                            <a href="logged_in_Version.html" role="menuitem">Browse events</a>
+                            <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                            <a href="tickets-profile.html" role="menuitem">Tickets</a>
+                            <a href="likes.html" role="menuitem">Liked</a>
+                            <a href="tickets-profile.html" role="menuitem">Following</a>
+                            <a href="intrest.html" role="menuitem">Interests</a>
+                        </div>
+                        <div class="divider" aria-hidden="true"></div>
+                        <div class="menu-group">
+                            <a href="settings-new.html" role="menuitem">Account settings</a>
+                            <!-- Show user's email as a non-interactive item like the screenshot -->
+                            <div style="padding:10px 16px;color:#6b6b6b;font-size:14px;">
+                                <span id="dropdownUserEmail">test@example.com</span>
+                            </div>
+                            <a href="#" id="logoutLink" role="menuitem">Log out</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -948,21 +988,7 @@
                 </div>
             </div>
             <div class="hero-image"></div>
-            <!-- ...existing nav content... -->
-            <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
-                <div class="user-menu" onclick="toggleUserMenu()">
-                    <div class="user-avatar">U</div>
-                    <div class="user-email" id="userEmail">Loading...</div>
-                    <span class="dropdown-arrow"></span>
-                </div>
-
-                <div class="user-dropdown" id="userDropdown" style="display:none;">
-                    <a href="settings-new.html">Account Settings</a>
-                    <a href="dashboard-home.html">Organizer Dashboard</a>
-                    <a href="#" id="logoutLink" onclick="logout()">Log out</a>
-                </div>
-            </div>
-            </nav>
+        </div>
     </section>
 
     <!-- Filter Section -->
@@ -1086,7 +1112,7 @@
             const token = localStorage.getItem('authToken');
             const urlParams = new URLSearchParams(window.location.search);
             const fromLoggedIn = urlParams.get('from') === 'logged_in' || document.referrer.includes('logged_in_Version.html');
-
+            
             if (token && userStr) {
                 try {
                     const user = JSON.parse(userStr);
@@ -1104,7 +1130,7 @@
                     return false;
                 }
             }
-
+            
             // If called from logged in version but no valid auth, redirect back
             if (fromLoggedIn && (!token || !userStr)) {
                 console.log('Called from logged in version but no valid auth - redirecting to login');
@@ -1112,7 +1138,7 @@
                 window.location.href = 'login.html';
                 return false;
             }
-
+            
             isLoggedIn = false;
             return false;
         }
@@ -1137,16 +1163,27 @@
                 // Update search placeholders for logged in user
                 if (searchInput) searchInput.placeholder = 'Search for anything';
                 if (locationInput) locationInput.placeholder = 'Federal Capital Territory';
-
+                
                 // Load user data into UI
                 loadUserDataIntoUI();
             } else {
-                if (loggedOutNav) loggedOutNav.classList.remove('hidden');
-                if (loggedInNav) loggedInNav.classList.add('hidden');
+                // TEMPORARY: Hide logged-out nav for testing
+                if (loggedOutNav) loggedOutNav.classList.add('hidden');
+                // TEMPORARY: Keep logged-in nav visible for testing
+                if (loggedInNav) loggedInNav.classList.remove('hidden');
 
                 // Update search placeholders for logged out user
                 if (searchInput) searchInput.placeholder = 'Search events...';
                 if (locationInput) locationInput.placeholder = 'Location';
+                
+                // Set default user display for testing dropdown
+                const userEmailEl = document.getElementById('userEmail');
+                const userAvatarEl = document.getElementById('userAvatar');
+                const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
+                
+                if (userEmailEl) userEmailEl.textContent = 'Test User';
+                if (userAvatarEl) userAvatarEl.textContent = 'T';
+                if (dropdownUserEmailEl) dropdownUserEmailEl.textContent = 'test@example.com';
             }
         }
 
@@ -1200,12 +1237,20 @@
         function toggleUserMenu(event) {
             if (event) event.stopPropagation();
             const dropdown = document.getElementById('userDropdown');
-            const isVisible = dropdown.style.display === 'block';
-
-            if (isVisible) {
-                dropdown.style.display = 'none';
+            
+            if (!dropdown) {
+                console.log('Dropdown element not found');
+                return;
+            }
+            
+            console.log('Toggling dropdown, current classes:', dropdown.className);
+            
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                console.log('Dropdown hidden');
             } else {
-                dropdown.style.display = 'block';
+                dropdown.classList.add('show');
+                console.log('Dropdown shown');
             }
         }
 
@@ -1217,13 +1262,19 @@
                     const user = JSON.parse(userStr);
                     const userEmailEl = document.getElementById('userEmail');
                     const userAvatarEl = document.getElementById('userAvatar');
-
+                    const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
+                    
                     if (userEmailEl) {
                         // Show name if available, otherwise email
                         const displayText = user.name || user.email || 'User';
                         userEmailEl.textContent = displayText;
                     }
-
+                    
+                    if (dropdownUserEmailEl) {
+                        // Show email in dropdown
+                        dropdownUserEmailEl.textContent = user.email || 'user@example.com';
+                    }
+                    
                     if (userAvatarEl) {
                         // Set avatar to first letter of name or email
                         const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
@@ -1252,13 +1303,13 @@
             }
             // Close dropdown after click
             const dropdown = document.getElementById('userDropdown');
-            if (dropdown) dropdown.style.display = 'none';
+            if (dropdown) dropdown.classList.remove('show');
         }
 
         // Logout function with MongoDB integration
         async function logout() {
             console.log('Logout function called');
-
+            
             try {
                 // Call the MongoDB auth API logout endpoint if available
                 if (window.mongoAuthAPI || window.authAPI) {
@@ -1268,11 +1319,11 @@
                 } else {
                     console.log('No auth API available, using fallback');
                 }
-
+                
                 // Clear local storage
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('currentUser');
-
+                
                 console.log('Logout successful, redirecting...');
                 alert('Logged out successfully!');
                 window.location.href = 'index.html';
@@ -1299,18 +1350,18 @@
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
             const error = urlParams.get('error');
-
+            
             if (error) {
                 console.error('OAuth error:', error);
                 alert('Authentication failed. Please try again.');
                 window.location.href = 'login.html';
                 return;
             }
-
+            
             if (token) {
                 console.log('OAuth token received, fetching user profile...');
                 localStorage.setItem('authToken', token);
-
+                
                 // Fetch user profile after OAuth
                 if (window.mongoAuthAPI) {
                     window.mongoAuthAPI.getProfile().then(data => {
@@ -1341,7 +1392,7 @@
                 }
                 return;
             }
-
+            
             // No OAuth token, proceed with normal auth check
             checkAuthStatus();
             updateHeaderBasedOnAuth();
@@ -1358,21 +1409,29 @@
             // User menu toggle
             const userMenuButton = document.getElementById('userMenuButton');
             if (userMenuButton) {
-                userMenuButton.addEventListener('click', function (e) {
+                userMenuButton.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('User menu clicked');
+                    console.log('User menu button clicked!');
                     toggleUserMenu(e);
                 });
-                console.log('User menu click listener added');
+                console.log('✅ User menu click listener added successfully');
+                
+                // Also test if the dropdown exists
+                const testDropdown = document.getElementById('userDropdown');
+                if (testDropdown) {
+                    console.log('✅ Dropdown element found');
+                } else {
+                    console.error('❌ Dropdown element NOT found');
+                }
             } else {
-                console.warn('User menu button not found');
+                console.error('❌ User menu button NOT found');
             }
-
+            
             // Logout link
             const logoutLink = document.getElementById('logoutLink');
             if (logoutLink) {
-                logoutLink.addEventListener('click', function (e) {
+                logoutLink.addEventListener('click', function(e) {
                     e.preventDefault();
                     console.log('Logout link clicked');
                     handleMenuClick('logout');
@@ -1400,7 +1459,7 @@
             const userMenu = event.target.closest('.user-menu');
             const dropdown = document.getElementById('userDropdown');
             if (!userMenu && dropdown) {
-                dropdown.style.display = 'none';
+                dropdown.classList.remove('show');
             }
         });
 
@@ -1416,7 +1475,7 @@
                 // Close user dropdown
                 const userDropdown = document.getElementById('userDropdown');
                 if (userDropdown) {
-                    userDropdown.style.display = 'none';
+                    userDropdown.classList.remove('show');
                 }
             }
         });
@@ -1437,7 +1496,7 @@
 
         // Handle OAuth and load user data immediately when script runs
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 handleOAuthCallback();
             });
         } else {
@@ -1448,6 +1507,5 @@
     <!-- MongoDB Auth API -->
     <script src="js/auth-mongodb.js"></script>
 </body>
-
 
 </html>

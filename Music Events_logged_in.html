@@ -538,18 +538,21 @@
             display: none;
         }
 
-        /* Mobile Navigation Styles */
+        /* Mobile Navigation Updates */
         .mobile-nav-container {
             display: none;
+            /* Hidden by default */
         }
 
         @media (max-width: 768px) {
             .nav-container {
                 display: none !important;
+                /* Hide desktop nav completely */
             }
 
             .mobile-nav-container {
                 display: grid !important;
+                /* 3 columns: logo | search | profile */
                 grid-template-columns: auto 1fr auto;
                 align-items: center;
                 padding: 12px 16px;
@@ -583,7 +586,7 @@
             }
 
             .mobile-nav-container .search-bar:focus {
-                border-color: #3a3247;
+                border-color: #e53e3e;
                 background-color: white;
             }
 
@@ -600,7 +603,7 @@
                 right: 4px;
                 top: 50%;
                 transform: translateY(-50%);
-                background-color: #3a3247;
+                background-color: #e53e3e;
                 border: none;
                 border-radius: 50%;
                 width: 32px;
@@ -624,25 +627,12 @@
                 justify-content: center;
                 cursor: pointer;
                 position: relative;
+                font-size: 18px;
                 justify-self: end;
             }
 
             .mobile-nav-container .user-profile:hover {
                 background-color: #e8e8e8;
-            }
-
-            .mobile-nav-container .user-profile .user-avatar {
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-                background: #3a3247;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: 600;
-                font-size: 14px;
-                border: none;
             }
 
             .mobile-nav-container .dropdown {
@@ -754,6 +744,22 @@
                 width: 28px;
                 height: 28px;
             }
+
+            .mobile-nav-container .dropdown {
+                top: 60px !important;
+                left: 3px !important;
+                right: 3px !important;
+                width: calc(100vw - 6px) !important;
+                max-width: calc(100vw - 6px) !important;
+                max-height: calc(100vh - 70px) !important;
+            }
+            
+            .mobile-nav-container .dropdown-item {
+                padding: 12px 16px !important;
+                font-size: 14px !important;
+                line-height: 1.4 !important;
+                min-height: 48px !important;
+            }
         }
     </style>
 </head>
@@ -842,35 +848,34 @@
             </div>
         </nav>
 
-        <!-- Mobile Navigation -->
-        <nav class="mobile-nav-container">
-            <a href="#" class="logo">
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=32&h=32&fit=crop&crop=center" alt="Crowd Logo">
+        <!-- Mobile Navigation Container (shown on mobile only) -->
+        <div class="mobile-nav-container">
+            <a href="logged_in_Version.html" class="logo" aria-label="Crowd - Home">
+                <img src="logo.jpg" alt="Crowd Logo" style="width: 32px; height: 32px; object-fit: contain;">
             </a>
 
             <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-bar" placeholder="Search for events...">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-bar" placeholder="Search events">
                 <button class="search-button">🔍</button>
             </div>
 
-            <div class="user-profile" id="mobileUserProfile">
-                <div class="user-avatar" id="mobileUserAvatar">U</div>
-                <div class="dropdown" id="mobileDropdown">
-                    <div class="dropdown-item email" id="mobileUserEmail">Loading...</div>
+            <div class="user-profile" id="userProfile">
+                👤
+                <div class="dropdown" id="dropdown">
+                    <div class="dropdown-item email" id="userEmail">user@example.com</div>
                     <div class="dropdown-divider"></div>
                     <a href="logged_in_Version.html" class="dropdown-item">Browse events</a>
                     <a href="organizer-dashboard.html" class="dropdown-item">Manage my events</a>
-                    <a href="#" class="dropdown-item">Tickets</a>
-                    <a href="#" class="dropdown-item">Liked</a>
-                    <a href="#" class="dropdown-item">Following</a>
-                    <a href="#" class="dropdown-item">Interests</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="settings.html" class="dropdown-item">Account settings</a>
+                    <a href="tickets-profile.html" class="dropdown-item">Tickets</a>
+                    <a href="likes.html" class="dropdown-item">Liked</a>
+                    <a href="tickets-profile.html" class="dropdown-item">Following</a>
+                    <a href="intrest.html" class="dropdown-item">Interests</a>
+                    <a href="settings-new.html" class="dropdown-item">Account settings</a>
                     <a href="#" onclick="logout()" class="dropdown-item">Log out</a>
                 </div>
             </div>
-        </nav>
+        </div>
     </header>
 
     <!-- Hero Section -->
@@ -1079,9 +1084,8 @@
                 const userAvatarEl = document.getElementById('userAvatar');
                 const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
                 
-                // Mobile elements
-                const mobileUserEmailEl = document.getElementById('mobileUserEmail');
-                const mobileUserAvatarEl = document.getElementById('mobileUserAvatar');
+                // Mobile elements (for mobile-nav-container)
+                const mobileUserEmailEl = document.getElementById('userEmail');
                 
                 if (userEmailEl) {
                     // Show name if available, otherwise email
@@ -1100,14 +1104,9 @@
                     userAvatarEl.textContent = avatarText;
                 }
                 
-                // Update mobile elements
-                if (mobileUserEmailEl) {
+                // Update mobile elements (mobile nav container uses same userEmail element)
+                if (mobileUserEmailEl && mobileUserEmailEl !== userEmailEl) {
                     mobileUserEmailEl.textContent = user.email || 'user@example.com';
-                }
-                
-                if (mobileUserAvatarEl) {
-                    const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
-                    mobileUserAvatarEl.textContent = avatarText;
                 }
                 
                 console.log('User loaded:', user.name || user.email);
@@ -1138,38 +1137,84 @@
             window.location.href = 'index.html';
         }
         
-        // Mobile user profile dropdown toggle
-        function toggleMobileUserMenu() {
-            const dropdown = document.getElementById('mobileDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('show');
-            }
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const userMenu = event.target.closest('.user-menu');
-            const dropdown = document.getElementById('userDropdown');
-            const mobileUserProfile = event.target.closest('.user-profile');
-            const mobileDropdown = document.getElementById('mobileDropdown');
-            
-            if (!userMenu && dropdown) {
-                dropdown.style.display = 'none';
-            }
-            
-            if (!mobileUserProfile && mobileDropdown) {
-                mobileDropdown.classList.remove('show');
-            }
-        });
-        
-        // Add mobile profile click handler
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileUserProfile = document.getElementById('mobileUserProfile');
-            if (mobileUserProfile) {
-                mobileUserProfile.addEventListener('click', function(e) {
+        // Mobile Navigation functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile user profile dropdown
+            const userProfile = document.getElementById('userProfile');
+            const dropdown = document.getElementById('dropdown');
+
+            if (userProfile && dropdown) {
+                userProfile.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    toggleMobileUserMenu();
+                    console.log('Mobile user profile clicked');
+                    dropdown.classList.toggle('show');
                 });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function (e) {
+                    if (!userProfile.contains(e.target)) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+
+                // Handle dropdown item clicks
+                const dropdownItems = document.querySelectorAll('.mobile-nav-container .dropdown-item:not(.email)');
+                dropdownItems.forEach(item => {
+                    item.addEventListener('click', function () {
+                        console.log('Mobile dropdown clicked:', this.textContent);
+                        dropdown.classList.remove('show');
+
+                        // Add navigation logic for mobile header dropdown
+                        const itemText = this.textContent.trim();
+                        switch (itemText) {
+                            case 'Browse events':
+                                window.location.href = 'logged_in_Version.html';
+                                break;
+                            case 'Manage my events':
+                                window.location.href = 'organizer-dashboard.html';
+                                break;
+                            case 'Tickets':
+                                window.location.href = 'tickets-profile.html';
+                                break;
+                            case 'Liked':
+                                window.location.href = 'likes.html';
+                                break;
+                            case 'Following':
+                                window.location.href = 'tickets-profile.html';
+                                break;
+                            case 'Interests':
+                                window.location.href = 'intrest.html';
+                                break;
+                            case 'Account settings':
+                                window.location.href = 'settings-new.html';
+                                break;
+                        }
+                    });
+                });
+
+                // Mobile Search functionality
+                const searchBar = document.querySelector('.mobile-nav-container .search-bar');
+                const searchButton = document.querySelector('.mobile-nav-container .search-button');
+
+                if (searchButton && searchBar) {
+                    searchButton.addEventListener('click', function () {
+                        const searchTerm = searchBar.value.trim();
+                        if (searchTerm) {
+                            console.log('Mobile search for:', searchTerm);
+                            alert('Searching for: ' + searchTerm);
+                        }
+                    });
+
+                    searchBar.addEventListener('keypress', function (e) {
+                        if (e.key === 'Enter') {
+                            const searchTerm = this.value.trim();
+                            if (searchTerm) {
+                                console.log('Mobile search for:', searchTerm);
+                                alert('Searching for: ' + searchTerm);
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -1233,15 +1278,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Load user data
             loadUserData();
-            
-            // Initialize mobile navigation
-            const mobileUserProfile = document.getElementById('mobileUserProfile');
-            if (mobileUserProfile) {
-                mobileUserProfile.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    toggleMobileUserMenu();
-                });
-            }
         });
     </script>
 </body>

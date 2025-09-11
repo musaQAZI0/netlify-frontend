@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en-us">
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
     <title>Online Hobbies Events | CRWOD</title>
-    <link rel="icon" href="data:,">
-    <meta name="description"
-        content="Online events are amazing opportunities to have fun and learn. Find new online hobbies events on CRWOD." />
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/search-component.css">
-
+    <meta name="description" content="Online events are amazing opportunities to have fun and learn. Find new online hobbies events on CRWOD." />
+    
     <style>
         * {
             margin: 0;
@@ -73,13 +68,6 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: #f05537;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            max-width: 120px;
-            object-fit: contain;
         }
 
         .search-container {
@@ -253,6 +241,12 @@
 
         .help-dropdown:hover .help-dropdown-content {
             display: block;
+        }
+            background: transparent;
+            flex: 1;
+            padding: 0.25rem;
+            font-size: 14px;
+            color: #3a3247;
         }
 
         .search-input::placeholder {
@@ -774,8 +768,7 @@
             padding: 48px 0;
             background: white;
             width: 100%;
-            overflow: hidden;
-            /* Prevent any content overflow */
+            overflow: hidden; /* Prevent any content overflow */
         }
 
         .tags-cloud {
@@ -795,8 +788,7 @@
             font-size: 14px;
             text-decoration: none;
             transition: all 0.2s;
-            white-space: nowrap;
-            /* Prevent text wrapping within tags */
+            white-space: nowrap; /* Prevent text wrapping within tags */
             display: inline-block;
         }
 
@@ -852,8 +844,7 @@
             color: white;
             padding: 48px 0 24px;
             width: 100%;
-            clear: both;
-            /* Clear any floating elements */
+            clear: both; /* Clear any floating elements */
         }
 
         .footer-container {
@@ -1006,20 +997,16 @@
         }
 
         @keyframes pulse {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 1;
             }
-
             50% {
                 opacity: 0.5;
             }
         }
 
         /* Fix any potential text overflow issues */
-        html,
-        body {
+        html, body {
             overflow-x: hidden;
             width: 100%;
         }
@@ -1028,21 +1015,15 @@
             max-width: 100%;
         }
     </style>
-    <!-- Search Component Assets -->
-    <script src="js/search-component.js"></script>
 </head>
 
 <body>
     <!-- Header -->
     <header class="header">
         <nav class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div style="display: none; align-items: center; gap: 0.25rem;">
-                    <span class="logo-icon">🎟️</span>
-                    <span class="logo-text">crowd</span>
-                </div>
+            <a href="#" class="logo">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">crowd</span>
             </a>
 
             <div class="search-section" data-search-component>
@@ -1060,8 +1041,7 @@
                     <div class="help-dropdown-content" id="helpDropdownContent">
                         <a href="Help_center_logged_in.html">Help Center</a>
                         <a href="Help_Center_sub_parts/Your_tickets_new.html">Find your tickets</a>
-                        <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event
-                            organizer</a>
+                        <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event organizer</a>
                     </div>
                 </div>
                 <a href="#" class="nav-link secondary">Find my tickets</a>
@@ -1101,13 +1081,13 @@
             <div class="filter-tag">
                 Online
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
             <div class="filter-tag">
                 Date
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M7 10l5 5 5-5z" />
+                    <path d="M7 10l5 5 5-5z"/>
                 </svg>
             </div>
         </div>
@@ -1162,12 +1142,12 @@
                 <div class="carousel-nav">
                     <button class="carousel-btn" onclick="scrollCarousel('popular', -1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15 18l-6-6 6-6v12z" />
+                            <path d="M15 18l-6-6 6-6v12z"/>
                         </svg>
                     </button>
                     <button class="carousel-btn" onclick="scrollCarousel('popular', 1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6-6 6V6z" />
+                            <path d="M9 6l6 6-6 6V6z"/>
                         </svg>
                     </button>
                 </div>
@@ -1182,12 +1162,12 @@
                 <div class="carousel-nav">
                     <button class="carousel-btn" onclick="scrollCarousel('weekend', -1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15 18l-6-6 6-6v12z" />
+                            <path d="M15 18l-6-6 6-6v12z"/>
                         </svg>
                     </button>
                     <button class="carousel-btn" onclick="scrollCarousel('weekend', 1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6-6 6V6z" />
+                            <path d="M9 6l6 6-6 6V6z"/>
                         </svg>
                     </button>
                 </div>
@@ -1202,12 +1182,12 @@
                 <div class="carousel-nav">
                     <button class="carousel-btn" onclick="scrollCarousel('classes', -1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15 18l-6-6 6-6v12z" />
+                            <path d="M15 18l-6-6 6-6v12z"/>
                         </svg>
                     </button>
                     <button class="carousel-btn" onclick="scrollCarousel('classes', 1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6-6 6V6z" />
+                            <path d="M9 6l6 6-6 6V6z"/>
                         </svg>
                     </button>
                 </div>
@@ -1222,12 +1202,12 @@
                 <div class="carousel-nav">
                     <button class="carousel-btn" onclick="scrollCarousel('seminars', -1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15 18l-6-6 6-6v12z" />
+                            <path d="M15 18l-6-6 6-6v12z"/>
                         </svg>
                     </button>
                     <button class="carousel-btn" onclick="scrollCarousel('seminars', 1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6-6 6V6z" />
+                            <path d="M9 6l6 6-6 6V6z"/>
                         </svg>
                     </button>
                 </div>
@@ -1242,12 +1222,12 @@
                 <div class="carousel-nav">
                     <button class="carousel-btn" onclick="scrollCarousel('networking', -1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15 18l-6-6 6-6v12z" />
+                            <path d="M15 18l-6-6 6-6v12z"/>
                         </svg>
                     </button>
                     <button class="carousel-btn" onclick="scrollCarousel('networking', 1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6-6 6V6z" />
+                            <path d="M9 6l6 6-6 6V6z"/>
                         </svg>
                     </button>
                 </div>
@@ -1266,12 +1246,12 @@
                 <div class="carousel-nav">
                     <button class="carousel-btn" onclick="scrollCarousel('organizers', -1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M15 18l-6-6 6-6v12z" />
+                            <path d="M15 18l-6-6 6-6v12z"/>
                         </svg>
                     </button>
                     <button class="carousel-btn" onclick="scrollCarousel('organizers', 1)">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M9 6l6 6-6 6V6z" />
+                            <path d="M9 6l6 6-6 6V6z"/>
                         </svg>
                     </button>
                 </div>
@@ -1557,32 +1537,32 @@
             {
                 name: 'Clarity Relationships',
                 followers: '1501 followers',
-                avatar: 'https://ui-avatars.com/api/?name=CR&size=60&background=E5E7EB&color=9CA3AF'
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=CR'
             },
             {
                 name: 'Carolina Velis /Quest Mystic',
                 followers: '164 followers',
-                avatar: 'https://ui-avatars.com/api/?name=CV&size=60&background=E5E7EB&color=9CA3AF'
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=CV'
             },
             {
                 name: 'Waterstones',
                 followers: '25334 followers',
-                avatar: 'https://ui-avatars.com/api/?name=W&size=60&background=E5E7EB&color=9CA3AF'
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=W'
             },
             {
                 name: 'Random House',
                 followers: '7496 followers',
-                avatar: 'https://ui-avatars.com/api/?name=RH&size=60&background=E5E7EB&color=9CA3AF'
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=RH'
             },
             {
                 name: 'Indiana Audubon Society',
                 followers: '916 followers',
-                avatar: 'https://ui-avatars.com/api/?name=IA&size=60&background=E5E7EB&color=9CA3AF'
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=IA'
             },
             {
                 name: 'Strong Women Strange World',
                 followers: '409 followers',
-                avatar: 'https://ui-avatars.com/api/?name=SW&size=60&background=E5E7EB&color=9CA3AF'
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=SW'
             }
         ];
 
@@ -1597,10 +1577,10 @@
             } else if (date.toDateString() === tomorrow.toDateString()) {
                 return 'Tomorrow';
             } else {
-                return date.toLocaleDateString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric'
+                return date.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
                 });
             }
         }
@@ -1617,12 +1597,12 @@
         }
 
         function createEventCard(event) {
-            const urgencyHtml = event.urgency.length > 0 ?
+            const urgencyHtml = event.urgency.length > 0 ? 
                 `<span class="urgency-signal">${event.urgency[0]}</span>` : '';
-
-            const promotedHtml = event.promoted ?
+            
+            const promotedHtml = event.promoted ? 
                 `<span class="promoted-tag">Promoted</span>` : '';
-
+            
             return `
                 <div class="event-card" onclick="window.open('#', '_blank')">
                     <div class="event-image" style="background-image: url('${event.image}')"></div>
@@ -1673,15 +1653,15 @@
         function toggleHelpDropdown(event) {
             event.preventDefault();
             event.stopPropagation();
-
+            
             const dropdown = event.target.closest('.help-dropdown');
             const isActive = dropdown.classList.contains('active');
-
+            
             // Close all other dropdowns
             document.querySelectorAll('.help-dropdown.active').forEach(dd => {
                 dd.classList.remove('active');
             });
-
+            
             // Toggle current dropdown
             if (!isActive) {
                 dropdown.classList.add('active');
@@ -1698,10 +1678,10 @@
         }
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             // Add click event listener to close dropdowns when clicking outside
             document.addEventListener('click', closeDropdownsOnOutsideClick);
-
+            
             // Load all sections
             loadSection('popularEvents', allEvents.popular);
             loadSection('weekendEvents', allEvents.weekend);
@@ -1711,105 +1691,64 @@
             loadOrganizers();
         });
 
-        // Search functionality (with null check)
-        function initializeSearch() {
-            const searchInput = document.querySelector('.search-input');
-            if (searchInput) {
-                searchInput.addEventListener('input', function (e) {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const eventCards = document.querySelectorAll('.event-card');
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const eventCards = document.querySelectorAll('.event-card');
+            
+            eventCards.forEach(card => {
+                const title = card.querySelector('.event-title').textContent.toLowerCase();
+                const summary = card.querySelector('.event-summary').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || summary.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
 
-                    eventCards.forEach(card => {
-                        const titleElement = card.querySelector('.event-title');
-                        const summaryElement = card.querySelector('.event-summary');
+        // Filter interactions
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                console.log('Filter clicked:', this.textContent.trim());
+            });
+        });
 
-                        if (titleElement && summaryElement) {
-                            const title = titleElement.textContent.toLowerCase();
-                            const summary = summaryElement.textContent.toLowerCase();
+        // Category interactions
+        document.querySelectorAll('.category-item').forEach(category => {
+            category.addEventListener('click', function() {
+                console.log('Category clicked:', this.querySelector('.category-name').textContent);
+            });
+        });
 
-                            if (title.includes(searchTerm) || summary.includes(searchTerm)) {
-                                card.style.display = 'block';
-                            } else {
-                                card.style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            }
-        }
+        // Tag interactions
+        document.querySelectorAll('.tag-item').forEach(tag => {
+            tag.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Tag clicked:', this.textContent);
+            });
+        });
 
-        // Try to initialize search after DOM is loaded and after a delay for dynamic components
-        setTimeout(initializeSearch, 1000);
-
-        // Initialize interactive elements with null checks
-        function initializeInteractiveElements() {
-            // Filter interactions
-            const filterTags = document.querySelectorAll('.filter-tag');
-            if (filterTags.length > 0) {
-                filterTags.forEach(tag => {
-                    tag.addEventListener('click', function () {
-                        console.log('Filter clicked:', this.textContent.trim());
-                    });
-                });
-            }
-
-            // Category interactions
-            const categoryItems = document.querySelectorAll('.category-item');
-            if (categoryItems.length > 0) {
-                categoryItems.forEach(category => {
-                    category.addEventListener('click', function () {
-                        const categoryName = this.querySelector('.category-name');
-                        if (categoryName) {
-                            console.log('Category clicked:', categoryName.textContent);
-                        }
-                    });
-                });
-            }
-
-            // Tag interactions
-            const tagItems = document.querySelectorAll('.tag-item');
-            if (tagItems.length > 0) {
-                tagItems.forEach(tag => {
-                    tag.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        console.log('Tag clicked:', this.textContent);
-                    });
-                });
-            }
-
-            // Format interactions
-            const formatItems = document.querySelectorAll('.format-item');
-            if (formatItems.length > 0) {
-                formatItems.forEach(format => {
-                    format.addEventListener('click', function () {
-                        const formatName = this.querySelector('.format-name');
-                        if (formatName) {
-                            console.log('Format clicked:', formatName.textContent);
-                        }
-                    });
-                });
-            }
-        }
-
-        // Initialize after DOM is loaded
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeInteractiveElements);
-        } else {
-            initializeInteractiveElements();
-        }
+        // Format interactions
+        document.querySelectorAll('.format-item').forEach(format => {
+            format.addEventListener('click', function() {
+                console.log('Format clicked:', this.querySelector('.format-name').textContent);
+            });
+        });
     </script>
     <script src="js/redirect-to-login.js"></script>
     <script>
         // Update login links to use smart redirection
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const loginLinks = document.querySelectorAll('.login-link, a[href="login.html"]');
             loginLinks.forEach(link => {
-                link.addEventListener('click', function (e) {
+                link.addEventListener('click', function(e) {
                     e.preventDefault();
                     redirectToLogin('Hobbies events.html');
                 });
             });
-
+            
             // Check if user is already logged in and redirect to logged-in version
             if (isLoggedIn()) {
                 redirectToLoggedInVersion();
@@ -1817,5 +1756,4 @@
         });
     </script>
 </body>
-
 </html>

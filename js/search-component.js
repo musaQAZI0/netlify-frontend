@@ -369,17 +369,55 @@ class SearchComponent {
         // This would typically use a geolocation service
         // For demo purposes, we'll simulate it
         if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    // In a real app, you'd reverse geocode these coordinates
-                    console.log('Current position:', position.coords);
-                },
-                (error) => {
-                    console.log('Geolocation not available or denied');
-                },
-                { timeout: 5000 }
-            );
+            try {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        // In a real app, you'd reverse geocode these coordinates
+                        console.log('Current position:', position.coords);
+                        // Optionally update the location input with user's location
+                        this.updateLocationWithCoordinates(position.coords);
+                    },
+                    (error) => {
+                        // Handle different types of geolocation errors gracefully
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                console.log('User denied the request for Geolocation');
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                console.log('Location information is unavailable');
+                                break;
+                            case error.TIMEOUT:
+                                console.log('The request to get user location timed out');
+                                break;
+                            default:
+                                console.log('An unknown error occurred while retrieving location');
+                                break;
+                        }
+                        // Don't show error to user, just use default behavior
+                    },
+                    { 
+                        timeout: 5000,
+                        enableHighAccuracy: false,
+                        maximumAge: 300000 // 5 minutes
+                    }
+                );
+            } catch (error) {
+                console.log('Geolocation API error:', error);
+            }
+        } else {
+            console.log('Geolocation is not supported by this browser');
         }
+    }
+
+    updateLocationWithCoordinates(coords) {
+        // In a real app, you'd reverse geocode these coordinates to get a city name
+        // For now, we'll use a generic "Current Location" text
+        const locationInputs = document.querySelectorAll('.location-input');
+        locationInputs.forEach(input => {
+            if (input) {
+                input.placeholder = 'Current Location';
+            }
+        });
     }
 
     reverseGeocode(lat, lng) {
