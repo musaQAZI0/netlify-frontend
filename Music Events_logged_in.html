@@ -65,7 +65,7 @@
         .logo-text {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #f05537;
+            color: #3a3247;
         }
 
         .search-container {
@@ -88,8 +88,8 @@
         }
 
         .search-wrapper:focus-within {
-            border-color: #f05537;
-            box-shadow: 0 0 0 2px rgba(240, 85, 55, 0.1);
+            border-color: #3a3247;
+            box-shadow: 0 0 0 2px rgba(58, 50, 71, 0.1);
         }
 
         .search-icon {
@@ -141,7 +141,7 @@
         }
 
         .search-btn {
-            background: #f05537;
+            background: #3a3247;
             color: white;
             border: none;
             border-radius: 50%;
@@ -157,7 +157,7 @@
         }
 
         .search-btn:hover {
-            background: #e04429;
+            background: #2d2a3f;
         }
 
         .nav-actions {
@@ -179,7 +179,7 @@
         }
 
         .nav-action-item:hover {
-            color: #f05537;
+            color: #3a3247;
         }
 
         .nav-action-icon {
@@ -212,7 +212,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #f05537;
+            background: #3a3247;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -236,29 +236,64 @@
             top: 100%;
             right: 0;
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
+            border: 1px solid #e8e6ea;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            min-width: 280px;
             z-index: 1000;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+
+        .dropdown-section {
+            padding: 4px 0;
+        }
+
+        .dropdown-group {
+            margin-bottom: 4px;
         }
 
         .user-dropdown a {
-            display: block;
-            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
             text-decoration: none;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
+            color: #39364f;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 0 8px;
         }
 
         .user-dropdown a:hover {
-            background-color: #f8f8f8;
+            background-color: #f8f9fa;
+            color: #3a3247;
         }
 
-        .user-dropdown a:last-child {
-            border-bottom: none;
-            color: #f05537;
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e8e6ea;
+            margin: 8px 16px;
+        }
+
+        .user-info {
+            padding: 8px 20px;
+            margin: 0 8px;
+        }
+
+        .user-email-display {
+            font-size: 12px;
+            color: #6f7287;
+            font-weight: 500;
+        }
+
+        .logout-link {
+            color: #3a3247 !important;
+            font-weight: 500;
+        }
+
+        .logout-link:hover {
+            color: #e53e3e !important;
+            background-color: #fef2f2 !important;
         }
 
         /* Hero Section */
@@ -503,38 +538,174 @@
             display: none;
         }
 
-        /* Responsive Design */
+        /* Mobile Navigation Styles */
+        .mobile-nav-container {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .nav-container {
-                flex-direction: column;
-                gap: 1rem;
-                padding: 1rem;
+                display: none !important;
             }
 
-            .search-container {
-                order: 2;
-                max-width: 100%;
+            .mobile-nav-container {
+                display: grid !important;
+                grid-template-columns: auto 1fr auto;
+                align-items: center;
+                padding: 12px 16px;
+                gap: 12px;
+                background-color: white;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .mobile-nav-container .logo img {
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+            }
+
+            .mobile-nav-container .search-container {
+                justify-self: center;
+                width: 100%;
+                max-width: 420px;
                 margin: 0;
+                position: relative;
+            }
+
+            .mobile-nav-container .search-bar {
+                width: 100%;
+                padding: 10px 16px 10px 40px;
+                border: 1px solid #d0d0d0;
+                border-radius: 25px;
+                font-size: 14px;
+                outline: none;
+                background-color: #f8f8f8;
+            }
+
+            .mobile-nav-container .search-bar:focus {
+                border-color: #3a3247;
+                background-color: white;
+            }
+
+            .mobile-nav-container .search-icon {
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 16px;
+            }
+
+            .mobile-nav-container .search-button {
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: #3a3247;
+                border: none;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .mobile-nav-container .user-profile {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background-color: #f0f0f0;
+                border: 1px solid #d0d0d0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                position: relative;
+                justify-self: end;
+            }
+
+            .mobile-nav-container .user-profile:hover {
+                background-color: #e8e8e8;
+            }
+
+            .mobile-nav-container .user-profile .user-avatar {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: #3a3247;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 600;
+                font-size: 14px;
+                border: none;
+            }
+
+            .mobile-nav-container .dropdown {
+                position: fixed !important;
+                top: 65px !important;
+                left: 5px !important;
+                right: 5px !important;
+                width: calc(100vw - 10px) !important;
+                max-width: calc(100vw - 10px) !important;
+                max-height: calc(100vh - 80px) !important;
+                background-color: white;
+                border: 1px solid #e0e0e0;
+                border-radius: 12px !important;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+                z-index: 1500 !important;
+                display: none;
+                margin: 0 !important;
+                overflow-y: auto;
+            }
+
+            .mobile-nav-container .dropdown.show {
+                display: block;
+            }
+
+            .mobile-nav-container .dropdown-item {
+                padding: 16px 20px !important;
+                cursor: pointer;
+                border-bottom: 1px solid #f0f0f0;
+                font-size: 15px !important;
+                color: #333;
+                display: flex;
+                align-items: center;
+                line-height: 1.5 !important;
+                min-height: 50px !important;
+                text-decoration: none !important;
             }
             
-            .nav-actions {
-                order: 3;
-                justify-content: center;
-                gap: 1rem;
-                flex-wrap: wrap;
+            .mobile-nav-container .dropdown-item:visited {
+                color: #333 !important;
             }
 
-            .nav-action-item {
-                padding: 0.25rem;
+            .mobile-nav-container .dropdown-item:hover {
+                background-color: #f8f8f8;
             }
 
-            .nav-action-text {
-                font-size: 10px;
+            .mobile-nav-container .dropdown-item:last-child {
+                border-bottom: none;
             }
 
-            .user-menu {
-                order: 4;
-                margin-top: 0.5rem;
+            .mobile-nav-container .dropdown-item.email {
+                color: #666;
+                font-size: 13px;
+                cursor: default;
+            }
+
+            .mobile-nav-container .dropdown-item.email:hover {
+                background-color: white;
+            }
+
+            .mobile-nav-container .dropdown-divider {
+                height: 1px;
+                background-color: #e0e0e0;
+                margin: 8px 0;
             }
 
             .hero-container {
@@ -558,21 +729,30 @@
         }
 
         @media (max-width: 480px) {
-            .nav-actions {
-                flex-direction: column;
-                gap: 0.5rem;
-                width: 100%;
-            }
-            
-            .nav-action-item {
-                padding: 0.5rem;
-                text-align: center;
-                width: 100%;
+            .mobile-nav-container {
+                padding: 8px 12px;
+                gap: 8px;
             }
 
-            .user-menu {
-                width: 100%;
-                justify-content: center;
+            .mobile-nav-container .search-bar {
+                padding: 8px 14px 8px 36px;
+                font-size: 13px;
+            }
+
+            .mobile-nav-container .search-icon {
+                left: 12px;
+                font-size: 14px;
+            }
+
+            .mobile-nav-container .search-button {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .mobile-nav-container .user-profile {
+                width: 28px;
+                height: 28px;
             }
         }
     </style>
@@ -580,13 +760,11 @@
 <body>
     <!-- Header -->
     <header class="header">
+        <!-- Desktop Navigation -->
         <nav class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div style="display: none; align-items: center; gap: 0.25rem;">
-                    <span class="logo-icon">🎟️</span>
-                    <span class="logo-text">crowd</span>
-                </div>
+            <a href="#" class="logo">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">crowd</span>
             </a>
 
             <div class="search-container">
@@ -636,13 +814,60 @@
                         <div class="user-email" id="userEmail">Loading...</div>
                     </div>
                     <span class="dropdown-arrow">▾</span>
+                    
+                    <!-- Enhanced User Dropdown Menu -->
+                    <div class="user-dropdown" id="userDropdown" style="display: none;">
+                        <div class="dropdown-section">
+                            <div class="dropdown-group">
+                                <a href="logged_in_Version.html" role="menuitem">Browse events</a>
+                                <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                                <a href="#" role="menuitem">Tickets</a>
+                                <a href="#" role="menuitem">Liked</a>
+                                <a href="#" role="menuitem">Following</a>
+                                <a href="#" role="menuitem">Interests</a>
+                            </div>
+                        </div>
+                        
+                        <div class="dropdown-divider"></div>
+                        
+                        <div class="dropdown-section">
+                            <a href="settings.html" role="menuitem">Account settings</a>
+                            <div class="user-info">
+                                <span class="user-email-display" id="dropdownUserEmail">Loading...</span>
+                            </div>
+                            <a href="#" onclick="logout()" role="menuitem" class="logout-link">Log out</a>
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- User Dropdown Menu -->
-                <div class="user-dropdown" id="userDropdown" style="display: none;">
-                    <a href="#">Account Settings</a>
-                    <a href="#">Organizer Dashboard</a>
-                    <a href="#" onclick="logout()">Log Out</a>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav-container">
+            <a href="#" class="logo">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=32&h=32&fit=crop&crop=center" alt="Crowd Logo">
+            </a>
+
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-bar" placeholder="Search for events...">
+                <button class="search-button">🔍</button>
+            </div>
+
+            <div class="user-profile" id="mobileUserProfile">
+                <div class="user-avatar" id="mobileUserAvatar">U</div>
+                <div class="dropdown" id="mobileDropdown">
+                    <div class="dropdown-item email" id="mobileUserEmail">Loading...</div>
+                    <div class="dropdown-divider"></div>
+                    <a href="logged_in_Version.html" class="dropdown-item">Browse events</a>
+                    <a href="organizer-dashboard.html" class="dropdown-item">Manage my events</a>
+                    <a href="#" class="dropdown-item">Tickets</a>
+                    <a href="#" class="dropdown-item">Liked</a>
+                    <a href="#" class="dropdown-item">Following</a>
+                    <a href="#" class="dropdown-item">Interests</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="settings.html" class="dropdown-item">Account settings</a>
+                    <a href="#" onclick="logout()" class="dropdown-item">Log out</a>
                 </div>
             </div>
         </nav>
@@ -852,6 +1077,11 @@
                 const user = JSON.parse(userStr);
                 const userEmailEl = document.getElementById('userEmail');
                 const userAvatarEl = document.getElementById('userAvatar');
+                const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
+                
+                // Mobile elements
+                const mobileUserEmailEl = document.getElementById('mobileUserEmail');
+                const mobileUserAvatarEl = document.getElementById('mobileUserAvatar');
                 
                 if (userEmailEl) {
                     // Show name if available, otherwise email
@@ -859,10 +1089,25 @@
                     userEmailEl.textContent = displayText;
                 }
                 
+                if (dropdownUserEmailEl) {
+                    // Show email in dropdown
+                    dropdownUserEmailEl.textContent = user.email || 'user@example.com';
+                }
+                
                 if (userAvatarEl) {
                     // Set avatar to first letter of name or email
                     const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
                     userAvatarEl.textContent = avatarText;
+                }
+                
+                // Update mobile elements
+                if (mobileUserEmailEl) {
+                    mobileUserEmailEl.textContent = user.email || 'user@example.com';
+                }
+                
+                if (mobileUserAvatarEl) {
+                    const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
+                    mobileUserAvatarEl.textContent = avatarText;
                 }
                 
                 console.log('User loaded:', user.name || user.email);
@@ -893,13 +1138,38 @@
             window.location.href = 'index.html';
         }
         
+        // Mobile user profile dropdown toggle
+        function toggleMobileUserMenu() {
+            const dropdown = document.getElementById('mobileDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('show');
+            }
+        }
+        
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const userMenu = event.target.closest('.user-menu');
             const dropdown = document.getElementById('userDropdown');
+            const mobileUserProfile = event.target.closest('.user-profile');
+            const mobileDropdown = document.getElementById('mobileDropdown');
             
             if (!userMenu && dropdown) {
                 dropdown.style.display = 'none';
+            }
+            
+            if (!mobileUserProfile && mobileDropdown) {
+                mobileDropdown.classList.remove('show');
+            }
+        });
+        
+        // Add mobile profile click handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileUserProfile = document.getElementById('mobileUserProfile');
+            if (mobileUserProfile) {
+                mobileUserProfile.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleMobileUserMenu();
+                });
             }
         });
 
@@ -963,6 +1233,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Load user data
             loadUserData();
+            
+            // Initialize mobile navigation
+            const mobileUserProfile = document.getElementById('mobileUserProfile');
+            if (mobileUserProfile) {
+                mobileUserProfile.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleMobileUserMenu();
+                });
+            }
         });
     </script>
 </body>

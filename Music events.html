@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRWOD - Music Events in Punjab, Pakistan</title>
-    <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="css/responsive.css">
     <style>
         * {
             margin: 0;
@@ -18,10 +16,6 @@
             line-height: 1.6;
             color: #333;
             background-color: #fafafa;
-        }
-
-        body.category-page {
-            min-height: 100vh;
         }
 
         .container {
@@ -71,13 +65,6 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: #f05537;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            max-width: 120px;
-            object-fit: contain;
         }
 
         .search-container {
@@ -680,25 +667,19 @@
     <link rel="stylesheet" href="css/search-component.css">
     <script src="js/search-component.js"></script>
 </head>
-<body class="category-page">
+<body>
     <!-- Header -->
     <header class="header">
+        <!-- Desktop Navigation -->
         <nav class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div style="display: none; align-items: center; gap: 0.25rem;">
-                    <span class="logo-icon">🎟️</span>
-                    <span class="logo-text">crowd</span>
-                </div>
+            <a href="#" class="logo">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">crowd</span>
             </a>
 
             <div class="search-section" data-search-component>
                 <!-- Search component will be rendered here by JavaScript -->
             </div>
-
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu">
-                <span>☰</span>
-            </button>
 
             <div class="nav-links" id="navLinks">
                 <a href="contact_sales.html" class="nav-link">Contact Sales</a>
@@ -717,6 +698,34 @@
                 <a href="#" class="nav-link secondary">Find my tickets</a>
                 <a href="login.html" class="nav-link secondary login-link">Log In</a>
                 <a href="signup.html" class="nav-link primary">Sign Up</a>
+            </div>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav-container">
+            <a href="#" class="logo">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=32&h=32&fit=crop&crop=center" alt="Crowd Logo">
+            </a>
+
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-bar" placeholder="Search for events...">
+                <button class="search-button">🔍</button>
+            </div>
+
+            <div class="user-profile" id="mobileUserProfile">
+                👤
+                <div class="dropdown" id="mobileDropdown">
+                    <div class="dropdown-item email">Not signed in</div>
+                    <div class="dropdown-divider"></div>
+                    <a href="login.html" class="dropdown-item">Log In</a>
+                    <a href="signup.html" class="dropdown-item">Sign Up</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="contact_sales.html" class="dropdown-item">Contact Sales</a>
+                    <a href="create-events.html" class="dropdown-item">Create Events</a>
+                    <a href="Help_center_logged_in.html" class="dropdown-item">Help Center</a>
+                    <a href="#" class="dropdown-item">Find my tickets</a>
+                </div>
             </div>
         </nav>
     </header>
@@ -740,11 +749,8 @@
         <div class="container">
             <!-- Search Filters -->
             <div class="filters">
-                <div class="filter-group">
-                    <button class="filter-btn">Punjab ▼</button>
-                    <button class="filter-btn">Date ▼</button>
-                    <button class="filter-btn">Category ▼</button>
-                </div>
+                <button class="btn">Punjab ▼</button>
+                <button class="btn">Date ▼</button>
             </div>
 
             <!-- Empty State -->
@@ -943,35 +949,24 @@
             }
         });
 
-        // Search functionality (with null checks)
-        function initializeSearchFunctionality() {
-            const searchBtn = document.querySelector('.search-btn');
-            const searchInput = document.querySelector('.search-input');
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-input').value;
+            const location = document.querySelector('.location-input').value;
             
-            if (searchBtn && searchInput) {
-                searchBtn.addEventListener('click', function() {
-                    const searchTerm = searchInput.value;
-                    const locationInput = document.querySelector('.location-input');
-                    const location = locationInput ? locationInput.value : '';
-                    
-                    if (searchTerm.trim()) {
-                        console.log('[v0] Searching for:', searchTerm, 'in', location);
-                        // Here you would typically make an API call to search for events
-                        alert(`Searching for "${searchTerm}" in ${location}`);
-                    }
-                });
-
-                // Enter key support for search
-                searchInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        searchBtn.click();
-                    }
-                });
+            if (searchTerm.trim()) {
+                console.log('[v0] Searching for:', searchTerm, 'in', location);
+                // Here you would typically make an API call to search for events
+                alert(`Searching for "${searchTerm}" in ${location}`);
             }
-        }
-        
-        // Initialize search after a delay to allow for dynamic loading
-        setTimeout(initializeSearchFunctionality, 1000);
+        });
+
+        // Enter key support for search
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-btn').click();
+            }
+        });
 
         // Card hover effects and click handlers
         document.querySelectorAll('.card').forEach(card => {
@@ -1196,42 +1191,6 @@
         
         window.addEventListener('resize', handleResize);
         handleResize(); // Call on initial load
-
-        // Mobile menu functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const navLinks = document.getElementById('navLinks');
-            
-            if (mobileMenuToggle && navLinks) {
-                mobileMenuToggle.addEventListener('click', function() {
-                    navLinks.classList.toggle('active');
-                    
-                    // Update hamburger icon
-                    const icon = this.querySelector('span');
-                    if (navLinks.classList.contains('active')) {
-                        icon.innerHTML = '✕';
-                    } else {
-                        icon.innerHTML = '☰';
-                    }
-                });
-                
-                // Close mobile menu when clicking on a link
-                navLinks.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('nav-link')) {
-                        navLinks.classList.remove('active');
-                        mobileMenuToggle.querySelector('span').innerHTML = '☰';
-                    }
-                });
-                
-                // Close mobile menu when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!mobileMenuToggle.contains(e.target) && !navLinks.contains(e.target)) {
-                        navLinks.classList.remove('active');
-                        mobileMenuToggle.querySelector('span').innerHTML = '☰';
-                    }
-                });
-            }
-        });
 
         
     </script>
