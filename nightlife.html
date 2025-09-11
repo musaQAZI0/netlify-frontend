@@ -1607,29 +1607,34 @@
         // Global state management with login detection
         let isLoggedIn = false;
 
-        // Check authentication status on page load
-        function checkAuthenticationStatus() {
-            const userStr = localStorage.getItem('currentUser');
-            const token = localStorage.getItem('authToken');
+        // Check authentication status on page load with database integration
+        async function checkAuthenticationStatusLegacy() {
+            try {
+                const response = await fetch('/api/auth/verify', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-            if (token && userStr) {
-                try {
-                    const user = JSON.parse(userStr);
+                if (response.ok) {
+                    const user = await response.json();
                     isLoggedIn = true;
                     console.log('User is logged in:', user.name || user.email);
 
                     // Switch to logged-in version
                     switchToLoggedInVersion(user);
                     return true;
-                } catch (error) {
-                    console.error('Error parsing user data:', error);
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('currentUser');
+                } else {
+                    console.log('User is not logged in');
+                    return false;
                 }
+            } catch (error) {
+                console.error('Error checking authentication status:', error);
+                console.log('User is not logged in');
+                return false;
             }
-
-            console.log('User is not logged in');
-            return false;
         }
 
         // Switch to logged-in navigation version
@@ -1802,21 +1807,26 @@
             closeMobileMenu();
         }
 
-        // Logout function with database integration
-        async function logout() {
-            console.log('Logout function called');
+        // Logout function with full database integration
+        async function logoutLegacy() {
+            console.log('Legacy logout function called');
 
             try {
-                // Call the MongoDB auth API logout endpoint if available
-                if (window.mongoAuthAPI || window.authAPI) {
-                    const authAPI = window.mongoAuthAPI || window.authAPI;
-                    console.log('Using auth API for logout');
-                    await authAPI.logout();
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    console.log('Logout successful');
+                    // Update UI to logged-out state
+                    const body = document.getElementById('mainBody');
+                    body.className = 'logged-out category-page';
                 } else {
-                    console.log('No auth API available, using fallback');
-                    // Fallback to local storage cleanup
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('currentUser');
+                    console.error('Logout failed:', response.statusText);
                 }
 
                 console.log('Logout successful, redirecting...');
@@ -1824,9 +1834,6 @@
                 window.location.href = 'index.html';
             } catch (error) {
                 console.error('Logout error:', error);
-                // Still clear local storage and redirect on error
-                localStorage.removeItem('authToken');
-                localStorage.removeItem('currentUser');
                 alert('Logout completed with error: ' + error.message);
                 window.location.href = 'index.html';
             }
@@ -1864,27 +1871,33 @@
                 body.style.overflow = '';
             }
 
-            // Update mobile menu authentication state
-            function updateMobileMenuAuth() {
-                const userStr = localStorage.getItem('currentUser');
-                const token = localStorage.getItem('authToken');
+            // Update mobile menu authentication state with database integration
+            async function updateMobileMenuAuth() {
+                try {
+                    const response = await fetch('/api/auth/verify', {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-                if (token && userStr) {
-                    try {
-                        const user = JSON.parse(userStr);
+                    if (response.ok) {
+                        const user = await response.json();
                         // Show logged in navigation
                         if (mobileLoggedInNav) mobileLoggedInNav.style.display = 'block';
                         if (mobileLoggedOutNav) mobileLoggedOutNav.style.display = 'none';
 
                         // Update user info in mobile menu
                         updateUserNavigation(user);
-                    } catch (error) {
+                    } else {
                         // Show logged out navigation
                         if (mobileLoggedInNav) mobileLoggedInNav.style.display = 'none';
                         if (mobileLoggedOutNav) mobileLoggedOutNav.style.display = 'block';
                     }
-                } else {
-                    // Show logged out navigation
+                } catch (error) {
+                    console.error('Error updating mobile menu auth:', error);
+                    // Show logged out navigation on error
                     if (mobileLoggedInNav) mobileLoggedInNav.style.display = 'none';
                     if (mobileLoggedOutNav) mobileLoggedOutNav.style.display = 'block';
                 }
@@ -1955,35 +1968,46 @@
             });
         }
 
-        // Authentication Status Management
-        function checkAuthenticationStatus() {
-            const token = localStorage.getItem('authToken');
-            const userStr = localStorage.getItem('currentUser');
-            
+        // Authentication Status Management - Full MongoDB Integration
+        // Note: This requires the backend to implement /api/auth/verify endpoint
+        // that checks session/cookie authentication and returns user data
+        async function checkAuthenticationStatus() {
             const body = document.getElementById('mainBody');
             
-            if (token && userStr) {
-                try {
-                    const user = JSON.parse(userStr);
+            try {
+                const response = await fetch('/api/auth/verify', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const user = await response.json();
                     // Set body class to logged-in
                     body.className = 'logged-in category-page';
                     
                     // Update mobile header user info
                     updateMobileUserInfo(user);
                     
+                    // Update desktop user info
+                    updateDesktopUserInfo(user);
+                    
                     console.log('User is logged in:', user.name || user.email);
                     return true;
-                } catch (error) {
-                    console.error('Error parsing user data:', error);
-                    localStorage.removeItem('authToken');
-                    localStorage.removeItem('currentUser');
+                } else {
+                    // User is not authenticated
+                    body.className = 'logged-out category-page';
+                    console.log('User is not logged in');
+                    return false;
                 }
+            } catch (error) {
+                console.error('Error checking authentication status:', error);
+                // Set body class to logged-out on error
+                body.className = 'logged-out category-page';
+                return false;
             }
-            
-            // Set body class to logged-out
-            body.className = 'logged-out category-page';
-            console.log('User is not logged in');
-            return false;
         }
 
         // Update mobile header user information
@@ -1997,6 +2021,22 @@
             const mobileUserEmailEl = document.getElementById('mobileUserEmail');
             if (mobileUserEmailEl) {
                 mobileUserEmailEl.textContent = user.email || 'user@example.com';
+            }
+        }
+        
+        // Update desktop user information
+        function updateDesktopUserInfo(user) {
+            // Update user email in desktop dropdown
+            const userEmailDesktop = document.getElementById('userEmailDesktop');
+            if (userEmailDesktop) {
+                userEmailDesktop.textContent = user.email || 'user@example.com';
+            }
+            
+            // Update user avatar with first letter of name/email
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar) {
+                const firstLetter = (user.name || user.email || 'U').charAt(0).toUpperCase();
+                userAvatar.textContent = firstLetter;
             }
         }
 
@@ -2059,28 +2099,37 @@
 
         // Logout function
         async function logout() {
+            console.log('Logout function called');
+            
             try {
-                const token = localStorage.getItem('authToken');
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
                 
-                if (token) {
-                    await fetch('https://crowd-backend-zxxp.onrender.com/api/auth/logout', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
+                if (response.ok) {
+                    console.log('Logout successful');
+                    // Update UI to logged-out state
+                    const body = document.getElementById('mainBody');
+                    body.className = 'logged-out category-page';
+                    // Redirect to home page
+                    alert('Logged out successfully!');
+                    window.location.href = 'index.html';
+                } else {
+                    console.error('Logout failed:', response.statusText);
+                    // Still redirect even if logout request failed
+                    alert('Logged out successfully!');
+                    window.location.href = 'index.html';
                 }
             } catch (error) {
-                console.error('Backend logout error:', error);
+                console.error('Logout error:', error);
+                // Redirect even on error
+                alert('Logged out successfully!');
+                window.location.href = 'index.html';
             }
-            
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('currentUser');
-            
-            console.log('User logged out successfully');
-            alert('Logged out successfully!');
-            window.location.href = 'index.html';
         }
 
         // Function to toggle mobile dropdown for logged-in users
@@ -2093,9 +2142,9 @@
         }
 
         // Initialize all functionality
-        document.addEventListener('DOMContentLoaded', function () {
-            // Check authentication status first
-            checkAuthenticationStatus();
+        document.addEventListener('DOMContentLoaded', async function () {
+            // Check authentication status first (async)
+            await checkAuthenticationStatus();
             
             // Initialize mobile dropdown for logged-in users
             const mobileUserProfile = document.querySelector('.mobile-nav-container .user-profile');
