@@ -23,10 +23,18 @@
             --transition: all 0.3s ease;
         }
 
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: "Neue Plak", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Helvetica, Tahoma, Arial, sans-serif;
             background-color: #f8f7fa;
             color: #39364f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Enhanced Header Styles */
@@ -543,7 +551,7 @@
         /* Breadcrumb Styles */
         .breadcrumb {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 0;
             padding: 16px 24px;
             font-size: 14px;
         }
@@ -568,6 +576,7 @@
             padding: 48px 0 64px;
             position: relative;
             overflow: hidden;
+            margin: 0;
         }
 
         .hero-container {
@@ -636,6 +645,7 @@
             background: white;
             padding: 24px 0;
             border-bottom: 1px solid #ddd8df;
+            margin: 0;
         }
 
         .filter-container {
@@ -711,6 +721,7 @@
             margin: 0 auto;
             padding: 48px 24px;
             text-align: center;
+            flex: 1;
         }
 
         .empty-state {
@@ -874,7 +885,20 @@
         @media (max-width: 768px) {
 
             .header {
-                min-height: 116px;
+                min-height: auto;
+            }
+            
+            /* Set specific heights for each section */
+            .mobile-utility {
+                min-height: 32px;
+            }
+            
+            .nav-container {
+                min-height: 56px;
+            }
+            
+            .header-search-mobile {
+                min-height: 60px;
             }
 
             /* Show mobile utility row */
@@ -915,6 +939,10 @@
                 padding: 16px 12px;
             }
 
+            .hero-section {
+                padding: 32px 0 48px;
+            }
+
             .hero-container {
                 flex-direction: column;
                 text-align: center;
@@ -930,6 +958,10 @@
                 flex: none;
                 width: 100%;
                 max-width: 400px;
+            }
+
+            .filter-section {
+                padding: 16px 0;
             }
 
             .filter-container {
