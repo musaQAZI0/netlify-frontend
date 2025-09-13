@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -667,14 +668,18 @@
     <link rel="stylesheet" href="css/search-component.css">
     <script src="js/search-component.js"></script>
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
-        <!-- Desktop Navigation -->
         <nav class="nav-container">
             <a href="#" class="logo">
-                <span class="logo-icon">🎟️</span>
-                <span class="logo-text">crowd</span>
+                <img src="logo.png" alt="Crowd Logo" class="logo-img"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display: none; align-items: center; gap: 0.25rem;">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">crowd</span>
+                </div>
             </a>
 
             <div class="search-section" data-search-component>
@@ -692,40 +697,13 @@
                     <div class="help-dropdown-content" id="helpDropdownContent">
                         <a href="Help_center_logged_in.html">Help Center</a>
                         <a href="Help_Center_sub_parts/Your_tickets_new.html">Find your tickets</a>
-                        <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event organizer</a>
+                        <a href="Help_Center_sub_parts/crowd_help_center_contact_organizer.html">Contact your event
+                            organizer</a>
                     </div>
                 </div>
                 <a href="#" class="nav-link secondary">Find my tickets</a>
                 <a href="login.html" class="nav-link secondary login-link">Log In</a>
                 <a href="signup.html" class="nav-link primary">Sign Up</a>
-            </div>
-        </nav>
-
-        <!-- Mobile Navigation -->
-        <nav class="mobile-nav-container">
-            <a href="#" class="logo">
-                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=32&h=32&fit=crop&crop=center" alt="Crowd Logo">
-            </a>
-
-            <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-bar" placeholder="Search for events...">
-                <button class="search-button">🔍</button>
-            </div>
-
-            <div class="user-profile" id="mobileUserProfile">
-                👤
-                <div class="dropdown" id="mobileDropdown">
-                    <div class="dropdown-item email">Not signed in</div>
-                    <div class="dropdown-divider"></div>
-                    <a href="login.html" class="dropdown-item">Log In</a>
-                    <a href="signup.html" class="dropdown-item">Sign Up</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="contact_sales.html" class="dropdown-item">Contact Sales</a>
-                    <a href="create-events.html" class="dropdown-item">Create Events</a>
-                    <a href="Help_center_logged_in.html" class="dropdown-item">Help Center</a>
-                    <a href="#" class="dropdown-item">Find my tickets</a>
-                </div>
             </div>
         </nav>
     </header>
@@ -739,7 +717,8 @@
                     <p class="hero-subtitle">Online</p>
                     <p class="hero-description">Discover the best Music events in your area and online</p>
                 </div>
-                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=280&fit=crop&crop=center" alt="Music performer with guitar" class="hero-image">
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=280&fit=crop&crop=center"
+                    alt="Music performer with guitar" class="hero-image">
             </div>
         </div>
     </section>
@@ -765,43 +744,53 @@
                 <h2 class="section-title">Explore music event formats</h2>
                 <div class="grid grid-formats" id="formats-grid">
                     <div class="card">
-                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop&crop=center" alt="Music Conference" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Conference" class="card-image">
                         <h3 class="card-title">Conferences</h3>
                     </div>
                     <div class="card">
-                        <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=300&h=200&fit=crop&crop=center" alt="Music Seminar" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Seminar" class="card-image">
                         <h3 class="card-title">Seminars</h3>
                     </div>
                     <div class="card">
-                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop&crop=center" alt="Music Expo" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Expo" class="card-image">
                         <h3 class="card-title">Expos</h3>
                     </div>
                     <div class="card">
-                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=200&fit=crop&crop=center" alt="Music Convention" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Convention" class="card-image">
                         <h3 class="card-title">Conventions</h3>
                     </div>
                     <div class="card">
-                        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=300&h=200&fit=crop&crop=center" alt="Music Festival" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Festival" class="card-image">
                         <h3 class="card-title">Festivals</h3>
                     </div>
                     <div class="card">
-                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=300&h=200&fit=crop&crop=center" alt="Live Performance" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=300&h=200&fit=crop&crop=center"
+                            alt="Live Performance" class="card-image">
                         <h3 class="card-title">Performances</h3>
                     </div>
                     <div class="card hidden" data-extra="true">
-                        <img src="https://images.unsplash.com/photo-1489599904056-99aa2bf8a222?w=300&h=200&fit=crop&crop=center" alt="Music Video Screening" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1489599904056-99aa2bf8a222?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Video Screening" class="card-image">
                         <h3 class="card-title">Screenings</h3>
                     </div>
                     <div class="card hidden" data-extra="true">
-                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=300&h=200&fit=crop&crop=center" alt="Music Gala" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Gala" class="card-image">
                         <h3 class="card-title">Galas</h3>
                     </div>
                     <div class="card hidden" data-extra="true">
-                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&fit=crop&crop=center" alt="Music Classes" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Classes" class="card-image">
                         <h3 class="card-title">Classes</h3>
                     </div>
                     <div class="card hidden" data-extra="true">
-                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=300&h=200&fit=crop&crop=center" alt="Music Industry Networking" class="card-image">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=300&h=200&fit=crop&crop=center"
+                            alt="Music Industry Networking" class="card-image">
                         <h3 class="card-title">Networking</h3>
                     </div>
                 </div>
@@ -922,10 +911,10 @@
 
     <script>
         // Toggle functionality for formats section
-        document.getElementById('formats-toggle').addEventListener('click', function() {
+        document.getElementById('formats-toggle').addEventListener('click', function () {
             const extraItems = document.querySelectorAll('#formats-grid [data-extra="true"]');
             const button = this;
-            
+
             if (button.textContent === 'View more') {
                 extraItems.forEach(item => item.classList.remove('hidden'));
                 button.textContent = 'View less';
@@ -936,10 +925,10 @@
         });
 
         // Toggle functionality for categories section
-        document.getElementById('categories-toggle').addEventListener('click', function() {
+        document.getElementById('categories-toggle').addEventListener('click', function () {
             const extraItems = document.querySelectorAll('#categories-grid [data-extra="true"]');
             const button = this;
-            
+
             if (button.textContent === 'View more') {
                 extraItems.forEach(item => item.classList.remove('hidden'));
                 button.textContent = 'View less';
@@ -950,10 +939,10 @@
         });
 
         // Search functionality
-        document.querySelector('.search-btn').addEventListener('click', function() {
+        document.querySelector('.search-btn').addEventListener('click', function () {
             const searchTerm = document.querySelector('.search-input').value;
             const location = document.querySelector('.location-input').value;
-            
+
             if (searchTerm.trim()) {
                 console.log('[v0] Searching for:', searchTerm, 'in', location);
                 // Here you would typically make an API call to search for events
@@ -962,7 +951,7 @@
         });
 
         // Enter key support for search
-        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+        document.querySelector('.search-input').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 document.querySelector('.search-btn').click();
             }
@@ -970,7 +959,7 @@
 
         // Card hover effects and click handlers
         document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('click', function() {
+            card.addEventListener('click', function () {
                 const title = this.querySelector('.card-title').textContent;
                 console.log('[v0] Card clicked:', title);
                 // Here you would typically navigate to a filtered view or detail page
@@ -981,7 +970,7 @@
         function handleResize() {
             const nav = document.querySelector('.nav');
             const hiddenMobile = document.querySelectorAll('.hidden-mobile');
-            
+
             if (window.innerWidth < 768) {
                 hiddenMobile.forEach(el => el.style.display = 'none');
             } else {
@@ -994,7 +983,7 @@
         let currentUser = null;
 
         // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             checkAuthState();
             attachDropdownListener();
         });
@@ -1004,7 +993,7 @@
             // Check primary auth token and user data (from main app)
             const authToken = localStorage.getItem('authToken');
             const currentUserData = localStorage.getItem('currentUser');
-            
+
             if (authToken && currentUserData) {
                 try {
                     currentUser = JSON.parse(currentUserData);
@@ -1015,7 +1004,7 @@
                     console.error('Error parsing currentUser data:', error);
                 }
             }
-            
+
             // Fallback to crowdUser storage
             const userData = localStorage.getItem('crowdUser');
             if (userData) {
@@ -1081,7 +1070,7 @@
                     <a href="signup.html" class="nav-link primary signup-link">Sign Up</a>
                 `;
             }
-            
+
             // Reattach dropdown listeners after updating navigation
             attachDropdownListener();
         }
@@ -1094,10 +1083,10 @@
             }
 
             // Close dropdowns when clicking outside
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 const helpDropdown = document.getElementById('helpDropdown');
                 const userDropdown = document.querySelector('.user-profile-dropdown');
-                
+
                 if (helpDropdown && !helpDropdown.contains(event.target)) {
                     helpDropdown.classList.remove('active');
                 }
@@ -1108,11 +1097,11 @@
             });
 
             // Handle keyboard navigation
-            document.addEventListener('keydown', function(event) {
+            document.addEventListener('keydown', function (event) {
                 if (event.key === 'Escape') {
                     const helpDropdown = document.getElementById('helpDropdown');
                     const userDropdown = document.querySelector('.user-profile-dropdown');
-                    
+
                     if (helpDropdown) helpDropdown.classList.remove('active');
                     if (userDropdown) userDropdown.classList.remove('active');
                 }
@@ -1121,7 +1110,7 @@
             // Add user profile dropdown listener
             const userProfileBtn = document.querySelector('.user-profile-btn');
             if (userProfileBtn) {
-                userProfileBtn.addEventListener('click', function(e) {
+                userProfileBtn.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     const userDropdown = document.querySelector('.user-profile-dropdown');
@@ -1177,7 +1166,7 @@
 
             document.getElementById('notificationMessage').textContent = message;
             notification.className = `top-notification ${type}`;
-            
+
             setTimeout(() => notification.classList.add('show'), 100);
             setTimeout(() => hideTopNotification(), 4000);
         }
@@ -1188,11 +1177,12 @@
                 notification.classList.remove('show');
             }
         }
-        
+
         window.addEventListener('resize', handleResize);
         handleResize(); // Call on initial load
 
-        
+
     </script>
 </body>
+
 </html>
