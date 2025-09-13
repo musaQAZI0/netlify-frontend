@@ -1816,360 +1816,85 @@
     </footer>
 
     <script>
-        // Database-Integrated Authentication System
-        const API_CONFIG = {
-            BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                ? 'http://localhost:3002'
-                : 'https://crowd-backend-zxxp.onrender.com',
-            ENDPOINTS: {
-                LOGIN: '/api/auth/login',
-                VERIFY: '/api/auth/verify-token',
-                PROFILE: '/api/auth/profile',
-                LOGOUT: '/api/auth/logout'
-            }
-        };
-
-        const STORAGE_KEYS = {
-            SESSION_TOKEN: 'crowd_session_token',
-            USER_ID: 'crowd_user_id',
-            LOGIN_TIME: 'crowd_login_time',
-            // Legacy keys for migration
-            LEGACY_TOKEN: 'authToken',
-            LEGACY_USER: 'currentUser',
-            OLD_TOKEN: 'crowd_auth_token',
-            OLD_USER: 'crowd_user_data'
-        };
-
-        // Global authentication state
+        // Simplified Authentication System for Public Page
         let isLoggedIn = false;
         let currentUser = null;
 
-        async function checkAuthenticationState() {
-            console.log('🔐 Starting comprehensive database authentication check...');
+        function checkAuthenticationState() {
+            console.log('🔐 Checking authentication state...');
 
             try {
-                // Method 1: Check URL parameters (highest priority)
-                const urlAuth = await checkURLParameters();
-                if (urlAuth.success) {
-                    console.log('✅ Authentication via URL parameters successful');
-                    return await setupAuthState(urlAuth.user, urlAuth.token, 'URL navigation');
+                // Check if user is coming from logged-in page
+                const urlParams = new URLSearchParams(window.location.search);
+                const userData = urlParams.get('user');
+                const fromPage = urlParams.get('from');
+
+                if (userData && fromPage === 'logged_in') {
+                    try {
+                        const user = JSON.parse(decodeURIComponent(userData));
+                        console.log('✅ User authenticated from logged-in page');
+                        isLoggedIn = true;
+                        currentUser = user;
+                        updateAuthenticationState(true);
+                        // Clean URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                        return true;
+                    } catch (error) {
+                        console.error('Error parsing user data:', error);
+                    }
                 }
 
-                // Method 2: Verify current session token with database
-                const sessionAuth = await checkSessionToken();
-                if (sessionAuth.success) {
-                    console.log('✅ Authentication via session token successful');
-                    return await setupAuthState(sessionAuth.user, sessionAuth.token, 'Session verification');
+                // Check local storage for existing session
+                const storedUser = localStorage.getItem('currentUser');
+                const storedToken = localStorage.getItem('authToken');
+
+                if (storedUser && storedToken) {
+                    try {
+                        const user = JSON.parse(storedUser);
+                        console.log('✅ User authenticated from local storage');
+                        isLoggedIn = true;
+                        currentUser = user;
+                        updateAuthenticationState(true);
+                        return true;
+                    } catch (error) {
+                        console.error('Error parsing stored user data:', error);
+                    }
                 }
 
-                // Method 3: Migrate legacy authentication data
-                const legacyAuth = await attemptLegacyMigration();
-                if (legacyAuth.success) {
-                    console.log('✅ Authentication via legacy migration successful');
-                    return await setupAuthState(legacyAuth.user, legacyAuth.token, 'Legacy migration');
-                }
-
-                // Method 4: Create demo session if coming from logged_in_Version.html
-                const demoAuth = await createDemoSessionIfNeeded();
-                if (demoAuth.success) {
-                    console.log('✅ Demo session created for testing');
-                    return await setupAuthState(demoAuth.user, demoAuth.token, 'Demo session');
-                }
-
-                console.log('❌ No valid authentication found - staying in guest mode');
-                await clearAuthState();
+                console.log('❌ No authentication found - staying in guest mode');
+                isLoggedIn = false;
+                currentUser = null;
+                updateAuthenticationState(false);
                 return false;
 
             } catch (error) {
                 console.error('🚨 Authentication check failed:', error);
-                await clearAuthState();
+                isLoggedIn = false;
+                currentUser = null;
+                updateAuthenticationState(false);
                 return false;
             }
         }
 
-        async function checkURLParameters() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('token');
-            const userData = urlParams.get('user');
-            const fromPage = urlParams.get('from');
 
-            console.log('🔗 Checking URL parameters:', { token: !!token, userData: !!userData, fromPage });
-
-            // First check if we have user data from logged_in_Version.html
-            if (userData && fromPage === 'logged_in') {
-                console.log('✅ Processing REAL user authentication from logged_in_Version.html');
-
-                try {
-                    const user = JSON.parse(decodeURIComponent(userData));
-                    console.log('🎯 Real user data found:', user.email || user.name || 'Unknown');
-
-                    // Use the real user data directly - no need to verify with database
-                    // since this is coming from our own logged_in_Version.html page
-                    const realToken = token || 'auth_token_' + Date.now();
-
-                    // Clean URL after processing
-                    window.history.replaceState({}, document.title, window.location.pathname);
-
-                    return { success: true, user, token: realToken };
-                } catch (error) {
-                    console.error('❌ URL parameter processing error:', error);
-                    console.log('📋 Raw user data:', userData);
-                }
-            } else if (token && fromPage === 'logged_in') {
-                // Handle case where we have token but no user data
-                console.log('⚠️ Token without user data from logged_in page - trying database verification');
-
-                try {
-                    const verified = await verifyTokenAndGetUser(token);
-                    if (verified.success) {
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        return { success: true, user: verified.user, token };
-                    }
-                } catch (error) {
-                    console.error('Database verification error:', error);
-                }
-            }
-
-            return { success: false };
-        }
-
-        async function checkSessionToken() {
-            const token = sessionStorage.getItem(STORAGE_KEYS.SESSION_TOKEN) ||
-                localStorage.getItem(STORAGE_KEYS.OLD_TOKEN);
-            const loginTime = localStorage.getItem(STORAGE_KEYS.LOGIN_TIME);
-
-            if (!token) return { success: false };
-
-            // Check if session is expired (24 hours)
-            if (loginTime && isSessionExpired(loginTime)) {
-                console.log('⏰ Session expired, clearing auth data');
-                await clearSession();
-                return { success: false };
-            }
-
-            const verified = await verifyTokenAndGetUser(token);
-            if (verified.success) {
-                return { success: true, user: verified.user, token };
-            }
-
-            // If database is unavailable but we have stored user data, try using local storage
-            if (verified.error === 'database_unavailable') {
-                console.log('🔄 Database unavailable, trying local user data fallback');
-                const storedUserId = sessionStorage.getItem(STORAGE_KEYS.USER_ID);
-                const legacyUser = localStorage.getItem(STORAGE_KEYS.LEGACY_USER);
-
-                if (legacyUser) {
-                    try {
-                        const user = JSON.parse(legacyUser);
-                        console.log('✅ Using cached user data due to database unavailability');
-                        return { success: true, user, token };
-                    } catch (error) {
-                        console.error('Error parsing cached user data:', error);
-                    }
-                }
-            }
-
-            return { success: false };
-        }
-
-        async function attemptLegacyMigration() {
-            const legacyToken = localStorage.getItem(STORAGE_KEYS.LEGACY_TOKEN);
-            const legacyUser = localStorage.getItem(STORAGE_KEYS.LEGACY_USER);
-
-            if (legacyToken && legacyUser) {
-                console.log('🔄 Attempting legacy data migration');
-
-                try {
-                    const user = JSON.parse(legacyUser);
-                    const verified = await verifyTokenAndGetUser(legacyToken);
-
-                    if (verified.success) {
-                        // Migrate to new storage format
-                        await createUserSession(verified.user, legacyToken);
-
-                        // Clean up legacy data
-                        localStorage.removeItem(STORAGE_KEYS.LEGACY_TOKEN);
-                        localStorage.removeItem(STORAGE_KEYS.LEGACY_USER);
-
-                        return { success: true, user: verified.user, token: legacyToken };
-                    } else if (verified.error === 'database_unavailable') {
-                        console.log('🔄 Database unavailable during migration, using cached user data');
-                        // Use cached user data when database is unavailable
-                        return { success: true, user, token: legacyToken };
-                    }
-                } catch (error) {
-                    console.error('Legacy migration error:', error);
-                }
-            }
-
-            return { success: false };
-        }
-
-        async function createDemoSessionIfNeeded() {
-            const referrer = document.referrer;
-            const urlParams = new URLSearchParams(window.location.search);
-            const fromPage = urlParams.get('from');
-            const isFromLoggedIn = referrer && referrer.includes('logged_in_Version.html');
-
-            // Only create demo session if coming from logged_in_Version.html but NO URL parameters
-            // This ensures real user data from URL parameters takes priority
-            if (isFromLoggedIn && fromPage !== 'logged_in') {
-                console.log('🎭 Creating demo session for testing (no URL auth data found)');
-
-                const demoUser = {
-                    id: 'demo_user_001',
-                    email: 'demo@example.com',
-                    name: 'Demo User',
-                    avatar: null,
-                    created_at: new Date().toISOString()
-                };
-
-                const demoToken = 'demo_token_' + Date.now();
-                await createUserSession(demoUser, demoToken);
-
-                return { success: true, user: demoUser, token: demoToken };
-            } else if (isFromLoggedIn && fromPage === 'logged_in') {
-                console.log('🚫 Skipping demo session - real user data should be in URL parameters');
-            }
-
-            return { success: false };
-        }
-
-        async function verifyTokenAndGetUser(token) {
-            try {
-                console.log('🔍 Verifying token with database...');
-
-                const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.VERIFY}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ token })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success && data.user) {
-                        console.log('✅ Token verified, user data retrieved from database');
-                        return { success: true, user: data.user };
-                    }
-                }
-
-                console.log('❌ Token verification failed');
-                return { success: false };
-
-            } catch (error) {
-                console.error('Database verification error:', error);
-                console.log('⚠️ Database access failed - using fallback authentication');
-
-                // Return failure so other auth methods can be tried
-                return { success: false, error: 'database_unavailable' };
-            }
-        }
-
-        async function createUserSession(user, token) {
-            console.log('💾 Creating secure user session...');
-
-            // Store in sessionStorage for security
-            sessionStorage.setItem(STORAGE_KEYS.SESSION_TOKEN, token);
-            sessionStorage.setItem(STORAGE_KEYS.USER_ID, user.id);
-
-            // Store login time in localStorage for expiry check
-            localStorage.setItem(STORAGE_KEYS.LOGIN_TIME, new Date().toISOString());
-
-            console.log('✅ Session created successfully');
-        }
-
-        async function setupAuthState(user, token, method) {
-            console.log(`🎯 Setting up authentication state via ${method}`);
-
-            // Update global state
-            isLoggedIn = true;
-            currentUser = user;
-
-            // Create session
-            await createUserSession(user, token);
-
-            // Update UI
-            updateAuthenticationState(true);
-            updateUserDisplay(user);
-
-            // Show welcome notification
-            const userName = user.name || user.email?.split('@')[0] || 'User';
-            showTopNotification(`Welcome back, ${userName}! 🎭`, 'success');
-
-            console.log('✅ Authentication state setup complete');
-            return true;
-        }
-
-        async function clearAuthState() {
-            console.log('🧹 Clearing authentication state...');
-
-            // Update global state
-            isLoggedIn = false;
-            currentUser = null;
-
-            // Clear session data
-            await clearSession();
-
-            // Update UI
-            updateAuthenticationState(false);
-
-            console.log('✅ Authentication state cleared');
-        }
-
-        function isSessionExpired(loginTime) {
-            if (!loginTime) return true;
-
-            try {
-                const loginDate = new Date(loginTime);
-                const now = new Date();
-                const diffHours = (now - loginDate) / (1000 * 60 * 60);
-
-                return diffHours > 24; // 24-hour expiry
-            } catch (error) {
-                return true; // Expire on error
-            }
-        }
-
-        async function clearSession() {
-            // Clear all storage keys
-            Object.values(STORAGE_KEYS).forEach(key => {
-                sessionStorage.removeItem(key);
-                localStorage.removeItem(key);
-            });
-
-            console.log('🗑️ Session data cleared');
-        }
-
-        // Enhanced user display with real database data
         function updateUserDisplay(user) {
-            const userEmailEl = document.getElementById('userEmail');
-            const userAvatarEl = document.getElementById('userAvatar');
-            const dropdownUserEmail = document.getElementById('dropdownUserEmail');
-            const mobileDropdownUserEmail = document.getElementById('mobileDropdownUserEmail');
+            // Simple user display update for when user is logged in
+            if (user) {
+                console.log('👤 Updating user display for:', user.email || user.name);
 
-            if (userEmailEl && user) {
-                const displayText = user.name || user.email || 'User';
-                userEmailEl.textContent = displayText;
+                const userEmailEl = document.getElementById('userEmail');
+                const userAvatarEl = document.getElementById('userAvatar');
+
+                if (userEmailEl) {
+                    const displayText = user.name || user.email || 'User';
+                    userEmailEl.textContent = displayText;
+                }
+
+                if (userAvatarEl) {
+                    const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
+                    userAvatarEl.textContent = avatarText;
+                }
             }
-
-            if (userAvatarEl && user) {
-                const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
-                userAvatarEl.textContent = avatarText;
-            }
-
-            // Update dropdown email displays
-            if (dropdownUserEmail && user) {
-                dropdownUserEmail.textContent = user.email || user.name || 'user@example.com';
-            }
-
-            if (mobileDropdownUserEmail && user) {
-                mobileDropdownUserEmail.textContent = user.email || user.name || 'user@example.com';
-            }
-
-            console.log('👤 User display updated with database data:', user?.email);
         }
 
         // Function to update header based on authentication status
@@ -2217,99 +1942,26 @@
             }
         }
 
-        // Enhanced database profile fetching functionality
-        async function fetchUserProfileFromDatabase(userId, token) {
-            console.log('👤 Fetching user profile from database...');
-
-            try {
-                const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROFILE}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const profileData = await response.json();
-                    if (profileData.success && profileData.user) {
-                        console.log('✅ User profile fetched from database:', profileData.user.email);
-                        return {
-                            success: true,
-                            user: {
-                                id: profileData.user.id,
-                                email: profileData.user.email,
-                                name: profileData.user.name || profileData.user.firstName || profileData.user.email.split('@')[0],
-                                firstName: profileData.user.firstName,
-                                lastName: profileData.user.lastName,
-                                avatar: profileData.user.avatar,
-                                created_at: profileData.user.created_at,
-                                updated_at: profileData.user.updated_at
-                            }
-                        };
-                    }
-                }
-
-                console.log('❌ Failed to fetch user profile from database');
-                return { success: false };
-
-            } catch (error) {
-                console.error('Database profile fetch error:', error);
-                return { success: false };
-            }
-        }
-
-        // Enhanced logout with database integration
-        async function logout() {
+        // Simple logout function
+        function logout() {
             console.log('🚪 Logging out user...');
 
-            try {
-                const token = sessionStorage.getItem(STORAGE_KEYS.SESSION_TOKEN);
+            // Clear local storage
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
 
-                if (token && !token.startsWith('demo_token_')) {
-                    // Notify backend of logout
-                    await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LOGOUT}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Backend logout error:', error);
-            }
+            // Update state
+            isLoggedIn = false;
+            currentUser = null;
+            updateAuthenticationState(false);
 
-            await clearAuthState();
+            // Show notification
             showTopNotification('Successfully logged out', 'info');
 
             // Redirect to login page
             setTimeout(() => {
                 window.location.href = 'login.html';
             }, 1500);
-        }
-
-        // Real-time profile updates from database
-        async function syncUserProfileData() {
-            if (!isLoggedIn || !currentUser) return;
-
-            const token = sessionStorage.getItem(STORAGE_KEYS.SESSION_TOKEN);
-            if (!token || token.startsWith('demo_token_')) return;
-
-            try {
-                const profileResult = await fetchUserProfileFromDatabase(currentUser.id, token);
-                if (profileResult.success) {
-                    // Update current user with fresh database data
-                    currentUser = profileResult.user;
-
-                    // Update UI with fresh data
-                    updateUserDisplay(currentUser);
-
-                    console.log('🔄 User profile synced with database');
-                }
-            } catch (error) {
-                console.error('Profile sync error:', error);
-            }
         }
 
         // Top notification system
@@ -2368,18 +2020,15 @@
             }
         }
 
-        // Periodic profile sync (every 10 minutes)
-        setInterval(syncUserProfileData, 10 * 60 * 1000);
-
         // Handle auth state changes from other tabs
         window.addEventListener('storage', function (e) {
-            if (e.key === STORAGE_KEYS.SESSION_TOKEN && !e.newValue) {
+            if ((e.key === 'authToken' || e.key === 'currentUser') && !e.newValue) {
                 // Token was removed, user logged out
                 isLoggedIn = false;
                 currentUser = null;
                 updateAuthenticationState(false);
                 showTopNotification('You have been logged out from another tab', 'info');
-            } else if (e.key === STORAGE_KEYS.SESSION_TOKEN && e.newValue) {
+            } else if ((e.key === 'authToken' || e.key === 'currentUser') && e.newValue) {
                 // Token was added, user logged in
                 checkAuthenticationState();
             }
@@ -2387,8 +2036,8 @@
 
         // Navigation function for logged_in_Version.html to call this page
         function navigateToArtsPage() {
-            const token = localStorage.getItem('authToken') || sessionStorage.getItem('crowd_session_token');
-            const currentUser = localStorage.getItem('currentUser') || sessionStorage.getItem('crowd_user_data');
+            const token = localStorage.getItem('authToken');
+            const currentUser = localStorage.getItem('currentUser');
 
             console.log('🎭 Navigating to Arts page with authentication data');
 
@@ -2399,49 +2048,23 @@
                 console.log('✅ Navigating with authentication parameters');
                 window.location.href = targetUrl;
             } else {
-                // Navigate without parameters - will try other auth methods
+                // Navigate without parameters
                 console.log('⚠️ No auth data found, navigating without parameters');
                 window.location.href = 'Performing & Visual Arts projects.html';
             }
         }
 
-        // Enhanced authentication state update with forced header toggle
-        function forceHeaderToggle() {
-            console.log('🔄 Force toggling headers based on current auth state');
-            console.log('Current isLoggedIn state:', isLoggedIn);
-
-            // Force update even if state seems unchanged
-            updateAuthenticationState(isLoggedIn);
-
-            // Double-check header visibility
-            setTimeout(() => {
-                const loggedInHeader = document.querySelector('.logged-in-header');
-                const loggedOutHeader = document.querySelector('.logged-out-header');
-
-                console.log('Header visibility check:');
-                console.log('Logged-in header display:', loggedInHeader ? getComputedStyle(loggedInHeader).display : 'not found');
-                console.log('Logged-out header display:', loggedOutHeader ? getComputedStyle(loggedOutHeader).display : 'not found');
-
-                if (isLoggedIn && loggedInHeader && getComputedStyle(loggedInHeader).display === 'none') {
-                    console.log('🚨 Logged-in header not showing when it should - forcing display');
-                    loggedInHeader.style.display = 'block !important';
-                    if (loggedOutHeader) loggedOutHeader.style.display = 'none !important';
-                }
-            }, 100);
-        }
-
         // Call authentication check on page load
         document.addEventListener('DOMContentLoaded', function () {
-            console.log('🚀 Initializing Performing & Visual Arts page with database authentication...');
+            console.log('🚀 Initializing Performing & Visual Arts page...');
 
-            checkAuthenticationState().then((authResult) => {
-                console.log('🎯 Auth check complete, result:', authResult);
+            const authResult = checkAuthenticationState();
+            console.log('🎯 Auth check complete, result:', authResult);
 
-                // Force header toggle after auth check
-                setTimeout(() => {
-                    forceHeaderToggle();
-                }, 200);
-            });
+            // Force header toggle after auth check
+            setTimeout(() => {
+                updateAuthenticationState(isLoggedIn);
+            }, 100);
         });
 
         // Search functionality
