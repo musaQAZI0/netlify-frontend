@@ -1004,7 +1004,35 @@
             }
         }
 
-        /* Mobile Menu Toggle */
+        /* Desktop Search Styles */
+        .desktop-search {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 600px;
+            margin-right: 1rem;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 0.5rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        /* Desktop Navigation */
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        /* Mobile Menu Toggle - Enhanced positioning */
         .mobile-menu-toggle {
             display: none;
             flex-direction: column;
@@ -1018,6 +1046,7 @@
             z-index: 1002;
             transition: all 0.3s ease;
             position: relative;
+            flex-shrink: 0;
             margin-left: auto;
         }
 
@@ -1043,7 +1072,7 @@
             transform: rotate(-45deg) translate(7px, -6px);
         }
 
-        /* Mobile Menu */
+        /* Enhanced Mobile Menu */
         .mobile-menu {
             position: absolute;
             top: 100%;
@@ -1051,15 +1080,18 @@
             right: 0;
             background: white;
             border-top: 1px solid #e0e0e0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            border-radius: 0 0 12px 12px;
             z-index: 1100;
             opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
+            transform: translateY(-20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             visibility: hidden;
             pointer-events: none;
             max-height: 0;
             overflow: hidden;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .mobile-menu.active {
@@ -1067,41 +1099,144 @@
             transform: translateY(0);
             visibility: visible;
             pointer-events: all;
-            max-height: 400px;
+            max-height: 600px;
         }
 
+        /* Enhanced Menu Items */
         .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 16px 20px;
-            cursor: pointer;
+            display: block;
             border-bottom: 1px solid #f0f0f0;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
             font-size: 15px;
             color: #333;
+            overflow: hidden;
+            position: relative;
         }
 
         .menu-item:last-child {
             border-bottom: none;
         }
 
-        .menu-item:hover {
-            background-color: #f8f9fa;
+        .menu-item > a,
+        .menu-item > div:first-child {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            position: relative;
+        }
+
+        .menu-item:hover > a,
+        .menu-item:hover > div:first-child {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(8px);
         }
 
         .menu-item .icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 12px;
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover .icon {
+            transform: scale(1.1);
         }
 
         .menu-item .text {
             flex: 1;
             font-weight: 500;
+        }
+
+        .menu-item .arrow {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+            opacity: 0.6;
+            margin-left: auto;
+        }
+
+        .menu-item.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Enhanced Submenu Styles */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f5f7ff 100%);
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item.expanded .submenu {
+            max-height: 300px;
+            border-left-color: #667eea;
+        }
+
+        .submenu a {
+            display: block;
+            padding: 14px 20px 14px 50px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .submenu a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+            padding-left: 55px;
+        }
+
+        .submenu a:before {
+            content: '→';
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .submenu a:hover:before {
+            opacity: 1;
+            left: 30px;
+        }
+
+        /* Menu Item Animation */
+        .mobile-menu.active .menu-item {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInRight 0.5s ease forwards;
+        }
+
+        .mobile-menu.active .menu-item:nth-child(1) { animation-delay: 0.1s; }
+        .mobile-menu.active .menu-item:nth-child(2) { animation-delay: 0.2s; }
+        .mobile-menu.active .menu-item:nth-child(3) { animation-delay: 0.3s; }
+        .mobile-menu.active .menu-item:nth-child(4) { animation-delay: 0.4s; }
+        .mobile-menu.active .menu-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* Mobile Responsive Styles for Menu */
@@ -1139,7 +1274,8 @@
                 </div>
             </a>
 
-            <div class="search-container">
+            <!-- Desktop Search -->
+            <div class="desktop-search">
                 <div class="search-wrapper">
                     <span class="search-icon">🔍</span>
                     <input type="text" class="search-input" placeholder="Search events...">
@@ -1153,17 +1289,18 @@
                 </div>
             </div>
 
-            <!-- Add mobile menu toggle button -->
+            <!-- Mobile Menu Toggle - MOVED HERE -->
             <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
 
-            <div class="nav-links" id="navLinks">
-                <a href="#" class="nav-link">Contact Sales</a>
-                <a href="#" class="nav-link">Create Events</a>
-                <a href="#" class="nav-link secondary">Find my tickets</a>
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <a href="food_events.html" class="nav-link">Find Events</a>
+                <a href="create-events.html" class="nav-link">Create Events</a>
+                <a href="tickets-profile.html" class="nav-link">Find my tickets</a>
 
                 <div class="help-dropdown" id="helpDropdown">
                     <button class="help-dropdown-btn" id="helpDropdownBtn" type="button">
@@ -1177,37 +1314,66 @@
                     </div>
                 </div>
 
-                <a href="#" class="nav-link secondary login-link">Log In</a>
-                <a href="#" class="nav-link primary">Sign Up</a>
-            </div>
+                <a href="login.html" class="nav-link secondary login-link">Log In</a>
+                <a href="signup.html" class="nav-link primary">Sign Up</a>
+            </nav>
         </nav>
 
-        <!-- Mobile Menu Structure -->
+        <!-- Enhanced Mobile Menu Structure -->
         <div class="mobile-menu" id="mobileMenu">
-            <div class="menu-item" onclick="navigateToPage('food_events.html')">
+            <!-- Find Events -->
+            <a href="food_events.html" class="menu-item">
                 <div class="icon">📅</div>
                 <span class="text">Find Events</span>
-            </div>
+            </a>
 
-            <div class="menu-item" onclick="navigateToPage('create-events.html')">
+            <!-- Create Events (Expandable) -->
+            <div class="menu-item expandable" onclick="toggleSubmenu('create-events')">
                 <div class="icon">➕</div>
                 <span class="text">Create Events</span>
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
             </div>
 
-            <div class="menu-item" onclick="navigateToPage('tickets-profile.html')">
+            <!-- Create Events Submenu -->
+            <div class="submenu" id="create-events-submenu">
+                <a href="organizer-dashboard.html" class="submenu-item">Organizer Resource Hub</a>
+                <a href="create-events.html" class="submenu-item">Create Events</a>
+                <a href="contact_sales.html" class="submenu-item">Contact Sales</a>
+            </div>
+
+            <!-- Help Center (Expandable) -->
+            <div class="menu-item expandable" onclick="toggleSubmenu('help-center')">
+                <div class="icon">❓</div>
+                <span class="text">Help Center</span>
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+            </div>
+
+            <!-- Help Center Submenu -->
+            <div class="submenu" id="help-center-submenu">
+                <a href="#help-center" class="submenu-item">Help Center</a>
+                <a href="tickets-profile.html" class="submenu-item">Find your tickets</a>
+                <a href="#contact-support" class="submenu-item">Contact Support</a>
+            </div>
+
+            <!-- Direct Links -->
+            <a href="tickets-profile.html" class="menu-item">
                 <div class="icon">🎫</div>
                 <span class="text">Find My Tickets</span>
-            </div>
+            </a>
 
-            <div class="menu-item" onclick="navigateToPage('login.html')">
+            <a href="login.html" class="menu-item">
                 <div class="icon">🔑</div>
                 <span class="text">Log In</span>
-            </div>
+            </a>
 
-            <div class="menu-item" onclick="navigateToPage('signup.html')">
+            <a href="signup.html" class="menu-item">
                 <div class="icon">📝</div>
                 <span class="text">Sign Up</span>
-            </div>
+            </a>
         </div>
 
         <!-- Mobile Navigation Container (shown on mobile only for logged-in users) -->
@@ -2432,7 +2598,7 @@
             }
         });
 
-        // Mobile Menu Toggle Function
+        // Enhanced Mobile Menu Toggle Function
         function toggleMobileMenu() {
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
             const mobileMenu = document.querySelector('.mobile-menu');
@@ -2441,15 +2607,48 @@
                 const isActive = mobileMenu.classList.contains('active');
 
                 if (isActive) {
+                    // Close mobile menu
                     mobileMenu.classList.remove('active');
                     mobileMenuToggle.classList.remove('active');
                     mobileMenuToggle.setAttribute('aria-expanded', 'false');
                     document.body.classList.remove('mobile-menu-open');
+
+                    // Close all expanded submenus
+                    const expandedItems = document.querySelectorAll('.menu-item.expanded');
+                    expandedItems.forEach(item => {
+                        item.classList.remove('expanded');
+                    });
                 } else {
+                    // Open mobile menu
                     mobileMenu.classList.add('active');
                     mobileMenuToggle.classList.add('active');
                     mobileMenuToggle.setAttribute('aria-expanded', 'true');
                     document.body.classList.add('mobile-menu-open');
+                }
+            }
+        }
+
+        // Enhanced Submenu Toggle Function
+        function toggleSubmenu(submenuId) {
+            const menuItem = document.querySelector(`[onclick="toggleSubmenu('${submenuId}')"]`);
+            const submenu = document.getElementById(`${submenuId}-submenu`);
+
+            if (menuItem && submenu) {
+                const isExpanded = menuItem.classList.contains('expanded');
+
+                // Close all other expanded submenus
+                const allExpandedItems = document.querySelectorAll('.menu-item.expanded');
+                allExpandedItems.forEach(item => {
+                    if (item !== menuItem) {
+                        item.classList.remove('expanded');
+                    }
+                });
+
+                // Toggle current submenu
+                if (isExpanded) {
+                    menuItem.classList.remove('expanded');
+                } else {
+                    menuItem.classList.add('expanded');
                 }
             }
         }
@@ -2460,6 +2659,8 @@
             toggleMobileMenu(); // Close menu after navigation
         }
 
+        // Enhanced event listeners for improved mobile menu functionality
+
         // Close mobile menu when clicking outside
         document.addEventListener('click', function(e) {
             const mobileMenu = document.querySelector('.mobile-menu');
@@ -2468,6 +2669,40 @@
             if (mobileMenu && mobileMenu.classList.contains('active')) {
                 if (!mobileMenu.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
                     toggleMobileMenu();
+                }
+            }
+        });
+
+        // Enhanced keyboard navigation support
+        document.addEventListener('keydown', function(e) {
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+            if (mobileMenu && mobileMenu.classList.contains('active')) {
+                // Close menu with Escape key
+                if (e.key === 'Escape') {
+                    toggleMobileMenu();
+                    document.querySelector('.mobile-menu-toggle').focus();
+                }
+
+                // Prevent background scrolling when menu is open
+                if (e.key === 'Tab') {
+                    const focusableElements = mobileMenu.querySelectorAll(
+                        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                    );
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+
+                    if (e.shiftKey) {
+                        if (document.activeElement === firstElement) {
+                            e.preventDefault();
+                            lastElement.focus();
+                        }
+                    } else {
+                        if (document.activeElement === lastElement) {
+                            e.preventDefault();
+                            firstElement.focus();
+                        }
+                    }
                 }
             }
         });
@@ -2482,9 +2717,49 @@
                     mobileMenuToggle.classList.remove('active');
                     mobileMenuToggle.setAttribute('aria-expanded', 'false');
                     document.body.classList.remove('mobile-menu-open');
+
+                    // Close all expanded submenus
+                    const expandedItems = document.querySelectorAll('.menu-item.expanded');
+                    expandedItems.forEach(item => {
+                        item.classList.remove('expanded');
+                    });
                 }
             }
         });
+
+        // Prevent background scrolling when mobile menu is open
+        function lockBodyScroll() {
+            const scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
+        }
+
+        function unlockBodyScroll() {
+            const scrollY = document.body.style.top;
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
+
+        // Enhanced mobile menu toggle with scroll lock
+        const originalToggleMobileMenu = toggleMobileMenu;
+        toggleMobileMenu = function() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const wasActive = mobileMenu && mobileMenu.classList.contains('active');
+
+            originalToggleMobileMenu();
+
+            // Apply or remove scroll lock based on new state
+            if (mobileMenu) {
+                if (mobileMenu.classList.contains('active')) {
+                    lockBodyScroll();
+                } else {
+                    unlockBodyScroll();
+                }
+            }
+        };
     </script>
 </body>
 
