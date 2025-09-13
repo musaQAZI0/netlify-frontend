@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nightlife Events in Punjab, Pakistan - Parties, Dances, & More | Eventbrite</title>
+    <link rel="icon" href="data:,">
+    <style>
+        /* CSS Custom Properties */
+        /* CSS Custom Properties */
+        :root {
+            --primary-color: #f05537;
+            --primary-dark: #e04429;
+            --text-dark: #3a3247;
+            --text-light: #585163;
+            --border-color: #e8e8e8;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --gradient-bg: linear-gradient(135deg, #1e0a3c 0%, #4a1a5e 50%, #2d1b4e 100%);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1e0a3c;
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mobile-utility {
+            display: none;
+            background: var(--white);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1003;
+        }
+
+        .mobile-utility .utility-inner {
+            display: flex;
+            justify-content: center;
+            padding: 8px 1rem;
+        }
+
+        .mobile-utility .utility-links a {
+            margin: 0 0.75rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 70px;
+            position: relative;
+            gap: 1rem;
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+            z-index: 1001;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-img {
+            height: 40px;
+            width: auto;
+            max-width: 150px;
+            object-fit: contain;
+            transition: height 0.3s ease;
+        }
+
+        .logo-fallback {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .logo-icon {
+            font-size: 1.2rem;
+            color: #3a3247;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            transition: font-size 0.3s ease;
+        }
+
+        /* Search Styles */
+        .desktop-search {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 48px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .search-container:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(240, 85, 55, 0.1);
+        }
+
+        .search-section {
+            display: flex;
+            align-items: center;
+            flex: 2;
+            padding: 0 16px;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            color: #716b7a;
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: transparent;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .search-input::placeholder {
+            color: #716b7a;
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background-color: #ddd;
+            flex-shrink: 0;
+        }
+
+        .location-section {
+            display: flex;
+            align-items: center;
+            flex: 1.5;
+            padding: 0 12px;
+            height: 100%;
+            min-width: 120px;
+        }
+
+        .location-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+            color: #716b7a;
+            flex-shrink: 0;
+        }
+
+        .location-input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: transparent;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .location-input::placeholder {
+            color: #716b7a;
+        }
+
+        .search-button {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+            margin: 4px;
+            flex-shrink: 0;
+        }
+
+        .search-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .search-button-icon {
+            width: 16px;
+            height: 16px;
+            color: white;
+        }
+
+        /* Mobile Search - Fixed */
+        .header-search-mobile {
+            display: none;
+            padding: 12px 16px;
+            width: 100%;
+            background: var(--white);
+        }
+
+        .header-search-mobile .search-container {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 48px;
+            overflow: hidden;
+        }
+
+        .header-search-mobile .search-section {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            padding: 0 16px;
+            height: 100%;
+            min-width: 0;
+        }
+
+        .header-search-mobile .search-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            color: #6c757d;
+            flex-shrink: 0;
+        }
+
+        .header-search-mobile .search-input {
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: var(--text-dark);
+            background: transparent;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .header-search-mobile .search-input::placeholder {
+            color: #6c757d;
+        }
+
+        .header-search-mobile .divider {
+            width: 1px;
+            height: 28px;
+            background-color: #dee2e6;
+            margin: 0 8px;
+        }
+
+        .header-search-mobile .location-section {
+            display: flex;
+            align-items: center;
+            flex: 0 0 auto;
+            padding: 0 12px 0 0;
+            height: 100%;
+            min-width: 100px;
+        }
+
+        .header-search-mobile .location-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+            color: #6c757d;
+            flex-shrink: 0;
+        }
+
+        .header-search-mobile .location-input {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: transparent;
+            width: 80px;
+            min-width: 0;
+        }
+
+        .header-search-mobile .search-button {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4px;
+            flex-shrink: 0;
+        }
+
+        /* Navigation */
+        .desktop-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: var(--transition);
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: var(--text-dark);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .nav-link.primary {
+            background: transparent;
+            color: var(--text-dark);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+
+        /* Help Center Dropdown */
+        .help-center-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .help-center-toggle {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            transition: var(--transition);
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .help-center-toggle:hover {
+            color: var(--text-dark);
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .help-center-toggle.active {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-arrow {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .help-center-toggle.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .help-center-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1100;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            visibility: hidden;
+            pointer-events: none;
+            margin-top: 8px;
+        }
+
+        .help-center-menu.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        .help-center-menu-item {
+            display: block;
+            padding: 12px 16px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+
+        .help-center-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .help-center-menu-item:hover {
+            background-color: #f8f9fa;
+            color: var(--text-dark);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1002;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text-dark);
+            margin: 3px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            right: 12px;
+            width: 200px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1100;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .mobile-menu.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+            pointer-events: all;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .menu-item.expandable {
+            justify-content: space-between;
+        }
+
+        .menu-item .icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-item .text {
+            flex: 1;
+        }
+
+        .menu-item .arrow {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-item.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            background-color: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            display: none;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .submenu-item {
+            padding: 10px 16px 10px 44px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .submenu-item:last-child {
+            border-bottom: none;
+        }
+
+        .submenu-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #1e0a3c;
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #fff;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-bg);
+            padding: 40px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            color: #ede9f5;
+        }
+
+        .hero-text .location {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: #ede9f5;
+            margin-bottom: 24px;
+        }
+
+        .hero-text p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: #ede9f5;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        .hero-filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+        }
+
+        .filter-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-image {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.3), rgba(138, 43, 226, 0.3)),
+                url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* Category Section */
+        .category-section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 15px 12px;
+            border-radius: 24px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-title {
+            color: #333;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .category-filters {
+            display: flex;
+            justify-content: flex-start;
+            gap: 8px;
+            flex-wrap: nowrap;
+            margin-bottom: 32px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .category-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-filter {
+            background: transparent;
+            border: none;
+            color: #666;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            white-space: nowrap;
+            min-height: 44px;
+            flex-shrink: 0;
+        }
+
+        .category-filter.active {
+            color: var(--primary-color);
+        }
+
+        .category-filter.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .category-filter:hover {
+            color: var(--primary-color);
+            background: rgba(240, 85, 55, 0.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #333;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: #f8f8f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .empty-icon::before {
+            content: '😔';
+            font-size: 3rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 30px 16px 20px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 24px;
+        }
+
+        .footer-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-section a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Focus & Accessibility */
+        .mobile-menu-toggle:focus,
+        .nav-link:focus,
+        .category-filter:focus,
+        .filter-button:focus,
+        .help-center-toggle:focus {
+            outline: 2px solid var(--text-dark);
+            outline-offset: 2px;
+        }
+
+        /* Responsive Design - Mobile First */
+        @media (max-width: 767px) {
+            .mobile-utility {
+                display: block;
+            }
+
+            .header-search-mobile {
+                display: block;
+            }
+
+            .desktop-search {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: inline-flex;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+
+            .nav-container {
+                min-height: 50px;
+                padding: 0.5rem 1rem;
+                justify-content: space-between;
+            }
+
+            .logo-img {
+                height: 35px;
+            }
+
+            .logo-text {
+                font-size: 1.25rem;
+            }
+
+            .category-section {
+                margin: 15px 12px;
+                padding: 20px 16px;
+            }
+
+            .hero {
+                padding: 30px 16px;
+            }
+
+            .hero-image {
+                height: 250px;
+            }
+
+            .breadcrumb {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+
+            .category-title {
+                font-size: 1.1rem;
+            }
+
+            .empty-state {
+                padding: 40px 20px;
+            }
+
+            .empty-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .empty-icon::before {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .mobile-utility {
+                display: none;
+            }
+
+            .header-search-mobile {
+                display: none;
+            }
+
+            .desktop-search {
+                display: flex;
+                max-width: 280px;
+                width: auto;
+            }
+
+            .desktop-nav {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .mobile-menu-toggle {
+                display: none;
+            }
+
+            .nav-container {
+                padding: 0.75rem 1rem;
+                min-height: 60px;
+                gap: 0.75rem;
+            }
+
+            .hero {
+                padding: 60px 24px;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+
+            .hero-image {
+                height: 400px;
+            }
+
+            .category-filters {
+                justify-content: center;
+                overflow-x: visible;
+            }
+
+            .category-section {
+                margin: 30px 24px;
+                padding: 35px;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .nav-container {
+                padding: 0.75rem 1rem;
+                min-height: 70px;
+                gap: 1rem;
+            }
+
+            .desktop-search {
+                max-width: 450px;
+            }
+
+            .desktop-nav {
+                gap: 1.5rem;
+            }
+
+            .logo-img {
+                height: 40px;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .nav-link {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+
+            .hero-content {
+                gap: 60px;
+            }
+
+            .category-section {
+                margin: 40px 24px;
+                padding: 40px;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .nav-container {
+                max-width: 1400px;
+            }
+
+            .desktop-search {
+                max-width: 600px;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="logged-out category-page" id="mainBody">
+    <!-- Header -->
+    <header class="header">
+        <!-- Mobile utility links -->
+        <div class="mobile-utility">
+            <div class="utility-inner">
+                <nav class="utility-links">
+                    <a href="tickets-profile.html">Find my tickets</a>
+                    <a href="login.html">Log In</a>
+                    <a href="signup.html">Sign Up</a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="logo" aria-label="Crowd - Home">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-fallback" style="display: none;">
+                    <span class="logo-icon" aria-hidden="true">🎫</span>
+                    <span class="logo-text">crowd</span>
+                </div>
+            </a>
+
+            <!-- Desktop Search -->
+            <div class="desktop-search">
+                <div class="search-container">
+                    <div class="search-section">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search events" id="searchInputDesktop">
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="location-section">
+                        <svg class="location-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M11.6 11.6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-7.6C8.5 4 6 6.5 6 9.6 6 13.8 11.6 20 11.6 20s5.6-6.2 5.6-10.4c0-3.1-2.5-5.6-5.6-5.6z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="location-input" placeholder="Punjab" value="Punjab"
+                            id="locationInputDesktop">
+                    </div>
+
+                    <button class="search-button" type="button" onclick="performSearch()">
+                        <svg class="search-button-icon" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <a href="food_events.html" class="nav-link">Find Events</a>
+                <a href="create-events.html" class="nav-link">Create Events</a>
+
+                <!-- Help Center Dropdown -->
+                <div class="help-center-dropdown">
+                    <button class="help-center-toggle" onclick="toggleHelpCenter()" aria-expanded="false">
+                        Help Center
+                        <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="6,9 12,15 18,9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="help-center-menu" id="helpCenterMenu">
+                        <a href="#" class="help-center-menu-item">Help Center</a>
+                        <a href="tickets-profile.html" class="help-center-menu-item">Find your tickets</a>
+                        <a href="#" class="help-center-menu-item">Contact your event organizer</a>
+                    </div>
+                </div>
+
+                <a href="tickets-profile.html" class="nav-link secondary">Find my tickets</a>
+                <a href="login.html" class="nav-link secondary">Log In</a>
+                <a href="signup.html" class="nav-link primary">Sign Up</a>
+            </nav>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu"
+                aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <!-- Mobile Search -->
+        <div class="header-search-mobile">
+            <div class="search-container">
+                <div class="search-section">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                            fill="currentColor" />
+                    </svg>
+                    <input type="text" class="search-input" placeholder="Search events" id="searchInput">
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="location-section">
+                    <svg class="location-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.6 11.6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-7.6C8.5 4 6 6.5 6 9.6 6 13.8 11.6 20 11.6 20s5.6-6.2 5.6-10.4c0-3.1-2.5-5.6-5.6-5.6z"
+                            fill="currentColor" />
+                    </svg>
+                    <input type="text" class="location-input" placeholder="Punjab" value="Punjab" id="locationInput">
+                </div>
+
+                <button class="search-button" type="button" onclick="performSearch()">
+                    <svg class="search-button-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                            fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="menu-item" onclick="window.location.href='food_events.html'">
+                <div class="icon">
+                    <svg class="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <span class="text">Find Events</span>
+            </div>
+
+            <div class="menu-item expandable" onclick="toggleSubmenu('create-events')">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <span class="text">Create Events</span>
+                <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+            </div>
+
+            <div class="submenu show" id="create-events-submenu">
+                <div class="submenu-item" onclick="window.location.href='#'">Organizer Resource Hub</div>
+                <div class="submenu-item" onclick="window.location.href='create-events.html'">Create Events</div>
+                <div class="submenu-item" onclick="window.location.href='#'">Contact Sales</div>
+            </div>
+
+            <div class="menu-item" onclick="window.location.href='tickets-profile.html'">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"></path>
+                        <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"></path>
+                        <path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h2v-4h-2z"></path>
+                    </svg>
+                </div>
+                <span class="text">Find my tickets</span>
+            </div>
+
+            <div class="menu-item" onclick="window.location.href='#'">
+                <div class="icon">
+                    <svg class="help-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m9,9a3,3 0 1,1 6,0c0,2 -3,3 -3,3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <span class="text">Help Center</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="index.html">Home</a> / <a href="#">Pakistan</a> / <a href="#">Punjab</a> / <a href="#">Events in
+            Punjab</a> / Nightlife
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero fade-in">
+        <div class="hero-content">
+            <div class="hero-text slide-in">
+                <h1>NIGHTLIFE</h1>
+                <div class="location">in Punjab, Pakistan</div>
+                <p>Electrify your nights with parties, music, comedy, and more.</p>
+                <div class="hero-filters">
+                    <button class="filter-button">
+                        Punjab
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 10.2l5 5 5-5-1.4-1.4-3.6 3.6-3.6-3.6z" />
+                        </svg>
+                    </button>
+                    <button class="filter-button">
+                        Date
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 10.2l5 5 5-5-1.4-1.4-3.6 3.6-3.6-3.6z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image"></div>
+        </div>
+    </section>
+
+    <!-- Category Section -->
+    <section class="category-section fade-in">
+        <h2 class="category-title">Explore what's popular within Nightlife</h2>
+
+        <div class="category-filters">
+            <button class="category-filter active">All</button>
+            <button class="category-filter">Tonight</button>
+            <button class="category-filter">This Weekend</button>
+            <button class="category-filter">Music</button>
+            <button class="category-filter">Clubs & Parties</button>
+            <button class="category-filter">Holidays</button>
+            <button class="category-filter">Comedy & Shows</button>
+            <button class="category-filter">Food & Drink</button>
+            <button class="category-filter">Film & Media</button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon"></div>
+            <h3>We couldn't find anything</h3>
+            <p>Adjust your filters and try again</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Use Eventbrite</h4>
+                <ul>
+                    <li><a href="#">Create Events</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Event Marketing Platform</a></li>
+                    <li><a href="#">Eventbrite Mobile Ticket App</a></li>
+                    <li><a href="#">Eventbrite Check-In App</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Plan Events</h4>
+                <ul>
+                    <li><a href="#">Sell Tickets Online</a></li>
+                    <li><a href="#">Event Payment System</a></li>
+                    <li><a href="#">Event Management Software</a></li>
+                    <li><a href="#">Virtual Events Platform</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Find Events</h4>
+                <ul>
+                    <li><a href="#">New York Events</a></li>
+                    <li><a href="#">Chicago Events</a></li>
+                    <li><a href="#">Los Angeles Events</a></li>
+                    <li><a href="#">Washington Events</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect With Us</h4>
+                <ul>
+                    <li><a href="#">Contact Support</a></li>
+                    <li><a href="#">Contact Sales</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 Eventbrite
+        </div>
+    </footer>
+
+    <script>
+        // Application State
+        const AppState = {
+            mobileMenuOpen: false,
+            helpCenterOpen: false,
+            searchQuery: '',
+            locationQuery: 'Punjab'
+        };
+
+        // Help Center Dropdown Management
+        function toggleHelpCenter() {
+            const helpCenterToggle = document.querySelector('.help-center-toggle');
+            const helpCenterMenu = document.getElementById('helpCenterMenu');
+
+            if (!helpCenterMenu || !helpCenterToggle) return;
+
+            AppState.helpCenterOpen = !AppState.helpCenterOpen;
+
+            if (AppState.helpCenterOpen) {
+                helpCenterMenu.classList.add('active');
+                helpCenterToggle.classList.add('active');
+                helpCenterToggle.setAttribute('aria-expanded', 'true');
+            } else {
+                helpCenterMenu.classList.remove('active');
+                helpCenterToggle.classList.remove('active');
+                helpCenterToggle.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function closeHelpCenter() {
+            if (AppState.helpCenterOpen) {
+                toggleHelpCenter();
+            }
+        }
+
+        // Mobile Menu Management
+        function toggleMobileMenu() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+            if (!mobileMenu || !mobileMenuToggle) return;
+
+            AppState.mobileMenuOpen = !AppState.mobileMenuOpen;
+
+            if (AppState.mobileMenuOpen) {
+                mobileMenu.classList.add('active');
+                mobileMenuToggle.classList.add('active');
+                mobileMenuToggle.setAttribute('aria-expanded', 'true');
+                document.body.classList.add('mobile-menu-open');
+            } else {
+                mobileMenu.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('mobile-menu-open');
+            }
+        }
+
+        function closeMobileMenu() {
+            if (AppState.mobileMenuOpen) {
+                toggleMobileMenu();
+            }
+        }
+
+        // Submenu Management
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId + '-submenu');
+            const menuItem = submenu?.previousElementSibling;
+
+            if (!submenu || !menuItem) return;
+
+            const isExpanded = submenu.classList.contains('show');
+
+            if (isExpanded) {
+                submenu.classList.remove('show');
+                menuItem.classList.remove('expanded');
+            } else {
+                submenu.classList.add('show');
+                menuItem.classList.add('expanded');
+            }
+        }
+
+        // Search Functionality
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput') || document.getElementById('searchInputDesktop');
+            const locationInput = document.getElementById('locationInput') || document.getElementById('locationInputDesktop');
+
+            const searchTerm = searchInput?.value.trim() || '';
+            const location = locationInput?.value.trim() || '';
+
+            if (!searchTerm && !location) {
+                alert('Please enter a search term or location');
+                return;
+            }
+
+            // Update app state
+            AppState.searchQuery = searchTerm;
+            AppState.locationQuery = location;
+
+            console.log('Searching for:', searchTerm, 'in', location);
+            // Implement actual search functionality here
+        }
+
+        // Category Filter Management
+        function initializeCategoryFilters() {
+            const filterButtons = document.querySelectorAll('.category-filter');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    // Visual feedback
+                    this.style.transform = 'scale(0.95)';
+                    requestAnimationFrame(() => {
+                        this.style.transform = 'scale(1)';
+                    });
+
+                    // Filter logic would go here
+                    console.log('Filter applied:', this.textContent);
+                });
+            });
+        }
+
+        // Event Listeners Setup
+        function setupEventListeners() {
+            // Search input handlers
+            const searchInputs = document.querySelectorAll('#searchInput, #locationInput, #searchInputDesktop, #locationInputDesktop');
+            searchInputs.forEach(input => {
+                input?.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            });
+
+            // Click outside to close mobile menu and dropdowns
+            document.addEventListener('click', function (e) {
+                const mobileMenu = document.querySelector('.mobile-menu');
+                const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+                const helpCenterMenu = document.getElementById('helpCenterMenu');
+                const helpCenterToggle = document.querySelector('.help-center-toggle');
+
+                // Close mobile menu if clicking outside
+                if (AppState.mobileMenuOpen &&
+                    mobileMenu &&
+                    !mobileMenu.contains(e.target) &&
+                    !mobileMenuToggle.contains(e.target)) {
+                    closeMobileMenu();
+                }
+
+                // Close help center dropdown if clicking outside
+                if (AppState.helpCenterOpen &&
+                    helpCenterMenu &&
+                    !helpCenterMenu.contains(e.target) &&
+                    !helpCenterToggle.contains(e.target)) {
+                    closeHelpCenter();
+                }
+            });
+
+            // Window resize handler
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768 && AppState.mobileMenuOpen) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Filter button animations
+            const heroFilterButtons = document.querySelectorAll('.filter-button');
+            heroFilterButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    this.style.transform = 'scale(0.95)';
+                    requestAnimationFrame(() => {
+                        this.style.transform = 'scale(1)';
+                    });
+                });
+            });
+        }
+
+        // Intersection Observer for Scroll Animations
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for scroll animations
+            const elementsToObserve = document.querySelectorAll('.category-section, .footer');
+            elementsToObserve.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Initialize Application
+        function initializeApp() {
+            initializeCategoryFilters();
+            setupEventListeners();
+            initializeScrollAnimations();
+
+            console.log('Nightlife Events App initialized');
+        }
+
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+
+</html>
