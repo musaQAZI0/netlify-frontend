@@ -92,7 +92,9 @@
       "Bash(git merge:*)",
       "Read(//c/Users/LENOVO/Downloads/**)",
       "Bash(git stash:*)",
-      "Bash(start \"C:\\Users\\LENOVO\\Desktop\\New folder (7)\\netlify-frontend\\Performing & Visual Arts projects.html\")"
+      "Bash(start \"C:\\Users\\LENOVO\\Desktop\\New folder (7)\\netlify-frontend\\Performing & Visual Arts projects.html\")",
+      "Bash(git fetch:*)",
+      "Bash(start \"C:\\Users\\LENOVO\\Desktop\\New folder (7)\\netlify-frontend\\nightlife.html\")"
     ],
     "deny": [],
     "ask": []
