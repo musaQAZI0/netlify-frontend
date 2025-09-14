@@ -1581,14 +1581,6 @@
     <script src="js/auth-db.js"></script>
 
     <script>
-        // Enhanced Database Authentication System
-        let isLoggedIn = false;
-        let currentUser = null;
-        let authToken = null;
-
-        // Database configuration
-        const API_BASE_URL = 'https://crowd-backend-zxxp.onrender.com/api';
-
         // Application State
         const AppState = {
             mobileMenuOpen: false,
@@ -1597,97 +1589,41 @@
             locationQuery: 'Punjab'
         };
 
-        // Enhanced Database Authentication Integration
+        // Authentication state variables
+        let isLoggedIn = false;
+        let currentUser = null;
+        let authToken = null;
+
+        // Check authentication state using DatabaseAuth
         function checkAuthenticationState() {
-            console.log('🔐 Initializing database authentication...');
+            console.log('🔐 Checking authentication state...');
 
             // Check if coming from logged_in_Version.html
             const urlParams = new URLSearchParams(window.location.search);
             const fromPage = urlParams.get('from');
 
             if (fromPage === 'logged_in') {
-                console.log('🔗 Coming from logged-in page, checking database authentication...');
+                console.log('🔗 Coming from logged-in page');
                 // Clean up URL without reloading
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // Listen for authentication state changes from DatabaseAuth
-            window.addEventListener('authStateChanged', (event) => {
-                const { isLoggedIn: authIsLoggedIn, user } = event.detail;
-                isLoggedIn = authIsLoggedIn;
-                currentUser = user;
-
-                if (authIsLoggedIn && user) {
-                    authToken = dbAuth.currentToken;
-                    updateAuthenticationState(true);
-                    updateUserDisplay(user);
-                    updateLoggedInHeaderUserInfo(user);
-                    console.log('✅ User authenticated via database:', user.firstName);
-                } else {
-                    updateAuthenticationState(false);
-                    console.log('ℹ️ User not authenticated');
-                }
-            });
-
             // Get current state from DatabaseAuth
-            const authState = dbAuth.getAuthState();
-            if (authState.isLoggedIn) {
-                isLoggedIn = true;
-                currentUser = authState.user;
-                authToken = authState.token;
-                updateAuthenticationState(true);
-                updateUserDisplay(authState.user);
-                updateLoggedInHeaderUserInfo(authState.user);
-                return true;
-            }
-
-            return false;
-        }
-
-        // Verify authentication token with database
-        async function verifyTokenWithDatabase(token) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/verify-token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ token })
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Token verified with database');
-
-                    if (result.user) {
-                        currentUser = result.user;
-                        localStorage.setItem('currentUser', JSON.stringify(result.user));
-                        updateUserDisplay(result.user);
-                        updateLoggedInHeaderUserInfo(result.user);
-                    }
+            if (window.dbAuth) {
+                const authState = dbAuth.getAuthState();
+                if (authState.isLoggedIn) {
+                    isLoggedIn = true;
+                    currentUser = authState.user;
+                    authToken = authState.token;
+                    updateAuthenticationState(true);
+                    updateLoggedInHeaderUserInfo(authState.user);
+                    console.log('✅ User authenticated:', authState.user.firstName);
                     return true;
-                } else if (response.status === 401) {
-                    console.log('❌ Token expired or invalid');
-                    return false;
-                } else {
-                    console.error('🚨 Token verification failed:', response.statusText);
-                    return false;
                 }
-            } catch (error) {
-                console.error('🚨 Database connection failed during token verification:', error);
-                showTopNotification('Connection issue - some features may be limited', 'warning');
-                return true;
             }
-        }
 
-        // Clear authentication data
-        function clearAuthenticationData() {
-            isLoggedIn = false;
-            currentUser = null;
-            authToken = null;
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('authToken');
-            updateAuthenticationState(false);
+            console.log('ℹ️ User not authenticated');
+            return false;
         }
 
         // Update authentication state
@@ -1695,65 +1631,33 @@
             isLoggedIn = loggedIn;
             const body = document.body;
 
-            if (isLoggedIn) {
+            if (loggedIn) {
                 body.classList.add('is-logged-in');
                 console.log('✅ Added is-logged-in class');
-                console.log('✅ Body classes:', body.className);
             } else {
                 body.classList.remove('is-logged-in');
                 console.log('❌ Removed is-logged-in class');
-                console.log('❌ Body classes:', body.className);
             }
         }
 
-        // Temporary test function - you can call this in browser console to test logged-in state
+        // Debug functions
         window.testLoggedInState = function() {
             console.log('🧪 Testing logged-in state...');
             isLoggedIn = true;
-            currentUser = { email: 'test@example.com', name: 'Test User' };
+            currentUser = { email: 'test@example.com', firstName: 'Test', lastName: 'User' };
             updateAuthenticationState(true);
-            updateUserDisplay(currentUser);
+            updateLoggedInHeaderUserInfo(currentUser);
             console.log('🧪 Logged-in state activated for testing');
         };
-
-        // Clear old tokens function
-        window.clearAuthData = function() {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('currentUser');
-            console.log('🧹 Cleared stored auth data');
-            location.reload();
-        };
-
-        // Update user display
-        function updateUserDisplay(user) {
-            if (user) {
-                console.log('👤 Updating user display for:', user.email || user.name);
-                // Add user display logic here if needed
-            }
-        }
 
         // Update logged-in header user info
         function updateLoggedInHeaderUserInfo(user) {
             if (user) {
-                // Update desktop user menu
-                const userEmailDisplay = document.getElementById('userEmailDisplay');
-                const userAvatar = document.getElementById('userAvatar');
-
-                // Update mobile user profile
                 const userEmail = document.getElementById('userEmail');
-                const mobileUserAvatar = document.getElementById('userAvatar');
-
-                if (userEmailDisplay) userEmailDisplay.textContent = user.email || user.name || 'user@example.com';
-                if (userEmail) userEmail.textContent = user.email || user.name || 'user@example.com';
-
-                if (userAvatar) {
-                    const initial = (user.name || user.email || 'U').charAt(0).toUpperCase();
-                    userAvatar.textContent = initial;
+                if (userEmail) {
+                    userEmail.textContent = user.email || 'user@example.com';
                 }
-                if (mobileUserAvatar) {
-                    const initial = (user.name || user.email || 'U').charAt(0).toUpperCase();
-                    mobileUserAvatar.textContent = initial;
-                }
+                console.log('👤 Updated user info in header for:', user.firstName || user.email);
             }
         }
 
@@ -2074,16 +1978,40 @@
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('🚀 Initializing Nightlife page...');
 
-            // Wait for DatabaseAuth to be ready
+            // Wait for DatabaseAuth to initialize
             if (window.dbAuth) {
-                await dbAuth.init();
+                console.log('📡 Waiting for DatabaseAuth initialization...');
+
+                // Listen for auth state changes
+                window.addEventListener('authStateChanged', (event) => {
+                    const { isLoggedIn: authIsLoggedIn, user } = event.detail;
+                    console.log('🔄 Auth state changed:', authIsLoggedIn, user);
+
+                    if (authIsLoggedIn && user) {
+                        isLoggedIn = true;
+                        currentUser = user;
+                        authToken = dbAuth.currentToken;
+                        updateAuthenticationState(true);
+                        updateLoggedInHeaderUserInfo(user);
+                        console.log('✅ Logged in as:', user.firstName);
+                    } else {
+                        isLoggedIn = false;
+                        currentUser = null;
+                        authToken = null;
+                        updateAuthenticationState(false);
+                        console.log('❌ Logged out');
+                    }
+                });
+
+                // Wait a bit for DatabaseAuth to complete initialization
+                await new Promise(resolve => setTimeout(resolve, 100));
             }
 
-            // Initialize authentication
+            // Check initial authentication state
             const authResult = checkAuthenticationState();
-            console.log('🎯 Auth check complete, result:', authResult);
+            console.log('🎯 Initial auth check result:', authResult);
 
-            // Then initialize the rest of the app
+            // Initialize the rest of the app
             initializeApp();
 
             // Initialize template dropdown functionality
@@ -2179,15 +2107,20 @@
             }
         });
 
-        // Handle storage changes (for multi-tab logout)
-        window.addEventListener('storage', function(e) {
-            if ((e.key === 'authToken' || e.key === 'currentUser') && !e.newValue) {
-                // Token was removed, user logged out
-                clearAuthenticationData();
-                showTopNotification('You have been logged out from another tab', 'info');
-            } else if ((e.key === 'authToken' || e.key === 'currentUser') && e.newValue) {
-                // Token was added, user logged in
-                checkAuthenticationState();
+        // Handle auth changes from other tabs via custom events
+        window.addEventListener('authStateChanged', function(e) {
+            console.log('🔄 Auth state changed from another component:', e.detail);
+            const { isLoggedIn: authIsLoggedIn, user } = e.detail;
+
+            if (authIsLoggedIn && user) {
+                isLoggedIn = true;
+                currentUser = user;
+                updateAuthenticationState(true);
+                updateLoggedInHeaderUserInfo(user);
+            } else {
+                isLoggedIn = false;
+                currentUser = null;
+                updateAuthenticationState(false);
             }
         });
     </script>
