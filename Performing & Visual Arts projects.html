@@ -410,167 +410,110 @@
         }
 
         .logged-in-header {
-            display: none;
+            display: none !important;
         }
 
         .is-logged-in .logged-out-header {
-            display: none;
+            display: none !important;
         }
 
         .is-logged-in .logged-in-header {
-            display: block;
+            display: block !important;
         }
 
-        /* Logged In Header Styles - Template Design */
-        .logged-in-header {
-            background-color: white;
-            padding: 12px 16px;
+        /* Mobile Navigation Container Visibility */
+        .mobile-nav-container {
+            display: none;
+        }
+
+        .is-logged-in .mobile-nav-container {
+            display: none; /* Still hidden on desktop */
+        }
+
+        @media (max-width: 768px) {
+            .is-logged-in .mobile-nav-container {
+                display: flex !important;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px 16px;
+                background-color: white;
+                border-bottom: 1px solid #e0e0e0;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            }
+        }
+
+        /* Additional User Menu Styles */
+        .user-menu {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #e0e0e0;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+            cursor: pointer;
+            color: #39364f;
             position: relative;
         }
 
-        .logged-in-header .logo {
+        .user-menu:hover {
+            background: #f8f8f8;
+        }
+
+        .user-avatar {
             width: 32px;
             height: 32px;
-            background-color: #e53e3e;
-            border-radius: 6px;
+            border-radius: 50%;
+            background: #3a3247;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .logged-in-header .search-container {
-            flex: 1;
-            max-width: 400px;
-            margin: 0 16px;
-            position: relative;
-        }
-
-        .logged-in-header .search-bar {
-            width: 100%;
-            padding: 10px 16px 10px 40px;
-            border: 1px solid #d0d0d0;
-            border-radius: 25px;
+            font-weight: 600;
             font-size: 14px;
-            outline: none;
-            background-color: #f8f8f8;
         }
 
-        .logged-in-header .search-bar:focus {
-            border-color: #e53e3e;
-            background-color: white;
+        .user-email {
+            font-size: 12px;
+            color: #585163;
         }
 
-        .logged-in-header .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666;
-            font-size: 16px;
-        }
-
-        .logged-in-header .search-button {
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #e53e3e;
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-        }
-
-        .logged-in-header .user-profile {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            border: 1px solid #d0d0d0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .logged-in-header .user-profile:hover {
-            background-color: #e8e8e8;
-        }
-
-        .logged-in-header .dropdown {
+        .user-dropdown {
             position: absolute;
             top: 100%;
             right: 0;
-            background-color: white;
-            border: 1px solid #e0e0e0;
+            background: white;
+            border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 250px;
+            min-width: 200px;
             z-index: 1000;
             display: none;
-            margin-top: 8px;
+            margin-top: 5px;
         }
 
-        .logged-in-header .dropdown.show {
+        .user-dropdown.show,
+        .user-dropdown[style*="display: block"] {
+            display: block !important;
+        }
+
+        .user-dropdown a {
             display: block;
-        }
-
-        .logged-in-header .dropdown-item {
             padding: 12px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
+            text-decoration: none;
             color: #333;
-            display: flex;
-            align-items: center;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
         }
 
-        .logged-in-header .dropdown-item:hover {
-            background-color: #f8f8f8;
+        .user-dropdown a:hover {
+            background: #f8f8f8;
         }
 
-        .logged-in-header .dropdown-item:last-child {
+        .user-dropdown a:last-child {
             border-bottom: none;
-        }
-
-        .logged-in-header .dropdown-item.email {
-            color: #666;
-            font-size: 13px;
-            cursor: default;
-        }
-
-        .logged-in-header .dropdown-item.email:hover {
-            background-color: white;
-        }
-
-        .logged-in-header .dropdown-divider {
-            height: 1px;
-            background-color: #e0e0e0;
-            margin: 8px 0;
-        }
-
-        /* Mobile responsive for logged-in header */
-        @media (max-width: 768px) {
-            .logged-in-header .search-container {
-                margin: 0 8px;
-            }
-
-            .logged-in-header .dropdown {
-                width: 200px;
-            }
         }
 
         /* Button Styles */
@@ -877,20 +820,14 @@
         /* Mobile Navigation Container for Logged-in Users */
         .mobile-nav-container {
             display: none;
-            /* Hidden by default, shown only for logged-in users on mobile */
-        }
-
-        .logged-in .mobile-nav-container {
-            display: none;
         }
 
         @media (max-width: 768px) {
-            .logged-in .nav-container {
+            .is-logged-in .logged-in-header .nav-container {
                 display: none !important;
-                /* Hide desktop nav completely for logged-in users */
             }
 
-            .logged-in .mobile-nav-container {
+            .is-logged-in .mobile-nav-container {
                 display: flex !important;
                 align-items: center;
                 justify-content: space-between;
@@ -1696,32 +1633,126 @@
 
     <!-- Logged In Header -->
     <header class="header logged-in-header" style="display: none;">
-        <div class="logo">E</div>
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
+                    onerror="this.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';">
+                <div class="logo-fallback">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">CRWOD</span>
+                </div>
+            </a>
 
-        <div class="search-container">
-            <div class="search-icon">🔍</div>
-            <input type="text" class="search-bar" placeholder="Search events" id="loggedInSearchInput">
-            <button class="search-button" onclick="performLoggedInSearch()">🔍</button>
+            <!-- Desktop Search -->
+            <div class="desktop-search">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search events..." id="loggedInDesktopSearch">
+                    <div class="location-wrapper">
+                        <span class="location-icon">📍</span>
+                        <input type="text" class="location-input" placeholder="Location" id="loggedInLocationInput">
+                    </div>
+                    <button class="search-btn" onclick="performLoggedInSearch()">
+                        <span>🔍</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu"
+                aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Desktop Navigation for Logged In Users -->
+            <nav class="desktop-nav">
+                <a href="food_events.html" class="nav-link">Find Events</a>
+                <a href="create-events.html" class="nav-link">Create Events</a>
+                <a href="organizer-dashboard.html" class="nav-link">Dashboard</a>
+                <a href="tickets-profile.html" class="nav-link">My Tickets</a>
+
+                <!-- User Menu -->
+                <div class="user-menu" onclick="toggleUserMenu(event)">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-email" id="userEmail">user@example.com</div>
+                    <span>▾</span>
+
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="organizer-dashboard.html">Manage my events</a>
+                        <a href="tickets-profile.html">Tickets</a>
+                        <a href="#liked">Liked</a>
+                        <a href="#following">Following</a>
+                        <a href="#interests">Interests</a>
+                        <a href="settings-new.html">Account settings</a>
+                        <a href="#organize">Organize</a>
+                        <a href="#help">Help</a>
+                        <a href="#" onclick="logout()">Log out</a>
+                    </div>
+                </div>
+            </nav>
         </div>
 
-        <div class="user-profile" id="userProfile">
-            👤
-            <div class="dropdown" id="dropdown">
-                <div class="dropdown-item">Manage my events</div>
-                <div class="dropdown-item">Tickets</div>
-                <div class="dropdown-item">Liked</div>
-                <div class="dropdown-item">Following</div>
-                <div class="dropdown-item">Interests</div>
-                <div class="dropdown-item">Account settings</div>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-item email" id="userEmail">user@example.com</div>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-item" onclick="logout()">Log out</div>
-                <div class="dropdown-item">Organize</div>
-                <div class="dropdown-item">Help</div>
+        <!-- Mobile inline search for logged in users -->
+        <div class="header-search-mobile">
+            <div class="search-container-mobile">
+                <div class="search-section-mobile">
+                    <svg class="search-icon-mobile" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                            fill="currentColor" />
+                    </svg>
+                    <input type="text" class="search-input-mobile" placeholder="Search events" id="loggedInSearchInput">
+                </div>
+                <button class="search-button-mobile" type="button" onclick="performLoggedInSearch()">
+                    <svg class="search-button-icon-mobile" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                            fill="currentColor" />
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Navigation Container for Logged-in Users -->
+    <div class="mobile-nav-container">
+        <a href="index.html" class="logo">
+            <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
+                onerror="this.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';">
+            <div class="logo-fallback">
+                <span class="logo-icon">🎟️</span>
+                <span class="logo-text">CRWOD</span>
+            </div>
+        </a>
+
+        <div class="search-container">
+            <div class="search-icon">🔍</div>
+            <input type="text" class="search-bar" placeholder="Search events" id="mobileLoggedInSearchInput">
+            <button class="search-button" onclick="performLoggedInSearch()">🔍</button>
+        </div>
+
+        <div class="user-profile" id="mobileUserProfile" onclick="toggleMobileUserProfile(event)">
+            <span id="mobileUserAvatar">👤</span>
+            <div class="dropdown" id="mobileDropdown">
+                <a href="organizer-dashboard.html" class="dropdown-item">Manage my events</a>
+                <a href="tickets-profile.html" class="dropdown-item">Tickets</a>
+                <a href="#liked" class="dropdown-item">Liked</a>
+                <a href="#following" class="dropdown-item">Following</a>
+                <a href="#interests" class="dropdown-item">Interests</a>
+                <a href="settings-new.html" class="dropdown-item">Account settings</a>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item email" id="mobileUserEmail">user@example.com</div>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item" onclick="logout()">Log out</a>
+                <a href="#organize" class="dropdown-item">Organize</a>
+                <a href="#help" class="dropdown-item">Help</a>
+            </div>
+        </div>
+    </div>
 
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
@@ -2291,8 +2322,8 @@
             console.log('👤 Updating logged-in header user info for:', user.email || user.name);
 
             // Update mobile user profile
-            const mobileUserAvatar = document.querySelector('.mobile-nav-container #userAvatar');
-            const mobileUserEmail = document.querySelector('.mobile-nav-container #userEmail');
+            const mobileUserAvatar = document.querySelector('.mobile-nav-container #mobileUserAvatar');
+            const mobileUserEmail = document.querySelector('.mobile-nav-container #mobileUserEmail');
 
             if (mobileUserAvatar && user) {
                 const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
@@ -2305,8 +2336,8 @@
             }
 
             // Update desktop user profile
-            const desktopUserAvatar = document.querySelector('.user-menu .user-avatar');
-            const desktopUserEmail = document.querySelector('.user-menu .user-email');
+            const desktopUserAvatar = document.querySelector('.user-menu .user-avatar, #userAvatar');
+            const desktopUserEmail = document.querySelector('.user-menu .user-email, #userEmail');
 
             if (desktopUserAvatar && user) {
                 const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
@@ -2323,13 +2354,16 @@
         function performLoggedInSearch() {
             const mobileSearchInput = document.getElementById('loggedInSearchInput');
             const desktopSearchInput = document.getElementById('loggedInDesktopSearch');
+            const mobileNavSearchInput = document.getElementById('mobileLoggedInSearchInput');
             const locationInput = document.getElementById('loggedInLocationInput');
 
             let searchTerm = '';
             if (mobileSearchInput && mobileSearchInput.value.trim() !== '') {
                 searchTerm = mobileSearchInput.value;
-            } else if (desktopSearchInput) {
+            } else if (desktopSearchInput && desktopSearchInput.value.trim() !== '') {
                 searchTerm = desktopSearchInput.value;
+            } else if (mobileNavSearchInput && mobileNavSearchInput.value.trim() !== '') {
+                searchTerm = mobileNavSearchInput.value;
             }
 
             const location = locationInput ? locationInput.value : '';
@@ -2344,6 +2378,12 @@
 
             const locationText = location || 'your area';
             alert('Searching for: "' + searchTerm + '" in ' + locationText);
+
+            // Clear search inputs after search
+            if (mobileSearchInput) mobileSearchInput.value = '';
+            if (desktopSearchInput) desktopSearchInput.value = '';
+            if (mobileNavSearchInput) mobileNavSearchInput.value = '';
+            if (locationInput) locationInput.value = '';
         }
 
         // Enhanced logout function with database call
@@ -2497,6 +2537,7 @@
             const loggedInSearchInputs = [
                 document.getElementById('loggedInSearchInput'),
                 document.getElementById('loggedInDesktopSearch'),
+                document.getElementById('mobileLoggedInSearchInput'),
                 document.getElementById('loggedInLocationInput')
             ];
 
@@ -2667,7 +2708,7 @@
 
             // Close mobile navigation dropdown
             const mobileUserProfile = event.target.closest('.mobile-nav-container .user-profile');
-            const mobileDropdown = document.querySelector('.mobile-nav-container .dropdown');
+            const mobileDropdown = document.querySelector('.mobile-nav-container .dropdown, #mobileDropdown');
             if (!mobileUserProfile && mobileDropdown) {
                 mobileDropdown.classList.remove('show');
             }
