@@ -421,6 +421,158 @@
             display: block;
         }
 
+        /* Logged In Header Styles - Template Design */
+        .logged-in-header {
+            background-color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .logged-in-header .logo {
+            width: 32px;
+            height: 32px;
+            background-color: #e53e3e;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logged-in-header .search-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 16px;
+            position: relative;
+        }
+
+        .logged-in-header .search-bar {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid #d0d0d0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            background-color: #f8f8f8;
+        }
+
+        .logged-in-header .search-bar:focus {
+            border-color: #e53e3e;
+            background-color: white;
+        }
+
+        .logged-in-header .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 16px;
+        }
+
+        .logged-in-header .search-button {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #e53e3e;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+        }
+
+        .logged-in-header .user-profile {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .logged-in-header .user-profile:hover {
+            background-color: #e8e8e8;
+        }
+
+        .logged-in-header .dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            z-index: 1000;
+            display: none;
+            margin-top: 8px;
+        }
+
+        .logged-in-header .dropdown.show {
+            display: block;
+        }
+
+        .logged-in-header .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .logged-in-header .dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .logged-in-header .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .logged-in-header .dropdown-item.email {
+            color: #666;
+            font-size: 13px;
+            cursor: default;
+        }
+
+        .logged-in-header .dropdown-item.email:hover {
+            background-color: white;
+        }
+
+        .logged-in-header .dropdown-divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 8px 0;
+        }
+
+        /* Mobile responsive for logged-in header */
+        @media (max-width: 768px) {
+            .logged-in-header .search-container {
+                margin: 0 8px;
+            }
+
+            .logged-in-header .dropdown {
+                width: 200px;
+            }
+        }
+
         /* Button Styles */
         .btn-primary {
             background: #3659e3;
@@ -1544,87 +1696,30 @@
 
     <!-- Logged In Header -->
     <header class="header logged-in-header" style="display: none;">
-        <!-- Mobile Navigation Container for Logged-in Users -->
-        <div class="mobile-nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
-                    onerror="this.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';">
-                <div class="logo-fallback" style="display: none;">E</div>
-            </a>
+        <div class="logo">E</div>
 
-            <div class="search-container">
-                <div class="search-icon">🔍</div>
-                <input type="text" class="search-bar" placeholder="Search events" id="loggedInSearchInput">
-                <button class="search-button" onclick="performLoggedInSearch()">🔍</button>
-            </div>
-
-            <div class="user-profile" id="userProfile" onclick="toggleMobileUserProfile(event)">
-                <div id="userAvatar">U</div>
-                <div class="dropdown" id="dropdown">
-                    <div class="dropdown-item email" id="userEmail">user@example.com</div>
-                    <div class="dropdown-divider"></div>
-                    <a href="logged_in_Version.html" class="dropdown-item">Browse events</a>
-                    <a href="organizer-dashboard.html" class="dropdown-item">Manage my events</a>
-                    <a href="tickets-profile.html" class="dropdown-item">Tickets</a>
-                    <a href="likes.html" class="dropdown-item">Liked</a>
-                    <a href="tickets-profile.html" class="dropdown-item">Following</a>
-                    <a href="intrest.html" class="dropdown-item">Interests</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="settings-new.html" class="dropdown-item">Account settings</a>
-                    <div class="dropdown-item" onclick="logout()">Log out</div>
-                </div>
-            </div>
+        <div class="search-container">
+            <div class="search-icon">🔍</div>
+            <input type="text" class="search-bar" placeholder="Search events" id="loggedInSearchInput">
+            <button class="search-button" onclick="performLoggedInSearch()">🔍</button>
         </div>
 
-        <!-- Desktop Navigation for Logged-in Users -->
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
-                    onerror="this.style.display='none'; this.parentElement.querySelector('.logo-fallback').style.display='flex';">
-                <div class="logo-fallback" style="display: none;">
-                    <span class="logo-icon">🎟️</span>
-                    <span class="logo-text">CRWOD</span>
-                </div>
-            </a>
-
-            <div class="search-container">
-                <div class="search-wrapper">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" placeholder="Search events..." id="loggedInDesktopSearch">
-                    <div class="location-wrapper">
-                        <span class="location-icon">📍</span>
-                        <input type="text" class="location-input" placeholder="Location" id="loggedInLocationInput">
-                    </div>
-                    <button class="search-btn" onclick="performLoggedInSearch()">
-                        <span>🔍</span>
-                    </button>
-                </div>
+        <div class="user-profile" id="userProfile">
+            👤
+            <div class="dropdown" id="dropdown">
+                <div class="dropdown-item">Manage my events</div>
+                <div class="dropdown-item">Tickets</div>
+                <div class="dropdown-item">Liked</div>
+                <div class="dropdown-item">Following</div>
+                <div class="dropdown-item">Interests</div>
+                <div class="dropdown-item">Account settings</div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item email" id="userEmail">user@example.com</div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" onclick="logout()">Log out</div>
+                <div class="dropdown-item">Organize</div>
+                <div class="dropdown-item">Help</div>
             </div>
-
-            <nav class="nav-actions">
-                <a href="liked.html" class="nav-action-item">
-                    <div class="nav-action-icon">❤️</div>
-                    <div class="nav-action-text">Liked</div>
-                </a>
-                <a href="tickets-profile.html" class="nav-action-item">
-                    <div class="nav-action-icon">🎫</div>
-                    <div class="nav-action-text">Tickets</div>
-                </a>
-                <a href="organizer-dashboard.html" class="nav-action-item">
-                    <div class="nav-action-icon">➕</div>
-                    <div class="nav-action-text">Create</div>
-                </a>
-
-                <div class="user-menu" onclick="toggleUserMenu(event)" id="userMenuButton">
-                    <div class="user-avatar" id="userAvatar">U</div>
-                    <div class="user-email" id="userEmailDisplay">user@example.com</div>
-                    <div class="user-dropdown" id="userDropdown">
-                        <a href="settings-new.html">Account Settings</a>
-                        <a href="organizer-dashboard.html">Organizer Dashboard</a>
-                        <a href="#" onclick="logout()">Log Out</a>
-                    </div>
-                </div>
-            </nav>
         </div>
     </header>
 
@@ -1980,11 +2075,10 @@
         // Verify authentication token with database
         async function verifyTokenWithDatabase(token) {
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/verify`, {
+                const response = await fetch(`${API_BASE_URL}/auth/verify-token`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ token })
                 });
@@ -2645,7 +2739,7 @@
             });
         });
 
-        // Mobile Navigation - Dropdown functionality
+        // Template Dropdown functionality
         document.addEventListener('DOMContentLoaded', function () {
             const userProfile = document.getElementById('userProfile');
             const dropdown = document.getElementById('dropdown');
@@ -2664,13 +2758,13 @@
                 });
 
                 // Handle dropdown item clicks
-                const dropdownItems = document.querySelectorAll('.mobile-nav-container .dropdown-item:not(.email)');
+                const dropdownItems = dropdown.querySelectorAll('.dropdown-item:not(.email)');
                 dropdownItems.forEach(item => {
                     item.addEventListener('click', function () {
-                        console.log('Mobile dropdown clicked:', this.textContent);
+                        console.log('Clicked:', this.textContent);
                         dropdown.classList.remove('show');
 
-                        // Add navigation logic for mobile header dropdown
+                        // Add navigation logic based on menu item
                         const itemText = this.textContent.trim();
                         switch (itemText) {
                             case 'Browse events':
@@ -2703,13 +2797,19 @@
                                     window.location.href = 'index.html';
                                 }
                                 break;
+                            case 'Organize':
+                                window.location.href = 'create-events.html';
+                                break;
+                            case 'Help':
+                                window.location.href = 'help.html';
+                                break;
                         }
                     });
                 });
 
-                // Mobile Search functionality
-                const searchBar = document.querySelector('.mobile-nav-container .search-bar');
-                const searchButton = document.querySelector('.mobile-nav-container .search-button');
+                // Search functionality for logged in header
+                const searchBar = document.querySelector('.logged-in-header .search-bar');
+                const searchButton = document.querySelector('.logged-in-header .search-button');
 
                 if (searchButton && searchBar) {
                     searchButton.addEventListener('click', function () {

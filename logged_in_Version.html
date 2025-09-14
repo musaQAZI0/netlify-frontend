@@ -2243,7 +2243,14 @@
 
                                 // Navigate to specific pages based on category
                                 if (category === 'dating') {
-                                    window.location.href = 'DATING.html';
+                                    const currentUser = localStorage.getItem('currentUser');
+                                    const authToken = localStorage.getItem('authToken');
+                                    if (currentUser && authToken) {
+                                        const encodedUser = encodeURIComponent(currentUser);
+                                        window.location.href = `DATING.html?from=logged_in&user=${encodedUser}&token=${authToken}`;
+                                    } else {
+                                        window.location.href = 'DATING.html?from=logged_in';
+                                    }
                                 } else if (category === 'hobbies') {
                                     window.location.href = 'Hobbies events_logged_in.html';
                                 } else if (category === 'holidays') {
@@ -2254,7 +2261,16 @@
                                     console.log('Redirecting to business events...');
                                     window.location.href = 'business_events.html';
                                 } else if (category === 'nightlife') {
-                                    window.location.href = 'NIGHTLIFE.html?from=logged_in';
+                                    // Get current user data and token from localStorage
+                                    const currentUser = localStorage.getItem('currentUser');
+                                    const authToken = localStorage.getItem('authToken');
+
+                                    if (currentUser && authToken) {
+                                        const encodedUser = encodeURIComponent(currentUser);
+                                        window.location.href = `nightlife.html?from=logged_in&user=${encodedUser}&token=${authToken}`;
+                                    } else {
+                                        window.location.href = 'nightlife.html?from=logged_in';
+                                    }
                                 } else {
                                     // For categories without specific pages, show a message
                                     const categoryTitle = this.querySelector('.category-title');
@@ -3212,7 +3228,7 @@
                         </a>
 
                         <!-- Nightlife -->
-                        <a href="NIGHTLIFE.html" class="category-card" data-category="nightlife">
+                        <a href="nightlife.html" class="category-card" data-category="nightlife">
                             <div class="icon-wrapper">
                                 <svg class="category-icon" viewBox="0 0 47 48" fill="none">
                                     <path
@@ -3245,7 +3261,7 @@
                         </a>
 
                         <!-- Dating -->
-                        <a href="DATING.html" class="category-card" data-category="dating">
+                        <a href="#" class="category-card" data-category="dating">
                             <div class="icon-wrapper">
                                 <svg class="category-icon" viewBox="0 -5 45 45" fill="none">
                                     <path
