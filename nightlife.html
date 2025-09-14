@@ -1597,78 +1597,51 @@
             locationQuery: 'Punjab'
         };
 
-        // Check authentication state
+        // Enhanced Database Authentication Integration
         function checkAuthenticationState() {
-            console.log('🔐 Checking authentication state...');
+            console.log('🔐 Initializing database authentication...');
 
-            try {
-                // Check URL parameters first
-                const urlParams = new URLSearchParams(window.location.search);
-                const userData = urlParams.get('user');
-                const token = urlParams.get('token');
-                const fromPage = urlParams.get('from');
+            // Check if coming from logged_in_Version.html
+            const urlParams = new URLSearchParams(window.location.search);
+            const fromPage = urlParams.get('from');
 
-                if (userData && token && fromPage === 'logged_in') {
-                    try {
-                        const user = JSON.parse(decodeURIComponent(userData));
-                        console.log('✅ User authenticated from logged-in page');
-                        isLoggedIn = true;
-                        currentUser = user;
-                        authToken = token;
-
-                        localStorage.setItem('currentUser', JSON.stringify(user));
-                        localStorage.setItem('authToken', token);
-                        updateAuthenticationState(true);
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        verifyTokenWithDatabase(token);
-                        return true;
-                    } catch (error) {
-                        console.error('Error parsing user data:', error);
-                    }
-                }
-
-                // Check localStorage
-                const storedUser = localStorage.getItem('currentUser');
-                const storedToken = localStorage.getItem('authToken');
-
-                if (storedUser && storedToken) {
-                    try {
-                        const user = JSON.parse(storedUser);
-                        console.log('🔍 Verifying stored session with database...');
-                        authToken = storedToken;
-                        currentUser = user;
-
-                        verifyTokenWithDatabase(storedToken).then(isValid => {
-                            if (isValid) {
-                                console.log('✅ User authenticated from local storage');
-                                isLoggedIn = true;
-                                updateAuthenticationState(true);
-                                updateUserDisplay(currentUser);
-                                updateLoggedInHeaderUserInfo(currentUser);
-                            } else {
-                                console.log('❌ Stored token invalid - clearing session');
-                                clearAuthenticationData();
-                            }
-                        });
-                        return true;
-                    } catch (error) {
-                        console.error('Error parsing stored user data:', error);
-                        clearAuthenticationData();
-                    }
-                }
-
-                console.log('❌ No authentication found - staying in guest mode');
-                isLoggedIn = false;
-                currentUser = null;
-                authToken = null;
-                updateAuthenticationState(false);
-                return false;
-
-            } catch (error) {
-                console.error('🚨 Authentication check failed:', error);
-                clearAuthenticationData();
-                return false;
+            if (fromPage === 'logged_in') {
+                console.log('🔗 Coming from logged-in page, checking database authentication...');
+                // Clean up URL without reloading
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
+
+            // Listen for authentication state changes from DatabaseAuth
+            window.addEventListener('authStateChanged', (event) => {
+                const { isLoggedIn: authIsLoggedIn, user } = event.detail;
+                isLoggedIn = authIsLoggedIn;
+                currentUser = user;
+
+                if (authIsLoggedIn && user) {
+                    authToken = dbAuth.currentToken;
+                    updateAuthenticationState(true);
+                    updateUserDisplay(user);
+                    updateLoggedInHeaderUserInfo(user);
+                    console.log('✅ User authenticated via database:', user.firstName);
+                } else {
+                    updateAuthenticationState(false);
+                    console.log('ℹ️ User not authenticated');
+                }
+            });
+
+            // Get current state from DatabaseAuth
+            const authState = dbAuth.getAuthState();
+            if (authState.isLoggedIn) {
+                isLoggedIn = true;
+                currentUser = authState.user;
+                authToken = authState.token;
+                updateAuthenticationState(true);
+                updateUserDisplay(authState.user);
+                updateLoggedInHeaderUserInfo(authState.user);
+                return true;
+            }
+
+            return false;
         }
 
         // Verify authentication token with database
@@ -1784,34 +1757,24 @@
             }
         }
 
-        // Enhanced logout function
+        // Enhanced logout function using DatabaseAuth
         async function logout() {
             console.log('🚪 Logging out user...');
 
             try {
-                if (authToken) {
-                    await fetch(`${API_BASE_URL}/auth/logout`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`
-                        },
-                        body: JSON.stringify({
-                            timestamp: new Date().toISOString(),
-                            page: 'nightlife'
-                        })
-                    });
+                const result = await dbAuth.logout();
+                if (result.success) {
+                    showTopNotification('Successfully logged out', 'info');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                } else {
+                    showTopNotification('Logout failed. Please try again.', 'error');
                 }
             } catch (error) {
-                console.error('Failed to notify database of logout:', error);
+                console.error('Logout failed:', error);
+                showTopNotification('Logout failed. Please try again.', 'error');
             }
-
-            clearAuthenticationData();
-            showTopNotification('Successfully logged out', 'info');
-
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
         }
 
         // Show notifications
@@ -2108,10 +2071,15 @@
         }
 
         // DOM Content Loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             console.log('🚀 Initializing Nightlife page...');
 
-            // Initialize authentication first
+            // Wait for DatabaseAuth to be ready
+            if (window.dbAuth) {
+                await dbAuth.init();
+            }
+
+            // Initialize authentication
             const authResult = checkAuthenticationState();
             console.log('🎯 Auth check complete, result:', authResult);
 

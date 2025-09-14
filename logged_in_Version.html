@@ -2243,14 +2243,8 @@
 
                                 // Navigate to specific pages based on category
                                 if (category === 'dating') {
-                                    const currentUser = localStorage.getItem('currentUser');
-                                    const authToken = localStorage.getItem('authToken');
-                                    if (currentUser && authToken) {
-                                        const encodedUser = encodeURIComponent(currentUser);
-                                        window.location.href = `DATING.html?from=logged_in&user=${encodedUser}&token=${authToken}`;
-                                    } else {
-                                        window.location.href = 'DATING.html?from=logged_in';
-                                    }
+                                    // Use database authentication - no need to pass large data via URL
+                                    window.location.href = 'DATING.html?from=logged_in';
                                 } else if (category === 'hobbies') {
                                     window.location.href = 'Hobbies events_logged_in.html';
                                 } else if (category === 'holidays') {
@@ -2261,16 +2255,8 @@
                                     console.log('Redirecting to business events...');
                                     window.location.href = 'business_events.html';
                                 } else if (category === 'nightlife') {
-                                    // Get current user data and token from localStorage
-                                    const currentUser = localStorage.getItem('currentUser');
-                                    const authToken = localStorage.getItem('authToken');
-
-                                    if (currentUser && authToken) {
-                                        const encodedUser = encodeURIComponent(currentUser);
-                                        window.location.href = `nightlife.html?from=logged_in&user=${encodedUser}&token=${authToken}`;
-                                    } else {
-                                        window.location.href = 'nightlife.html?from=logged_in';
-                                    }
+                                    // Use database authentication - no need to pass large data via URL
+                                    window.location.href = 'nightlife.html?from=logged_in';
                                 } else {
                                     // For categories without specific pages, show a message
                                     const categoryTitle = this.querySelector('.category-title');
