@@ -2202,9 +2202,7 @@
         </div>
         <div class="nav-container">
             <!-- Logo -->
-            <a href="index.html" class="logo" aria-label="Crowd - Home">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img">
-            </a>
+            H
 
             <!-- Mobile inline search (visible on small screens) -->
             <div class="header-search-mobile" aria-hidden="true">
@@ -2267,6 +2265,7 @@
             <nav class="desktop-nav" aria-label="Main navigation">
                 <a href="find-events.html" class="nav-link">Find Events</a>
                 <a href="create_events_index.html" class="nav-link">Create Events</a>
+                <a href="contact_sales.html" class="nav-link">Contact Sales</a>
                 <a href="tickets-profile.html" class="nav-link secondary">Find my tickets</a>
                 <div class="help-dropdown" id="helpDropdown">
                     <button class="help-dropdown-btn" id="helpDropdownBtn" type="button" aria-haspopup="true"
@@ -2278,6 +2277,7 @@
                         <a href="Help_center.html" role="menuitem">Help Center</a>
                         <a href="tickets-profile.html" role="menuitem">Find your tickets</a>
                         <a href="Contact_organizer.html" role="menuitem">Contact organizer</a>
+                        <a href="contact_sales.html" role="menuitem">Contact Sales</a>
                     </div>
                 </div>
                 <a href="login.html" class="nav-link secondary">Log In</a>
@@ -2325,9 +2325,11 @@
 
             <!-- Create Events Submenu -->
             <div class="submenu show" id="create-events-submenu">
-                <div class="submenu-item" onclick="window.location.href='organizer-resource-hub.html'">Organizer Resource Hub</div>
+                <div class="submenu-item" onclick="window.location.href='organizer-resource-hub.html'">Organizer
+                    Resource Hub</div>
                 <div class="submenu-item" onclick="window.location.href='create_events_index.html'">Create Events</div>
-                <div class="submenu-item">Contact Sales</div>
+                <div class="submenu-item" onclick="window.location.href='contact_sales'">Contact Sales</div>
+
             </div>
 
             <!-- Get Started -->
@@ -2355,7 +2357,9 @@
             <div class="submenu" id="help-center-submenu">
                 <div class="submenu-item" onclick="window.location.href='Help_center.html'">Help Center</div>
                 <div class="submenu-item" onclick="window.location.href='tickets-profile.html'">Find your tickets</div>
-                <div class="submenu-item" onclick="window.location.href='Contact_organizer.html'">Contact organizer</div>
+                <div class="submenu-item" onclick="window.location.href='Contact_organizer.html'">Contact organizer
+                </div>
+                <div class="submenu-item" onclick="window.location.href='contact_sales.html'">Contact Sales</div>
             </div>
         </div>
     </header>
@@ -3223,7 +3227,7 @@
             }
 
             // Close mobile menu when clicking outside
-            document.addEventListener('click', function(e) {
+            document.addEventListener('click', function (e) {
                 const mobileMenu = document.querySelector('.mobile-menu');
                 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
                 if (mobileMenu && mobileMenu.classList.contains('active')) {
@@ -3266,10 +3270,10 @@
         function toggleMobileMenu() {
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
             const mobileMenu = document.querySelector('.mobile-menu');
-            
+
             if (mobileMenu && mobileMenuToggle) {
                 const isActive = mobileMenu.classList.contains('active');
-                
+
                 if (isActive) {
                     mobileMenu.classList.remove('active');
                     mobileMenuToggle.classList.remove('active');
