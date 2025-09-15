@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowd - Find Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding-top: 80px; /* Space for header */
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Desktop Header */
+        .desktop-header {
+            display: none;
+            padding: 8px 16px;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: flex;
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a3247;
+        }
+
+        .mobile-header .logo {
+            width: 32px;
+            height: 32px;
+            background-color: #e53e3e;
+            border-radius: 6px;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-left: 0.25rem;
+        }
+
+        /* Search Section Styles */
+        .search-section {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 2rem;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .mobile-header .search-container {
+            flex: 1;
+            margin: 0 12px;
+            border-radius: 20px;
+            background-color: #f8f8f8;
+            box-shadow: none;
+            border: 1px solid #d0d0d0;
+        }
+
+        .search-section-inner,
+        .location-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+        }
+
+        .search-icon,
+        .location-icon {
+            width: 18px;
+            height: 18px;
+            color: #666;
+        }
+
+        .mobile-header .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-input,
+        .location-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            color: #333;
+            width: 100%;
+        }
+
+        .mobile-header .search-input {
+            padding: 8px 12px 8px 36px;
+            width: 100%;
+        }
+
+        .search-input::placeholder,
+        .location-input::placeholder {
+            color: #999;
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: #ddd;
+        }
+
+        .search-button {
+            background: #3a3247;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-header .search-button {
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #e53e3e;
+            width: 28px;
+            height: 28px;
+            margin-left: 0;
+            font-size: 12px;
+        }
+
+        .search-button:hover {
+            background: #2f2a3c;
+        }
+
+        .search-button-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        /* Navigation Actions */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        .integrated-nav-container {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: #f8f8f9;
+            transform: translateY(-1px);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* User Menu Styles */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+            cursor: pointer;
+            color: #39364f;
+            position: relative;
+        }
+
+        .mobile-header .user-menu {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            justify-content: center;
+            padding: 0;
+            gap: 0;
+            font-size: 16px;
+        }
+
+        .user-menu:hover {
+            background: #f8f8f9;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3a3247;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .mobile-header .user-avatar {
+            display: none;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #585163;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #716b7a;
+        }
+
+        .mobile-header .dropdown-arrow {
+            display: none;
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 220px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            padding: 8px 0;
+            z-index: 1200;
+        }
+
+        .mobile-header .user-dropdown {
+            width: 280px;
+            right: -8px;
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .user-dropdown a,
+        .dropdown-item {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #111;
+            font-size: 13px;
+            transition: background 0.12s;
+            cursor: pointer;
+        }
+
+        .user-dropdown a:hover,
+        .dropdown-item:hover {
+            background: #f8f8f9;
+        }
+
+        .user-dropdown .divider {
+            height: 1px;
+            background: #f0f0f2;
+            margin: 4px 0;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        .breadcrumb {
+            grid-column: 1 / -1;
+            margin-bottom: 10px;
+        }
+
+        .breadcrumb a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb span {
+            color: #666;
+            margin: 0 5px;
+        }
+
+        .page-title {
+            grid-column: 1 / -1;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            height: fit-content;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .filter-section {
+            margin-bottom: 30px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .filter-item input[type="radio"],
+        .filter-item input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .view-more {
+            color: #d1410c;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .filters-applied {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-tag {
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .clear-all {
+            color: #d1410c;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .events-section {
+            padding: 20px;
+        }
+
+        .event-card {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .event-card:hover {
+            background-color: #f9f9f9;
+        }
+
+        .event-image {
+            width: 200px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .event-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .event-time {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .event-price {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .event-organizer {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .popular-section {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .grid-event-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .grid-event-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .grid-event-image {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(45deg, #764ba2 0%, #667eea 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .grid-event-content {
+            padding: 16px;
+        }
+
+        .trends-section {
+            padding: 40px 20px;
+            background: white;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .trends-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .trend-item {
+            color: #d1410c;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer {
+            background: #2d1b69;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Desktop Media Query */
+        @media (min-width: 769px) {
+            .mobile-header {
+                display: none;
+            }
+            
+            .desktop-header {
+                display: flex;
+            }
+            
+            body {
+                padding-top: 80px;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .desktop-header {
+                display: none;
+            }
+            
+            .mobile-header {
+                display: flex;
+            }
+            
+            body {
+                padding-top: 60px;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            
+            .trends-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .event-card {
+                flex-direction: column;
+            }
+            
+            .event-image {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Unified Header -->
+    <div class="header">
+        <!-- Desktop Header -->
+        <nav class="desktop-header">
+            <a href="index.html" class="logo">
+                <div style="display: flex; align-items: center; gap: 0.25rem;">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">crowd</span>
+                </div>
+            </a>
+
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-section-inner">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search events" id="desktopSearchInput">
+                    </div>
+                    <div class="divider"></div>
+                    <div class="location-section">
+                        <svg class="location-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M11.6 11.6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-7.6C8.5 4 6 6.5 6 9.6 6 13.8 11.6 20 11.6 20s5.6-6.2 5.6-10.4c0-3.1-2.5-5.6-5.6-5.6z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="location-input" placeholder="California, United States" id="desktopLocationInput">
+                    </div>
+                    <button class="search-button" type="button" onclick="performSearch('desktop')">
+                        <svg class="search-button-icon" viewBox="0 0 24 24" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <div class="integrated-nav-container">
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span class="nav-text">Create an event</span>
+                    </a>
+
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        <span class="nav-text">Likes</span>
+                    </a>
+
+                    <a href="#" class="nav-item">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="nav-text">Tickets</span>
+                    </a>
+                </div>
+
+                <div class="user-menu" id="desktopUserMenuButton">
+                    <div class="user-avatar">U</div>
+                    <div>
+                        <div class="user-email">user@example.com</div>
+                    </div>
+                    <span class="dropdown-arrow">▾</span>
+                    
+                    <div class="user-dropdown" id="desktopUserDropdown">
+                        <a href="#">Find events</a>
+                        <a href="#">Browse events</a>
+                        <a href="#">Manage my events</a>
+                        <a href="#">Tickets</a>
+                        <a href="#">Liked</a>
+                        <a href="#">Following</a>
+                        <a href="#">Interests</a>
+                        <div class="divider"></div>
+                        <a href="#">Account settings</a>
+                        <a href="#" onclick="handleLogout(event)">Log out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <a href="index.html" class="logo">C</a>
+            
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-input" placeholder="Search events" id="mobileSearchInput">
+                <button class="search-button" onclick="performSearch('mobile')">🔍</button>
+            </div>
+            
+            <div class="user-menu" id="mobileUserProfile">
+                👤
+                <div class="user-dropdown" id="mobileDropdown">
+                    <div class="dropdown-item">Manage my events</div>
+                    <div class="dropdown-item">Tickets</div>
+                    <div class="dropdown-item">Liked</div>
+                    <div class="dropdown-item">Following</div>
+                    <div class="dropdown-item">Interests</div>
+                    <div class="dropdown-item">Account settings</div>
+                    <div class="divider"></div>
+                    <div class="dropdown-item" onclick="handleLogout(event)">Log out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="#">Home</a> <span>/</span>
+            <a href="#">United States</a> <span>/</span>
+            <a href="#">California</a> <span>/</span>
+            <span>Autumn Events</span>
+        </div>
+
+        <h1 class="page-title">Autumn events in California, United States</h1>
+
+        <aside class="sidebar">
+            <div class="filter-section">
+                <h3 class="filter-title">Filters</h3>
+                
+                <div class="filter-section">
+                    <h4>Category</h4>
+                    <div class="filter-item">
+                        <input type="checkbox" id="business"> <label for="business">Business</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="food"> <label for="food">Food & Drink</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="health"> <label for="health">Health</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="music"> <label for="music">Music</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="auto"> <label for="auto">Auto, Boat & Air</label>
+                    </div>
+                    <div class="view-more" onclick="toggleMore('category')">View more</div>
+                    <div id="category-more" style="display: none;">
+                        <div class="filter-item">
+                            <input type="checkbox" id="charity"> <label for="charity">Charity & Causes</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="community"> <label for="community">Community</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="family"> <label for="family">Family & Education</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="fashion"> <label for="fashion">Fashion</label>
+                        </div>
+                    </div>
+                    <div class="view-more" onclick="toggleLess('category')" id="category-less" style="display: none;">View less</div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>Date</h4>
+                    <div class="filter-item">
+                        <input type="radio" name="date" id="today"> <label for="today">Today</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="radio" name="date" id="tomorrow"> <label for="tomorrow">Tomorrow</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="radio" name="date" id="weekend"> <label for="weekend">This weekend</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="radio" name="date" id="week"> <label for="week">This week</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="radio" name="date" id="nextweek"> <label for="nextweek">Next week</label>
+                    </div>
+                    <div class="view-more" onclick="toggleMore('date')">View more</div>
+                    <div id="date-more" style="display: none;">
+                        <div class="filter-item">
+                            <input type="radio" name="date" id="month"> <label for="month">This month</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="radio" name="date" id="nextmonth"> <label for="nextmonth">Next month</label>
+                        </div>
+                    </div>
+                    <div class="view-more" onclick="toggleLess('date')" id="date-less" style="display: none;">View less</div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>Price</h4>
+                    <div class="filter-item">
+                        <input type="radio" name="price" id="free"> <label for="free">Free</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="radio" name="price" id="paid" checked> <label for="paid">Paid</label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h4>Format</h4>
+                    <div class="filter-item">
+                        <input type="checkbox" id="class"> <label for="class">Class</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="conference"> <label for="conference">Conference</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="festival"> <label for="festival">Festival</label>
+                    </div>
+                    <div class="filter-item">
+                        <input type="checkbox" id="party"> <label for="party">Party</label>
+                    </div>
+                    <div class="view-more" onclick="toggleMore('format')">View more</div>
+                    <div id="format-more" style="display: none;">
+                        <div class="filter-item">
+                            <input type="checkbox" id="networking"> <label for="networking">Networking</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="seminar"> <label for="seminar">Seminar</label>
+                        </div>
+                        <div class="filter-item">
+                            <input type="checkbox" id="workshop"> <label for="workshop">Workshop</label>
+                        </div>
+                    </div>
+                    <div class="view-more" onclick="toggleLess('format')" id="format-less" style="display: none;">View less</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="filters-applied">
+                <span>1 filter applied</span>
+                <div class="filter-tag">
+                    Paid <i class="fas fa-times" onclick="clearFilter()"></i>
+                </div>
+                <span class="clear-all" onclick="clearAllFilters()">Clear All</span>
+            </div>
+
+            <div class="events-section">
+                <div class="event-card">
+                    <div class="event-image">
+                        🍂 Autumn Meditation
+                    </div>
+                    <div class="event-details">
+                        <div class="event-title">Autumn's Embrace: A Fall Equinox Meditation & Wellness Retreat</div>
+                        <div class="event-time">Wed, Sep 24 • 3:00 AM PDT</div>
+                        <div class="event-price">Free</div>
+                        <div class="event-organizer">Promoted</div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image">
+                        📚 Story Time
+                    </div>
+                    <div class="event-details">
+                        <div class="event-title">"Once Upon a Time: Story-Submerging for Subversive Times"</div>
+                        <div class="event-time">Thu, Sep 25 • 4:30 AM PDT</div>
+                        <div class="event-price">From $65.87</div>
+                        <div class="event-organizer">Promoted</div>
+                    </div>
+                </div>
+
+                <div class="event-card">
+                    <div class="event-image">
+                        🎯 Transform & Connect
+                    </div>
+                    <div class="event-details">
+                        <div class="event-badge">Just added</div>
+                        <div class="event-title">Autumn Equinox Healing Journey (Transform, Let Go, and Reconnect)</div>
+                        <div class="event-time">Sun, Sep 21 • 8:00 PM PDT</div>
+                        <div class="event-price">Free</div>
+                        <div class="event-organizer">Promoted</div>
+                    </div>
+                </div>
+
+                <div class="no-results">
+                    <div style="font-size: 60px; margin-bottom: 20px;">🔍</div>
+                    <h3>Nothing matched your search, but you might like these options.</h3>
+                </div>
+            </div>
+
+            <div class="popular-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 class="section-title">Popular events</h2>
+                    <span class="view-more">Explore more events ></span>
+                </div>
+
+                <div class="event-grid">
+                    <div class="grid-event-card">
+                        <div class="grid-event-image">💰 Investment Community</div>
+                        <div class="grid-event-content">
+                            <div class="event-badge" style="background: #ffc107; color: #000;">Sales end soon</div>
+                            <div class="event-title">Join Biggest Community | Investors Founders | Los Angeles</div>
+                            <div class="event-time">Wednesday • 12:30 PM</div>
+                            <div class="event-organizer">Los Angeles</div>
+                            <div class="event-price">Free</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-event-card">
+                        <div class="grid-event-image">🎓 IELTS & UK Education</div>
+                        <div class="grid-event-content">
+                            <div class="event-badge" style="background: #28a745;">Going fast</div>
+                            <div class="event-title">IELTS & UK Education Expo @ The Beverly Hotel LA</div>
+                            <div class="event-time">Saturday • 11:00 AM</div>
+                            <div class="event-organizer">The Beverly Hotel</div>
+                            <div class="event-price">Free</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-event-card">
+                        <div class="grid-event-image">🏢 Property Expo</div>
+                        <div class="grid-event-content">
+                            <div class="event-title">Upcoming Bay Area Property Expo - Book Free Entry Now</div>
+                            <div class="event-time">Sat, Oct 4 • 10:00 AM</div>
+                            <div class="event-organizer">The Grand Hotel - San Francisco</div>
+                            <div class="event-price">Free</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-event-card">
+                        <div class="grid-event-image">🎪 The King Crusade</div>
+                        <div class="grid-event-content">
+                            <div class="event-title">The King Crusade</div>
+                            <div class="event-time">Thu, Oct 16 • 10:00 AM</div>
+                            <div class="event-organizer">San Francisco International Airport</div>
+                            <div class="event-price">Free</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="trends-section" style="grid-column: 1 / -1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2 class="section-title">Trends in California 📈</h2>
+                <span class="view-more">Explore more trends ></span>
+            </div>
+            
+            <div class="trends-grid">
+                <a href="#" class="trend-item">1. Event today in expo centre san francisco</a>
+                <a href="#" class="trend-item">2. Tech meetup</a>
+                <a href="#" class="trend-item">3. Concert</a>
+                <a href="#" class="trend-item">4. Los Angeles 2025</a>
+                <a href="#" class="trend-item">5. Autumn</a>
+                <a href="#" class="trend-item">6. Startup</a>
+                <a href="#" class="trend-item">7. San Francisco</a>
+                <a href="#" class="trend-item">8. Networking</a>
+                <a href="#" class="trend-item">9. Live music concerts</a>
+                <a href="#" class="trend-item">10. Food festival</a>
+                <a href="#" class="trend-item">11. Silicon Valley</a>
+                <a href="#" class="trend-item">12. Beach events</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+            <a href="#">Help</a>
+            <a href="#">Careers</a>
+            <a href="#">Press</a>
+            <a href="#">Impact</a>
+            <a href="#">Investors</a>
+            <a href="#">Security</a>
+            <a href="#">Developers</a>
+            <a href="#">Status</a>
+            <a href="#">Terms</a>
+            <a href="#">Privacy</a>
+            <a href="#">Accessibility</a>
+            <a href="#">Cookies</a>
+        </div>
+        <div>© 2025 Crowd</div>
+        <div style="margin-top: 10px;">
+            <select style="background: #2d1b69; color: white; border: 1px solid #666; padding: 5px;">
+                <option>United States</option>
+            </select>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        function performSearch(source) {
+            const searchInput = source === 'desktop' ? 
+                document.getElementById('desktopSearchInput') : 
+                document.getElementById('mobileSearchInput');
+            const locationInput = document.getElementById('desktopLocationInput');
+            
+            const searchTerm = searchInput?.value.trim() || '';
+            const location = locationInput?.value.trim() || '';
+            
+            if (searchTerm || location) {
+                console.log(`${source} search:`, { searchTerm, location });
+                alert(`Searching for: ${searchTerm} ${location ? `in ${location}` : ''}`);
+            }
+        }
+
+        // Header functionality
+        function initializeDesktopMenu() {
+            const userMenuButton = document.getElementById('desktopUserMenuButton');
+            const userDropdown = document.getElementById('desktopUserDropdown');
+
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    if (userDropdown.classList.contains('show')) {
+                        userDropdown.classList.remove('show');
+                    } else {
+                        userDropdown.classList.add('show');
+                    }
+                });
+            }
+        }
+
+        function initializeMobileMenu() {
+            const userProfile = document.getElementById('mobileUserProfile');
+            const dropdown = document.getElementById('mobileDropdown');
+
+            if (userProfile) {
+                userProfile.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    } else {
+                        dropdown.classList.add('show');
+                    }
+                });
+            }
+        }
+
+        function handleLogout(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                alert('Logged out successfully!');
+                // Add actual logout logic here
+            }
+        }
+
+        // Original page functionality
+        function toggleMore(section) {
+            const moreSection = document.getElementById(section + '-more');
+            const lessButton = document.getElementById(section + '-less');
+            const moreButtons = document.querySelectorAll(`[onclick="toggleMore('${section}')"]`);
+            
+            moreSection.style.display = 'block';
+            lessButton.style.display = 'block';
+            moreButtons.forEach(btn => btn.style.display = 'none');
+        }
+
+        function toggleLess(section) {
+            const moreSection = document.getElementById(section + '-more');
+            const lessButton = document.getElementById(section + '-less');
+            const moreButtons = document.querySelectorAll(`[onclick="toggleMore('${section}')"]`);
+            
+            moreSection.style.display = 'none';
+            lessButton.style.display = 'none';
+            moreButtons.forEach(btn => btn.style.display = 'block');
+        }
+
+        function clearFilter() {
+            const filterTag = document.querySelector('.filter-tag');
+            const filtersApplied = document.querySelector('.filters-applied');
+            filterTag.remove();
+            
+            const remaining = document.querySelectorAll('.filter-tag').length;
+            if (remaining === 0) {
+                filtersApplied.innerHTML = '<span>No filters applied</span>';
+            } else {
+                filtersApplied.firstChild.textContent = `${remaining} filter${remaining > 1 ? 's' : ''} applied`;
+            }
+        }
+
+        function clearAllFilters() {
+            const filtersApplied = document.querySelector('.filters-applied');
+            filtersApplied.innerHTML = '<span>No filters applied</span>';
+            
+            document.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked').forEach(input => {
+                input.checked = false;
+            });
+        }
+
+        // Global click handler to close dropdowns
+        document.addEventListener('click', function(e) {
+            const desktopUserDropdown = document.getElementById('desktopUserDropdown');
+            const desktopUserMenuButton = document.getElementById('desktopUserMenuButton');
+            const mobileUserProfile = document.getElementById('mobileUserProfile');
+            const mobileDropdown = document.getElementById('mobileDropdown');
+
+            if (!desktopUserMenuButton?.contains(e.target) && !desktopUserDropdown?.contains(e.target)) {
+                desktopUserDropdown?.classList.remove('show');
+            }
+
+            if (!mobileUserProfile?.contains(e.target) && !mobileDropdown?.contains(e.target)) {
+                mobileDropdown?.classList.remove('show');
+            }
+        });
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDesktopMenu();
+            initializeMobileMenu();
+
+            // Search input enter key functionality
+            document.getElementById('desktopSearchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('desktopLocationInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('mobileSearchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('mobile');
+                }
+            });
+
+            // Event card click handlers
+            document.querySelectorAll('.event-card, .grid-event-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    alert('Event details would open here!');
+                });
+            });
+
+            // Filter change handlers
+            document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+                input.addEventListener('change', function() {
+                    updateFiltersDisplay();
+                });
+            });
+
+            function updateFiltersDisplay() {
+                const checkedInputs = document.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked');
+                const filtersApplied = document.querySelector('.filters-applied');
+                
+                if (checkedInputs.length === 0) {
+                    filtersApplied.innerHTML = '<span>No filters applied</span>';
+                } else {
+                    let html = `<span>${checkedInputs.length} filter${checkedInputs.length > 1 ? 's' : ''} applied</span>`;
+                    checkedInputs.forEach(input => {
+                        const label = document.querySelector(`label[for="${input.id}"]`);
+                        if (label) {
+                            html += `<div class="filter-tag">${label.textContent} <i class="fas fa-times" onclick="removeFilter('${input.id}')"></i></div>`;
+                        }
+                    });
+                    html += '<span class="clear-all" onclick="clearAllFilters()">Clear All</span>';
+                    filtersApplied.innerHTML = html;
+                }
+            }
+
+            window.removeFilter = function(inputId) {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.checked = false;
+                    updateFiltersDisplay();
+                }
+            };
+
+            // Add some dynamic content loading simulation
+            setTimeout(() => {
+                const noResults = document.querySelector('.no-results');
+                if (noResults) {
+                    noResults.style.animation = 'fadeIn 0.5s ease-in';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

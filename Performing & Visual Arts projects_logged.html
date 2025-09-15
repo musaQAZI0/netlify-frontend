@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Arts Projects | CRWOD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #3a3247;
+            background-color: #fff;
+        }
+
+        /* Desktop Header Styles */
+        .header {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 60px;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+            margin-right: 1.5rem;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3a3247;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 600px;
+            margin-right: 1rem;
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 0.5rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: #3a3247;
+            box-shadow: 0 0 0 2px rgba(58, 50, 71, 0.1);
+        }
+
+        .search-icon {
+            color: #716b7a;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            padding: 0.5rem;
+            font-size: 14px;
+            color: #3a3247;
+            min-width: 0;
+        }
+
+        .search-input::placeholder {
+            color: #716b7a;
+        }
+
+        .location-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 0 0.75rem;
+            border-left: 1px solid #ddd;
+            min-width: 180px;
+        }
+
+        .location-icon {
+            color: #716b7a;
+            margin-right: 0.5rem;
+        }
+
+        .location-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 0.5rem 0;
+            font-size: 14px;
+            color: #3a3247;
+            width: 100%;
+        }
+
+        .location-input::placeholder {
+            color: #716b7a;
+        }
+
+        .search-btn {
+            background: #3a3247;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .search-btn:hover {
+            background: #585163;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        .nav-action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #39364f;
+            transition: color 0.2s;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-action-item:hover {
+            color: #3a3247;
+        }
+
+        .nav-action-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-action-text {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+            cursor: pointer;
+            color: #39364f;
+            position: relative;
+        }
+
+        .user-menu:hover {
+            background: #f8f8f8;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3a3247;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #585163;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #716b7a;
+            transition: transform 0.2s ease;
+        }
+
+        .user-menu.dropdown-open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Enhanced User Dropdown */
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 220px;
+            z-index: 1000;
+            display: none;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .menu-item.expandable {
+            justify-content: space-between;
+        }
+
+        .menu-item .icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .menu-item .text {
+            flex: 1;
+        }
+
+        .menu-item .arrow {
+            width: 12px;
+            height: 12px;
+            transition: transform 0.2s ease;
+            color: #666;
+        }
+
+        .menu-item.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            background-color: #fafafa;
+            border-top: 1px solid #f0f0f0;
+            display: none;
+        }
+
+        .submenu.show {
+            display: block;
+        }
+
+        .submenu-item {
+            padding: 10px 16px 10px 44px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .submenu-item:last-child {
+            border-bottom: none;
+        }
+
+        .submenu-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-item.logout {
+            color: #716b7a;
+        }
+
+        .menu-item.logout:hover {
+            background: #f8f8f8;
+        }
+
+        /* Mobile Header Styles */
+        .mobile-header {
+            background-color: white;
+            padding: 12px 16px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .mobile-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: contain;
+        }
+
+        .mobile-search-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 16px;
+            position: relative;
+        }
+
+        .mobile-search-bar {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid #d0d0d0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            background-color: #f8f8f8;
+        }
+
+        .mobile-search-bar:focus {
+            border-color: #3a3247;
+            background-color: white;
+        }
+
+        .mobile-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 16px;
+        }
+
+        .mobile-search-button {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #3a3247;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+        }
+
+        .mobile-user-profile {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .mobile-user-profile:hover {
+            background-color: #e8e8e8;
+        }
+
+        .mobile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            z-index: 1000;
+            display: none;
+            margin-top: 8px;
+        }
+
+        .mobile-dropdown.show {
+            display: block;
+        }
+
+        .mobile-dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .mobile-dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .mobile-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-dropdown-item.email {
+            color: #666;
+            font-size: 13px;
+            cursor: default;
+        }
+
+        .mobile-dropdown-item.email:hover {
+            background-color: white;
+        }
+
+        .mobile-dropdown-divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 8px 0;
+        }
+
+        .mobile-browse-events {
+            background-color: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #333;
+            display: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .mobile-browse-events {
+                display: block;
+            }
+
+            .mobile-search-container {
+                margin: 0 8px;
+            }
+            
+            .mobile-dropdown {
+                width: 200px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 480px) {
+            .mobile-header {
+                padding: 8px 12px;
+            }
+            
+            .mobile-search-container {
+                margin: 0 6px;
+            }
+            
+            .mobile-search-bar {
+                font-size: 13px;
+                padding: 8px 12px 8px 35px;
+            }
+            
+            .mobile-dropdown {
+                width: 180px;
+            }
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: #f8f7fa;
+            padding: 16px 0;
+        }
+
+        .breadcrumb-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breadcrumb-item {
+            color: #6f7287;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item a {
+            color: #6f7287;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+            color: #3a3247;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #240f4c 0%, #4c1d95 100%);
+            color: white;
+            padding: 48px 0;
+        }
+
+        .page-header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .page-header-content h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff58c;
+            margin-bottom: 16px;
+        }
+
+        .page-header-subtitle {
+            color: #fff58c;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .page-header-description {
+            color: #fff58c;
+            font-size: 16px;
+        }
+
+        .page-header-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .page-header-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            background: white;
+            border: 2px solid #e8e7eb;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .filter-tag:hover {
+            border-color: #3a3247;
+            background: #f8f8f8;
+        }
+
+        /* Project Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 24px;
+        }
+
+        .project-category {
+            color: #6f7287;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .project-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .project-description {
+            color: #6f7287;
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .project-funding {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .project-goal {
+            font-size: 14px;
+            color: #6f7287;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e8e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3a3247, #585163);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6f7287;
+        }
+
+        .project-urgency {
+            background: #fff3cd;
+            color: #856404;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+
+        .project-urgency.ending-soon {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2d2438;
+            color: white;
+            padding: 48px 0 24px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 48px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 24px;
+            color: #716b7a;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul li a {
+            color: #e8e7eb;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #716b7a;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #444;
+            margin-top: 32px;
+            padding-top: 24px;
+            text-align: center;
+            color: #888;
+        }
+
+        /* Mobile Responsive for Content */
+        @media (max-width: 768px) {
+            .page-header-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .page-header-content h1 {
+                font-size: 36px;
+            }
+
+            .page-header-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body class="logged-out category-page">
+
+    <!-- Desktop Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="#" class="logo">
+                <img src="logo.jpg" alt="CROWD" style="width: 32px; height: 32px; margin-right: 8px;">
+                <span class="logo-text">crowd</span>
+            </a>
+
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="Search for anything">
+
+                    <div class="location-wrapper">
+                        <span class="location-icon">📍</span>
+                        <input type="text" class="location-input" placeholder="Federal Capital Territory">
+                    </div>
+
+                    <button class="search-btn" onclick="handleSearch()">
+                        🔍
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">➕</span>
+                    <span class="nav-action-text">Create an event</span>
+                </a>
+
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">♡</span>
+                    <span class="nav-action-text">Likes</span>
+                </a>
+
+                <a href="#" class="nav-action-item">
+                    <span class="nav-action-icon">🎫</span>
+                    <span class="nav-action-text">Tickets</span>
+                </a>
+
+                <div class="user-menu" id="userMenuButton" onclick="toggleUserMenu(event)">
+                    <div class="user-avatar" id="userAvatar">⏳</div>
+                    <div>
+                        <div class="user-email" id="userEmail">Loading...</div>
+                    </div>
+                    <span class="dropdown-arrow">▾</span>
+
+                    <!-- Enhanced User Dropdown Menu -->
+                    <div class="user-dropdown" id="userDropdown">
+                        <!-- Find Events -->
+                        <div class="menu-item" onclick="handleMenuClick('find-events')">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <span class="text">Find Events</span>
+                        </div>
+
+                        <!-- Create Events (Expandable) -->
+                        <div class="menu-item expandable" onclick="toggleSubmenu('create-events', event)">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <span class="text">Create Events</span>
+                            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+
+                        <!-- Create Events Submenu -->
+                        <div class="submenu show" id="create-events-submenu">
+                            <div class="submenu-item" onclick="handleSubmenuClick('organizer-hub')">Organizer Resource Hub</div>
+                            <div class="submenu-item" onclick="handleSubmenuClick('create-events')">Create Events</div>
+                            <div class="submenu-item" onclick="handleSubmenuClick('contact-sales')">Contact Sales</div>
+                        </div>
+
+                        <!-- Get Started -->
+                        <div class="menu-item" onclick="handleMenuClick('get-started')">
+                            <div class="icon"></div>
+                            <span class="text">Get Started</span>
+                        </div>
+
+                        <!-- Help Center (Expandable) -->
+                        <div class="menu-item expandable" onclick="toggleSubmenu('help-center', event)">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="m9,9a3,3 0 1,1 6,0c0,2 -3,3 -3,3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                            </div>
+                            <span class="text">Help Center</span>
+                            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+
+                        <!-- Help Center Submenu (Hidden by default) -->
+                        <div class="submenu" id="help-center-submenu">
+                            <div class="submenu-item" onclick="handleSubmenuClick('help-center')">Help Center</div>
+                            <div class="submenu-item" onclick="handleSubmenuClick('find-tickets')">Find your tickets</div>
+                            <div class="submenu-item" onclick="handleSubmenuClick('contact-organizer')">Contact your event organizer</div>
+                        </div>
+
+                        <!-- Account Settings -->
+                        <div class="menu-item" onclick="handleMenuClick('settings')">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path d="m12 1 1.27 6.32L16 8l-3.86 3.68 2.73 6.32L12 16l-2.87 2-2.87-6.32L12 8l2.73-0.68L12 1Z"></path>
+                                </svg>
+                            </div>
+                            <span class="text">Account Settings</span>
+                        </div>
+
+                        <!-- Organizer Dashboard -->
+                        <div class="menu-item" onclick="handleMenuClick('dashboard')">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                </svg>
+                            </div>
+                            <span class="text">Organizer Dashboard</span>
+                        </div>
+
+                        <!-- Log Out -->
+                        <div class="menu-item logout" onclick="handleMenuClick('logout')">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="m9 21h-4a2 2 0 0 1-2-2v-14a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16,17 21,12 16,7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </div>
+                            <span class="text">Log Out</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Header -->
+    <div class="mobile-header">
+        <img src="logo.jpg" alt="CROWD" class="mobile-logo" style="width: 32px; height: 32px; object-fit: contain; background: none; border-radius: 6px;">
+        
+        <div class="mobile-search-container">
+            <div class="mobile-search-icon">🔍</div>
+            <input type="text" class="mobile-search-bar" placeholder="Search events">
+            <button class="mobile-search-button">🔍</button>
+        </div>
+        
+        <div class="mobile-user-profile" id="mobileUserProfile">
+            👤
+            <div class="mobile-dropdown" id="mobileDropdown">
+                <div class="mobile-dropdown-item">Manage my events</div>
+                <div class="mobile-dropdown-item">Tickets</div>
+                <div class="mobile-dropdown-item">Liked</div>
+                <div class="mobile-dropdown-item">Following</div>
+                <div class="mobile-dropdown-item">Interests</div>
+                <div class="mobile-dropdown-item">Account settings</div>
+                <div class="mobile-dropdown-divider"></div>
+                <div class="mobile-dropdown-item email" data-user-email>Loading...</div>
+                <div class="mobile-dropdown-divider"></div>
+                <div class="mobile-dropdown-item">Log out</div>
+                <div class="mobile-dropdown-item">Organize</div>
+                <div class="mobile-dropdown-item">Help</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mobile-browse-events">Browse events</div>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <div class="breadcrumb-container">
+            <ol class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item">/ Online</li>
+                <li class="breadcrumb-item">/ Online Projects</li>
+                <li class="breadcrumb-item">/ Performing & Visual Arts</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-container">
+            <div class="page-header-content">
+                <h1>Performing & Visual Arts projects</h1>
+                <div class="page-header-subtitle">Online</div>
+                <p class="page-header-description">Discover and fund the best Performing & Visual Arts projects
+                    online
+                </p>
+            </div>
+            <div class="page-header-image">
+                <img src="https://cdn.evbstatic.com/s3-build/fe/build/images/ccf145c936454495769e08e602a92412-arts.webp"
+                    alt="Arts">
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Filters -->
+        <section class="filters">
+            <div class="filter-tag">
+                Online ▼
+            </div>
+            <div class="filter-tag">
+                Category ▼
+            </div>
+            <div class="filter-tag">
+                Funding Goal ▼
+            </div>
+            <div class="filter-tag">
+                Time Left ▼
+            </div>
+        </section>
+
+        <!-- Projects Grid -->
+        <section class="projects-grid">
+            <!-- Project 1 -->
+            <div class="project-card">
+                <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1085373293%2F2814696456801%2F1%2Foriginal.20250731-140850?crop=focalpoint&fit=crop&w=400&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.5&fp-y=0.5&s=455388a81060eff27a4e324f42e89f0d"
+                    alt="Jewelry Project" class="project-image">
+                <div class="project-content">
+                    <div class="project-urgency ending-soon">Funding ends soon</div>
+                    <div class="project-category">Jewelry Design</div>
+                    <h3 class="project-title">A journey throughout the history of Fibulas, Brooches and Pins</h3>
+                    <p class="project-description">A lecture by Daniela Malev, which takes the audience on a
+                        condensed
+                        journey throughout 5000 years of history and development of the brooch.</p>
+                    <div class="project-meta">
+                        <div class="project-funding">$8,450</div>
+                        <div class="project-goal">of $12,000</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 64%"></div>
+                    </div>
+                    <div class="project-stats">
+                        <span>89 backers</span>
+                        <span>12 days left</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card">
+                <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1063282813%2F185750211993%2F1%2Foriginal.20250630-125113?w=512&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C1%2C1920%2C960&s=53cdc25b99fe393a3661f546adb30a00"
+                    alt="Drawing Workshop" class="project-image">
+                <div class="project-content">
+                    <div class="project-category">Art Workshop</div>
+                    <h3 class="project-title">Drawing Sunflowers in Art Workshop</h3>
+                    <p class="project-description">Monet, Van Gogh, Gustav Klimt, Egon Schiele - explore the beauty
+                        of
+                        sunflowers through art history and create your own masterpiece.</p>
+                    <div class="project-meta">
+                        <div class="project-funding">$6,780</div>
+                        <div class="project-goal">of $8,000</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%"></div>
+                    </div>
+                    <div class="project-stats">
+                        <span>203 backers</span>
+                        <span>8 days left</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card">
+                <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1024593993%2F440433906100%2F1%2Foriginal.20250506-175611?crop=focalpoint&fit=crop&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.5&fp-y=0.5&s=8603949f285fca467da42adc7e9c019d"
+                    alt="Literary Event" class="project-image">
+                <div class="project-content">
+                    <div class="project-urgency ending-soon">Few spots left</div>
+                    <div class="project-category">Literature</div>
+                    <h3 class="project-title">Exploring the Life & Work of Ira Cohen</h3>
+                    <p class="project-description">A talk about literary great Ira Cohen's poetry and prose writings
+                        with special guests exploring his influence on modern literature.</p>
+                    <div class="project-meta">
+                        <div class="project-funding">$4,350</div>
+                        <div class="project-goal">of $6,000</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 73%"></div>
+                    </div>
+                    <div class="project-stats">
+                        <span>156 backers</span>
+                        <span>3 days left</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="project-card">
+                <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1016324653%2F167752770648%2F1%2Foriginal.20250424-215130?crop=focalpoint&fit=crop&w=512&auto=format%2Ccompress&q=75&sharp=10&fp-x=5e-05&fp-y=5e-05&s=bba70ba27c333609b1a80050ee4ae105"
+                        alt="Typography Project" class="project-image">
+                <div class="project-content">
+                    <div class="project-category">Design</div>
+                    <h3 class="project-title">Time Travel in Heavyweight Type</h3>
+                    <p class="project-description">Decoding a decade-long journey through graffiti, signage, and
+                        stone
+                        carving to explore the evolution of typography.</p>
+                    <div class="project-meta">
+                        <div class="project-funding">$9,200</div>
+                        <div class="project-goal">of $15,000</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 61%"></div>
+                    </div>
+                    <div class="project-stats">
+                        <span>245 backers</span>
+                        <span>18 days left</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 5 -->
+            <div class="project-card">
+                <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F983578743%2F8938453233%2F1%2Foriginal.20250314-042606?crop=focalpoint&fit=crop&w=400&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.005&fp-y=0.005&s=b9385113d2ae38fa6af817f4de6066f9"
+                        alt="Art History Project" class="project-image">
+                <div class="project-content">
+                    <div class="project-category">Art History</div>
+                    <h3 class="project-title">The Art of Goodbye: The Mourning Madonna</h3>
+                    <p class="project-description">Explore how depictions of the grieving Virgin Mary in Christian
+                        art
+                        have become enduring symbols of maternal loss throughout history.</p>
+                    <div class="project-meta">
+                        <div class="project-funding">$5,670</div>
+                        <div class="project-goal">of $10,000</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 57%"></div>
+                    </div>
+                    <div class="project-stats">
+                        <span>178 backers</span>
+                        <span>22 days left</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 6 -->
+            <div class="project-card">
+                <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1024578203%2F440433906100%2F1%2Foriginal.20250506-174054?crop=focalpoint&fit=crop&w=400&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.5&fp-y=0.5&s=0584e3ceea2cb74a8a3915d7b69ebd33"
+                        alt="Poetry Project" class="project-image">
+                <div class="project-content">
+                    <div class="project-urgency">Popular</div>
+                    <div class="project-category">Poetry</div>
+                    <h3 class="project-title">Indigenous Poetics Collection</h3>
+                    <p class="project-description">Supporting the publication of a new collection exploring
+                        Indigenous
+                        voices and perspectives in contemporary poetry.</p>
+                    <div class="project-meta">
+                        <div class="project-funding">$7,890</div>
+                        <div class="project-goal">of $12,000</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 66%"></div>
+                    </div>
+                    <div class="project-stats">
+                        <span>298 backers</span>
+                        <span>15 days left</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 7 -->
+            <div class="project-card">
+                <img src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F928814793%2F2085224182553%2F1%2Foriginal.20250106-184830?crop=focalpoint&fit=crop&w=400&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.760154738878&fp-y=0.542748079955&s=7ff1dd4d752b23f4a168a1057f513eee"
+                        alt="Literature Discussion" class="project-image">
+                <div class="project-content">
+                    <div class="project-category">Literature</div>
+                    <h3 class="project-title">Reading James Baldwin: Another Country</h3>
+                    <p class="project-description">Explore Baldwin's 1962 bestselling novel with cultural critic and
+                        novelist Vinson Cunningham in this literary discussion series.</p>
+                    <div class="project-meta">
+                        <div class="project-funding">$2,340</div>
+                        <div class="project-goal">of $4,000</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 59%"></div>
+                    </div>
+                    <div class="project-stats">
+                        <span>87 backers</span>
+                        <span>25 days left</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Use CRWOD</h3>
+                <ul>
+                    <li><a href="#">Start a Project</a></li>
+                    <li><a href="#">Browse Projects</a></li>
+                    <li><a href="#">Creator Resources</a></li>
+                    <li><a href="#">CRWOD Mobile App</a></li>
+                    <li><a href="#">Trust & Safety</a></li>
+                    <li><a href="#">Community Guidelines</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support Creators</h3>
+                <ul>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">Project Types</a></li>
+                    <li><a href="#">Funding Tips</a></li>
+                    <li><a href="#">Success Stories</a></li>
+                    <li><a href="#">Creator Handbook</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Find Projects</h3>
+                <ul>
+                    <li><a href="#">Arts & Crafts</a></li>
+                    <li><a href="#">Technology</a></li>
+                    <li><a href="#">Film & Video</a></li>
+                    <li><a href="#">Music</a></li>
+                    <li><a href="#">Publishing</a></li>
+                    <li><a href="#">Games</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <ul>
+                    <li><a href="#">Contact Support</a></li>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 CRWOD. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Desktop search functionality
+        function handleSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const locationInput = document.getElementById('locationInput');
+            const query = searchInput.value.trim();
+            const location = locationInput.value.trim();
+
+            if (query || location) {
+                alert(`Searching for: "${query}" in ${location || 'Federal Capital Territory'}`);
+            } else {
+                alert('Please enter a search term or location');
+            }
+        }
+
+        // Handle enter key in desktop search inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const locationInput = document.getElementById('locationInput');
+            
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        handleSearch();
+                    }
+                });
+            }
+
+            if (locationInput) {
+                locationInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        handleSearch();
+                    }
+                });
+            }
+        });
+
+        // Desktop toggle user dropdown menu
+        function toggleUserMenu(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            const userMenu = document.getElementById('userMenuButton');
+            const isVisible = dropdown.classList.contains('show');
+
+            if (isVisible) {
+                dropdown.classList.remove('show');
+                userMenu.classList.remove('dropdown-open');
+            } else {
+                dropdown.classList.add('show');
+                userMenu.classList.add('dropdown-open');
+            }
+        }
+
+        // Handle submenu toggle
+        function toggleSubmenu(menuId, event) {
+            if (event) event.stopPropagation();
+            const submenu = document.getElementById(menuId + '-submenu');
+            const menuItem = submenu.previousElementSibling;
+            
+            if (submenu.classList.contains('show')) {
+                submenu.classList.remove('show');
+                menuItem.classList.remove('expanded');
+            } else {
+                submenu.classList.add('show');
+                menuItem.classList.add('expanded');
+            }
+        }
+
+        // Handle desktop menu item clicks
+        function handleMenuClick(action) {
+            switch (action) {
+                case 'find-events':
+                    alert('Navigating to Find Events...');
+                    break;
+                case 'get-started':
+                    alert('Navigating to Get Started...');
+                    break;
+                case 'settings':
+                    alert('Navigating to Account Settings...');
+                    break;
+                case 'dashboard':
+                    alert('Navigating to Organizer Dashboard...');
+                    break;
+                case 'logout':
+                    if (confirm('Are you sure you want to log out?')) {
+                        alert('Logged out successfully!');
+                        // In a real app, this would redirect to login page
+                    }
+                    break;
+            }
+            // Close dropdown after click
+            document.getElementById('userDropdown').classList.remove('show');
+            document.getElementById('userMenuButton').classList.remove('dropdown-open');
+        }
+
+        // Handle submenu item clicks
+        function handleSubmenuClick(action) {
+            switch (action) {
+                case 'organizer-hub':
+                    alert('Navigating to Organizer Resource Hub...');
+                    break;
+                case 'create-events':
+                    alert('Navigating to Create Events...');
+                    break;
+                case 'contact-sales':
+                    alert('Navigating to Contact Sales...');
+                    break;
+                case 'help-center':
+                    alert('Navigating to Help Center...');
+                    break;
+                case 'find-tickets':
+                    alert('Navigating to Find Your Tickets...');
+                    break;
+                case 'contact-organizer':
+                    alert('Navigating to Contact Event Organizer...');
+                    break;
+            }
+            // Close dropdown after click
+            document.getElementById('userDropdown').classList.remove('show');
+            document.getElementById('userMenuButton').classList.remove('dropdown-open');
+        }
+
+        // Close desktop dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            const userMenu = event.target.closest('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+
+            if (!userMenu && dropdown) {
+                dropdown.classList.remove('show');
+                document.getElementById('userMenuButton').classList.remove('dropdown-open');
+            }
+        });
+
+        // Mobile dropdown functionality
+        const mobileUserProfile = document.getElementById('mobileUserProfile');
+        const mobileDropdown = document.getElementById('mobileDropdown');
+
+        if (mobileUserProfile && mobileDropdown) {
+            mobileUserProfile.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mobileDropdown.classList.toggle('show');
+            });
+
+            // Close mobile dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!mobileUserProfile.contains(e.target)) {
+                    mobileDropdown.classList.remove('show');
+                }
+            });
+
+            // Handle mobile dropdown item clicks
+            const mobileDropdownItems = document.querySelectorAll('.mobile-dropdown-item:not(.email)');
+            mobileDropdownItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    console.log('Mobile - Clicked:', this.textContent);
+                    mobileDropdown.classList.remove('show');
+                    // Add your navigation logic here
+                });
+            });
+        }
+
+        // Mobile search functionality
+        const mobileSearchBar = document.querySelector('.mobile-search-bar');
+        const mobileSearchButton = document.querySelector('.mobile-search-button');
+
+        if (mobileSearchButton) {
+            mobileSearchButton.addEventListener('click', function() {
+                const searchTerm = mobileSearchBar.value.trim();
+                if (searchTerm) {
+                    console.log('Mobile - Searching for:', searchTerm);
+                    alert(`Mobile search: "${searchTerm}"`);
+                }
+            });
+        }
+
+        if (mobileSearchBar) {
+            mobileSearchBar.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const searchTerm = this.value.trim();
+                    if (searchTerm) {
+                        console.log('Mobile - Searching for:', searchTerm);
+                        alert(`Mobile search: "${searchTerm}"`);
+                    }
+                }
+            });
+        }
+
+        // Project card interactions
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', () => {
+                alert('Navigating to project details...');
+            });
+        });
+
+        // Filter functionality
+        document.querySelectorAll('.filter-tag').forEach(filter => {
+            filter.addEventListener('click', () => {
+                filter.style.borderColor = '#3a3247';
+                filter.style.background = '#f8f8f8';
+
+                // Reset other filters
+                document.querySelectorAll('.filter-tag').forEach(otherFilter => {
+                    if (otherFilter !== filter) {
+                        otherFilter.style.borderColor = '#e8e7eb';
+                        otherFilter.style.background = 'white';
+                    }
+                });
+            });
+        });
+
+        // Initialize the Create Events submenu as expanded (as shown in the original dropdown)
+        document.addEventListener('DOMContentLoaded', function() {
+            const createEventsMenu = document.querySelector('.menu-item.expandable');
+            if (createEventsMenu) {
+                createEventsMenu.classList.add('expanded');
+            }
+        });
+    </script>
+
+    <!-- Backend Integration Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/auth-mongodb.js"></script>
+
+    <script>
+        // Database Authentication Integration
+        class DatabaseAuth {
+            constructor() {
+                this.authAPI = window.mongoAuthAPI;
+                this.isLoading = false;
+            }
+
+            // Initialize authentication check
+            async initialize() {
+                console.log('🔐 Initializing database authentication...');
+
+                try {
+                    this.isLoading = true;
+                    this.showLoadingState();
+
+                    // Check if user has valid token
+                    const token = localStorage.getItem('authToken');
+                    if (!token) {
+                        console.log('❌ No auth token found, redirecting to login');
+                        this.redirectToLogin();
+                        return;
+                    }
+
+                    // Verify token and fetch fresh user data from database
+                    const userData = await this.fetchUserFromDatabase();
+
+                    if (userData && userData.success) {
+                        console.log('✅ User authenticated via database:', userData.user);
+                        this.updateUI(userData.user);
+                    } else {
+                        console.log('❌ Database authentication failed');
+                        this.redirectToLogin();
+                    }
+
+                } catch (error) {
+                    console.error('🔥 Database authentication error:', error);
+                    this.handleAuthError(error);
+                } finally {
+                    this.isLoading = false;
+                    this.hideLoadingState();
+                }
+            }
+
+            // Fetch user data directly from database
+            async fetchUserFromDatabase() {
+                console.log('🔄 Fetching user data from database...');
+
+                try {
+                    const response = await this.authAPI.getProfile();
+
+                    if (response && response.user) {
+                        console.log('📊 Database returned user data:', {
+                            email: response.user.email,
+                            name: response.user.name,
+                            id: response.user._id || response.user.id
+                        });
+                        return response;
+                    } else {
+                        throw new Error('Invalid response from database');
+                    }
+
+                } catch (error) {
+                    console.error('❌ Failed to fetch user from database:', error);
+                    throw error;
+                }
+            }
+
+            // Update UI with database user data
+            updateUI(user) {
+                console.log('🎨 Updating UI with database user data...');
+
+                // Update desktop header
+                const userEmailEl = document.getElementById('userEmail');
+                const userAvatarEl = document.getElementById('userAvatar');
+
+                if (userEmailEl) {
+                    const displayName = user.name || user.email;
+                    userEmailEl.textContent = displayName;
+                    console.log('✅ Updated desktop user display:', displayName);
+                }
+
+                if (userAvatarEl) {
+                    const avatarLetter = (user.name || user.email).charAt(0).toUpperCase();
+                    userAvatarEl.textContent = avatarLetter;
+                    console.log('✅ Updated avatar letter:', avatarLetter);
+                }
+
+                // Update mobile header
+                const mobileUserAvatar = document.getElementById('mobileUserAvatar');
+                if (mobileUserAvatar) {
+                    mobileUserAvatar.textContent = (user.name || user.email).charAt(0).toUpperCase();
+                }
+
+                // Update dropdown email
+                const dropdownEmails = document.querySelectorAll('[data-user-email]');
+                dropdownEmails.forEach(el => {
+                    el.textContent = user.email;
+                });
+
+                // Show user info in console for debugging
+                console.log('👤 Current user from database:', {
+                    name: user.name,
+                    email: user.email,
+                    id: user._id || user.id,
+                    createdAt: user.createdAt
+                });
+            }
+
+            // Show loading state
+            showLoadingState() {
+                const userEmailEl = document.getElementById('userEmail');
+                const userAvatarEl = document.getElementById('userAvatar');
+
+                if (userEmailEl) userEmailEl.textContent = 'Loading...';
+                if (userAvatarEl) userAvatarEl.textContent = '⏳';
+            }
+
+            // Hide loading state
+            hideLoadingState() {
+                // Loading state will be replaced by actual data or error handling
+            }
+
+            // Handle authentication errors
+            handleAuthError(error) {
+                console.error('🚨 Authentication error:', error);
+
+                // Clear any invalid tokens
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+
+                // Show error message
+                alert('Session expired. Please login again.');
+
+                // Redirect to login
+                this.redirectToLogin();
+            }
+
+            // Redirect to login page
+            redirectToLogin() {
+                console.log('🔄 Redirecting to login page...');
+                window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.pathname);
+            }
+        }
+
+        // Initialize database authentication when DOM is ready
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 DOM loaded, starting database authentication...');
+
+            const dbAuth = new DatabaseAuth();
+            await dbAuth.initialize();
+        });
+
+        // Also initialize on window load as fallback
+        window.addEventListener('load', async function() {
+            // Only run if not already initialized
+            if (!window.dbAuthInitialized) {
+                console.log('🔄 Window loaded, initializing database auth as fallback...');
+                const dbAuth = new DatabaseAuth();
+                await dbAuth.initialize();
+                window.dbAuthInitialized = true;
+            }
+        });
+
+        // Handle logout with database cleanup
+        async function logout() {
+            console.log('🚪 Logging out...');
+
+            try {
+                // Call backend logout endpoint
+                if (window.mongoAuthAPI) {
+                    await window.mongoAuthAPI.logout();
+                }
+            } catch (error) {
+                console.error('Logout API error:', error);
+            }
+
+            // Clear all auth data
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+
+            // Redirect to home page
+            window.location.href = 'index.html';
+        }
+
+        // Make logout function globally available
+        window.logout = logout;
+    </script>
+</body>
+
+</html>
+                    

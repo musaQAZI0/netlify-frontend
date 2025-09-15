@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food & Drink Events in Punjab, Pakistan | Crowd</title>
+    <title>Events Platform - Best Events in Punjab</title>
     <style>
-        /* Reset & Base Styles */
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -32,8 +31,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #2d2d2d;
-            background: #fff;
+            color: var(--text-dark);
+            background-color: #f8f9fa;
         }
 
         .container {
@@ -572,6 +571,308 @@
             background-color: #f0f0f0;
         }
 
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: 20px 0;
+            background: white;
+        }
+
+        .breadcrumb a {
+            color: #4285f4;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .breadcrumb span {
+            margin: 0 5px;
+            color: #666;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            margin: 0 20px 40px 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .location-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 50px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #5f6368;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .explore-link {
+            color: #4285f4;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Trending Searches */
+        .trending-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .trending-item {
+            color: #4285f4;
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .trending-item:hover {
+            text-decoration: underline;
+        }
+
+        /* Featured Organizers */
+        .organizers-container {
+            position: relative;
+        }
+
+        .organizers-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .organizers-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .organizer-card {
+            min-width: 250px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .organizer-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+
+        .organizer-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .organizer-followers {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .follow-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: #666;
+            cursor: pointer;
+        }
+
+        /* Event Cards */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .event-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .event-content {
+            padding: 20px;
+        }
+
+        .event-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .event-details {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .event-price {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .event-organizer {
+            color: #4285f4;
+            font-size: 0.9rem;
+        }
+
+        /* Points of Interest */
+        .poi-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .poi-item {
+            background: white;
+            border: 1px solid #e8eaed;
+            border-radius: 20px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #333;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .poi-item:hover {
+            background: #f1f3f4;
+        }
+
+        /* Time Options */
+        .time-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .time-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #4285f4;
+            padding: 20px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .time-option:hover {
+            background: #f1f3f4;
+        }
+
+        .time-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #4285f4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .mobile-utility {
                 display: block;
@@ -605,521 +906,21 @@
             body.mobile-menu-open {
                 overflow: hidden;
             }
-        }
 
-
-        /* Top Notification */
-        .top-notification {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #4caf50;
-            color: white;
-            padding: 12px 20px;
-            text-align: center;
-            z-index: 10000;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .top-notification.show {
-            transform: translateY(0);
-        }
-
-        .top-notification.error {
-            background: #f44336;
-        }
-
-        .notification-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-        }
-
-
-        /* Breadcrumbs */
-        .breadcrumbs {
-            background: #f8f9fa;
-            padding: 15px 0;
-        }
-
-        .breadcrumb-nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .breadcrumb-nav a {
-            color: #666;
-            text-decoration: none;
-        }
-
-        .breadcrumb-nav a:hover {
-            color: #333;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #240f4c 0%, #3a1f5c 100%);
-            color: white;
-            padding: 60px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-        }
-
-        .hero-text h1 {
-            font-size: 48px;
-            font-weight: bold;
-            color: #fc86bc;
-            margin-bottom: 12px;
-            line-height: 1.2;
-        }
-
-        .hero-text .location {
-            color: #fff58c;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .hero-text p {
-            color: #fff58c;
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .hero-image {
-            width: 200px;
-            height: 200px;
-            border-radius: 12px;
-            overflow: hidden;
-            flex-shrink: 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Filters */
-        .filters {
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 20px 0;
-        }
-
-        .filter-tags {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .filter-tag {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border: 1px solid #d0d0d0;
-            border-radius: 25px;
-            background: white;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .filter-tag:hover {
-            border-color: #ccc;
-            background: #f5f5f5;
-        }
-
-        .filter-tag.active {
-            border-color: #333;
-            background: #333;
-            color: white;
-        }
-
-        /* Main Content */
-        .main-content {
-            padding: 50px 0;
-            min-height: 60vh;
-        }
-
-        .events-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        /* Event Cards */
-        .event-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .event-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .event-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .event-date {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 12px;
-            color: #f05537;
-        }
-
-        .event-content {
-            padding: 20px;
-        }
-
-        .event-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2d2d2d;
-        }
-
-        .event-location {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .event-price {
-            font-size: 16px;
-            font-weight: 600;
-            color: #f05537;
-        }
-
-        .event-attendees {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 12px;
-            font-size: 12px;
-            color: #666;
-        }
-
-        /* Loading Cards */
-        .loading-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .loading-placeholder {
-            background: #f0f0f0;
-            border-radius: 6px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-placeholder::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                left: -100%;
+            .hero h1 {
+                font-size: 2.5rem;
             }
-
-            100% {
-                left: 100%;
-            }
-        }
-
-        .loading-image {
-            height: 200px;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .loading-content {
-            padding: 20px;
-        }
-
-        .loading-title {
-            height: 20px;
-            margin-bottom: 12px;
-            width: 80%;
-        }
-
-        .loading-subtitle {
-            height: 16px;
-            margin-bottom: 8px;
-            width: 60%;
-        }
-
-        .loading-price {
-            height: 16px;
-            width: 40%;
-        }
-
-        /* Footer */
-        .footer {
-            background: #39364f;
-            color: white;
-            padding: 50px 0 20px;
-            margin-top: 80px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-section h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: #ccc;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: #fff;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #555;
-            padding-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .footer-meta {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .footer-meta a {
-            color: #ccc;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .footer-meta a:hover {
-            color: white;
-        }
-
-        /* Auth Modal */
-        .auth-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .auth-modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #2d2d2d;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #2d2d2d;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #333;
-        }
-
-        .auth-btn {
-            width: 100%;
-            background: #f05537;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .auth-btn:hover {
-            background: #e04429;
-        }
-
-        .auth-toggle {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-        }
-
-        .auth-toggle a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .auth-toggle a:hover {
-            text-decoration: underline;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .hero-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .hero-text h1 {
-                font-size: 36px;
-            }
-
-            .hero-text .location {
-                font-size: 20px;
-            }
-
-            .events-grid {
+            
+            .trending-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
             }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 15px;
-            }
-
-            .hero {
-                padding: 40px 0;
-            }
-
-            .main-content {
-                padding: 30px 0;
+            
+            .time-options {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
-
 <body>
     <!-- Header -->
     <header class="header">
@@ -1136,7 +937,7 @@
         <div class="nav-container">
             <!-- Logo -->
             <a href="index.html" class="logo" aria-label="Crowd - Home">
-                <img src="logo.jpg" alt="Crowd Logo" class="logo-img">
+                <img src="https://images.unsplash.com/photo-1516575118985-9b0f50c5f24b?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Crowd Logo" class="logo-img">
             </a>
 
             <!-- Mobile inline search (visible on small screens) -->
@@ -1151,7 +952,7 @@
                         <input type="text" class="search-input" placeholder="Search events" id="mobileSearchInput"
                             aria-label="Search events">
                     </div>
-                    <button class="search-button" type="button" onclick="performHeaderSearch()" aria-label="Search">
+                    <button class="search-button" type="button" onclick="performSearch()" aria-label="Search">
                         <svg class="search-button-icon" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -1171,7 +972,7 @@
                                 d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
                                 fill="currentColor" />
                         </svg>
-                        <input type="text" class="search-input" placeholder="Search events" id="headerSearchInput">
+                        <input type="text" class="search-input" placeholder="Search events" id="searchInput">
                     </div>
 
                     <div class="divider"></div>
@@ -1182,10 +983,10 @@
                                 d="M11.6 11.6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-7.6C8.5 4 6 6.5 6 9.6 6 13.8 11.6 20 11.6 20s5.6-6.2 5.6-10.4c0-3.1-2.5-5.6-5.6-5.6z"
                                 fill="currentColor" />
                         </svg>
-                        <input type="text" class="location-input" placeholder="Choose a location" id="headerLocationInput">
+                        <input type="text" class="location-input" placeholder="Choose a location" id="locationInput">
                     </div>
 
-                    <button class="search-button" type="button" onclick="performHeaderSearch()">
+                    <button class="search-button" type="button" onclick="performSearch()">
                         <svg class="search-button-icon" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -1310,424 +1111,274 @@
         </div>
     </header>
 
-    <!-- Breadcrumbs -->
-    <section class="breadcrumbs">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
         <div class="container">
-            <nav class="breadcrumb-nav">
-                <a href="index.html">Home</a> /
-                <a href="#" onclick="goToCountry()">Pakistan</a> /
-                <a href="#" onclick="goToRegion()">Punjab</a> /
-                <a href="#" onclick="goToEvents()">Events</a> /
-                <span>Food & Drink</span>
-            </nav>
+            <a href="#">Home</a>
+            <span>/</span>
+            <a href="#">Pakistan</a>
+            <span>/</span>
+            <a href="#">Things to do in Punjab</a>
+            <span>/</span>
+            <span>Events in Punjab</span>
         </div>
-    </section>
+    </div>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <div class="hero">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Food & Drink Events</h1>
-                    <div class="location">in Punjab, Pakistan</div>
-                    <p>Discover amazing culinary experiences and food events in your area</p>
-                </div>
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop"
-                        alt="Food & Drink Events" loading="lazy">
+            <h1>Best events in<br>Punjab</h1>
+            <p>Looking for things to do in Punjab? Whether you're a local, new in town or just cruising through we've got loads of great tips and events. You can explore by location, what's popular, our top picks, free stuff... you got this. Ready?</p>
+            <button class="location-btn">
+                📍 Punjab ▼
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Trending Searches -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    Trending searches 📈
+                </h2>
+                <a href="#" class="explore-link">Explore more trends →</a>
+            </div>
+            <div class="trending-grid">
+                <a href="#" class="trending-item">1. Event today in expo centre lahore</a>
+                <a href="#" class="trending-item">2. Cultural festivals</a>
+                <a href="#" class="trending-item">3. Concert</a>
+                <a href="#" class="trending-item">4. Lahore 2025</a>
+                <a href="#" class="trending-item">5. Autumn</a>
+                <a href="#" class="trending-item">6. Food festivals</a>
+                <a href="#" class="trending-item">7. Lahore</a>
+                <a href="#" class="trending-item">8. Art exhibitions</a>
+                <a href="#" class="trending-item">9. Live band concerts</a>
+                <a href="#" class="trending-item">10. Sports events</a>
+                <a href="#" class="trending-item">11. London</a>
+            </div>
+        </div>
+
+        <!-- Featured Organizers -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Featured Organizers</h2>
+            </div>
+            <p style="margin-bottom: 20px; color: #666;">Follow the organizers from these events and get notified when they create new ones.</p>
+            <div class="organizers-container">
+                <div class="organizers-scroll">
+                    <div class="organizer-card">
+                        <button class="close-btn">×</button>
+                        <div class="organizer-avatar" style="background-image: url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')">🌍</div>
+                        <div class="organizer-name">AllTours</div>
+                        <div class="organizer-followers">1029 followers</div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
+                    <div class="organizer-card">
+                        <button class="close-btn">×</button>
+                        <div class="organizer-avatar" style="background-image: url('https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')">T</div>
+                        <div class="organizer-name">Tablon Global</div>
+                        <div class="organizer-followers">605 followers</div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
+                    <div class="organizer-card">
+                        <button class="close-btn">×</button>
+                        <div class="organizer-avatar" style="background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')">HM</div>
+                        <div class="organizer-name">HM Events</div>
+                        <div class="organizer-followers">1537 followers</div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
+                    <div class="organizer-card">
+                        <button class="close-btn">×</button>
+                        <div class="organizer-avatar" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')">A</div>
+                        <div class="organizer-name">AHZ Pakistan</div>
+                        <div class="organizer-followers">165 followers</div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
+                    <div class="organizer-card">
+                        <button class="close-btn">×</button>
+                        <div class="organizer-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80')">👤</div>
+                        <div class="organizer-name">Jasbier Sachdev</div>
+                        <div class="organizer-followers">950 followers</div>
+                        <button class="follow-btn">Follow</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Filters -->
-    <section class="filters">
-        <div class="container">
-            <div class="filter-tags">
-                <div class="filter-tag" onclick="toggleFilter(this, 'location')">
-                    <span>Punjab</span>
-                    <span>▼</span>
+        <!-- Online Events -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Online Events</h2>
+                <a href="#" class="explore-link">Explore more events →</a>
+            </div>
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="event-status">Almost full</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">Lost in Place: How to Motivate Your Stuck Emerging Adult</div>
+                        <div class="event-details">Tomorrow • 5:00 PM GMT+5</div>
+                        <div class="event-price">From $44.51</div>
+                        <div class="event-organizer">Kim Muench</div>
+                        <div class="event-organizer">👥 306 followers</div>
+                    </div>
                 </div>
-                <div class="filter-tag" onclick="toggleFilter(this, 'date')">
-                    <span>Date</span>
-                    <span>▼</span>
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="event-status">Almost full</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">BASIS Charter Schools Virtual Info Session</div>
+                        <div class="event-details">Wednesday • 6:00 AM GMT+5</div>
+                        <div class="event-price">Free</div>
+                        <div class="event-organizer">BASIS Charter Schools</div>
+                        <div class="event-organizer">👥 163 followers</div>
+                    </div>
                 </div>
-                <div class="filter-tag" onclick="toggleFilter(this, 'price')">
-                    <span>Price</span>
-                    <span>▼</span>
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="event-status">Going fast</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">#LookCloser: Building positive relationships with children and...</div>
+                        <div class="event-details">Wednesday • 2:00 PM GMT+5</div>
+                        <div class="event-price">Free</div>
+                        <div class="event-organizer">Prevention Programme</div>
+                        <div class="event-organizer">👥 1.7k followers</div>
+                    </div>
                 </div>
-                <div class="filter-tag" onclick="toggleFilter(this, 'category')">
-                    <span>Category</span>
-                    <span>▼</span>
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="event-status">Sales end soon</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">Online Workshop - Boosting Your Mood</div>
+                        <div class="event-details">Wednesday • 4:00 PM GMT+5</div>
+                        <div class="event-price">Free</div>
+                        <div class="event-organizer">Healthcare People Management Association</div>
+                        <div class="event-organizer">👥 167 followers</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="container">
-            <div class="events-grid" id="eventsGrid">
-                <!-- Events will be dynamically loaded here -->
+        <!-- Points of Interest -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Points of Interest near Punjab</h2>
+            </div>
+            <div class="poi-grid">
+                <a href="#" class="poi-item">Jam E Shirin Park Lahore ↗</a>
+                <a href="#" class="poi-item">Harappa Civilization ↗</a>
+                <a href="#" class="poi-item">Iqbal Park ↗</a>
+                <a href="#" class="poi-item">D Ground Park ↗</a>
+                <a href="#" class="poi-item">Gutwala Park Faisalabad ↗</a>
+                <a href="#" class="poi-item">Tomb Of Nadira Begum ↗</a>
+                <a href="#" class="poi-item">Bagh E Jinnah ↗</a>
+                <a href="#" class="poi-item">Clock Tower Faisalabad ↗</a>
+                <a href="#" class="poi-item">Hafiz Burger Point ↗</a>
+                <a href="#" class="poi-item">Liberty Roundabout Park ↗</a>
+                <a href="#" class="poi-item">Shaikh Fazal ↗</a>
+                <a href="#" class="poi-item">River Jhelum Tourist Point ↗</a>
+                <a href="#" class="poi-item">Sialkot Clock Tower ↗</a>
+                <a href="#" class="poi-item">Walled City Of Lahore Authority ↗</a>
+                <a href="#" class="poi-item">The Leather Point ↗</a>
+                <a href="#" class="poi-item">Kamrans Baradari ↗</a>
+                <a href="#" class="poi-item">Burraq Park ↗</a>
+                <a href="#" class="poi-item">Statue Of Liberty ↗</a>
+                <a href="#" class="poi-item">Iqbal House ↗</a>
+                <a href="#" class="poi-item">Army Museum Lahore ↗</a>
             </div>
         </div>
-    </main>
 
-    <!-- Auth Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeAuthModal()">×</button>
-            <h2 class="modal-title" id="modalTitle">Log In</h2>
-            <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+        <!-- Event Time Options -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Event time options</h2>
+            </div>
+            <div class="time-options">
+                <a href="#" class="time-option">
+                    <div class="time-icon">🕐</div>
+                    <span>Today</span>
+                </a>
+                <a href="#" class="time-option">
+                    <div class="time-icon">🕑</div>
+                    <span>Tomorrow</span>
+                </a>
+                <a href="#" class="time-option">
+                    <div class="time-icon">🕒</div>
+                    <span>This weekend</span>
+                </a>
+                <a href="#" class="time-option">
+                    <div class="time-icon">🕓</div>
+                    <span>This week</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Popular in Punjab -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Popular in Punjab</h2>
+                <a href="#" class="explore-link">Explore more events →</a>
+            </div>
+            <div class="events-grid">
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="event-content">
+                        <div class="event-title">Lahore Audio Tour: A Journey Through Time and Heritage.</div>
+                        <div class="event-details">Heera Mandi</div>
+                        <div class="event-price">From €5.49</div>
+                        <div class="event-organizer">AllTours</div>
+                        <div class="event-organizer">👥 1k followers</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="event-status">Sales end soon</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">Join Biggest Community | Investors Founders | Lahore</div>
+                        <div class="event-details">Wednesday • 12:30 PM</div>
+                        <div class="event-details">Lahore</div>
+                        <div class="event-price">Free</div>
+                        <div class="event-organizer">Tablon Global</div>
+                        <div class="event-organizer">👥 605 followers</div>
+                    </div>
                 </div>
-                <div class="form-group" id="nameGroup" style="display: none;">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name">
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">Startup Event Pitch Secrets: Get Investors Hooked at Events -...</div>
+                        <div class="event-details">Wednesday • 7:00 PM • 35 more</div>
+                        <div class="event-details">Virtual (Online)</div>
+                        <div class="event-price">From $21.05</div>
+                        <div class="event-organizer">HM Events</div>
+                        <div class="event-organizer">👥 1.5k followers</div>
+                    </div>
                 </div>
-                <button type="submit" class="auth-btn" id="authButton">Log In</button>
-            </form>
-            <div class="auth-toggle">
-                <span id="authToggleText">Don't have an account?</span>
-                <a href="#" onclick="toggleAuthMode()" id="authToggleLink">Sign Up</a>
+                <div class="event-card">
+                    <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')">
+                        <div class="event-status">Going fast</div>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">IELTS & UK Education Expo @ The Nishat Hotel Lahore</div>
+                        <div class="event-details">Saturday • 11:00 AM</div>
+                        <div class="event-details">The Nishat Hotel</div>
+                        <div class="event-price">Free</div>
+                        <div class="event-organizer">AHZ Pakistan</div>
+                        <div class="event-organizer">👥 185 followers</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Use Crowd</h3>
-                    <ul class="footer-links">
-                        <li><a href="#" onclick="showCreateEvents()">Create Events</a></li>
-                        <li><a href="#" onclick="showPricing()">Pricing</a></li>
-                        <li><a href="#" onclick="showMarketing()">Event Marketing</a></li>
-                        <li><a href="#" onclick="showMobileApp()">Mobile App</a></li>
-                        <li><a href="#" onclick="showCheckIn()">Check-In App</a></li>
-                        <li><a href="Help_center.html">Help Center</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Plan Events</h3>
-                    <ul class="footer-links">
-                        <li><a href="#" onclick="showSellTickets()">Sell Tickets Online</a></li>
-                        <li><a href="#" onclick="showEventManagement()">Event Management</a></li>
-                        <li><a href="#" onclick="showPayment()">Payment Solutions</a></li>
-                        <li><a href="#" onclick="showVirtual()">Virtual Events</a></li>
-                        <li><a href="#" onclick="showQR()">QR Check-In</a></li>
-                        <li><a href="#" onclick="showAnalytics()">Analytics</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Find Events</h3>
-                    <ul class="footer-links">
-                        <li><a href="#" onclick="showFoodEvents()">Food & Drink Events</a></li>
-                        <li><a href="#" onclick="showMusicEvents()">Music Events</a></li>
-                        <li><a href="#" onclick="showBusinessEvents()">Business Events</a></li>
-                        <li><a href="#" onclick="showArtsEvents()">Arts Events</a></li>
-                        <li><a href="#" onclick="showSportsEvents()">Sports Events</a></li>
-                        <li><a href="#" onclick="browseAll()">Browse All</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <ul class="footer-links">
-                        <li><a href="#" onclick="contactSupport()">Contact Support</a></li>
-                        <li><a href="#" onclick="contactSales()">Contact Sales</a></li>
-                        <li><a href="#" onclick="openFacebook()">Facebook</a></li>
-                        <li><a href="#" onclick="openTwitter()">Twitter</a></li>
-                        <li><a href="#" onclick="openInstagram()">Instagram</a></li>
-                        <li><a href="#" onclick="openLinkedIn()">LinkedIn</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <div>&copy; 2025 Crowd</div>
-                <div class="footer-meta">
-                    <a href="#" onclick="showAbout()">About</a>
-                    <a href="#" onclick="showPrivacy()">Privacy</a>
-                    <a href="#" onclick="showTerms()">Terms</a>
-                    <a href="#" onclick="showSecurity()">Security</a>
-                    <a href="#" onclick="showAccessibility()">Accessibility</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // Global state variables
-        let events = [];
-        let filteredEvents = [];
-
-        // Sample events data
-        const sampleEvents = [
-            {
-                id: 1,
-                title: "Karachi Food Festival 2025",
-                location: "Expo Centre, Karachi",
-                date: "Mar 15",
-                price: "PKR 500",
-                image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=200&fit=crop",
-                attendees: 245,
-                category: "festival"
-            },
-            {
-                id: 2,
-                title: "Lahore Street Food Tour",
-                location: "Food Street, Lahore",
-                date: "Mar 18",
-                price: "PKR 750",
-                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=200&fit=crop",
-                attendees: 89,
-                category: "tour"
-            },
-            {
-                id: 3,
-                title: "Traditional Punjabi Cooking Class",
-                location: "Culinary Institute, Islamabad",
-                date: "Mar 20",
-                price: "PKR 1,200",
-                image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop",
-                attendees: 32,
-                category: "class"
-            },
-            {
-                id: 4,
-                title: "Wine Tasting Evening",
-                location: "Pearl Continental, Lahore",
-                date: "Mar 22",
-                price: "PKR 2,500",
-                image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&h=200&fit=crop",
-                attendees: 67,
-                category: "tasting"
-            },
-            {
-                id: 5,
-                title: "BBQ Championship",
-                location: "Liberty Market, Lahore",
-                date: "Mar 25",
-                price: "Free",
-                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=200&fit=crop",
-                attendees: 156,
-                category: "competition"
-            },
-            {
-                id: 6,
-                title: "Dessert Making Workshop",
-                location: "Baking Studio, Karachi",
-                date: "Mar 28",
-                price: "PKR 800",
-                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=200&fit=crop",
-                attendees: 28,
-                category: "workshop"
-            }
-        ];
-
-
-        // Notification functions
-        function showTopNotification(message, type = 'info') {
-            let notification = document.getElementById('topNotification');
-            if (!notification) {
-                notification = document.createElement('div');
-                notification.id = 'topNotification';
-                notification.className = 'top-notification';
-                notification.innerHTML = `
-                    <div class="notification-content">
-                        <span id="notificationMessage"></span>
-                        <button class="notification-close" onclick="hideTopNotification()">×</button>
-                    </div>
-                `;
-                document.body.appendChild(notification);
-            }
-
-            document.getElementById('notificationMessage').textContent = message;
-            notification.className = `top-notification ${type}`;
-
-            setTimeout(() => notification.classList.add('show'), 100);
-            setTimeout(() => hideTopNotification(), 4000);
-        }
-
-        function hideTopNotification() {
-            const notification = document.getElementById('topNotification');
-            if (notification) {
-                notification.classList.remove('show');
-            }
-        }
-
-        // Search functionality
-        function handleSearch() {
-            showTopNotification('Search functionality would be implemented here', 'info');
-        }
-
-        // Filter functionality
-        function toggleFilter(element, filterType) {
-            element.classList.toggle('active');
-
-            switch (filterType) {
-                case 'location':
-                    showTopNotification('Location filter: Punjab, Pakistan selected', 'info');
-                    break;
-                case 'date':
-                    showTopNotification('Date filter options: Today, This Week, This Month', 'info');
-                    break;
-                case 'price':
-                    showTopNotification('Price filter: Free, Under 1000, 1000-2000, Above 2000', 'info');
-                    break;
-                case 'category':
-                    showTopNotification('Category filter: Festival, Workshop, Tour, Tasting, Competition', 'info');
-                    break;
-            }
-        }
-
-        // Event loading functions
-        function loadEvents() {
-            const eventsGrid = document.getElementById('eventsGrid');
-            showLoading();
-
-            setTimeout(() => {
-                eventsGrid.innerHTML = '';
-
-                if (filteredEvents.length === 0) {
-                    eventsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">No events found. Try adjusting your search or filters.</p>';
-                    return;
-                }
-
-                filteredEvents.forEach(event => {
-                    const eventCard = createEventCard(event);
-                    eventsGrid.appendChild(eventCard);
-                });
-            }, 1000);
-        }
-
-        function showLoading() {
-            const eventsGrid = document.getElementById('eventsGrid');
-            eventsGrid.innerHTML = '';
-
-            for (let i = 0; i < 6; i++) {
-                const loadingCard = document.createElement('div');
-                loadingCard.className = 'loading-card';
-                loadingCard.innerHTML = `
-                    <div class="loading-placeholder loading-image"></div>
-                    <div class="loading-content">
-                        <div class="loading-placeholder loading-title"></div>
-                        <div class="loading-placeholder loading-subtitle"></div>
-                        <div class="loading-placeholder loading-price"></div>
-                    </div>
-                `;
-                eventsGrid.appendChild(loadingCard);
-            }
-        }
-
-        function createEventCard(event) {
-            const card = document.createElement('div');
-            card.className = 'event-card';
-            card.onclick = () => showEventDetails(event);
-
-            card.innerHTML = `
-                <div class="event-image" style="background-image: url('${event.image}')">
-                    <div class="event-date">${event.date}</div>
-                </div>
-                <div class="event-content">
-                    <div class="event-title">${event.title}</div>
-                    <div class="event-location">📍 ${event.location}</div>
-                    <div class="event-price">${event.price}</div>
-                    <div class="event-attendees">👥 ${event.attendees} attending</div>
-                </div>
-            `;
-
-            return card;
-        }
-
-        function showEventDetails(event) {
-            alert(`Event: ${event.title}\nLocation: ${event.location}\nDate: ${event.date}\nPrice: ${event.price}\n\n${event.attendees} people are attending this event.`);
-        }
-
-        // Breadcrumb navigation
-        function goToCountry() { showTopNotification('Showing events in Pakistan...', 'info'); }
-        function goToRegion() { showTopNotification('Showing events in Punjab...', 'info'); }
-        function goToEvents() { showTopNotification('Showing all events...', 'info'); }
-
-        // Footer functions
-        function showCreateEvents() { window.location.href = 'create-events.html'; }
-        function showPricing() { showTopNotification('Opening pricing page...', 'info'); }
-        function showMarketing() { showTopNotification('Opening event marketing page...', 'info'); }
-        function showMobileApp() { showTopNotification('Opening mobile app download...', 'info'); }
-        function showCheckIn() { showTopNotification('Opening check-in app info...', 'info'); }
-        function showSellTickets() { showTopNotification('Opening sell tickets page...', 'info'); }
-        function showEventManagement() { showTopNotification('Opening event management page...', 'info'); }
-        function showPayment() { showTopNotification('Opening payment solutions page...', 'info'); }
-        function showVirtual() { showTopNotification('Opening virtual events page...', 'info'); }
-        function showQR() { showTopNotification('Opening QR check-in info...', 'info'); }
-        function showAnalytics() { showTopNotification('Opening analytics page...', 'info'); }
-        function showFoodEvents() { showTopNotification('You are already viewing food events!', 'info'); }
-        function showMusicEvents() { window.location.href = 'Music events.html'; }
-        function showBusinessEvents() { window.location.href = 'business_events.html'; }
-        function showArtsEvents() { window.location.href = 'Performing & Visual Arts projects.html'; }
-        function showSportsEvents() { showTopNotification('Sports events coming soon...', 'info'); }
-        function browseAll() { showTopNotification('Opening all events...', 'info'); }
-        function contactSupport() { showTopNotification('Opening contact support...', 'info'); }
-        function contactSales() { showTopNotification('Opening contact sales...', 'info'); }
-        function openFacebook() { window.open('https://facebook.com', '_blank'); }
-        function openTwitter() { window.open('https://twitter.com', '_blank'); }
-        function openInstagram() { window.open('https://instagram.com', '_blank'); }
-        function openLinkedIn() { window.open('https://linkedin.com', '_blank'); }
-        function showAbout() { showTopNotification('Opening about page...', 'info'); }
-        function showPrivacy() { showTopNotification('Opening privacy policy...', 'info'); }
-        function showTerms() { showTopNotification('Opening terms of service...', 'info'); }
-        function showSecurity() { showTopNotification('Opening security info...', 'info'); }
-        function showAccessibility() { showTopNotification('Opening accessibility info...', 'info'); }
-
-        // Auth modal functions
-        function toggleAuthMode() {
-            // Simple toggle between login and signup
-            const modalTitle = document.getElementById('modalTitle');
-            const authButton = document.getElementById('authButton');
-            const nameGroup = document.getElementById('nameGroup');
-            const authToggleText = document.getElementById('authToggleText');
-            const authToggleLink = document.getElementById('authToggleLink');
-
-            if (modalTitle.textContent === 'Log In') {
-                modalTitle.textContent = 'Sign Up';
-                authButton.textContent = 'Sign Up';
-                nameGroup.style.display = 'block';
-                authToggleText.textContent = 'Already have an account?';
-                authToggleLink.textContent = 'Log In';
-            } else {
-                modalTitle.textContent = 'Log In';
-                authButton.textContent = 'Log In';
-                nameGroup.style.display = 'none';
-                authToggleText.textContent = "Don't have an account?";
-                authToggleLink.textContent = 'Sign Up';
-            }
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.remove('active');
-            document.getElementById('authForm').reset();
-        }
-
-        function handleAuthSubmit(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            showTopNotification('Authentication successful!', 'success');
-            closeAuthModal();
-        }
-
-        // Header functionality
+        // Help Center Dropdown
         function toggleHelpDropdown(event) {
             if (event) {
                 event.preventDefault();
@@ -1756,11 +1407,11 @@
             }
         }
 
-        function performHeaderSearch() {
+        function performSearch() {
             // Prefer mobile input if present and has value
             const mobileEl = document.getElementById('mobileSearchInput');
-            const desktopEl = document.getElementById('headerSearchInput');
-            const locationEl = document.getElementById('headerLocationInput');
+            const desktopEl = document.getElementById('searchInput');
+            const locationEl = document.getElementById('locationInput');
 
             let searchTerm = '';
             if (mobileEl && mobileEl.value.trim() !== '') {
@@ -1772,11 +1423,18 @@
             const location = locationEl ? locationEl.value : '';
 
             if (searchTerm.trim() === '' && location.trim() === '') {
-                showTopNotification('Please enter a search term or location', 'info');
+                alert('Please enter a search term or location');
                 return;
             }
 
-            showTopNotification(`Searching for: ${searchTerm} in ${location || 'all locations'}`, 'info');
+            // Create URL parameters
+            const params = new URLSearchParams();
+            if (searchTerm.trim()) params.append('q', searchTerm);
+            if (location.trim()) params.append('location', location);
+
+            // Navigate to search results (you can change this URL)
+            console.log('Searching for:', searchTerm, 'in location:', location);
+            alert(`Searching for: ${searchTerm} in ${location || 'all locations'}`);
         }
 
         // Toggle Submenu Function
@@ -1797,10 +1455,10 @@
         function toggleMobileMenu() {
             const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
             const mobileMenu = document.querySelector('.mobile-menu');
-
+            
             if (mobileMenu && mobileMenuToggle) {
                 const isActive = mobileMenu.classList.contains('active');
-
+                
                 if (isActive) {
                     mobileMenu.classList.remove('active');
                     mobileMenuToggle.classList.remove('active');
@@ -1857,9 +1515,79 @@
             }
         }
 
-        // Initialize on page load
+        // Follow button functionality
+        document.querySelectorAll('.follow-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent === 'Follow') {
+                    this.textContent = 'Following';
+                    this.style.background = '#34a853';
+                } else {
+                    this.textContent = 'Follow';
+                    this.style.background = '#4285f4';
+                }
+            });
+        });
+
+        // Close organizer cards
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.style.display = 'none';
+            });
+        });
+
+        // Smooth scrolling for organizers
+        const organizersScroll = document.querySelector('.organizers-scroll');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        organizersScroll.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - organizersScroll.offsetLeft;
+            scrollLeft = organizersScroll.scrollLeft;
+        });
+
+        organizersScroll.addEventListener('mouseleave', () => {
+            isDown = false;
+        });
+
+        organizersScroll.addEventListener('mouseup', () => {
+            isDown = false;
+        });
+
+        organizersScroll.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - organizersScroll.offsetLeft;
+            const walk = (x - startX) * 2;
+            organizersScroll.scrollLeft = scrollLeft - walk;
+        });
+
+        // Time option selection
+        document.querySelectorAll('.time-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.time-option').forEach(opt => {
+                    opt.style.background = 'transparent';
+                });
+                this.style.background = '#e8f0fe';
+            });
+        });
+
+        // Event card hover effects
+        document.querySelectorAll('.event-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+            });
+        });
+
+        // Initialize everything when DOM is loaded
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize header functionality
+            // Initialize dropdown functionality
             const helpDropdownBtn = document.getElementById('helpDropdownBtn');
             if (helpDropdownBtn) {
                 helpDropdownBtn.addEventListener('click', toggleHelpDropdown);
@@ -1871,27 +1599,27 @@
                 mobileMenuToggle.addEventListener('click', toggleMobileMenu);
             }
 
-            // Add global event listeners for header
+            // Add global event listeners
             document.addEventListener('click', handleOutsideClicks);
             document.addEventListener('keydown', handleKeyboardNavigation);
 
-            // Allow Enter key to trigger header search
-            const headerSearchInput = document.getElementById('headerSearchInput');
-            const headerLocationInput = document.getElementById('headerLocationInput');
+            // Allow Enter key to trigger search
+            const searchInput = document.getElementById('searchInput');
+            const locationInput = document.getElementById('locationInput');
             const mobileSearchInput = document.getElementById('mobileSearchInput');
 
-            if (headerSearchInput) {
-                headerSearchInput.addEventListener('keypress', function (e) {
+            if (searchInput) {
+                searchInput.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') {
-                        performHeaderSearch();
+                        performSearch();
                     }
                 });
             }
 
-            if (headerLocationInput) {
-                headerLocationInput.addEventListener('keypress', function (e) {
+            if (locationInput) {
+                locationInput.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') {
-                        performHeaderSearch();
+                        performSearch();
                     }
                 });
             }
@@ -1899,7 +1627,7 @@
             if (mobileSearchInput) {
                 mobileSearchInput.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') {
-                        performHeaderSearch();
+                        performSearch();
                     }
                 });
             }
@@ -1917,51 +1645,7 @@
                     }
                 }
             });
-
-            // Initialize existing functionality
-            events = [...sampleEvents];
-            filteredEvents = [...events];
-            loadEvents();
-
-            // Close auth modal when clicking outside
-            const authModal = document.getElementById('authModal');
-            if (authModal) {
-                authModal.addEventListener('click', function (event) {
-                    if (event.target === this) {
-                        closeAuthModal();
-                    }
-                });
-            }
-
-            // Show appropriate nav container based on screen size
-            updateNavVisibility();
-            window.addEventListener('resize', updateNavVisibility);
         });
-
-        // Function to show/hide appropriate navigation based on screen size
-        function updateNavVisibility() {
-            const mobileNavContainer = document.querySelector('.mobile-nav-container');
-
-            if (window.innerWidth <= 768) {
-                if (mobileNavContainer) {
-                    mobileNavContainer.style.display = 'flex';
-                }
-            } else {
-                if (mobileNavContainer) {
-                    mobileNavContainer.style.display = 'none';
-                }
-                // Close mobile menu if open on resize to desktop
-                const mobileMenu = document.querySelector('.mobile-menu');
-                const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-                if (mobileMenu && mobileMenu.classList.contains('active')) {
-                    mobileMenu.classList.remove('active');
-                    mobileMenuToggle.classList.remove('active');
-                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
-                    document.body.classList.remove('mobile-menu-open');
-                }
-            }
-        }
     </script>
 </body>
-
 </html>
