@@ -230,6 +230,10 @@
             content: '📅';
         }
 
+        .dropdown-item.browse::before {
+            content: '🔍';
+        }
+
         .dropdown-item.tickets::before {
             content: '🎫';
         }
@@ -1097,7 +1101,18 @@
                                     <line x1="3" y1="10" x2="21" y2="10"></line>
                                 </svg>
                             </div>
-                            <span class="text">Find Events</span>
+                            <span class="text">Browse events</span>
+                        </div>
+                        <div class="menu-item" onclick="handleMenuClick('manage-events')">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <span class="text">Manage my events</span>
                         </div>
 
                         <!-- Create Events (Expandable) -->
@@ -1206,7 +1221,8 @@
                 <div class="dropdown-header">
                     <div class="dropdown-email">musa.128.com@gmail.com</div>
                 </div>
-                <div class="dropdown-item manage">Manage my events</div>
+                <div class="dropdown-item manage" onclick="window.location.href='events-calendar.html'">Manage my events</div>
+                <div class="dropdown-item browse" onclick="window.location.href='get_ticket.html'">Browse events</div>
                 <div class="dropdown-item tickets">Tickets</div>
                 <div class="dropdown-item liked">Liked</div>
                 <div class="dropdown-item following">Following</div>
@@ -1370,15 +1386,24 @@
             item.addEventListener('click', function(e) {
                 e.stopPropagation();
                 console.log('Clicked:', this.textContent.trim());
+
+                const itemText = this.textContent.trim();
+
+                // Add navigation logic
+                if (this.classList.contains('interests') || itemText === 'Interests') {
+                    window.location.href = 'intrest.html';
+                } else if (this.classList.contains('manage') || itemText === 'Manage my events') {
+                    window.location.href = 'events-calendar.html';
+                } else if (this.classList.contains('browse') || itemText === 'Browse events') {
+                    window.location.href = 'get_ticket.html';
+                }
+
                 hideDropdown();
-                
+
                 // Add haptic feedback on mobile
                 if ('vibrate' in navigator) {
                     navigator.vibrate(50);
                 }
-                
-                // Add your navigation logic here
-                // Example: window.location.href = '/path-to-page';
             });
         });
 
@@ -1563,7 +1588,10 @@
         function handleMenuClick(action) {
             switch (action) {
                 case 'find-events':
-                    alert('Navigating to Find Events...');
+                    window.location.href = 'get_ticket.html';
+                    break;
+                case 'manage-events':
+                    window.location.href = 'events-calendar.html';
                     break;
                 case 'get-started':
                     alert('Navigating to Get Started...');
@@ -1857,6 +1885,10 @@
                 if (dropdown) dropdown.classList.remove('show');
                 if (userMenu) userMenu.classList.remove('dropdown-open');
                 return;
+            } else if (action === 'find-events') {
+                window.location.href = 'get_ticket.html';
+            } else if (action === 'manage-events') {
+                window.location.href = 'events-calendar.html';
             }
 
             // Call original function for other actions
