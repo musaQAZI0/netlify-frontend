@@ -5,7 +5,7 @@ const Config = {
     
     // Port configurations
     FRONTEND_PORT: 8080,  // Frontend runs on port 8080
-    BACKEND_PORT: 3002,   // Backend runs on port 3002
+    BACKEND_PORT: 10000,  // Backend runs on port 10000 (Render default)
     
     // API base URL - Always use Render production backend
     get API_BASE_URL() {
