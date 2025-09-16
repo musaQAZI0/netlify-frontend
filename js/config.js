@@ -5,15 +5,11 @@ const Config = {
     
     // Port configurations
     FRONTEND_PORT: 8080,  // Frontend runs on port 8080
-    BACKEND_PORT: 3004,   // Backend runs on port 3004
+    BACKEND_PORT: 3002,   // Backend runs on port 3002
     
-    // API base URL - Use local or production based on environment
+    // API base URL - Always use Render production backend
     get API_BASE_URL() {
-        if (this.isDevelopment) {
-            return `http://localhost:${this.BACKEND_PORT}/api`; // Local backend server
-        } else {
-            return 'https://crowd-backend-zxxp.onrender.com/api'; // Production backend
-        }
+        return 'https://crowd-backend-zxxp.onrender.com/api'; // Production backend on Render
     },
     
     // Frontend URL - Always use current domain

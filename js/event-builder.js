@@ -1,7 +1,7 @@
 // Event Builder API Integration
 class EventBuilderAPI {
     constructor() {
-        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'http://localhost:3001/api';
+        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
         this.currentEventData = {
             title: '',
             description: '',
@@ -29,7 +29,7 @@ class EventBuilderAPI {
 
     // Get authentication token
     getAuthToken() {
-        return localStorage.getItem('authToken') || '';
+        return localStorage.getItem('authToken') || localStorage.getItem('token') || '';
     }
 
     // API request helper

@@ -1,7 +1,7 @@
 // Authentication and User Profile Utilities
 class AuthUtils {
     constructor() {
-        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'http://localhost:3001/api';
+        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
         this.currentUser = null;
     }
 
