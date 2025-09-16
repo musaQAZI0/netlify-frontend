@@ -1,11 +1,10 @@
 // Event Builder API Integration
 class EventBuilderAPI {
     constructor() {
-        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'http://localhost:3001/api';
+        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
         this.currentEventData = {
             title: '',
             description: '',
-            category: 'Other',
             startDate: null,
             endDate: null,
             venue: '',
@@ -29,7 +28,7 @@ class EventBuilderAPI {
 
     // Get authentication token
     getAuthToken() {
-        return localStorage.getItem('authToken') || '';
+        return localStorage.getItem('authToken') || localStorage.getItem('token') || '';
     }
 
     // API request helper
@@ -71,7 +70,6 @@ class EventBuilderAPI {
                 this.currentEventData = {
                     title: data.event.title || '',
                     description: data.event.description || '',
-                    category: data.event.category || 'Other',
                     startDate: data.event.startDate ? new Date(data.event.startDate).toISOString().split('T')[0] : null,
                     endDate: data.event.endDate ? new Date(data.event.endDate).toISOString().split('T')[0] : null,
                     venue: data.event.venue || '',
@@ -261,7 +259,6 @@ class EventBuilder {
         this.setFieldValue('eventTitle', data.title);
         this.setFieldValue('overviewDescription', data.description);
         this.setFieldValue('eventStatus', data.status);
-        this.setFieldValue('eventCategory', data.category);
 
         // Handle location data with Google Places integration
         if (window.googlePlaces) {
@@ -404,15 +401,6 @@ class EventBuilder {
             });
         }
 
-        // Category
-        const categoryEl = document.getElementById('eventCategory');
-        if (categoryEl) {
-            categoryEl.addEventListener('change', (e) => {
-                this.api.currentEventData.category = e.target.value;
-                this.scheduleAutoSave();
-                console.log('Category selected:', e.target.value);
-            });
-        }
 
         // Date inputs
         const dateInputs = ['eventDate', 'startTime', 'endTime'];
@@ -689,16 +677,36 @@ document.addEventListener('click', (event) => {
     }
 });
 
+// Prevent uncaught promise rejections and message channel errors
+window.addEventListener('unhandledrejection', (event) => {
+    console.warn('Unhandled promise rejection:', event.reason);
+    event.preventDefault(); // Prevent console errors
+});
+
+// Handle message channel errors (common with browser extensions)
+window.addEventListener('error', (event) => {
+    if (event.message.includes('message channel closed')) {
+        console.warn('Message channel error suppressed (likely browser extension)');
+        return true; // Prevent error from propagating
+    }
+});
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Wait for config and auth-utils to load
     const initializeWhenReady = () => {
-        if (window.Config && window.authUtils) {
-            window.eventBuilder = new EventBuilder();
-        } else {
-            setTimeout(initializeWhenReady, 100);
+        try {
+            if (window.Config && window.authUtils) {
+                window.eventBuilder = new EventBuilder();
+            } else {
+                setTimeout(initializeWhenReady, 100);
+            }
+        } catch (error) {
+            console.error('Error initializing event builder:', error);
+            // Retry initialization after a delay
+            setTimeout(initializeWhenReady, 1000);
         }
     };
-    
+
     setTimeout(initializeWhenReady, 100);
 });

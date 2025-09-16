@@ -28,22 +28,35 @@ class GooglePlacesIntegration {
         console.log('Initializing Places Autocomplete for USA only...');
 
         try {
-            // Create autocomplete instance restricted to USA only
-            this.autocomplete = new google.maps.places.Autocomplete(locationInput, {
-                types: ['establishment', 'geocode'], // Both businesses and addresses
-                componentRestrictions: { 
-                    country: 'us' // USA only
-                },
-                fields: [
-                    'place_id', 
-                    'name', 
-                    'formatted_address', 
-                    'address_components', 
-                    'geometry', 
-                    'types',
-                    'business_status'
-                ]
-            });
+            // Use the new PlaceAutocompleteElement (recommended approach)
+            if (google.maps.places.PlaceAutocompleteElement) {
+                this.autocomplete = new google.maps.places.PlaceAutocompleteElement({
+                    types: ['establishment', 'geocode'],
+                    componentRestrictions: {
+                        country: 'us'
+                    }
+                });
+
+                // Replace the input with the new element
+                locationInput.parentNode.replaceChild(this.autocomplete, locationInput);
+            } else {
+                // Fallback to legacy Autocomplete
+                this.autocomplete = new google.maps.places.Autocomplete(locationInput, {
+                    types: ['establishment', 'geocode'], // Both businesses and addresses
+                    componentRestrictions: {
+                        country: 'us' // USA only
+                    },
+                    fields: [
+                        'place_id',
+                        'name',
+                        'formatted_address',
+                        'address_components',
+                        'geometry',
+                        'types',
+                        'business_status'
+                    ]
+                });
+            }
 
             // Set additional options for better suggestions
             this.autocomplete.setOptions({
@@ -88,7 +101,10 @@ class GooglePlacesIntegration {
     // Test autocomplete service to debug issues
     testAutocompleteService(input) {
         try {
-            const service = new google.maps.places.AutocompleteService();
+            // Use new AutocompleteSuggestion if available, fallback to legacy
+            const service = google.maps.places.AutocompleteSuggestion ?
+                new google.maps.places.AutocompleteSuggestion() :
+                new google.maps.places.AutocompleteService();
             
             // Test with a sample query
             service.getPlacePredictions({
@@ -119,7 +135,10 @@ class GooglePlacesIntegration {
         }
 
         try {
-            const service = new google.maps.places.AutocompleteService();
+            // Use new AutocompleteSuggestion if available, fallback to legacy
+            const service = google.maps.places.AutocompleteSuggestion ?
+                new google.maps.places.AutocompleteSuggestion() :
+                new google.maps.places.AutocompleteService();
             
             service.getPlacePredictions({
                 input: inputText,
