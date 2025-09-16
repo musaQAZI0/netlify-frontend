@@ -17,45 +17,60 @@
             color: #221d19;
             background-color: #ffffff;
             overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            padding-top: 70px; /* Adjust based on header height */
         }
 
         /* Header Styles */
         .header {
-            background: white;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
-            border-bottom: 1px solid #e8e8e8;
+            background: white;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .nav-container {
-            display: flex;
+        /* Desktop Header */
+        .desktop-header {
+            display: none;
+            padding: 8px 16px;
             align-items: center;
-            padding: 0.75rem 1rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            min-height: 60px;
-            gap: 1rem;
+            gap: 24px;
         }
 
+        /* Mobile Header */
+        .mobile-header {
+            display: flex;
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Logo Styles */
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
             text-decoration: none;
-            transition: transform 0.2s;
-            margin-right: 1.5rem;
+            color: #3a3247;
         }
 
-        .logo:hover {
-            transform: scale(1.05);
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .mobile-header .logo {
+            width: 32px;
+            height: 32px;
+            background-color: #e53e3e;
+            border-radius: 6px;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
         }
 
         .logo-icon {
@@ -63,103 +78,136 @@
         }
 
         .logo-text {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #3a3247;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-left: 0.25rem;
+        }
+
+        /* Search Section Styles */
+        .search-section {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 2rem;
         }
 
         .search-container {
             display: flex;
             align-items: center;
-            flex: 1;
-            max-width: 600px;
-            margin-right: 1rem;
-        }
-
-        .search-wrapper {
-            display: flex;
-            align-items: center;
-            background: #fff;
+            background: white;
             border: 1px solid #ddd;
             border-radius: 25px;
-            padding: 0.5rem;
-            width: 100%;
-            transition: all 0.2s ease;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
-        .search-wrapper:focus-within {
-            border-color: #3a3247;
-            box-shadow: 0 0 0 2px rgba(58, 50, 71, 0.1);
-        }
-
-        .search-icon {
-            color: #716b7a;
-            margin-left: 0.5rem;
-            margin-right: 0.5rem;
-        }
-
-        .search-input {
-            border: none;
-            outline: none;
-            background: transparent;
+        .mobile-header .search-container {
             flex: 1;
-            padding: 0.5rem;
-            font-size: 14px;
-            color: #3a3247;
-            min-width: 0;
+            margin: 0 12px;
+            border-radius: 20px;
+            background-color: #f8f8f8;
+            box-shadow: none;
+            border: 1px solid #d0d0d0;
         }
 
-        .search-input::placeholder {
-            color: #716b7a;
-        }
-
-        .location-wrapper {
+        .search-section-inner,
+        .location-section {
             display: flex;
             align-items: center;
-            padding: 0 0.75rem;
-            border-left: 1px solid #ddd;
-            min-width: 180px;
+            gap: 8px;
+            padding: 8px 12px;
         }
 
+        .search-icon,
         .location-icon {
-            color: #716b7a;
-            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            color: #666;
         }
 
+        .mobile-header .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-input,
         .location-input {
             border: none;
             outline: none;
             background: transparent;
-            padding: 0.5rem 0;
             font-size: 14px;
-            color: #3a3247;
+            color: #333;
             width: 100%;
         }
 
-        .location-input::placeholder {
-            color: #716b7a;
+        .mobile-header .search-input {
+            padding: 8px 12px 8px 36px;
+            width: 100%;
         }
 
-        .search-btn {
+        .search-input::placeholder,
+        .location-input::placeholder {
+            color: #999;
+        }
+
+        .mobile-header .search-input:focus {
+            border-color: #e53e3e;
+            background-color: white;
+            box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.1);
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: #ddd;
+        }
+
+        .search-button {
             background: #3a3247;
-            color: white;
             border: none;
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            cursor: pointer;
-            transition: background-color 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 0.5rem;
-            flex-shrink: 0;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.2s ease;
         }
 
-        .search-btn:hover {
-            background: #2d2a3f;
+        .mobile-header .search-button {
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #e53e3e;
+            width: 28px;
+            height: 28px;
+            margin-left: 0;
+            font-size: 12px;
         }
 
+        .search-button:hover {
+            background: #2f2a3c;
+        }
+
+        .mobile-header .search-button:hover {
+            background-color: #d63031;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .search-button-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        /* Navigation Actions */
         .nav-actions {
             display: flex;
             align-items: center;
@@ -167,31 +215,52 @@
             margin-left: auto;
         }
 
-        .nav-action-item {
+        /* Integrated Navigation Styles */
+        .integrated-nav-container {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-decoration: none;
-            color: #39364f;
-            transition: color 0.2s;
+            gap: 4px;
             cursor: pointer;
-            padding: 0.5rem;
+            transition: all 0.2s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #6b7280;
+            text-decoration: none;
         }
 
-        .nav-action-item:hover {
+        .nav-item:hover {
+            background-color: #f8f8f9;
+            transform: translateY(-1px);
+        }
+
+        .nav-item.active {
             color: #3a3247;
         }
 
-        .nav-action-icon {
-            font-size: 1.25rem;
-            margin-bottom: 0.25rem;
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .nav-action-text {
+        .nav-text {
             font-size: 12px;
             font-weight: 500;
+            white-space: nowrap;
         }
 
+        /* User Menu Styles */
         .user-menu {
             display: flex;
             align-items: center;
@@ -204,8 +273,25 @@
             position: relative;
         }
 
+        .mobile-header .user-menu {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            justify-content: center;
+            padding: 0;
+            gap: 0;
+            font-size: 16px;
+        }
+
         .user-menu:hover {
-            background: #f8f8f8;
+            background: #f8f8f9;
+        }
+
+        .mobile-header .user-menu:hover {
+            background-color: #e8e8e8;
+            transform: scale(1.05);
         }
 
         .user-avatar {
@@ -221,6 +307,10 @@
             font-size: 14px;
         }
 
+        .mobile-header .user-avatar {
+            display: none;
+        }
+
         .user-email {
             font-size: 12px;
             color: #585163;
@@ -231,70 +321,217 @@
             color: #716b7a;
         }
 
-        .user-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid #e8e6ea;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            min-width: 280px;
-            z-index: 1000;
-            padding: 8px 0;
-            font-size: 14px;
+        .mobile-header .dropdown-arrow {
+            display: none;
         }
 
-        .dropdown-section {
+        /* User Dropdown Menu */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 220px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            padding: 8px 0;
+            z-index: 1200;
+        }
+
+        .mobile-header .user-dropdown {
+            width: 280px;
+            right: -8px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: dropdownSlide 0.2s ease-out;
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .dropdown-email {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .user-dropdown .menu-group {
             padding: 4px 0;
         }
 
-        .dropdown-group {
-            margin-bottom: 4px;
+        .user-dropdown a,
+        .dropdown-item {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #111;
+            font-size: 13px;
+            transition: background 0.12s;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .user-dropdown a {
+        .mobile-header .dropdown-item {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #333;
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            text-decoration: none;
-            color: #39364f;
-            transition: all 0.2s ease;
-            border-radius: 8px;
-            margin: 0 8px;
         }
 
-        .user-dropdown a:hover {
-            background-color: #f8f9fa;
-            color: #3a3247;
+        .user-dropdown a:hover,
+        .dropdown-item:hover {
+            background: #f8f8f9;
         }
 
+        .mobile-header .dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .user-dropdown .divider,
         .dropdown-divider {
             height: 1px;
-            background-color: #e8e6ea;
-            margin: 8px 16px;
+            background: #f0f0f2;
+            margin: 4px 0;
         }
 
-        .user-info {
-            padding: 8px 20px;
-            margin: 0 8px;
+        .mobile-header .dropdown-divider {
+            background-color: #e9ecef;
+            margin: 8px 0;
         }
 
-        .user-email-display {
-            font-size: 12px;
-            color: #6f7287;
-            font-weight: 500;
+        .dropdown-item:last-child {
+            border-bottom: none;
         }
 
-        .logout-link {
-            color: #3a3247 !important;
-            font-weight: 500;
+        /* Mobile dropdown item icons */
+        .mobile-header .dropdown-item::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            opacity: 0.7;
         }
 
-        .logout-link:hover {
-            color: #e53e3e !important;
-            background-color: #fef2f2 !important;
+        .mobile-header .dropdown-item.manage::before { content: '📅'; }
+        .mobile-header .dropdown-item.browse::before { content: '🔍'; }
+        .mobile-header .dropdown-item.tickets::before { content: '🎫'; }
+        .mobile-header .dropdown-item.liked::before { content: '❤️'; }
+        .mobile-header .dropdown-item.following::before { content: '👥'; }
+        .mobile-header .dropdown-item.interests::before { content: '⭐'; }
+        .mobile-header .dropdown-item.settings::before { content: '⚙️'; }
+        .mobile-header .dropdown-item.organize::before { content: '📊'; }
+        .mobile-header .dropdown-item.help::before { content: '❓'; }
+        .mobile-header .dropdown-item.logout::before { content: '🚪'; }
+
+        /* Overlay */
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(2px);
         }
+
+        .dropdown-overlay.show {
+            display: block;
+        }
+
+        /* Desktop Media Query */
+        @media (min-width: 769px) {
+            .mobile-header {
+                display: none;
+            }
+
+            .desktop-header {
+                display: flex;
+            }
+
+            body {
+                padding-top: 80px;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .desktop-header {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-header {
+                padding: 10px 12px;
+            }
+
+            .mobile-header .search-container {
+                margin: 0 8px;
+            }
+
+            .mobile-header .user-dropdown {
+                width: 260px;
+                right: -8px;
+            }
+
+            .mobile-header .logo {
+                width: 28px;
+                height: 28px;
+                font-size: 16px;
+            }
+
+            .mobile-header .user-menu {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
 
         /* Breadcrumbs */
         .breadcrumbs {
@@ -811,8 +1048,29 @@
             color: #faafa0;
         }
 
+
         /* Responsive Design */
         @media (max-width: 968px) {
+            .header {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .mobile-browse-events {
+                display: block;
+            }
+
+            .mobile-search-container {
+                margin: 0 8px;
+            }
+
+            .mobile-dropdown {
+                width: 250px;
+            }
+
             .nav-container {
                 flex-direction: column;
                 gap: 1rem;
@@ -824,7 +1082,7 @@
                 max-width: 100%;
                 margin: 0;
             }
-            
+
             .nav-actions {
                 order: 3;
                 justify-content: center;
@@ -927,89 +1185,144 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <nav class="nav-container">
-            <a href="#" class="logo">
-                <span class="logo-icon">🎟️</span>
-                <span class="logo-text">crowd</span>
+    <!-- Unified Header -->
+    <div class="header">
+        <!-- Desktop Header -->
+        <nav class="desktop-header">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display: none; align-items: center; gap: 0.25rem;">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">crowd</span>
+                </div>
             </a>
 
-            <div class="search-container">
-                <div class="search-wrapper">
-                    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="21 21l-4.35-4.35"/>
-                    </svg>
-                    <input type="text" class="search-input" placeholder="Search holiday events">
-                    
-                    <div class="location-wrapper">
-                        <svg class="location-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
+            <div class="search-section" data-search-component>
+                <div class="search-container">
+                    <div class="search-section-inner">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
                         </svg>
-                        <input type="text" class="location-input" placeholder="Punjab" value="Punjab">
+                        <input type="text" class="search-input" placeholder="Search holiday events" id="desktopSearchInput"
+                            aria-label="Search events">
                     </div>
-                    
-                    <button class="search-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="21 21l-4.35-4.35"/>
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="location-section">
+                        <svg class="location-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M11.6 11.6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-7.6C8.5 4 6 6.5 6 9.6 6 13.8 11.6 20 11.6 20s5.6-6.2 5.6-10.4c0-3.1-2.5-5.6-5.6-5.6z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="location-input" placeholder="Punjab" value="Punjab" id="desktopLocationInput"
+                            aria-label="Choose a location">
+                    </div>
+                    <button class="search-button" type="button" onclick="performSearch('desktop')" aria-label="Search">
+                        <svg class="search-button-icon" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
                         </svg>
                     </button>
                 </div>
             </div>
 
             <div class="nav-actions">
-                <a href="#" class="nav-action-item">
-                    <span class="nav-action-icon">➕</span>
-                    <span class="nav-action-text">Create an event</span>
-                </a>
-                
-                <a href="#" class="nav-action-item">
-                    <span class="nav-action-icon">♡</span>
-                    <span class="nav-action-text">Likes</span>
-                </a>
-                
-                <a href="#" class="nav-action-item">
-                    <span class="nav-action-icon">🎫</span>
-                    <span class="nav-action-text">Tickets</span>
-                </a>
-                
-                <div class="user-menu" onclick="toggleUserMenu()">
-                    <div class="user-avatar" id="userAvatar">U</div>
+                <div class="integrated-nav-container">
+                    <a href="event-builder.html" class="nav-item" data-tab="create">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span class="nav-text">Create an event</span>
+                    </a>
+
+                    <a href="likes.html" class="nav-item" data-tab="likes">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                        <span class="nav-text">Likes</span>
+                    </a>
+
+                    <a href="tickets-profile.html" class="nav-item" data-tab="tickets">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="nav-text">Tickets</span>
+                    </a>
+                </div>
+
+                <div class="user-menu" id="desktopUserMenuButton">
+                    <div class="user-avatar" id="desktopUserAvatar">U</div>
                     <div>
-                        <div class="user-email" id="userEmail">Loading...</div>
+                        <div class="user-email" id="desktopUserEmail">Loading...</div>
                     </div>
                     <span class="dropdown-arrow">▾</span>
-                    
-                    <!-- Enhanced User Dropdown Menu -->
-                    <div class="user-dropdown" id="userDropdown" style="display: none;">
-                        <div class="dropdown-section">
-                            <div class="dropdown-group">
-                                <a href="logged_in_Version.html" role="menuitem">Browse events</a>
-                                <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
-                                <a href="#" role="menuitem">Tickets</a>
-                                <a href="#" role="menuitem">Liked</a>
-                                <a href="#" role="menuitem">Following</a>
-                                <a href="#" role="menuitem">Interests</a>
-                            </div>
+
+                    <div class="user-dropdown" id="desktopUserDropdown" role="menu" aria-hidden="true">
+                        <div class="menu-group">
+                            <a href="Find events.html" role="menuitem">Find events</a>
+                            <a href="get_ticket.html" role="menuitem">Browse events</a>
+                            <a href="events-calendar.html" role="menuitem">Manage my events</a>
+                            <a href="tickets-profile.html" role="menuitem">Tickets</a>
+                            <a href="likes.html" role="menuitem">Liked</a>
+                            <a href="tickets-profile.html" role="menuitem">Following</a>
+                            <a href="intrest.html" role="menuitem">Interests</a>
                         </div>
-                        
-                        <div class="dropdown-divider"></div>
-                        
-                        <div class="dropdown-section">
-                            <a href="settings.html" role="menuitem">Account settings</a>
-                            <div class="user-info">
-                                <span class="user-email-display" id="dropdownUserEmail">Loading...</span>
+                        <div class="divider" aria-hidden="true"></div>
+                        <div class="menu-group">
+                            <a href="settings-new.html" role="menuitem">Account settings</a>
+                            <div style="padding:10px 16px;color:#6b6b6b;font-size:14px;">
+                                <span id="desktopDropdownUserEmail">user@example.com</span>
                             </div>
-                            <a href="#" onclick="logout()" role="menuitem" class="logout-link">Log out</a>
+                            <a href="#" id="desktopLogoutLink" role="menuitem">Log out</a>
                         </div>
                     </div>
                 </div>
             </div>
         </nav>
-    </header>
+
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <a href="index.html" class="logo">E</a>
+
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-input" placeholder="Search holiday events" id="mobileSearchInput">
+                <button class="search-button" onclick="performSearch('mobile')">🔍</button>
+            </div>
+
+            <div class="user-menu" id="mobileUserProfile">
+                👤
+                <div class="user-dropdown" id="mobileDropdown">
+                    <div class="dropdown-header">
+                        <div class="dropdown-email" id="mobileUserEmail">user@example.com</div>
+                    </div>
+                    <div class="dropdown-item manage" onclick="window.location.href='events-calendar.html'">Manage my events</div>
+                    <div class="dropdown-item browse" onclick="window.location.href='get_ticket.html'">Browse events</div>
+                    <div class="dropdown-item tickets">Tickets</div>
+                    <div class="dropdown-item liked">Liked</div>
+                    <div class="dropdown-item following">Following</div>
+                    <div class="dropdown-item interests">Interests</div>
+                    <div class="dropdown-item settings">Account settings</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item organize">Organize</div>
+                    <div class="dropdown-item help">Help</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item logout">Log out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for mobile dropdown -->
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
 
     <!-- Breadcrumbs -->
     <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -1314,40 +1627,167 @@
     </footer>
 
     <script>
+        // Header Search functionality
+        function performSearch(source) {
+            const searchInput = source === 'desktop' ?
+                document.getElementById('desktopSearchInput') :
+                document.getElementById('mobileSearchInput');
+            const locationInput = document.getElementById('desktopLocationInput');
+
+            const searchTerm = searchInput?.value.trim() || '';
+            const location = locationInput?.value.trim() || '';
+
+            if (searchTerm || location) {
+                console.log(`${source} search:`, { searchTerm, location });
+                // Implement search logic here
+            }
+        }
+
+        // Desktop user menu functionality
+        function initializeDesktopMenu() {
+            const userMenuButton = document.getElementById('desktopUserMenuButton');
+            const userDropdown = document.getElementById('desktopUserDropdown');
+            const logoutLink = document.getElementById('desktopLogoutLink');
+
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (userDropdown.classList.contains('show')) {
+                        userDropdown.classList.remove('show');
+                    } else {
+                        userDropdown.classList.add('show');
+                    }
+                });
+            }
+
+            if (logoutLink) {
+                logoutLink.addEventListener('click', handleLogout);
+            }
+        }
+
+        // Mobile user menu functionality
+        function initializeMobileMenu() {
+            const userProfile = document.getElementById('mobileUserProfile');
+            const dropdown = document.getElementById('mobileDropdown');
+            const dropdownOverlay = document.getElementById('dropdownOverlay');
+
+            function showMobileDropdown() {
+                dropdown.classList.add('show');
+                dropdownOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function hideMobileDropdown() {
+                dropdown.classList.remove('show');
+                dropdownOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            if (userProfile) {
+                userProfile.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (dropdown.classList.contains('show')) {
+                        hideMobileDropdown();
+                    } else {
+                        showMobileDropdown();
+                    }
+                });
+            }
+
+            if (dropdownOverlay) {
+                dropdownOverlay.addEventListener('click', hideMobileDropdown);
+            }
+
+            // Handle mobile dropdown item clicks
+            const dropdownItems = document.querySelectorAll('.mobile-header .dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    console.log('Mobile menu clicked:', this.textContent.trim());
+
+                    if (this.classList.contains('logout')) {
+                        handleLogout(e);
+                    } else if (this.classList.contains('interests')) {
+                        window.location.href = 'intrest.html';
+                    } else if (this.classList.contains('manage')) {
+                        window.location.href = 'events-calendar.html';
+                    } else if (this.classList.contains('browse')) {
+                        window.location.href = 'get_ticket.html';
+                    }
+
+                    hideMobileDropdown();
+                });
+            });
+        }
+
+        // Shared logout functionality
+        function handleLogout(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                sessionStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Global click handler to close dropdowns
+        function initializeGlobalHandlers() {
+            document.addEventListener('click', function(e) {
+                const desktopUserDropdown = document.getElementById('desktopUserDropdown');
+                const desktopUserMenuButton = document.getElementById('desktopUserMenuButton');
+                const mobileUserProfile = document.getElementById('mobileUserProfile');
+                const mobileDropdown = document.getElementById('mobileDropdown');
+
+                // Close desktop dropdown if clicking outside
+                if (!desktopUserMenuButton?.contains(e.target) && !desktopUserDropdown?.contains(e.target)) {
+                    desktopUserDropdown?.classList.remove('show');
+                }
+
+                // Close mobile dropdown if clicking outside
+                if (!mobileUserProfile?.contains(e.target) && !mobileDropdown?.contains(e.target)) {
+                    mobileDropdown?.classList.remove('show');
+                    document.getElementById('dropdownOverlay')?.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Search input enter key functionality
+            document.getElementById('desktopSearchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('desktopLocationInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('mobileSearchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('mobile');
+                }
+            });
+        }
+
         // Load user data from localStorage
         function loadUserData() {
             const userStr = localStorage.getItem('currentUser');
             const token = localStorage.getItem('authToken');
-            
+
             if (!token || !userStr) {
                 // Not logged in, redirect to index
                 window.location.href = 'index.html';
                 return;
             }
-            
+
             try {
                 const user = JSON.parse(userStr);
-                const userEmailEl = document.getElementById('userEmail');
-                const userAvatarEl = document.getElementById('userAvatar');
-                const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
-                
-                if (userEmailEl) {
-                    // Show name if available, otherwise email
-                    const displayText = user.name || user.email || 'User';
-                    userEmailEl.textContent = displayText;
-                }
-                
-                if (dropdownUserEmailEl) {
-                    // Show email in dropdown
-                    dropdownUserEmailEl.textContent = user.email || 'user@example.com';
-                }
-                
-                if (userAvatarEl) {
-                    // Set avatar to first letter of name or email
-                    const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
-                    userAvatarEl.textContent = avatarText;
-                }
-                
+                updateUserElements(user);
                 console.log('User loaded:', user.name || user.email);
             } catch (error) {
                 console.error('Error loading user data:', error);
@@ -1357,7 +1797,41 @@
                 window.location.href = 'index.html';
             }
         }
-        
+
+        function updateUserElements(user) {
+            // Desktop elements (new header)
+            const desktopUserEmail = document.getElementById('desktopUserEmail');
+            const desktopUserAvatar = document.getElementById('desktopUserAvatar');
+            const desktopDropdownUserEmail = document.getElementById('desktopDropdownUserEmail');
+
+            // Mobile elements (new header)
+            const mobileUserEmail = document.getElementById('mobileUserEmail');
+
+            // Legacy elements (if any exist)
+            const userEmailEl = document.getElementById('userEmail');
+            const userAvatarEl = document.getElementById('userAvatar');
+            const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
+            const mobileUserAvatarEl = document.getElementById('mobileUserAvatar');
+            const mobileDropdownUserEmailEl = document.getElementById('mobileDropdownUserEmail');
+
+            const displayText = user.name || user.email || 'User';
+            const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
+            const emailText = user.email || user.name || 'user@example.com';
+
+            // Update new header elements
+            if (desktopUserEmail) desktopUserEmail.textContent = displayText;
+            if (desktopUserAvatar) desktopUserAvatar.textContent = avatarText;
+            if (desktopDropdownUserEmail) desktopDropdownUserEmail.textContent = emailText;
+            if (mobileUserEmail) mobileUserEmail.textContent = emailText;
+
+            // Update legacy elements if they exist
+            if (userEmailEl) userEmailEl.textContent = displayText;
+            if (userAvatarEl) userAvatarEl.textContent = avatarText;
+            if (dropdownUserEmailEl) dropdownUserEmailEl.textContent = emailText;
+            if (mobileUserAvatarEl) mobileUserAvatarEl.textContent = avatarText;
+            if (mobileDropdownUserEmailEl) mobileDropdownUserEmailEl.textContent = emailText;
+        }
+
         // Toggle user dropdown menu
         function toggleUserMenu() {
             const dropdown = document.getElementById('userDropdown');
@@ -1376,13 +1850,29 @@
             window.location.href = 'index.html';
         }
         
+        // Toggle mobile user dropdown menu
+        function toggleMobileUserMenu() {
+            const dropdown = document.getElementById('mobileDropdown');
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            } else {
+                dropdown.classList.add('show');
+            }
+        }
+
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const userMenu = event.target.closest('.user-menu');
             const dropdown = document.getElementById('userDropdown');
-            
+            const mobileUserMenu = event.target.closest('.mobile-user-profile');
+            const mobileDropdown = document.getElementById('mobileDropdown');
+
             if (!userMenu && dropdown) {
                 dropdown.style.display = 'none';
+            }
+
+            if (!mobileUserMenu && mobileDropdown) {
+                mobileDropdown.classList.remove('show');
             }
         });
 
@@ -1497,9 +1987,14 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize header functionality
+            initializeDesktopMenu();
+            initializeMobileMenu();
+            initializeGlobalHandlers();
+
             // Load user data
             loadUserData();
-            
+
             // Initialize holiday event platform
             new HolidayEventPlatform();
         });

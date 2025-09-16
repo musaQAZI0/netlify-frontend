@@ -2255,8 +2255,8 @@
                                     console.log('Redirecting to business events...');
                                     window.location.href = 'business_events.html';
                                 } else if (category === 'nightlife') {
-                                    // Use database authentication - no need to pass large data via URL
-                                    window.location.href = 'nightlife.html?from=logged_in';
+                                    // Redirect to nightlife logged in version
+                                    window.location.href = 'night_life_logged_in_version.html';
                                 } else {
                                     // For categories without specific pages, show a message
                                     const categoryTitle = this.querySelector('.category-title');
@@ -2886,8 +2886,8 @@
                     <div class="user-dropdown" id="userDropdown" role="menu" aria-hidden="true">
                     <div class="menu-group">
                         <a href="Find events.html" role="menuitem">Find events</a>
-                        <a href="logged_in_Version.html" role="menuitem">Browse events</a>
-                        <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                        <a href="get_ticket.html" role="menuitem">Browse events</a>
+                        <a href="events-calendar.html" role="menuitem">Manage my events</a>
                         <a href="tickets-profile.html" role="menuitem">Tickets</a>
                         <a href="likes.html" role="menuitem">Liked</a>
                         <a href="tickets-profile.html" role="menuitem">Following</a>
@@ -3214,7 +3214,7 @@
                         </a>
 
                         <!-- Nightlife -->
-                        <a href="nightlife.html" class="category-card" data-category="nightlife">
+                        <a href="night_life_logged_in_version.html" class="category-card" data-category="nightlife">
                             <div class="icon-wrapper">
                                 <svg class="category-icon" viewBox="0 0 47 48" fill="none">
                                     <path
@@ -3699,23 +3699,23 @@
             // Get current user data from logged_in_Version.html storage
             const token = localStorage.getItem('authToken') || localStorage.getItem('crowd_auth_token') || sessionStorage.getItem('crowd_auth_token');
             const currentUser = localStorage.getItem('currentUser');
-            
+
             console.log('🎭 Navigating to Performing & Visual Arts page with user:', currentUser ? JSON.parse(currentUser) : 'No user');
-            
+
             if (token && currentUser) {
                 // Pass both token and user data
                 const userDataEncoded = encodeURIComponent(currentUser);
                 console.log('✅ Navigating with full authentication data');
-                window.location.href = `Performing & Visual Arts projects.html?token=${encodeURIComponent(token)}&user=${userDataEncoded}&from=logged_in`;
+                window.location.href = `Performing & Visual Arts projects_logged.html?token=${encodeURIComponent(token)}&user=${userDataEncoded}&from=logged_in`;
             } else if (currentUser) {
                 // Pass user data even without token
                 const userDataEncoded = encodeURIComponent(currentUser);
                 console.log('⚠️ Navigating with user data only (no token)');
-                window.location.href = `Performing & Visual Arts projects.html?user=${userDataEncoded}&from=logged_in`;
+                window.location.href = `Performing & Visual Arts projects_logged.html?user=${userDataEncoded}&from=logged_in`;
             } else {
                 // Fallback to normal navigation with logged-in flag
                 console.log('📍 Fallback navigation - no auth data available');
-                window.location.href = 'Performing & Visual Arts projects.html?from=logged_in';
+                window.location.href = 'Performing & Visual Arts projects_logged.html?from=logged_in';
             }
         }
     </script>

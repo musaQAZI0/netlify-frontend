@@ -1,13 +1,16 @@
 // Eventbrite-style Monetize Page JavaScript
 class MonetizeApp {
     constructor() {
-        this.apiBaseUrl = '/api/monetize';
+        // Use environment-specific API URL
+        this.apiBaseUrl = window.location.hostname === 'localhost'
+            ? 'http://localhost:3003/api/monetize'
+            : 'https://crowd-backend-zxxp.onrender.com/api/monetize';
         this.currentUser = null;
         this.applications = [];
         this.currentStep = 1;
         this.totalSteps = 4;
         this.applicationType = null;
-        
+
         this.init();
     }
 

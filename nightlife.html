@@ -8,7 +8,6 @@
     <link rel="icon" href="data:,">
     <style>
         /* CSS Custom Properties */
-        /* CSS Custom Properties */
         :root {
             --primary-color: #f05537;
             --primary-dark: #e04429;
@@ -243,7 +242,7 @@
             color: white;
         }
 
-        /* Mobile Search - Fixed */
+        /* Mobile Search */
         .header-search-mobile {
             display: none;
             padding: 12px 16px;
@@ -1078,172 +1077,6 @@
             }
         }
 
-        /* Show/Hide headers based on auth state */
-        .logged-out-header {
-            display: block;
-        }
-
-        /* Logged In Header Styles - Template Design */
-        .logged-in-header {
-            background-color: white;
-            padding: 12px 16px;
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #e0e0e0;
-            position: relative;
-        }
-
-        .is-logged-in .logged-out-header {
-            display: none;
-        }
-
-        .is-logged-in .logged-in-header {
-            display: flex !important;
-        }
-
-        .logged-in-header .logo {
-            width: 32px;
-            height: 32px;
-            background-color: #e53e3e;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .logged-in-header .search-container {
-            flex: 1;
-            max-width: 400px;
-            margin: 0 16px;
-            position: relative;
-        }
-
-        .logged-in-header .search-bar {
-            width: 100%;
-            padding: 10px 16px 10px 40px;
-            border: 1px solid #d0d0d0;
-            border-radius: 25px;
-            font-size: 14px;
-            outline: none;
-            background-color: #f8f8f8;
-        }
-
-        .logged-in-header .search-bar:focus {
-            border-color: #e53e3e;
-            background-color: white;
-        }
-
-        .logged-in-header .search-icon {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666;
-            font-size: 16px;
-        }
-
-        .logged-in-header .search-button {
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #e53e3e;
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-        }
-
-        .logged-in-header .user-profile {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #f0f0f0;
-            border: 1px solid #d0d0d0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .logged-in-header .user-profile:hover {
-            background-color: #e8e8e8;
-        }
-
-        .logged-in-header .dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 250px;
-            z-index: 1000;
-            display: none;
-            margin-top: 8px;
-        }
-
-        .logged-in-header .dropdown.show {
-            display: block;
-        }
-
-        .logged-in-header .dropdown-item {
-            padding: 12px 16px;
-            cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 14px;
-            color: #333;
-            display: flex;
-            align-items: center;
-        }
-
-        .logged-in-header .dropdown-item:hover {
-            background-color: #f8f8f8;
-        }
-
-        .logged-in-header .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .logged-in-header .dropdown-item.email {
-            color: #666;
-            font-size: 13px;
-            cursor: default;
-        }
-
-        .logged-in-header .dropdown-item.email:hover {
-            background-color: white;
-        }
-
-        .logged-in-header .dropdown-divider {
-            height: 1px;
-            background-color: #e0e0e0;
-            margin: 8px 0;
-        }
-
-        /* Mobile responsive for logged-in header */
-        @media (max-width: 768px) {
-            .logged-in-header .search-container {
-                margin: 0 8px;
-            }
-
-            .logged-in-header .dropdown {
-                width: 200px;
-            }
-        }
-
-
         /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
 
@@ -1258,9 +1091,9 @@
     </style>
 </head>
 
-<body class="logged-out category-page" id="mainBody">
+<body class="category-page">
     <!-- Header -->
-    <header class="header logged-out-header">
+    <header class="header">
         <!-- Mobile utility links -->
         <div class="mobile-utility">
             <div class="utility-inner">
@@ -1320,8 +1153,8 @@
 
             <!-- Desktop Navigation -->
             <nav class="desktop-nav">
-                <a href="food_events.html" class="nav-link">Find Events</a>
-                <a href="create-events.html" class="nav-link">Create Events</a>
+                <a href="find-events.html" class="nav-link">Find Events</a>
+                <a href="create_events_index.html" class="nav-link">Create Events</a>
 
                 <!-- Help Center Dropdown -->
                 <div class="help-center-dropdown">
@@ -1388,7 +1221,7 @@
 
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
-            <div class="menu-item" onclick="window.location.href='food_events.html'">
+            <div class="menu-item" onclick="window.location.href='find-events.html'">
                 <div class="icon">
                     <svg class="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -1416,8 +1249,8 @@
             </div>
 
             <div class="submenu show" id="create-events-submenu">
-                <div class="submenu-item" onclick="window.location.href='#'">Organizer Resource Hub</div>
-                <div class="submenu-item" onclick="window.location.href='create-events.html'">Create Events</div>
+                <div class="submenu-item" onclick="window.location.href='organizer-resource-hub.html'">Organizer Resource Hub</div>
+                <div class="submenu-item" onclick="window.location.href='create_events_index.html'">Create Events</div>
                 <div class="submenu-item" onclick="window.location.href='#'">Contact Sales</div>
             </div>
 
@@ -1441,35 +1274,6 @@
                     </svg>
                 </div>
                 <span class="text">Help Center</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- Logged In Header -->
-    <header class="header logged-in-header" style="display: none;">
-        <div class="logo">E</div>
-
-        <div class="search-container">
-            <div class="search-icon">🔍</div>
-            <input type="text" class="search-bar" placeholder="Search events" id="loggedInSearchInput">
-            <button class="search-button" onclick="performLoggedInSearch()">🔍</button>
-        </div>
-
-        <div class="user-profile" id="userProfile">
-            👤
-            <div class="dropdown" id="dropdown">
-                <div class="dropdown-item">Manage my events</div>
-                <div class="dropdown-item">Tickets</div>
-                <div class="dropdown-item">Liked</div>
-                <div class="dropdown-item">Following</div>
-                <div class="dropdown-item">Interests</div>
-                <div class="dropdown-item">Account settings</div>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-item email" id="userEmail">user@example.com</div>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-item" onclick="logout()">Log out</div>
-                <div class="dropdown-item">Organize</div>
-                <div class="dropdown-item">Help</div>
             </div>
         </div>
     </header>
@@ -1577,9 +1381,6 @@
         </div>
     </footer>
 
-    <!-- Database Authentication System -->
-    <script src="js/auth-db.js"></script>
-
     <script>
         // Application State
         const AppState = {
@@ -1588,184 +1389,6 @@
             searchQuery: '',
             locationQuery: 'Punjab'
         };
-
-        // Authentication state variables
-        let isLoggedIn = false;
-        let currentUser = null;
-        let authToken = null;
-
-        // Check authentication state using DatabaseAuth
-        function checkAuthenticationState() {
-            console.log('🔐 Checking authentication state...');
-
-            // Check if coming from logged_in_Version.html
-            const urlParams = new URLSearchParams(window.location.search);
-            const fromPage = urlParams.get('from');
-
-            if (fromPage === 'logged_in') {
-                console.log('🔗 Coming from logged-in page');
-                // Clean up URL without reloading
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-
-            // Get current state from DatabaseAuth
-            if (window.dbAuth) {
-                const authState = dbAuth.getAuthState();
-                if (authState.isLoggedIn) {
-                    isLoggedIn = true;
-                    currentUser = authState.user;
-                    authToken = authState.token;
-                    updateAuthenticationState(true);
-                    updateLoggedInHeaderUserInfo(authState.user);
-                    console.log('✅ User authenticated:', authState.user.firstName);
-                    return true;
-                }
-            }
-
-            console.log('ℹ️ User not authenticated');
-            return false;
-        }
-
-        // Update authentication state
-        function updateAuthenticationState(loggedIn) {
-            isLoggedIn = loggedIn;
-            const body = document.body;
-
-            if (loggedIn) {
-                body.classList.add('is-logged-in');
-                console.log('✅ Added is-logged-in class');
-            } else {
-                body.classList.remove('is-logged-in');
-                console.log('❌ Removed is-logged-in class');
-            }
-        }
-
-        // Debug functions
-        window.testLoggedInState = function() {
-            console.log('🧪 Testing logged-in state...');
-            isLoggedIn = true;
-            currentUser = { email: 'test@example.com', firstName: 'Test', lastName: 'User' };
-            updateAuthenticationState(true);
-            updateLoggedInHeaderUserInfo(currentUser);
-            console.log('🧪 Logged-in state activated for testing');
-        };
-
-        // Update logged-in header user info
-        function updateLoggedInHeaderUserInfo(user) {
-            if (user) {
-                const userEmail = document.getElementById('userEmail');
-                if (userEmail) {
-                    userEmail.textContent = user.email || 'user@example.com';
-                }
-                console.log('👤 Updated user info in header for:', user.firstName || user.email);
-            }
-        }
-
-        // Enhanced logout function using DatabaseAuth
-        async function logout() {
-            console.log('🚪 Logging out user...');
-
-            try {
-                const result = await dbAuth.logout();
-                if (result.success) {
-                    showTopNotification('Successfully logged out', 'info');
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 1500);
-                } else {
-                    showTopNotification('Logout failed. Please try again.', 'error');
-                }
-            } catch (error) {
-                console.error('Logout failed:', error);
-                showTopNotification('Logout failed. Please try again.', 'error');
-            }
-        }
-
-        // Show notifications
-        function showTopNotification(message, type = 'info') {
-            let notification = document.getElementById('topNotification');
-            if (!notification) {
-                notification = document.createElement('div');
-                notification.id = 'topNotification';
-                notification.className = 'top-notification';
-                notification.style.cssText = `
-                    position: fixed;
-                    top: -100px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: white;
-                    border: 1px solid #ddd;
-                    border-radius: 8px;
-                    padding: 15px 20px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                    z-index: 10000;
-                    min-width: 300px;
-                    text-align: center;
-                    transition: top 0.3s ease;
-                `;
-                document.body.appendChild(notification);
-            }
-
-            notification.textContent = message;
-            notification.className = `top-notification ${type}`;
-
-            if (type === 'success') {
-                notification.style.borderColor = '#28a745';
-                notification.style.color = '#155724';
-            } else if (type === 'error') {
-                notification.style.borderColor = '#dc3545';
-                notification.style.color = '#721c24';
-            } else if (type === 'warning') {
-                notification.style.borderColor = '#ffc107';
-                notification.style.color = '#856404';
-            } else {
-                notification.style.borderColor = '#17a2b8';
-                notification.style.color = '#0c5460';
-            }
-
-            setTimeout(() => notification.style.top = '20px', 100);
-            setTimeout(() => notification.style.top = '-100px', 4000);
-        }
-
-        // User menu and dropdown functions for logged-in state
-        function toggleUserMenu(event) {
-            event.stopPropagation();
-            const dropdown = document.getElementById('userDropdown');
-            if (dropdown) {
-                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            }
-        }
-
-        function toggleMobileUserProfile(event) {
-            event.stopPropagation();
-            const dropdown = document.getElementById('dropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('show');
-            }
-        }
-
-        function performLoggedInSearch() {
-            const mobileInput = document.getElementById('loggedInSearchInput');
-            const desktopInput = document.getElementById('loggedInDesktopSearch');
-            const locationInput = document.getElementById('loggedInLocationInput');
-
-            let searchTerm = '';
-            if (mobileInput && mobileInput.value.trim() !== '') {
-                searchTerm = mobileInput.value;
-            } else if (desktopInput) {
-                searchTerm = desktopInput.value;
-            }
-
-            const location = locationInput ? locationInput.value : '';
-
-            if (searchTerm.trim() === '' && location.trim() === '') {
-                alert('Please enter a search term or location');
-                return;
-            }
-
-            const locationText = location || 'your area';
-            alert('Searching for: "' + searchTerm + '" in ' + locationText);
-        }
 
         // Help Center Dropdown Management
         function toggleHelpCenter() {
@@ -1975,153 +1598,9 @@
         }
 
         // DOM Content Loaded
-        document.addEventListener('DOMContentLoaded', async function() {
-            console.log('🚀 Initializing Nightlife page...');
-
-            // Wait for DatabaseAuth to initialize
-            if (window.dbAuth) {
-                console.log('📡 Waiting for DatabaseAuth initialization...');
-
-                // Listen for auth state changes
-                window.addEventListener('authStateChanged', (event) => {
-                    const { isLoggedIn: authIsLoggedIn, user } = event.detail;
-                    console.log('🔄 Auth state changed:', authIsLoggedIn, user);
-
-                    if (authIsLoggedIn && user) {
-                        isLoggedIn = true;
-                        currentUser = user;
-                        authToken = dbAuth.currentToken;
-                        updateAuthenticationState(true);
-                        updateLoggedInHeaderUserInfo(user);
-                        console.log('✅ Logged in as:', user.firstName);
-                    } else {
-                        isLoggedIn = false;
-                        currentUser = null;
-                        authToken = null;
-                        updateAuthenticationState(false);
-                        console.log('❌ Logged out');
-                    }
-                });
-
-                // Wait a bit for DatabaseAuth to complete initialization
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-
-            // Check initial authentication state
-            const authResult = checkAuthenticationState();
-            console.log('🎯 Initial auth check result:', authResult);
-
-            // Initialize the rest of the app
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Initializing Nightlife page...');
             initializeApp();
-
-            // Initialize template dropdown functionality
-            const userProfile = document.getElementById('userProfile');
-            const dropdown = document.getElementById('dropdown');
-
-            if (userProfile && dropdown) {
-                userProfile.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    dropdown.classList.toggle('show');
-                });
-
-                // Handle dropdown item clicks
-                const dropdownItems = dropdown.querySelectorAll('.dropdown-item:not(.email)');
-                dropdownItems.forEach(item => {
-                    item.addEventListener('click', function() {
-                        console.log('Clicked:', this.textContent);
-                        dropdown.classList.remove('show');
-                        // Add navigation logic based on menu item
-                        const itemText = this.textContent.trim();
-                        switch(itemText) {
-                            case 'Manage my events':
-                                window.location.href = 'organizer-dashboard.html';
-                                break;
-                            case 'Tickets':
-                                window.location.href = 'tickets-profile.html';
-                                break;
-                            case 'Liked':
-                                window.location.href = 'liked.html';
-                                break;
-                            case 'Following':
-                                window.location.href = 'following.html';
-                                break;
-                            case 'Interests':
-                                window.location.href = 'interests.html';
-                                break;
-                            case 'Account settings':
-                                window.location.href = 'settings-new.html';
-                                break;
-                            case 'Organize':
-                                window.location.href = 'create-events.html';
-                                break;
-                            case 'Help':
-                                window.location.href = 'help.html';
-                                break;
-                            case 'Log out':
-                                logout();
-                                break;
-                        }
-                    });
-                });
-            }
-
-            // Search functionality for logged in header
-            const searchBar = document.querySelector('.logged-in-header .search-bar');
-            const searchButton = document.querySelector('.logged-in-header .search-button');
-
-            if (searchButton) {
-                searchButton.addEventListener('click', function() {
-                    const searchTerm = searchBar ? searchBar.value.trim() : '';
-                    if (searchTerm) {
-                        console.log('Searching for:', searchTerm);
-                        performLoggedInSearch();
-                    }
-                });
-            }
-
-            if (searchBar) {
-                searchBar.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        const searchTerm = this.value.trim();
-                        if (searchTerm) {
-                            console.log('Searching for:', searchTerm);
-                            performLoggedInSearch();
-                        }
-                    }
-                });
-            }
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            // Close user dropdown
-            const userDropdown = document.getElementById('userDropdown');
-            if (userDropdown && !e.target.closest('.user-menu')) {
-                userDropdown.style.display = 'none';
-            }
-
-            // Close mobile user dropdown
-            const mobileDropdown = document.getElementById('dropdown');
-            if (mobileDropdown && !e.target.closest('.user-profile')) {
-                mobileDropdown.classList.remove('show');
-            }
-        });
-
-        // Handle auth changes from other tabs via custom events
-        window.addEventListener('authStateChanged', function(e) {
-            console.log('🔄 Auth state changed from another component:', e.detail);
-            const { isLoggedIn: authIsLoggedIn, user } = e.detail;
-
-            if (authIsLoggedIn && user) {
-                isLoggedIn = true;
-                currentUser = user;
-                updateAuthenticationState(true);
-                updateLoggedInHeaderUserInfo(user);
-            } else {
-                isLoggedIn = false;
-                currentUser = null;
-                updateAuthenticationState(false);
-            }
         });
     </script>
 </body>

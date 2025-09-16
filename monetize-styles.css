@@ -122,6 +122,15 @@ body {
 
 .eb-logo {
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: var(--eb-spacing-2);
+}
+
+.eb-logo-image {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
 }
 
 .eb-logo-text {
