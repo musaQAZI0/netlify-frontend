@@ -559,6 +559,9 @@ class EventBuilder {
     }
 
     validateRequiredFields() {
+        // Update data from DOM before validation
+        this.updateEventDataFromDOM();
+
         const requiredFields = [
             { field: 'title', message: 'Please enter an event title' },
             { field: 'description', message: 'Please enter an event description' },
@@ -566,13 +569,52 @@ class EventBuilder {
         ];
 
         for (const { field, message } of requiredFields) {
-            if (!this.api.currentEventData[field] || this.api.currentEventData[field].trim() === '') {
-                this.showError(message);
-                return false;
+            const value = this.api.currentEventData[field];
+
+            // Special handling for dates
+            if (field === 'startDate') {
+                if (!value || !Date.parse(value)) {
+                    this.showError(message);
+                    return false;
+                }
+            } else {
+                // For string fields
+                if (!value || (typeof value === 'string' && value.trim() === '')) {
+                    this.showError(message);
+                    return false;
+                }
             }
         }
 
         return true;
+    }
+
+    // Update event data from current DOM values
+    updateEventDataFromDOM() {
+        // Title
+        const titleEl = document.getElementById('eventTitle');
+        if (titleEl) {
+            this.api.currentEventData.title = titleEl.textContent.trim();
+        }
+
+        // Description
+        const descriptionEl = document.getElementById('overviewDescription');
+        if (descriptionEl) {
+            this.api.currentEventData.description = descriptionEl.value.trim();
+        }
+
+        // Date and time
+        const dateEl = document.getElementById('eventDate');
+        const startTimeEl = document.getElementById('startTime');
+        const endTimeEl = document.getElementById('endTime');
+
+        if (dateEl && dateEl.value) {
+            const startTime = startTimeEl ? startTimeEl.value : '00:00';
+            const endTime = endTimeEl ? endTimeEl.value : '23:59';
+
+            this.api.currentEventData.startDate = new Date(`${dateEl.value}T${startTime}`);
+            this.api.currentEventData.endDate = new Date(`${dateEl.value}T${endTime}`);
+        }
     }
 
     // UI Helper methods
