@@ -102,7 +102,18 @@ class EventBuilderAPI {
             const dataToSend = { ...this.currentEventData };
             delete dataToSend.category;
 
-            console.log('Saving event:', dataToSend);
+            // Additional cleanup - remove any category-related fields
+            delete dataToSend.eventCategory;
+
+            // Remove undefined/null values
+            Object.keys(dataToSend).forEach(key => {
+                if (dataToSend[key] === undefined || dataToSend[key] === null) {
+                    delete dataToSend[key];
+                }
+            });
+
+            console.log('Saving event (cleaned):', dataToSend);
+            console.log('Category removed:', !('category' in dataToSend));
             
             if (this.isEditing && this.eventId) {
                 // Update existing event
