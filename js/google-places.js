@@ -58,11 +58,13 @@ class GooglePlacesIntegration {
                 });
             }
 
-            // Set additional options for better suggestions
-            this.autocomplete.setOptions({
-                strictBounds: false,
-                types: ['establishment', 'geocode']
-            });
+            // Set additional options for better suggestions (only for legacy autocomplete)
+            if (this.autocomplete.setOptions) {
+                this.autocomplete.setOptions({
+                    strictBounds: false,
+                    types: ['establishment', 'geocode']
+                });
+            }
 
             // Listen for place selection
             this.autocomplete.addListener('place_changed', () => {
@@ -178,16 +180,22 @@ class GooglePlacesIntegration {
         const addressComponents = place.address_components || [];
         const locationData = this.parseAddressComponents(addressComponents);
 
-        // Populate form fields
-        document.getElementById('venueName').value = place.name || '';
-        document.getElementById('streetAddress').value = locationData.streetAddress || '';
-        document.getElementById('cityName').value = locationData.city || '';
-        document.getElementById('stateName').value = locationData.state || '';
-        document.getElementById('zipCode').value = locationData.zipCode || '';
-        document.getElementById('countryName').value = locationData.country || '';
+        // Populate form fields with null checks
+        const venueNameEl = document.getElementById('venueName');
+        const streetAddressEl = document.getElementById('streetAddress');
+        const cityNameEl = document.getElementById('cityName');
+        const stateNameEl = document.getElementById('stateName');
+        const zipCodeEl = document.getElementById('zipCode');
+        const countryNameEl = document.getElementById('countryName');
+        const locationInputEl = document.getElementById('locationInput');
 
-        // Update main location input to show full address
-        document.getElementById('locationInput').value = place.formatted_address || '';
+        if (venueNameEl) venueNameEl.value = place.name || '';
+        if (streetAddressEl) streetAddressEl.value = locationData.streetAddress || '';
+        if (cityNameEl) cityNameEl.value = locationData.city || '';
+        if (stateNameEl) stateNameEl.value = locationData.state || '';
+        if (zipCodeEl) zipCodeEl.value = locationData.zipCode || '';
+        if (countryNameEl) countryNameEl.value = locationData.country || '';
+        if (locationInputEl) locationInputEl.value = place.formatted_address || '';
     }
 
     // Parse Google Places address components
@@ -296,26 +304,34 @@ class GooglePlacesIntegration {
     handleManualLocationUpdate() {
         if (window.eventBuilder && window.eventBuilder.api) {
             const api = window.eventBuilder.api;
-            
-            // Update event data with manual inputs
-            api.currentEventData.venue = document.getElementById('venueName').value;
-            api.currentEventData.city = document.getElementById('cityName').value;
-            api.currentEventData.state = document.getElementById('stateName').value;
-            api.currentEventData.country = document.getElementById('countryName').value;
-            api.currentEventData.address = document.getElementById('streetAddress').value;
-            api.currentEventData.zipCode = document.getElementById('zipCode').value;
+
+            const venueNameEl = document.getElementById('venueName');
+            const cityNameEl = document.getElementById('cityName');
+            const stateNameEl = document.getElementById('stateName');
+            const countryNameEl = document.getElementById('countryName');
+            const streetAddressEl = document.getElementById('streetAddress');
+            const zipCodeEl = document.getElementById('zipCode');
+            const locationInputEl = document.getElementById('locationInput');
+
+            // Update event data with manual inputs (with null checks)
+            if (venueNameEl) api.currentEventData.venue = venueNameEl.value;
+            if (cityNameEl) api.currentEventData.city = cityNameEl.value;
+            if (stateNameEl) api.currentEventData.state = stateNameEl.value;
+            if (countryNameEl) api.currentEventData.country = countryNameEl.value;
+            if (streetAddressEl) api.currentEventData.address = streetAddressEl.value;
+            if (zipCodeEl) api.currentEventData.zipCode = zipCodeEl.value;
 
             // Create formatted address
             const parts = [
-                document.getElementById('streetAddress').value,
-                document.getElementById('cityName').value,
-                document.getElementById('stateName').value,
-                document.getElementById('zipCode').value
+                streetAddressEl?.value || '',
+                cityNameEl?.value || '',
+                stateNameEl?.value || '',
+                zipCodeEl?.value || ''
             ].filter(part => part.trim());
 
             const formattedAddress = parts.join(', ');
-            if (formattedAddress) {
-                document.getElementById('locationInput').value = formattedAddress;
+            if (formattedAddress && locationInputEl) {
+                locationInputEl.value = formattedAddress;
             }
 
             // Trigger auto-save
@@ -327,14 +343,22 @@ class GooglePlacesIntegration {
 
     // Get current location data
     getLocationData() {
+        const venueNameEl = document.getElementById('venueName');
+        const streetAddressEl = document.getElementById('streetAddress');
+        const cityNameEl = document.getElementById('cityName');
+        const stateNameEl = document.getElementById('stateName');
+        const zipCodeEl = document.getElementById('zipCode');
+        const countryNameEl = document.getElementById('countryName');
+        const locationInputEl = document.getElementById('locationInput');
+
         return {
-            venue: document.getElementById('venueName').value,
-            address: document.getElementById('streetAddress').value,
-            city: document.getElementById('cityName').value,
-            state: document.getElementById('stateName').value,
-            zipCode: document.getElementById('zipCode').value,
-            country: document.getElementById('countryName').value,
-            formattedAddress: document.getElementById('locationInput').value,
+            venue: venueNameEl?.value || '',
+            address: streetAddressEl?.value || '',
+            city: cityNameEl?.value || '',
+            state: stateNameEl?.value || '',
+            zipCode: zipCodeEl?.value || '',
+            country: countryNameEl?.value || '',
+            formattedAddress: locationInputEl?.value || '',
             latitude: this.selectedPlace?.geometry?.location?.lat() || null,
             longitude: this.selectedPlace?.geometry?.location?.lng() || null,
             placeId: this.selectedPlace?.place_id || null
@@ -345,13 +369,21 @@ class GooglePlacesIntegration {
     loadLocationData(locationData) {
         if (!locationData) return;
 
-        document.getElementById('venueName').value = locationData.venue || '';
-        document.getElementById('streetAddress').value = locationData.address || '';
-        document.getElementById('cityName').value = locationData.city || '';
-        document.getElementById('stateName').value = locationData.state || '';
-        document.getElementById('zipCode').value = locationData.zipCode || '';
-        document.getElementById('countryName').value = locationData.country || 'United States';
-        document.getElementById('locationInput').value = locationData.formattedAddress || '';
+        const venueNameEl = document.getElementById('venueName');
+        const streetAddressEl = document.getElementById('streetAddress');
+        const cityNameEl = document.getElementById('cityName');
+        const stateNameEl = document.getElementById('stateName');
+        const zipCodeEl = document.getElementById('zipCode');
+        const countryNameEl = document.getElementById('countryName');
+        const locationInputEl = document.getElementById('locationInput');
+
+        if (venueNameEl) venueNameEl.value = locationData.venue || '';
+        if (streetAddressEl) streetAddressEl.value = locationData.address || '';
+        if (cityNameEl) cityNameEl.value = locationData.city || '';
+        if (stateNameEl) stateNameEl.value = locationData.state || '';
+        if (zipCodeEl) zipCodeEl.value = locationData.zipCode || '';
+        if (countryNameEl) countryNameEl.value = locationData.country || 'United States';
+        if (locationInputEl) locationInputEl.value = locationData.formattedAddress || '';
 
         // Show location details if there's data
         if (locationData.venue || locationData.address || locationData.city) {
