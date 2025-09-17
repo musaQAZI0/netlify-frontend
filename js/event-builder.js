@@ -615,6 +615,12 @@ class EventBuilder {
             this.api.currentEventData.startDate = new Date(`${dateEl.value}T${startTime}`);
             this.api.currentEventData.endDate = new Date(`${dateEl.value}T${endTime}`);
         }
+
+        // Image - preserve existing imageUrl if it exists
+        const eventImage = document.getElementById('eventImage');
+        if (eventImage && eventImage.src && eventImage.style.display !== 'none') {
+            this.api.currentEventData.imageUrl = eventImage.src;
+        }
     }
 
     // UI Helper methods
