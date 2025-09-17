@@ -152,26 +152,83 @@
                     </div>
                     
                     <div class="main-form">
-                        <!-- Event Image Upload -->
-                        <div class="image-upload-section">
-                            <div class="image-upload-area" onclick="uploadImage()">
-                                <div class="upload-placeholder" id="uploadPlaceholder">
-                                    <div class="upload-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#3b82f6">
-                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                            <polyline points="7,10 12,15 17,10"/>
-                                            <line x1="12" x2="12" y1="15" y2="3"/>
-                                        </svg>
-                                    </div>
-                                    <h3>Upload photos and video</h3>
+                        <!-- Event Media Upload Section -->
+                        <div class="media-upload-section">
+                            <div class="section-header">
+                                <h3>Add images and video</h3>
+                                <div class="add-button">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <line x1="12" x2="12" y1="5" y2="19"/>
+                                        <line x1="5" x2="19" y1="12" y2="12"/>
+                                    </svg>
                                 </div>
-                                <img id="eventImage" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                             </div>
-                            <div class="image-controls">
-                                <div class="image-dots">
-                                    <span class="dot active"></span>
-                                    <span class="dot"></span>
-                                    <span class="dot"></span>
+
+                            <!-- Images Section -->
+                            <div class="media-subsection">
+                                <h4>Images</h4>
+                                <div class="pro-tip">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <span><strong>Pro tip:</strong> Use photos that set the mood, and avoid distracting text overlays. <a href="#">View examples →</a></span>
+                                </div>
+                                <div class="image-upload-area" onclick="uploadImage()">
+                                    <div class="upload-placeholder" id="uploadPlaceholder">
+                                        <div class="upload-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#ccc">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                                <polyline points="21,15 16,10 5,21"/>
+                                            </svg>
+                                        </div>
+                                        <p>Drag and drop an image or</p>
+                                        <button type="button" class="upload-btn">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                <polyline points="7,10 12,15 17,10"/>
+                                                <line x1="12" x2="12" y1="15" y2="3"/>
+                                            </svg>
+                                            Upload Image
+                                        </button>
+                                    </div>
+                                    <img id="eventImage" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                                </div>
+                                <div class="upload-specs">
+                                    <span>• Recommended image size: 2160 x 1080px</span>
+                                    <span>• Maximum file size: 10MB</span>
+                                    <span>• Supported image files: JPEG, PNG</span>
+                                </div>
+                            </div>
+
+                            <!-- Video Section -->
+                            <div class="media-subsection">
+                                <h4>Video</h4>
+                                <p class="video-description">Add a video to show your event's vibe. The video will appear with your event images.</p>
+                                <div class="video-upload-area" onclick="uploadVideo()">
+                                    <div class="upload-placeholder" id="videoUploadPlaceholder">
+                                        <div class="upload-icon">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="#ccc">
+                                                <polygon points="23 7 16 12 23 17 23 7"/>
+                                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                            </svg>
+                                        </div>
+                                        <p>Drag and drop an image or</p>
+                                        <button type="button" class="upload-btn">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                <polygon points="23 7 16 12 23 17 23 7"/>
+                                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                            </svg>
+                                            Upload video
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="upload-specs">
+                                    <span>• Min resolution: 480p</span>
+                                    <span>• Ratio: any vertical</span>
+                                    <span>• Length: up to 1 min</span>
+                                    <span>• Formats: MP4, MOV</span>
+                                    <span><a href="#">View more details →</a></span>
                                 </div>
                             </div>
                         </div>
@@ -323,6 +380,120 @@
                                 <button class="add-question-btn" onclick="addFAQ()">+ Add question</button>
                             </div>
                         </div>
+
+                        <!-- Add More Sections -->
+                        <div class="more-sections-area">
+                            <div class="more-sections-header">
+                                <h3>Add more sections to your event page</h3>
+                                <p>Make your event stand out even more. These sections help attendees find information and answer their questions - which means more ticket sales and less time answering messages.</p>
+                            </div>
+
+                            <div class="sections-grid">
+                                <!-- Lineup Section -->
+                                <div class="section-card" id="lineupCard">
+                                    <div class="section-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#374151">
+                                            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="section-info">
+                                        <h4>Lineup <span class="new-badge">New</span></h4>
+                                        <a href="#" class="see-examples">See examples</a>
+                                    </div>
+                                    <button class="add-section-btn" onclick="addLineupSection()">Add</button>
+                                </div>
+
+                                <!-- Agenda Section -->
+                                <div class="section-card" id="agendaCard">
+                                    <div class="section-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="#374151">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                            <line x1="16" x2="16" y1="2" y2="6"/>
+                                            <line x1="8" x2="8" y1="2" y2="6"/>
+                                            <line x1="3" x2="21" y1="10" y2="10"/>
+                                        </svg>
+                                    </div>
+                                    <div class="section-info">
+                                        <h4>Agenda</h4>
+                                        <a href="#" class="see-examples">See examples</a>
+                                    </div>
+                                    <button class="add-section-btn" onclick="addAgendaSection()">Add</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lineup Section (Initially Hidden) -->
+                        <div class="lineup-section" id="lineupSection" style="display: none;">
+                            <div class="section-header">
+                                <h3>Lineup <button class="edit-btn" onclick="editLineupTitle()">✏️</button></h3>
+                                <button class="delete-section-btn" onclick="deleteLineupSection()">Delete section</button>
+                            </div>
+                            <p class="section-description">Highlight your lineup of special guests with a section on your event page. Change the title of this section to fit your event's theme and add info about each person. You can set someone as a headliner to highlight them even more.</p>
+
+                            <div class="lineup-container" id="lineupContainer">
+                                <div class="lineup-item">
+                                    <div class="lineup-image">
+                                        <div class="image-upload-placeholder">
+                                            <span>Upload an image*</span>
+                                            <small>Image should be at least<br>320x320 pixels</small>
+                                            <button class="upload-btn-small" onclick="uploadLineupImage()">Upload</button>
+                                        </div>
+                                    </div>
+                                    <div class="lineup-details">
+                                        <input type="text" placeholder="Name" class="lineup-name">
+                                        <div class="tagline-section">
+                                            <button class="add-tagline-btn" onclick="addTagline()">🏷️ Add a tagline</button>
+                                        </div>
+                                        <textarea placeholder="Description" class="lineup-description"></textarea>
+                                        <div class="character-count">0 / 5000</div>
+                                        <div class="lineup-options">
+                                            <label class="headliner-toggle">
+                                                <input type="checkbox"> Set as headliner
+                                            </label>
+                                            <button class="social-links-btn" onclick="addSocialLinks()">🔗 Add social links</button>
+                                        </div>
+                                    </div>
+                                    <button class="delete-lineup-btn" onclick="deleteLineupItem(this)">🗑️</button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn" onclick="addAnotherLineupItem()">+ Add another</button>
+                        </div>
+
+                        <!-- Agenda Section (Initially Hidden) -->
+                        <div class="agenda-section" id="agendaSection" style="display: none;">
+                            <div class="section-header">
+                                <h3>Agenda</h3>
+                                <button class="delete-section-btn" onclick="deleteAgendaSection()">Delete section</button>
+                            </div>
+                            <p class="section-description">Add an itinerary, schedule, or lineup to your event. You can include a time, a description of what will happen, and who will host or perform during the event. (Ex. Speaker, performer, artist, guide, etc.) If your event has multiple dates, you can add a second agenda.</p>
+
+                            <div class="agenda-tabs">
+                                <button class="agenda-tab active" onclick="switchAgendaTab('agenda')">Agenda</button>
+                                <button class="agenda-tab" onclick="switchAgendaTab('new')">+ Add new agenda</button>
+                            </div>
+
+                            <div class="agenda-container" id="agendaContainer">
+                                <div class="agenda-item">
+                                    <input type="text" placeholder="Title*" class="agenda-title">
+                                    <div class="agenda-time-section">
+                                        <div class="time-input-group">
+                                            <label>🕐 Start time</label>
+                                            <input type="time" class="agenda-start-time">
+                                        </div>
+                                        <div class="time-input-group">
+                                            <label>🕐 End time</label>
+                                            <input type="time" class="agenda-end-time">
+                                        </div>
+                                    </div>
+                                    <div class="agenda-optional-fields">
+                                        <button class="add-host-btn" onclick="addHost()">👤 Host or Artist</button>
+                                        <button class="add-description-btn" onclick="addAgendaDescription()">📝 Add description</button>
+                                    </div>
+                                    <button class="delete-agenda-btn" onclick="deleteAgendaItem(this)">🗑️</button>
+                                </div>
+                            </div>
+                            <button class="add-slot-btn" onclick="addAgendaSlot()">+ Add slot</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -334,8 +505,10 @@
         </main>
     </div>
 
-    <!-- Hidden file input for image upload -->
+    <!-- Hidden file inputs -->
     <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+    <input type="file" id="videoInput" accept="video/*" style="display: none;" onchange="handleVideoUpload(event)">
+    <input type="file" id="lineupImageInput" accept="image/*" style="display: none;" onchange="handleLineupImageUpload(event)">
 
     <!-- The JavaScript is now in js/event-builder.js -->
 </body>

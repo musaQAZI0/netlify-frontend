@@ -1232,3 +1232,520 @@ select:focus {
 .highlight-btn:active {
   transform: translateY(1px);
 }
+
+/* Media Upload Section Styles */
+.media-upload-section {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.media-subsection {
+  margin-bottom: 32px;
+}
+
+.media-subsection:last-child {
+  margin-bottom: 0;
+}
+
+.media-subsection h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 12px;
+}
+
+.pro-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.pro-tip svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.pro-tip a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.video-description {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.image-upload-area, .video-upload-area {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  margin-bottom: 12px;
+}
+
+.image-upload-area:hover, .video-upload-area:hover {
+  border-color: #3b82f6;
+}
+
+.upload-btn {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.upload-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.upload-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.upload-specs span {
+  display: block;
+}
+
+.upload-specs a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+/* More Sections Area */
+.more-sections-area {
+  background: white;
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 32px;
+  margin: 32px 0;
+  text-align: center;
+}
+
+.more-sections-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.more-sections-header p {
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 24px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.section-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.section-card:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.section-icon {
+  flex-shrink: 0;
+}
+
+.section-info {
+  flex: 1;
+}
+
+.section-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.new-badge {
+  background: #3b82f6;
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.see-examples {
+  color: #3b82f6;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.add-section-btn {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-section-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #eff6ff;
+}
+
+/* Lineup Section Styles */
+.lineup-section, .agenda-section {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.delete-section-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: auto;
+}
+
+.delete-section-btn:hover {
+  text-decoration: underline;
+}
+
+.section-description {
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.lineup-container {
+  margin-bottom: 24px;
+}
+
+.lineup-item {
+  display: flex;
+  gap: 24px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.lineup-image {
+  flex-shrink: 0;
+  width: 120px;
+}
+
+.image-upload-placeholder {
+  background: #f1f5f9;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.upload-btn-small {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.lineup-details {
+  flex: 1;
+}
+
+.lineup-name {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.tagline-section {
+  margin-bottom: 12px;
+}
+
+.add-tagline-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.lineup-description {
+  width: 100%;
+  min-height: 80px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.character-count {
+  font-size: 12px;
+  color: #64748b;
+  text-align: right;
+  margin-bottom: 12px;
+}
+
+.lineup-options {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.headliner-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.social-links-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.delete-lineup-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-another-btn, .add-slot-btn {
+  background: #f8fafc;
+  border: 1px dashed #d1d5db;
+  border-radius: 6px;
+  padding: 12px 24px;
+  width: 100%;
+  font-size: 14px;
+  color: #3b82f6;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-another-btn:hover, .add-slot-btn:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+}
+
+/* Agenda Section Styles */
+.agenda-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.agenda-tab {
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.agenda-tab.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.agenda-tab:hover {
+  color: #3b82f6;
+}
+
+.agenda-container {
+  margin-bottom: 24px;
+}
+
+.agenda-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.agenda-title {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.agenda-time-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.time-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.time-input-group label {
+  font-size: 14px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agenda-start-time, .agenda-end-time {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.agenda-optional-fields {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.add-host-btn, .add-description-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-agenda-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lineup-item {
+    flex-direction: column;
+  }
+
+  .lineup-image {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .agenda-time-section {
+    grid-template-columns: 1fr;
+  }
+
+  .sections-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -531,6 +531,51 @@ class EventBuilder {
         }
     }
 
+    async handleVideoUpload(file) {
+        try {
+            this.showLoading('Uploading video...');
+            // For now, just show success. Implement actual video upload later
+            const videoUrl = await this.api.uploadImage(file); // Use same upload endpoint for now
+            this.api.currentEventData.videoUrl = videoUrl;
+            this.displayVideo(videoUrl);
+            this.hideLoading();
+            this.showSuccess('Video uploaded successfully');
+            this.scheduleAutoSave();
+        } catch (error) {
+            this.hideLoading();
+            this.showError('Failed to upload video: ' + error.message);
+        }
+    }
+
+    async handleLineupImageUpload(file) {
+        try {
+            this.showLoading('Uploading lineup image...');
+            const imageUrl = await this.api.uploadImage(file);
+            // Find the currently active lineup item and update its image
+            const activeUpload = document.querySelector('.image-upload-placeholder');
+            if (activeUpload) {
+                activeUpload.innerHTML = `<img src="${imageUrl}" style="width: 100%; height: 80px; object-fit: cover; border-radius: 4px;">`;
+            }
+            this.hideLoading();
+            this.showSuccess('Lineup image uploaded successfully');
+        } catch (error) {
+            this.hideLoading();
+            this.showError('Failed to upload lineup image: ' + error.message);
+        }
+    }
+
+    displayVideo(videoUrl) {
+        const videoPlaceholder = document.getElementById('videoUploadPlaceholder');
+        if (videoPlaceholder) {
+            videoPlaceholder.innerHTML = `
+                <video controls style="width: 100%; max-height: 200px;">
+                    <source src="${videoUrl}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+        }
+    }
+
     async saveAndContinue() {
         if (!this.validateRequiredFields()) {
             return;
@@ -674,6 +719,155 @@ function handleImageUpload(event) {
     const file = event.target.files[0];
     if (file && window.eventBuilder) {
         window.eventBuilder.handleImageUpload(file);
+    }
+}
+
+function uploadVideo() {
+    document.getElementById('videoInput')?.click();
+}
+
+function uploadLineupImage() {
+    document.getElementById('lineupImageInput')?.click();
+}
+
+function handleVideoUpload(event) {
+    const file = event.target.files[0];
+    if (file && window.eventBuilder) {
+        window.eventBuilder.handleVideoUpload(file);
+    }
+}
+
+function handleLineupImageUpload(event) {
+    const file = event.target.files[0];
+    if (file && window.eventBuilder) {
+        window.eventBuilder.handleLineupImageUpload(file);
+    }
+}
+
+// Lineup section functions
+function addLineupSection() {
+    const lineupSection = document.getElementById('lineupSection');
+    const lineupCard = document.getElementById('lineupCard');
+
+    if (lineupSection && lineupCard) {
+        lineupSection.style.display = 'block';
+        lineupCard.style.display = 'none';
+    }
+}
+
+function deleteLineupSection() {
+    const lineupSection = document.getElementById('lineupSection');
+    const lineupCard = document.getElementById('lineupCard');
+
+    if (lineupSection && lineupCard) {
+        lineupSection.style.display = 'none';
+        lineupCard.style.display = 'flex';
+    }
+}
+
+function editLineupTitle() {
+    // Implement lineup title editing
+    const title = prompt('Enter new lineup title:', 'Lineup');
+    if (title) {
+        const titleElement = document.querySelector('.lineup-section .section-header h3');
+        if (titleElement) {
+            titleElement.innerHTML = title + ' <button class="edit-btn" onclick="editLineupTitle()">✏️</button>';
+        }
+    }
+}
+
+function addTagline() {
+    // Implement tagline functionality
+    console.log('Add tagline clicked');
+}
+
+function addSocialLinks() {
+    // Implement social links functionality
+    console.log('Add social links clicked');
+}
+
+function deleteLineupItem(button) {
+    const lineupItem = button.closest('.lineup-item');
+    if (lineupItem) {
+        lineupItem.remove();
+    }
+}
+
+function addAnotherLineupItem() {
+    const lineupContainer = document.getElementById('lineupContainer');
+    if (lineupContainer) {
+        const newItem = document.querySelector('.lineup-item').cloneNode(true);
+        // Clear input values
+        const inputs = newItem.querySelectorAll('input, textarea');
+        inputs.forEach(input => input.value = '');
+        const checkbox = newItem.querySelector('input[type="checkbox"]');
+        if (checkbox) checkbox.checked = false;
+
+        lineupContainer.appendChild(newItem);
+    }
+}
+
+// Agenda section functions
+function addAgendaSection() {
+    const agendaSection = document.getElementById('agendaSection');
+    const agendaCard = document.getElementById('agendaCard');
+
+    if (agendaSection && agendaCard) {
+        agendaSection.style.display = 'block';
+        agendaCard.style.display = 'none';
+    }
+}
+
+function deleteAgendaSection() {
+    const agendaSection = document.getElementById('agendaSection');
+    const agendaCard = document.getElementById('agendaCard');
+
+    if (agendaSection && agendaCard) {
+        agendaSection.style.display = 'none';
+        agendaCard.style.display = 'flex';
+    }
+}
+
+function switchAgendaTab(tabName) {
+    const tabs = document.querySelectorAll('.agenda-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+
+    if (tabName === 'new') {
+        // Add new agenda functionality
+        console.log('Add new agenda clicked');
+    } else {
+        // Switch to agenda tab
+        const agendaTab = document.querySelector('.agenda-tab');
+        if (agendaTab) agendaTab.classList.add('active');
+    }
+}
+
+function addHost() {
+    // Implement add host functionality
+    console.log('Add host clicked');
+}
+
+function addAgendaDescription() {
+    // Implement add description functionality
+    console.log('Add agenda description clicked');
+}
+
+function deleteAgendaItem(button) {
+    const agendaItem = button.closest('.agenda-item');
+    if (agendaItem) {
+        agendaItem.remove();
+    }
+}
+
+function addAgendaSlot() {
+    const agendaContainer = document.getElementById('agendaContainer');
+    if (agendaContainer) {
+        const newItem = document.querySelector('.agenda-item').cloneNode(true);
+        // Clear input values
+        const inputs = newItem.querySelectorAll('input, textarea');
+        inputs.forEach(input => input.value = '');
+
+        agendaContainer.appendChild(newItem);
     }
 }
 
