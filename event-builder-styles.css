@@ -1443,7 +1443,11 @@ select:focus {
   border-radius: 12px;
   padding: 32px;
   margin: 32px 0;
-  text-align: center;
+}
+
+.more-sections-header {
+  text-align: left;
+  margin-bottom: 32px;
 }
 
 .more-sections-header h3 {
@@ -1456,39 +1460,48 @@ select:focus {
 .more-sections-header p {
   color: #64748b;
   font-size: 14px;
-  margin-bottom: 24px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .sections-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 .section-card {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: #f8fafc;
+  justify-content: space-between;
+  background: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  padding: 20px;
-  text-align: left;
+  padding: 20px 24px;
   transition: all 0.2s;
 }
 
 .section-card:hover {
   border-color: #3b82f6;
-  background: #eff6ff;
+  background: #f8fafc;
+}
+
+.section-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .section-icon {
   flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  background: #f8fafc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
 }
 
 .section-info {
@@ -1499,7 +1512,7 @@ select:focus {
   font-size: 16px;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 4px;
+  margin: 0 0 4px 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1513,29 +1526,42 @@ select:focus {
   padding: 2px 6px;
   border-radius: 4px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .see-examples {
   color: #3b82f6;
   text-decoration: none;
   font-size: 14px;
+  font-weight: 400;
+}
+
+.see-examples:hover {
+  text-decoration: underline;
+}
+
+.section-right {
+  display: flex;
+  align-items: center;
 }
 
 .add-section-btn {
   background: white;
   border: 1px solid #d1d5db;
   border-radius: 6px;
-  padding: 8px 16px;
+  padding: 8px 20px;
   font-size: 14px;
+  font-weight: 500;
   color: #374151;
   cursor: pointer;
   transition: all 0.2s;
+  min-width: 60px;
 }
 
 .add-section-btn:hover {
   border-color: #3b82f6;
   color: #3b82f6;
-  background: #eff6ff;
+  background: #f8fafc;
 }
 
 /* Lineup Section Styles */

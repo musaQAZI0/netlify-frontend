@@ -763,6 +763,7 @@ function addLineupSection() {
     }
 }
 
+
 function deleteLineupSection() {
     const lineupSection = document.getElementById('lineupSection');
     const lineupCard = document.getElementById('lineupCard');
@@ -906,6 +907,7 @@ function expandUploadSection() {
     }
 }
 
+
 function collapseUploadSection() {
     const heroSection = document.getElementById('uploadHeroSection');
     const expandedSection = document.getElementById('uploadExpandedSection');
@@ -1041,3 +1043,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTimeout(initializeWhenReady, 100);
 });
+
+// Ensure all onclick functions are available globally
+window.addLineupSection = addLineupSection;
+window.addAgendaSection = addAgendaSection;
+window.expandUploadSection = expandUploadSection;
+window.collapseUploadSection = collapseUploadSection;
+window.saveAndContinue = saveAndContinue;
+window.handleImageUpload = handleImageUpload;
+window.handleVideoUpload = handleVideoUpload;
+window.handleLineupImageUpload = handleLineupImageUpload;
