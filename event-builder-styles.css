@@ -1238,8 +1238,107 @@ select:focus {
   background: white;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 24px;
+  padding: 0;
   margin-bottom: 24px;
+  overflow: hidden;
+}
+
+/* Upload Hero Section (Initial View) */
+.upload-hero-section {
+  height: 300px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.upload-hero-section:hover {
+  transform: scale(1.02);
+}
+
+.upload-hero-background {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.8),
+    rgba(147, 51, 234, 0.8)
+  ),
+  url('https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?ixlib=rb-4.0.3&auto=format&fit=crop&w=2074&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.upload-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.upload-hero-content {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.upload-hero-icon {
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.upload-hero-content h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.upload-hero-plus {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Expanded Upload Section */
+.upload-expanded-section {
+  padding: 24px;
+}
+
+.upload-expanded-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.collapse-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.collapse-btn:hover {
+  background-color: #f1f5f9;
 }
 
 .media-subsection {

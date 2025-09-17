@@ -519,6 +519,10 @@ class EventBuilder {
     async handleImageUpload(file) {
         try {
             this.showLoading('Uploading image...');
+
+            // Expand upload section if not already expanded
+            expandUploadSection();
+
             const imageUrl = await this.api.uploadImage(file);
             this.api.currentEventData.imageUrl = imageUrl;
             this.displayImage(imageUrl);
@@ -534,6 +538,10 @@ class EventBuilder {
     async handleVideoUpload(file) {
         try {
             this.showLoading('Uploading video...');
+
+            // Expand upload section if not already expanded
+            expandUploadSection();
+
             // For now, just show success. Implement actual video upload later
             const videoUrl = await this.api.uploadImage(file); // Use same upload endpoint for now
             this.api.currentEventData.videoUrl = videoUrl;
@@ -871,6 +879,67 @@ function addAgendaSlot() {
     }
 }
 
+// Upload section expand/collapse functions
+function expandUploadSection() {
+    const heroSection = document.getElementById('uploadHeroSection');
+    const expandedSection = document.getElementById('uploadExpandedSection');
+
+    if (heroSection && expandedSection) {
+        // Hide hero section with animation
+        heroSection.style.transform = 'scale(0.95)';
+        heroSection.style.opacity = '0';
+
+        setTimeout(() => {
+            heroSection.style.display = 'none';
+            expandedSection.style.display = 'block';
+
+            // Animate in the expanded section
+            expandedSection.style.opacity = '0';
+            expandedSection.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                expandedSection.style.transition = 'all 0.3s ease';
+                expandedSection.style.opacity = '1';
+                expandedSection.style.transform = 'translateY(0)';
+            }, 10);
+        }, 200);
+    }
+}
+
+function collapseUploadSection() {
+    const heroSection = document.getElementById('uploadHeroSection');
+    const expandedSection = document.getElementById('uploadExpandedSection');
+
+    if (heroSection && expandedSection) {
+        // Animate out the expanded section
+        expandedSection.style.transition = 'all 0.2s ease';
+        expandedSection.style.opacity = '0';
+        expandedSection.style.transform = 'translateY(-20px)';
+
+        setTimeout(() => {
+            expandedSection.style.display = 'none';
+            heroSection.style.display = 'block';
+
+            // Reset hero section styles
+            heroSection.style.transition = 'all 0.3s ease';
+            heroSection.style.transform = 'scale(1)';
+            heroSection.style.opacity = '1';
+        }, 200);
+    }
+}
+
+// Check if upload section should be expanded on page load
+function checkUploadSectionState() {
+    const eventImage = document.getElementById('eventImage');
+    const videoPlaceholder = document.getElementById('videoUploadPlaceholder');
+
+    // If there's already an uploaded image or video, show expanded section
+    if ((eventImage && eventImage.src && eventImage.style.display !== 'none') ||
+        (videoPlaceholder && videoPlaceholder.innerHTML.includes('<video'))) {
+        expandUploadSection();
+    }
+}
+
 function saveAndContinue() {
     if (window.eventBuilder) {
         window.eventBuilder.saveAndContinue();
@@ -955,6 +1024,11 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (window.Config && window.authUtils) {
                 window.eventBuilder = new EventBuilder();
+
+                // Check upload section state after initialization
+                setTimeout(() => {
+                    checkUploadSectionState();
+                }, 1000);
             } else {
                 setTimeout(initializeWhenReady, 100);
             }
