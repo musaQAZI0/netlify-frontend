@@ -97,14 +97,18 @@ class EventBuilderAPI {
         try {
             // Merge current data with new data
             this.currentEventData = { ...this.currentEventData, ...eventData };
-            
-            console.log('Saving event:', this.currentEventData);
+
+            // Remove category field completely to avoid validation errors
+            const dataToSend = { ...this.currentEventData };
+            delete dataToSend.category;
+
+            console.log('Saving event:', dataToSend);
             
             if (this.isEditing && this.eventId) {
                 // Update existing event
                 const data = await this.apiRequest(`/events/${this.eventId}`, {
                     method: 'PUT',
-                    body: JSON.stringify(this.currentEventData)
+                    body: JSON.stringify(dataToSend)
                 });
                 
                 if (data.success) {
@@ -115,7 +119,7 @@ class EventBuilderAPI {
                 // Create new event
                 const data = await this.apiRequest('/events', {
                     method: 'POST',
-                    body: JSON.stringify(this.currentEventData)
+                    body: JSON.stringify(dataToSend)
                 });
                 
                 if (data.success) {
