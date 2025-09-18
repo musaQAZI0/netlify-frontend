@@ -269,6 +269,8 @@
         let currentTicketType = 'paid';
         let editingTicketId = null;
         let eventTickets = [];
+        let inventoryTiers = [];
+        let ticketGroups = [];
 
         document.addEventListener('DOMContentLoaded', function() {
             if (!window.dataManager.isAuthenticated()) {
@@ -304,8 +306,8 @@
                     return;
                 }
 
-                // Fetch event data from database
-                const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                // Fetch event data and advanced ticket classes
+                const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}/ticket-classes`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -318,11 +320,33 @@
                 }
 
                 const data = await response.json();
-                if (data.success && data.event) {
-                    currentEventData = data.event;
-                    populateEventInfo();
+                if (data.success) {
+                    // Also fetch basic event data
+                    const eventResponse = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${getAuthToken()}`
+                        }
+                    });
+
+                    if (eventResponse.ok) {
+                        const eventData = await eventResponse.json();
+                        if (eventData.success) {
+                            currentEventData = eventData.event;
+                            // Store advanced ticket data
+                            currentEventData.ticketClasses = data.ticketClasses;
+                            currentEventData.inventoryTiers = data.inventoryTiers;
+                            currentEventData.ticketGroups = data.ticketGroups;
+                            currentEventData.inventoryInfo = data.inventoryInfo;
+
+                            populateEventInfo();
+                            loadInventoryTiers();
+                            loadTicketGroups();
+                        }
+                    }
                 } else {
-                    throw new Error('Event not found');
+                    throw new Error('Failed to load ticket classes data');
                 }
             } catch (error) {
                 console.error('Failed to load event data:', error);
@@ -367,8 +391,8 @@
 
         function loadTickets() {
             try {
-                // Get tickets from the event data fetched from database
-                eventTickets = currentEventData.pricing?.tickets || [];
+                // Get advanced ticket classes from the event data
+                eventTickets = currentEventData.ticketClasses || [];
                 renderTicketsList();
             } catch (error) {
                 console.error('Failed to load tickets:', error);
@@ -377,31 +401,79 @@
             }
         }
 
+        function loadInventoryTiers() {
+            try {
+                inventoryTiers = currentEventData.inventoryTiers || [];
+                populateInventoryTierOptions();
+            } catch (error) {
+                console.error('Failed to load inventory tiers:', error);
+                inventoryTiers = [];
+            }
+        }
+
+        function loadTicketGroups() {
+            try {
+                ticketGroups = currentEventData.ticketGroups || [];
+                renderTicketGroups();
+            } catch (error) {
+                console.error('Failed to load ticket groups:', error);
+                ticketGroups = [];
+            }
+        }
+
         function renderTicketsList() {
             const ticketsList = document.getElementById('ticketsList');
-            
+
             if (eventTickets.length === 0) {
                 ticketsList.innerHTML = `
                     <div class="no-tickets">
-                        <p>No tickets created yet. Use the form on the right to add your first ticket.</p>
+                        <p>No ticket classes created yet. Use the form on the right to add your first ticket class.</p>
                     </div>
                 `;
                 return;
             }
 
-            ticketsList.innerHTML = eventTickets.map(ticket => `
-                <div class="ticket-item" data-ticket-id="${ticket.id}">
-                    <div class="ticket-info">
-                        <h4>${ticket.name}</h4>
-                        <p class="ticket-price">${ticket.type === 'free' ? 'Free' : ticket.type === 'donation' ? 'Donation' : '$' + ticket.price}</p>
-                        <p class="ticket-quantity">${ticket.quantity ? ticket.quantity + ' available' : 'Unlimited'}</p>
+            ticketsList.innerHTML = eventTickets.map(ticket => {
+                let priceDisplay = '';
+                if (ticket.type === 'free') {
+                    priceDisplay = 'Free';
+                } else if (ticket.type === 'donation') {
+                    priceDisplay = ticket.suggestedDonation > 0 ?
+                        `Donation (suggested: $${ticket.suggestedDonation})` : 'Donation';
+                } else {
+                    priceDisplay = `$${ticket.cost?.value || 0}`;
+                }
+
+                const quantityDisplay = ticket.quantity?.total ?
+                    `${ticket.quantity.total} available (${ticket.quantity.sold || 0} sold)` :
+                    'Unlimited';
+
+                const tierName = ticket.inventoryTierId ?
+                    getInventoryTierName(ticket.inventoryTierId) : '';
+
+                return `
+                    <div class="ticket-item" data-ticket-id="${ticket.id}">
+                        <div class="ticket-info">
+                            <h4>${ticket.name}</h4>
+                            <p class="ticket-price">${priceDisplay}</p>
+                            <p class="ticket-quantity">${quantityDisplay}</p>
+                            ${tierName ? `<p class="ticket-tier">Tier: ${tierName}</p>` : ''}
+                            <p class="ticket-type-badge">${ticket.type.toUpperCase()}</p>
+                            ${ticket.visibility?.hidden ? '<p class="ticket-hidden">Hidden</p>' : ''}
+                        </div>
+                        <div class="ticket-actions">
+                            <button class="edit-btn" onclick="editTicket('${ticket.id}')">Edit</button>
+                            <button class="delete-btn" onclick="deleteTicket('${ticket.id}')">Delete</button>
+                            <button class="remaining-btn" onclick="showRemainingTickets('${ticket.id}')">Remaining</button>
+                        </div>
                     </div>
-                    <div class="ticket-actions">
-                        <button class="edit-btn" onclick="editTicket('${ticket.id}')">Edit</button>
-                        <button class="delete-btn" onclick="deleteTicket('${ticket.id}')">Delete</button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+
+        function getInventoryTierName(tierId) {
+            const tier = inventoryTiers.find(t => t.id === tierId);
+            return tier ? tier.name : '';
         }
 
         function selectTicketType(type) {
