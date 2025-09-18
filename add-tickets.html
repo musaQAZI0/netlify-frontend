@@ -354,6 +354,9 @@
                 }
 
                 // Fetch event data and advanced ticket classes
+                console.log('Fetching ticket classes for event:', eventId);
+                console.log('Auth token present:', getAuthToken() ? 'Yes' : 'No');
+
                 const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}/ticket-classes`, {
                     method: 'GET',
                     headers: {
@@ -362,11 +365,26 @@
                     }
                 });
 
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('API Error Response:', errorText);
+
+                    // If ticket-classes endpoint doesn't exist (404), fallback to regular event endpoint
+                    if (response.status === 404) {
+                        console.log('Ticket classes endpoint not found, falling back to regular event API');
+                        await loadEventDataFallback(eventId);
+                        return;
+                    }
+
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
                 }
 
                 const data = await response.json();
+                console.log('Ticket classes API response:', data);
+
                 if (data.success) {
                     // Also fetch basic event data
                     const eventResponse = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
@@ -377,34 +395,98 @@
                         }
                     });
 
+                    console.log('Event API response status:', eventResponse.status);
+
                     if (eventResponse.ok) {
                         const eventData = await eventResponse.json();
+                        console.log('Event data:', eventData);
+
                         if (eventData.success) {
                             currentEventData = eventData.event;
                             // Store advanced ticket data
-                            currentEventData.ticketClasses = data.ticketClasses;
-                            currentEventData.inventoryTiers = data.inventoryTiers;
-                            currentEventData.ticketGroups = data.ticketGroups;
-                            currentEventData.inventoryInfo = data.inventoryInfo;
+                            currentEventData.ticketClasses = data.ticketClasses || [];
+                            currentEventData.inventoryTiers = data.inventoryTiers || [];
+                            currentEventData.ticketGroups = data.ticketGroups || [];
+                            currentEventData.inventoryInfo = data.inventoryInfo || {};
 
                             populateEventInfo();
                             loadInventoryTiers();
                             loadTicketGroups();
+                        } else {
+                            throw new Error('Event API returned error: ' + eventData.message);
                         }
+                    } else {
+                        const eventErrorText = await eventResponse.text();
+                        throw new Error(`Failed to fetch event data: HTTP ${eventResponse.status} - ${eventErrorText}`);
                     }
                 } else {
-                    throw new Error('Failed to load ticket classes data');
+                    throw new Error('Ticket classes API returned error: ' + data.message);
                 }
             } catch (error) {
                 console.error('Failed to load event data:', error);
-                alert('Failed to load event data. Redirecting to event builder.');
-                window.location.href = 'event-builder.html';
+                console.error('Error details:', {
+                    message: error.message,
+                    stack: error.stack,
+                    eventId: urlParams.get('id'),
+                    authToken: getAuthToken() ? 'Present' : 'Missing'
+                });
+                alert(`Failed to load event data: ${error.message}. Please check console for details.`);
+                // Don't redirect immediately, let user see the error
+                // window.location.href = 'event-builder.html';
+            }
+        }
+
+        // Fallback function for when ticket-classes endpoint doesn't exist
+        async function loadEventDataFallback(eventId) {
+            console.log('Using fallback event loading method');
+
+            const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getAuthToken()}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                currentEventData = data.event;
+                // Initialize empty advanced features for backward compatibility
+                currentEventData.ticketClasses = currentEventData.pricing?.tickets || [];
+                currentEventData.inventoryTiers = [];
+                currentEventData.ticketGroups = [];
+                currentEventData.inventoryInfo = { hasAdmissionTiers: false };
+
+                populateEventInfo();
+                loadInventoryTiers();
+                loadTicketGroups();
+            } else {
+                throw new Error('Event API returned error: ' + data.message);
             }
         }
 
         function getAuthToken() {
-            // Get token from localStorage or wherever it's stored
-            return localStorage.getItem('authToken') || '';
+            // Try multiple sources for auth token
+            let token = localStorage.getItem('authToken');
+
+            if (!token && window.dataManager && window.dataManager.getAuthToken) {
+                token = window.dataManager.getAuthToken();
+            }
+
+            if (!token) {
+                // Try other common token storage locations
+                token = localStorage.getItem('token') ||
+                       localStorage.getItem('jwt') ||
+                       localStorage.getItem('access_token') || '';
+            }
+
+            console.log('Auth token found:', token ? 'Yes (length: ' + token.length + ')' : 'No');
+            return token;
         }
 
         function populateEventInfo() {
