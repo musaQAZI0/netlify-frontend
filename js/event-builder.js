@@ -385,6 +385,8 @@ class EventBuilderAPI {
                 
                 if (data.success) {
                     console.log('Event updated successfully');
+                    // Store complete event data for add-tickets.html
+                    localStorage.setItem('editingEvent', JSON.stringify(data.event));
                     return { success: true, event: data.event, isNew: false };
                 }
             } else {
@@ -398,6 +400,8 @@ class EventBuilderAPI {
                     this.eventId = data.event._id;
                     this.isEditing = true;
                     console.log('Event created successfully:', this.eventId);
+                    // Store complete event data for add-tickets.html
+                    localStorage.setItem('editingEvent', JSON.stringify(data.event));
                     return { success: true, event: data.event, isNew: true };
                 }
             }
@@ -894,7 +898,7 @@ class EventBuilder {
                 
                 // Navigate to next step
                 setTimeout(() => {
-                    window.location.href = `add-tickets.html?id=${this.api.eventId}`;
+                    window.location.href = 'add-tickets.html';
                 }, 1000);
             }
         } catch (error) {
@@ -1616,9 +1620,15 @@ function goToPublish() {
 
 function goToTickets() {
     if (window.eventBuilder) {
-        window.eventBuilder.api.saveEvent().then(() => {
-            window.location.href = `add-tickets.html?id=${window.eventBuilder.api.eventId}`;
-        });
+        // Ensure event data is saved to localStorage for add-tickets.html
+        const eventData = window.eventBuilder.api.currentEventData;
+        if (eventData) {
+            localStorage.setItem('editingEvent', JSON.stringify(eventData));
+            window.location.href = 'add-tickets.html';
+        } else {
+            console.error('No event data to save');
+            alert('Please save your event first before adding tickets.');
+        }
     }
 }
 
