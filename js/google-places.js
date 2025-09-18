@@ -27,6 +27,12 @@ class GooglePlacesIntegration {
 
         console.log('Initializing Places Autocomplete for USA only...');
 
+        // Additional safety checks
+        if (!google || !google.maps || !google.maps.places) {
+            console.error('Google Maps Places API not loaded properly');
+            return false;
+        }
+
         try {
             // Use the new PlaceAutocompleteElement (recommended approach)
             if (google.maps.places.PlaceAutocompleteElement) {
@@ -58,18 +64,28 @@ class GooglePlacesIntegration {
                 });
             }
 
-            // Set additional options for better suggestions (only for legacy autocomplete)
-            if (this.autocomplete.setOptions) {
-                this.autocomplete.setOptions({
-                    strictBounds: false,
-                    types: ['establishment', 'geocode']
+            // Setup event listeners based on autocomplete type
+            if (google.maps.places.PlaceAutocompleteElement && this.autocomplete instanceof google.maps.places.PlaceAutocompleteElement) {
+                // New Places API - use addEventListener
+                this.autocomplete.addEventListener('gmp-placeselect', (event) => {
+                    console.log('New API place selected:', event.place);
+                    this.handlePlaceSelection(event.place);
+                });
+            } else {
+                // Legacy autocomplete
+                // Set additional options for better suggestions
+                if (this.autocomplete.setOptions) {
+                    this.autocomplete.setOptions({
+                        strictBounds: false,
+                        types: ['establishment', 'geocode']
+                    });
+                }
+
+                // Listen for place selection
+                this.autocomplete.addListener('place_changed', () => {
+                    this.handlePlaceSelection();
                 });
             }
-
-            // Listen for place selection
-            this.autocomplete.addListener('place_changed', () => {
-                this.handlePlaceSelection();
-            });
 
             // Add input event listener to debug autocomplete
             locationInput.addEventListener('input', (e) => {
@@ -160,10 +176,22 @@ class GooglePlacesIntegration {
     }
 
     // Handle place selection from autocomplete
-    handlePlaceSelection() {
-        const place = this.autocomplete.getPlace();
-        
-        if (!place.geometry) {
+    handlePlaceSelection(placeFromNewAPI = null) {
+        let place;
+
+        if (placeFromNewAPI) {
+            // New API passes place directly
+            place = placeFromNewAPI;
+        } else {
+            // Legacy API - get place from autocomplete
+            if (!this.autocomplete || !this.autocomplete.getPlace) {
+                console.error('Autocomplete not properly initialized');
+                return;
+            }
+            place = this.autocomplete.getPlace();
+        }
+
+        if (!place || !place.geometry) {
             console.log('No location data available for this place');
             return;
         }
