@@ -26,19 +26,30 @@ class EventBuilderAPI {
         this.isEditing = false;
     }
 
-    // Get authentication token
-    getAuthToken() {
-        return localStorage.getItem('authToken') || localStorage.getItem('token') || '';
+    // Get authentication token from database session
+    async getAuthToken() {
+        try {
+            const response = await fetch(`${this.baseURL}/auth/session`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            const data = await response.json();
+            return data.token || '';
+        } catch (error) {
+            console.error('Failed to get auth token:', error);
+            return '';
+        }
     }
 
-    // API request helper
+    // API request helper with database-only authentication
     async apiRequest(endpoint, options = {}) {
-        const token = this.getAuthToken();
+        const token = await this.getAuthToken();
 
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`
             },
+            credentials: 'include',
             ...options
         };
 
@@ -424,12 +435,13 @@ class EventBuilderAPI {
             const formData = new FormData();
             formData.append('image', file);
             
-            const token = this.getAuthToken();
+            const token = await this.getAuthToken();
             const response = await fetch(`${this.baseURL}/events/upload-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 },
+                credentials: 'include',
                 body: formData
             });
             
@@ -467,7 +479,7 @@ class EventBuilder {
         console.log('Initializing Event Builder with API integration');
         
         // Check authentication
-        if (!this.checkAuthentication()) {
+        if (!(await this.checkAuthentication())) {
             return;
         }
 
@@ -478,7 +490,7 @@ class EventBuilder {
 
         // Check if we're editing an existing event
         const urlParams = new URLSearchParams(window.location.search);
-        const eventId = urlParams.get('id') || localStorage.getItem('editingEventId');
+        const eventId = urlParams.get('id');
         
         if (eventId) {
             await this.loadExistingEvent(eventId);
@@ -492,10 +504,9 @@ class EventBuilder {
         console.log('Event Builder initialized successfully');
     }
 
-    checkAuthentication() {
-        if (!window.authUtils.isAuthenticated()) {
+    async checkAuthentication() {
+        if (!(await window.authUtils.isAuthenticated())) {
             console.log('User not authenticated, redirecting to login');
-            localStorage.setItem('redirectAfterLogin', 'event-builder.html');
             window.location.href = 'login.html';
             return false;
         }
@@ -774,7 +785,6 @@ class EventBuilder {
         try {
             this.showAutoSaving();
             await this.api.saveEvent(formData);
-            localStorage.setItem('eventBuilder_autosave', JSON.stringify(this.api.currentEventData));
             this.hideAutoSaving();
 
             // Show brief success indicator
@@ -886,12 +896,9 @@ class EventBuilder {
             const result = await this.api.saveEvent();
             
             if (result.success) {
-                // Store event ID for next steps
-                localStorage.setItem('editingEventId', this.api.eventId);
-                
                 this.hideLoading();
                 this.showSuccess('Event saved successfully');
-                
+
                 // Navigate to next step
                 setTimeout(() => {
                     window.location.href = `add-tickets.html?id=${this.api.eventId}`;
@@ -1785,17 +1792,7 @@ function initializeFormData() {
                 console.error('Failed to load event:', error);
             });
         } else {
-            // Load from local storage for auto-save recovery
-            const savedData = localStorage.getItem('eventBuilder_autosave');
-            if (savedData) {
-                try {
-                    const eventData = JSON.parse(savedData);
-                    populateFormWithEventData(eventData);
-                    console.log('Restored auto-saved data');
-                } catch (error) {
-                    console.error('Failed to restore auto-saved data:', error);
-                }
-            }
+            console.log('No event ID provided, starting new event');
         }
 
         // Set default date and time

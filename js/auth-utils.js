@@ -5,51 +5,78 @@ class AuthUtils {
         this.currentUser = null;
     }
 
-    // Get authentication token
-    getAuthToken() {
-        return localStorage.getItem('authToken') || '';
-    }
-
-    // Set authentication token
-    setAuthToken(token) {
-        if (token) {
-            localStorage.setItem('authToken', token);
-        } else {
-            localStorage.removeItem('authToken');
+    // Get authentication token from database session
+    async getAuthToken() {
+        try {
+            const response = await fetch(`${this.baseURL}/auth/session`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            const data = await response.json();
+            return data.token || '';
+        } catch (error) {
+            console.error('Failed to get auth token:', error);
+            return '';
         }
     }
 
-    // Check if user is authenticated
-    isAuthenticated() {
-        const token = this.getAuthToken();
-        return !!token;
+    // Set authentication token in database session
+    async setAuthToken(token) {
+        try {
+            await fetch(`${this.baseURL}/auth/session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ token })
+            });
+        } catch (error) {
+            console.error('Failed to set auth token:', error);
+        }
     }
 
-    // API request helper
+    // Check if user is authenticated via database
+    async isAuthenticated() {
+        try {
+            const response = await fetch(`${this.baseURL}/auth/verify`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            const data = await response.json();
+            return response.ok && data.success;
+        } catch (error) {
+            console.error('Authentication check failed:', error);
+            return false;
+        }
+    }
+
+    // API request helper with database authentication
     async apiRequest(endpoint, options = {}) {
-        const token = this.getAuthToken();
-        
+        const token = await this.getAuthToken();
+
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
+            credentials: 'include',
             ...options
         };
 
         try {
             const response = await fetch(`${this.baseURL}${endpoint}`, config);
             const data = await response.json();
-            
+
             if (!response.ok) {
                 if (response.status === 401) {
                     // Token expired or invalid
-                    this.logout();
+                    await this.logout();
                     throw new Error('Session expired. Please log in again.');
                 }
                 throw new Error(data.message || 'API request failed');
             }
-            
+
             return data;
         } catch (error) {
             console.error('API Request failed:', error);
@@ -59,7 +86,7 @@ class AuthUtils {
 
     // Get current user profile
     async getCurrentUser() {
-        if (!this.isAuthenticated()) {
+        if (!(await this.isAuthenticated())) {
             return null;
         }
 
@@ -73,7 +100,7 @@ class AuthUtils {
                 this.currentUser = data.user;
                 return this.currentUser;
             }
-            
+
             return null;
         } catch (error) {
             console.error('Failed to get current user:', error);
@@ -108,13 +135,13 @@ class AuthUtils {
                 method: 'POST',
                 body: JSON.stringify({ email, password })
             });
-            
+
             if (data.success && data.token) {
-                this.setAuthToken(data.token);
+                await this.setAuthToken(data.token);
                 this.currentUser = data.user;
                 return { success: true, user: data.user };
             }
-            
+
             throw new Error(data.message || 'Login failed');
         } catch (error) {
             console.error('Login failed:', error);
@@ -129,13 +156,13 @@ class AuthUtils {
                 method: 'POST',
                 body: JSON.stringify(userData)
             });
-            
+
             if (data.success && data.token) {
-                this.setAuthToken(data.token);
+                await this.setAuthToken(data.token);
                 this.currentUser = data.user;
                 return { success: true, user: data.user };
             }
-            
+
             throw new Error(data.message || 'Registration failed');
         } catch (error) {
             console.error('Registration failed:', error);
@@ -144,14 +171,18 @@ class AuthUtils {
     }
 
     // Logout user
-    logout() {
-        this.setAuthToken(null);
+    async logout() {
+        try {
+            await fetch(`${this.baseURL}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+        } catch (error) {
+            console.error('Logout request failed:', error);
+        }
+
         this.currentUser = null;
-        
-        // Clear any other session data
-        localStorage.removeItem('editingEventId');
-        localStorage.removeItem('redirectAfterLogin');
-        
+
         // Redirect to login page
         window.location.href = 'login.html';
     }
@@ -211,7 +242,7 @@ class AuthUtils {
 
     // Initialize user interface elements
     async initializeUserInterface() {
-        if (!this.isAuthenticated()) {
+        if (!(await this.isAuthenticated())) {
             console.log('User not authenticated, skipping UI initialization');
             return;
         }
@@ -273,24 +304,18 @@ class AuthUtils {
     }
 
     // Check authentication and redirect if needed
-    requireAuthentication(redirectUrl = null) {
-        if (!this.isAuthenticated()) {
-            if (redirectUrl) {
-                localStorage.setItem('redirectAfterLogin', redirectUrl);
-            }
+    async requireAuthentication(redirectUrl = null) {
+        if (!(await this.isAuthenticated())) {
             window.location.href = 'login.html';
             return false;
         }
         return true;
     }
 
-    // Handle redirect after login
+    // Handle redirect after login (no longer needed with database-only auth)
     handleRedirectAfterLogin() {
-        const redirectUrl = localStorage.getItem('redirectAfterLogin');
-        if (redirectUrl) {
-            localStorage.removeItem('redirectAfterLogin');
-            window.location.href = redirectUrl;
-        }
+        // Database-only authentication - no redirect handling needed
+        console.log('Database-only authentication active');
     }
 }
 
