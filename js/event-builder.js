@@ -34,26 +34,69 @@ class EventBuilderAPI {
     // API request helper
     async apiRequest(endpoint, options = {}) {
         const token = this.getAuthToken();
-        
+
         const config = {
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             ...options
         };
 
+        // Only add Content-Type for JSON requests, not for file uploads
+        if (!options.body || typeof options.body === 'string') {
+            config.headers['Content-Type'] = 'application/json';
+        }
+
         try {
             const response = await fetch(`${this.baseURL}${endpoint}`, config);
             const data = await response.json();
-            
+
             if (!response.ok) {
                 throw new Error(data.message || 'API request failed');
             }
-            
+
             return data;
         } catch (error) {
             console.error('API Request failed:', error);
+            throw error;
+        }
+    }
+
+    // Upload image to backend
+    async uploadImage(file) {
+        try {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const response = await this.apiRequest('/events/upload-image', {
+                method: 'POST',
+                body: formData
+            });
+
+            return response.imageUrl;
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            throw error;
+        }
+    }
+
+    // Upload video to backend
+    async uploadVideo(file) {
+        try {
+            const formData = new FormData();
+            formData.append('video', file);
+
+            const response = await this.apiRequest('/events/upload-video', {
+                method: 'POST',
+                body: formData
+            });
+
+            return {
+                videoUrl: response.videoUrl,
+                thumbnailUrl: response.thumbnailUrl
+            };
+        } catch (error) {
+            console.error('Video upload failed:', error);
             throw error;
         }
     }
@@ -92,11 +135,229 @@ class EventBuilderAPI {
         }
     }
 
+    // Collect form data from the page
+    collectFormData() {
+        const formData = {
+            // Event title
+            title: document.getElementById('eventTitle')?.textContent?.trim() ||
+                   document.getElementById('eventTitle')?.value?.trim() || '',
+
+            // Date and time
+            startDate: document.getElementById('eventDate')?.value || '',
+            startTime: document.getElementById('startTime')?.value || '',
+            endTime: document.getElementById('endTime')?.value || '',
+
+            // Location data
+            venue: document.getElementById('venueName')?.value?.trim() || '',
+            address: document.getElementById('streetAddress')?.value?.trim() || '',
+            city: document.getElementById('cityName')?.value?.trim() || '',
+            state: document.getElementById('stateName')?.value?.trim() || '',
+            country: document.getElementById('countryName')?.value?.trim() || 'United States',
+            zipCode: document.getElementById('zipCode')?.value?.trim() || '',
+
+            // Overview/description
+            description: document.getElementById('overviewDescription')?.value?.trim() || '',
+
+            // Status
+            status: document.getElementById('eventStatus')?.value || 'draft',
+
+            // Current images and videos
+            images: this.currentEventData.images || [],
+            videos: this.currentEventData.videos || [],
+
+            // Lineup data
+            lineup: this.collectLineupData(),
+
+            // Agenda data
+            agenda: this.collectAgendaData(),
+
+            // Good to know data
+            goodToKnow: this.collectGoodToKnowData()
+        };
+
+        // Combine date and time for proper datetime objects
+        if (formData.startDate && formData.startTime) {
+            formData.startDateTime = `${formData.startDate}T${formData.startTime}`;
+        }
+
+        if (formData.startDate && formData.endTime) {
+            formData.endDateTime = `${formData.startDate}T${formData.endTime}`;
+        }
+
+        return formData;
+    }
+
+    // Collect lineup data
+    collectLineupData() {
+        const lineupSection = document.getElementById('lineupSection');
+        if (!lineupSection || lineupSection.style.display === 'none') {
+            return { enabled: false, speakers: [] };
+        }
+
+        const lineupItems = lineupSection.querySelectorAll('.lineup-item');
+        const speakers = Array.from(lineupItems).map(item => {
+            const name = item.querySelector('.lineup-name')?.value?.trim() || '';
+            const description = item.querySelector('.lineup-description')?.value?.trim() || '';
+            const isHeadliner = item.querySelector('input[type="checkbox"]')?.checked || false;
+
+            if (!name) return null; // Skip empty entries
+
+            return {
+                name,
+                description,
+                isHeadliner,
+                image: '', // Will be updated when image upload is implemented
+                socialLinks: {}
+            };
+        }).filter(speaker => speaker !== null);
+
+        return {
+            enabled: true,
+            title: 'Lineup',
+            speakers
+        };
+    }
+
+    // Collect agenda data
+    collectAgendaData() {
+        const agendaSection = document.getElementById('agendaSection');
+        if (!agendaSection || agendaSection.style.display === 'none') {
+            return { enabled: false, schedules: [] };
+        }
+
+        const agendaItems = agendaSection.querySelectorAll('.agenda-item');
+        const items = Array.from(agendaItems).map(item => {
+            const title = item.querySelector('.agenda-title')?.value?.trim() || '';
+            const startTime = item.querySelector('.agenda-start-time')?.value || '';
+            const endTime = item.querySelector('.agenda-end-time')?.value || '';
+
+            if (!title) return null; // Skip empty entries
+
+            return {
+                title,
+                startTime,
+                endTime,
+                description: '',
+                host: '',
+                order: 0
+            };
+        }).filter(item => item !== null);
+
+        return {
+            enabled: true,
+            schedules: [{
+                title: 'Agenda',
+                date: new Date(),
+                items
+            }]
+        };
+    }
+
+    // Collect good to know data
+    collectGoodToKnowData() {
+        const highlightsContainer = document.getElementById('highlightsContainer');
+        const faqContainer = document.getElementById('faqContainer');
+
+        const highlights = [];
+        const faqs = [];
+
+        // Collect highlights
+        if (highlightsContainer) {
+            const highlightItems = highlightsContainer.querySelectorAll('.highlight-item');
+            highlightItems.forEach(item => {
+                const text = item.textContent?.trim();
+                if (text) highlights.push(text);
+            });
+        }
+
+        // Collect FAQs
+        if (faqContainer) {
+            const faqItems = faqContainer.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question')?.value?.trim() || '';
+                const answer = item.querySelector('.faq-answer')?.value?.trim() || '';
+                if (question && answer) {
+                    faqs.push({ question, answer });
+                }
+            });
+        }
+
+        return { highlights, faqs };
+    }
+
+    // Validate form data
+    validateFormData(formData) {
+        const errors = [];
+
+        // Required fields validation
+        if (!formData.title || formData.title.length < 3) {
+            errors.push('Event title must be at least 3 characters long');
+        }
+
+        if (!formData.description || formData.description.length < 10) {
+            errors.push('Event description must be at least 10 characters long');
+        }
+
+        if (!formData.startDate) {
+            errors.push('Event date is required');
+        }
+
+        if (!formData.startTime) {
+            errors.push('Start time is required');
+        }
+
+        if (!formData.endTime) {
+            errors.push('End time is required');
+        }
+
+        // Date validation
+        if (formData.startDate) {
+            const eventDate = new Date(formData.startDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            if (eventDate < today) {
+                errors.push('Event date cannot be in the past');
+            }
+        }
+
+        // Time validation
+        if (formData.startTime && formData.endTime) {
+            const start = formData.startTime.split(':').map(Number);
+            const end = formData.endTime.split(':').map(Number);
+            const startMinutes = start[0] * 60 + start[1];
+            const endMinutes = end[0] * 60 + end[1];
+
+            if (endMinutes <= startMinutes) {
+                errors.push('End time must be after start time');
+            }
+        }
+
+        // Location validation (basic)
+        if (!formData.venue && !formData.city) {
+            errors.push('Either venue name or city is required');
+        }
+
+        return {
+            isValid: errors.length === 0,
+            errors
+        };
+    }
+
     // Save event (create or update)
-    async saveEvent(eventData) {
+    async saveEvent(eventData = null) {
         try {
+            // Collect form data if not provided
+            const formData = eventData || this.collectFormData();
+
+            // Validate the data
+            const validation = this.validateFormData(formData);
+            if (!validation.isValid) {
+                throw new Error(validation.errors.join(', '));
+            }
+
             // Merge current data with new data
-            this.currentEventData = { ...this.currentEventData, ...eventData };
+            this.currentEventData = { ...this.currentEventData, ...formData };
 
             // Remove category field completely to avoid validation errors
             const dataToSend = { ...this.currentEventData };
@@ -439,7 +700,7 @@ class EventBuilder {
                 
                 // Update event data with proper backend structure
                 this.api.currentEventData.location = {
-                    type: 'physical',
+                    type: 'venue',
                     venue: locationData.venue,
                     address: {
                         street: locationData.address,
@@ -506,12 +767,22 @@ class EventBuilder {
     }
 
     async autoSave() {
-        if (!this.api.currentEventData.title) return;
-        
+        // Collect current form data
+        const formData = this.api.collectFormData();
+        if (!formData.title || formData.title.length < 3) return;
+
         try {
-            await this.api.saveEvent();
-            this.showSuccess('Auto-saved', 2000);
+            this.showAutoSaving();
+            await this.api.saveEvent(formData);
+            localStorage.setItem('eventBuilder_autosave', JSON.stringify(this.api.currentEventData));
+            this.hideAutoSaving();
+
+            // Show brief success indicator
+            setTimeout(() => {
+                this.showSuccess('Auto-saved', 2000);
+            }, 500);
         } catch (error) {
+            this.hideAutoSaving();
             console.error('Auto-save failed:', error);
         }
     }
@@ -520,11 +791,24 @@ class EventBuilder {
         try {
             this.showLoading('Uploading image...');
 
-            // Expand upload section if not already expanded
-            expandUploadSection();
-
             const imageUrl = await this.api.uploadImage(file);
-            this.api.currentEventData.imageUrl = imageUrl;
+
+            // Add image to current event data
+            if (!this.api.currentEventData.images) {
+                this.api.currentEventData.images = [];
+            }
+
+            this.api.currentEventData.images.push({
+                url: imageUrl,
+                alt: file.name,
+                isPrimary: this.api.currentEventData.images.length === 0
+            });
+
+            // Update the primary image for backward compatibility
+            if (this.api.currentEventData.images.length === 1) {
+                this.api.currentEventData.imageUrl = imageUrl;
+            }
+
             this.displayImage(imageUrl);
             this.scheduleAutoSave();
             this.hideLoading();
@@ -539,13 +823,21 @@ class EventBuilder {
         try {
             this.showLoading('Uploading video...');
 
-            // Expand upload section if not already expanded
-            expandUploadSection();
+            const videoData = await this.api.uploadVideo(file);
 
-            // For now, just show success. Implement actual video upload later
-            const videoUrl = await this.api.uploadImage(file); // Use same upload endpoint for now
-            this.api.currentEventData.videoUrl = videoUrl;
-            this.displayVideo(videoUrl);
+            // Add video to current event data
+            if (!this.api.currentEventData.videos) {
+                this.api.currentEventData.videos = [];
+            }
+
+            this.api.currentEventData.videos.push({
+                url: videoData.videoUrl,
+                title: file.name,
+                thumbnail: videoData.thumbnailUrl,
+                duration: 0 // Will be updated when we have actual video processing
+            });
+
+            this.displayVideo(videoData.videoUrl, videoData.thumbnailUrl);
             this.hideLoading();
             this.showSuccess('Video uploaded successfully');
             this.scheduleAutoSave();
@@ -678,13 +970,46 @@ class EventBuilder {
 
     // UI Helper methods
     showLoading(message = 'Loading...') {
-        // You can implement a loading spinner here
+        const saveStatus = document.getElementById('saveStatus');
+        const statusText = document.querySelector('.save-status-text');
+        const progressFill = document.querySelector('.save-progress-fill');
+
+        if (saveStatus && statusText && progressFill) {
+            saveStatus.style.display = 'block';
+            saveStatus.className = 'save-status';
+            statusText.textContent = message;
+            progressFill.style.width = '30%';
+        }
         console.log('Loading:', message);
     }
 
     hideLoading() {
-        // Hide loading spinner
+        const saveStatus = document.getElementById('saveStatus');
+        const progressFill = document.querySelector('.save-progress-fill');
+
+        if (progressFill) {
+            progressFill.style.width = '100%';
+            setTimeout(() => {
+                if (saveStatus) {
+                    saveStatus.style.display = 'none';
+                }
+            }, 1000);
+        }
         console.log('Loading complete');
+    }
+
+    showAutoSaving() {
+        const autoSaveIndicator = document.getElementById('autoSaveIndicator');
+        if (autoSaveIndicator) {
+            autoSaveIndicator.style.display = 'block';
+        }
+    }
+
+    hideAutoSaving() {
+        const autoSaveIndicator = document.getElementById('autoSaveIndicator');
+        if (autoSaveIndicator) {
+            autoSaveIndicator.style.display = 'none';
+        }
     }
 
     showSuccess(message, duration = 3000) {
@@ -1224,9 +1549,52 @@ function checkUploadSectionState() {
     }
 }
 
-function saveAndContinue() {
-    if (window.eventBuilder) {
-        window.eventBuilder.saveAndContinue();
+// Enhanced save and continue functionality
+async function saveAndContinue() {
+    try {
+        if (!window.eventBuilder) {
+            throw new Error('Event builder not initialized');
+        }
+
+        // Show loading state
+        const saveBtn = document.querySelector('.save-btn');
+        const originalText = saveBtn?.textContent || 'Save and continue';
+        if (saveBtn) {
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+        }
+
+        // Save the event
+        const result = await window.eventBuilder.saveEvent();
+
+        // Show success message
+        if (window.eventBuilder.showSuccess) {
+            window.eventBuilder.showSuccess('Event saved successfully!');
+        }
+
+        // Navigate to add tickets step
+        setTimeout(() => {
+            goToTickets();
+        }, 1000);
+
+        return result;
+
+    } catch (error) {
+        console.error('Save failed:', error);
+
+        // Show error message
+        if (window.eventBuilder.showError) {
+            window.eventBuilder.showError('Failed to save event: ' + error.message);
+        } else {
+            alert('Failed to save event: ' + error.message);
+        }
+    } finally {
+        // Reset button state
+        const saveBtn = document.querySelector('.save-btn');
+        if (saveBtn) {
+            saveBtn.textContent = 'Save and continue';
+            saveBtn.disabled = false;
+        }
     }
 }
 
@@ -1318,6 +1686,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     addRippleEffects();
                 }, 500);
 
+                // Initialize form functionality
+                setTimeout(() => {
+                    initializeFormData();
+                    enableAutoSave();
+                    setupFormEventListeners();
+                }, 800);
+
                 // Check upload section state after initialization
                 setTimeout(() => {
                     checkUploadSectionState();
@@ -1355,10 +1730,235 @@ window.uploadVideo = function() {
     document.getElementById('videoInput').click();
 };
 
+// Auto-save functionality
+function enableAutoSave() {
+    // Auto-save on form field changes
+    const formFields = [
+        'eventTitle', 'eventDate', 'startTime', 'endTime',
+        'venueName', 'streetAddress', 'cityName', 'stateName', 'zipCode',
+        'overviewDescription', 'eventStatus'
+    ];
+
+    formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            // Use different events based on field type
+            const events = field.tagName === 'INPUT' ? ['input', 'change'] : ['input', 'blur'];
+
+            events.forEach(eventType => {
+                field.addEventListener(eventType, () => {
+                    if (window.eventBuilder) {
+                        window.eventBuilder.scheduleAutoSave();
+                    }
+                });
+            });
+        }
+    });
+
+    // Auto-save when content editable fields change
+    const eventTitle = document.getElementById('eventTitle');
+    if (eventTitle && eventTitle.contentEditable) {
+        eventTitle.addEventListener('blur', () => {
+            if (window.eventBuilder) {
+                window.eventBuilder.scheduleAutoSave();
+            }
+        });
+    }
+}
+
+// Initialize form data from URL parameters or local storage
+function initializeFormData() {
+    try {
+        // Check for event ID in URL for editing
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventId = urlParams.get('id') || urlParams.get('eventId');
+
+        if (eventId && window.eventBuilder) {
+            console.log('Loading event for editing:', eventId);
+            window.eventBuilder.api.loadEvent(eventId).then(eventData => {
+                if (eventData) {
+                    populateFormWithEventData(eventData);
+                }
+            }).catch(error => {
+                console.error('Failed to load event:', error);
+            });
+        } else {
+            // Load from local storage for auto-save recovery
+            const savedData = localStorage.getItem('eventBuilder_autosave');
+            if (savedData) {
+                try {
+                    const eventData = JSON.parse(savedData);
+                    populateFormWithEventData(eventData);
+                    console.log('Restored auto-saved data');
+                } catch (error) {
+                    console.error('Failed to restore auto-saved data:', error);
+                }
+            }
+        }
+
+        // Set default date and time
+        setDefaultDateTime();
+
+    } catch (error) {
+        console.error('Error initializing form data:', error);
+    }
+}
+
+// Populate form with event data
+function populateFormWithEventData(eventData) {
+    try {
+        // Title
+        const titleField = document.getElementById('eventTitle');
+        if (titleField && eventData.title) {
+            if (titleField.contentEditable) {
+                titleField.textContent = eventData.title;
+            } else {
+                titleField.value = eventData.title;
+            }
+        }
+
+        // Date and time
+        if (eventData.startDate || eventData.dateTime?.start) {
+            const startDate = eventData.startDate || eventData.dateTime?.start;
+            if (startDate) {
+                const date = new Date(startDate);
+                const dateField = document.getElementById('eventDate');
+                if (dateField) {
+                    dateField.value = date.toISOString().split('T')[0];
+                }
+
+                const timeField = document.getElementById('startTime');
+                if (timeField && eventData.startTime) {
+                    timeField.value = eventData.startTime;
+                } else if (timeField) {
+                    timeField.value = date.toTimeString().slice(0, 5);
+                }
+            }
+        }
+
+        if (eventData.endTime) {
+            const endTimeField = document.getElementById('endTime');
+            if (endTimeField) {
+                endTimeField.value = eventData.endTime;
+            }
+        }
+
+        // Location
+        const fields = {
+            venueName: eventData.venue || eventData.location?.venue?.name,
+            streetAddress: eventData.address || eventData.location?.venue?.address?.street,
+            cityName: eventData.city || eventData.location?.venue?.address?.city,
+            stateName: eventData.state || eventData.location?.venue?.address?.state,
+            zipCode: eventData.zipCode || eventData.location?.venue?.address?.zipCode,
+            countryName: eventData.country || eventData.location?.venue?.address?.country
+        };
+
+        Object.entries(fields).forEach(([fieldId, value]) => {
+            const field = document.getElementById(fieldId);
+            if (field && value) {
+                field.value = value;
+            }
+        });
+
+        // Description
+        const descField = document.getElementById('overviewDescription');
+        if (descField && eventData.description) {
+            descField.value = eventData.description;
+        }
+
+        // Status
+        const statusField = document.getElementById('eventStatus');
+        if (statusField && eventData.status) {
+            statusField.value = eventData.status;
+        }
+
+        // Update sidebar display
+        updateSidebarDisplay();
+
+    } catch (error) {
+        console.error('Error populating form:', error);
+    }
+}
+
+// Set default date and time
+function setDefaultDateTime() {
+    const dateField = document.getElementById('eventDate');
+    const startTimeField = document.getElementById('startTime');
+    const endTimeField = document.getElementById('endTime');
+
+    if (dateField && !dateField.value) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateField.value = tomorrow.toISOString().split('T')[0];
+    }
+
+    if (startTimeField && !startTimeField.value) {
+        startTimeField.value = '18:00'; // Default to 6 PM
+    }
+
+    if (endTimeField && !endTimeField.value) {
+        endTimeField.value = '20:00'; // Default to 8 PM
+    }
+}
+
+// Update sidebar display with current form data
+function updateSidebarDisplay() {
+    try {
+        const title = document.getElementById('eventTitle')?.textContent ||
+                     document.getElementById('eventTitle')?.value || 'Event Title';
+        const date = document.getElementById('eventDate')?.value;
+        const startTime = document.getElementById('startTime')?.value;
+
+        // Update sidebar title
+        const sidebarTitle = document.getElementById('eventTitleSidebar');
+        if (sidebarTitle) {
+            sidebarTitle.textContent = title;
+        }
+
+        // Update sidebar date/time
+        const sidebarDateTime = document.getElementById('eventDateTimeSidebar');
+        if (sidebarDateTime && date && startTime) {
+            const eventDate = new Date(date + 'T' + startTime);
+            const options = {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            sidebarDateTime.textContent = eventDate.toLocaleDateString('en-US', options);
+        }
+    } catch (error) {
+        console.error('Error updating sidebar:', error);
+    }
+}
+
+// Setup form event listeners
+function setupFormEventListeners() {
+    // Listen for form changes and update sidebar
+    const formFields = ['eventTitle', 'eventDate', 'startTime'];
+    formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', updateSidebarDisplay);
+            field.addEventListener('change', updateSidebarDisplay);
+        }
+    });
+
+    // Content editable title support
+    const eventTitle = document.getElementById('eventTitle');
+    if (eventTitle) {
+        eventTitle.addEventListener('input', updateSidebarDisplay);
+        eventTitle.addEventListener('blur', updateSidebarDisplay);
+    }
+}
+
 // Debug: Log functions to verify they're available
 console.log('Functions available:', {
     addLineupSection: typeof window.addLineupSection,
     addAgendaSection: typeof window.addAgendaSection,
     uploadImage: typeof window.uploadImage,
-    uploadVideo: typeof window.uploadVideo
+    uploadVideo: typeof window.uploadVideo,
+    saveAndContinue: typeof window.saveAndContinue
 });
