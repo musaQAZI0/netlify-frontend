@@ -448,7 +448,7 @@
                 console.error('Error details:', {
                     message: error.message,
                     stack: error.stack,
-                    eventId: urlParams.get('id'),
+                    eventId: eventId,
                     authToken: getAuthToken() ? 'Present' : 'Missing'
                 });
                 alert(`Failed to load event data: ${error.message}. Please check console for details.`);
@@ -535,28 +535,58 @@
         }
 
         function populateEventInfo() {
-            document.getElementById('sidebarEventTitle').textContent = currentEventData.title;
-            document.getElementById('eventStatus').value = currentEventData.status;
-            
-            if (currentEventData.image) {
-                document.getElementById('sidebarEventImage').style.backgroundImage = `url(${currentEventData.image})`;
+            document.getElementById('sidebarEventTitle').textContent = currentEventData.title || 'Event Title';
+            document.getElementById('eventStatus').value = currentEventData.status || 'draft';
+
+            if (currentEventData.image || currentEventData.imageUrl) {
+                const imageUrl = currentEventData.image || currentEventData.imageUrl;
+                document.getElementById('sidebarEventImage').style.backgroundImage = `url(${imageUrl})`;
                 document.getElementById('sidebarEventImage').style.backgroundSize = 'cover';
             }
-            
-            // Update date time display
-            const date = new Date(currentEventData.date);
-            const startTime = formatTime(currentEventData.startTime);
-            const sidebarDisplay = date.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric',
-                year: 'numeric'
-            }) + `, ${startTime}`;
-            document.getElementById('sidebarEventDateTime').textContent = sidebarDisplay;
+
+            // Update date time display - handle various date formats
+            let dateValue = currentEventData.date || currentEventData.startDate || currentEventData.dateTime?.start;
+            let timeValue = currentEventData.startTime || currentEventData.time;
+
+            if (dateValue) {
+                const date = new Date(dateValue);
+                let startTime = 'Time not set';
+
+                // Try to get time from various sources
+                if (timeValue) {
+                    startTime = formatTime(timeValue);
+                } else if (dateValue.includes('T')) {
+                    // ISO format includes time
+                    startTime = formatTime(dateValue);
+                } else {
+                    startTime = 'Time not set';
+                }
+
+                const sidebarDisplay = date.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }) + `, ${startTime}`;
+                document.getElementById('sidebarEventDateTime').textContent = sidebarDisplay;
+            } else {
+                document.getElementById('sidebarEventDateTime').textContent = 'Date not set';
+            }
         }
 
         function formatTime(timeStr) {
-            const [hours, minutes] = timeStr.split(':');
+            if (!timeStr) {
+                return 'Time not set';
+            }
+
+            // Handle various time formats
+            let timePart = timeStr;
+            if (timeStr.includes('T')) {
+                // ISO format like "2024-01-01T10:00:00"
+                timePart = timeStr.split('T')[1].split('.')[0]; // Get time part
+            }
+
+            const [hours, minutes] = timePart.split(':');
             const hour = parseInt(hours);
             const ampm = hour >= 12 ? 'PM' : 'AM';
             const displayHour = hour % 12 || 12;
