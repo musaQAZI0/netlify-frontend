@@ -718,7 +718,241 @@ class EventBuilder {
     }
 }
 
-// Global functions for template access
+// Enhanced Media Upload Manager
+class EnhancedMediaUploadManager {
+    constructor() {
+        this.uploadedImages = []
+        this.uploadedVideos = []
+        this.maxImageSize = 10 * 1024 * 1024 // 10MB
+        this.maxVideoSize = 100 * 1024 * 1024 // 100MB
+        this.allowedImageTypes = ["image/jpeg", "image/png"]
+        this.allowedVideoTypes = ["video/mp4", "video/mov"]
+
+        this.init()
+    }
+
+    init() {
+        this.bindEvents()
+        this.setupDragAndDrop()
+    }
+
+    bindEvents() {
+        // Enhanced image upload events
+        const imageUploadBtn = document.getElementById("enhancedImageUploadBtn")
+        const imageInput = document.getElementById("enhancedImageInput")
+
+        imageUploadBtn?.addEventListener("click", () => imageInput?.click())
+        imageInput?.addEventListener("change", (e) => this.handleImageUpload(e))
+
+        // Enhanced video upload events
+        const videoUploadBtn = document.getElementById("enhancedVideoUploadBtn")
+        const videoInput = document.getElementById("enhancedVideoInput")
+
+        videoUploadBtn?.addEventListener("click", () => videoInput?.click())
+        videoInput?.addEventListener("change", (e) => this.handleVideoUpload(e))
+
+        // Button interactions
+        const viewExamplesBtn = document.querySelector(".enhanced-view-examples-btn")
+        const viewDetailsBtn = document.querySelector(".enhanced-view-details-btn")
+
+        viewExamplesBtn?.addEventListener("click", () => this.showExamples())
+        viewDetailsBtn?.addEventListener("click", () => this.showVideoDetails())
+    }
+
+    setupDragAndDrop() {
+        const dropZone = document.getElementById("enhancedImageDropZone")
+
+        if (!dropZone) return
+
+        // Prevent default drag behaviors
+        ;["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, this.preventDefaults, false)
+            document.body.addEventListener(eventName, this.preventDefaults, false)
+        })
+
+        // Highlight drop zone when item is dragged over it
+        ;["dragenter", "dragover"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, () => this.highlight(dropZone), false)
+        })
+        ;["dragleave", "drop"].forEach((eventName) => {
+            dropZone.addEventListener(eventName, () => this.unhighlight(dropZone), false)
+        })
+
+        // Handle dropped files
+        dropZone.addEventListener("drop", (e) => this.handleDrop(e), false)
+    }
+
+    preventDefaults(e) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+
+    highlight(element) {
+        element.classList.add("drag-active")
+    }
+
+    unhighlight(element) {
+        element.classList.remove("drag-active")
+    }
+
+    handleDrop(e) {
+        const dt = e.dataTransfer
+        const files = Array.from(dt.files)
+
+        this.processFiles(files)
+    }
+
+    handleImageUpload(e) {
+        const files = Array.from(e.target.files || [])
+        this.processFiles(files, "image")
+    }
+
+    handleVideoUpload(e) {
+        const files = Array.from(e.target.files || [])
+        this.processFiles(files, "video")
+    }
+
+    processFiles(files, type = "auto") {
+        files.forEach((file) => {
+            if (type === "auto") {
+                if (this.isValidImage(file)) {
+                    this.addImage(file)
+                } else if (this.isValidVideo(file)) {
+                    this.addVideo(file)
+                } else {
+                    this.showError(`Invalid file type: ${file.name}`)
+                }
+            } else if (type === "image" && this.isValidImage(file)) {
+                this.addImage(file)
+            } else if (type === "video" && this.isValidVideo(file)) {
+                this.addVideo(file)
+            } else {
+                this.showError(`Invalid ${type} file: ${file.name}`)
+            }
+        })
+    }
+
+    isValidImage(file) {
+        return this.allowedImageTypes.includes(file.type) && file.size <= this.maxImageSize
+    }
+
+    isValidVideo(file) {
+        return this.allowedVideoTypes.includes(file.type) && file.size <= this.maxVideoSize
+    }
+
+    async addImage(file) {
+        try {
+            this.uploadedImages.push(file)
+            this.showSuccess(`Image added: ${file.name}`)
+
+            // Use existing EventBuilder upload functionality
+            if (window.eventBuilder) {
+                await window.eventBuilder.handleImageUpload(file)
+            }
+
+            console.log("[Enhanced] Image uploaded:", file.name, "Size:", this.formatFileSize(file.size))
+        } catch (error) {
+            this.showError(`Failed to upload image: ${error.message}`)
+        }
+    }
+
+    async addVideo(file) {
+        try {
+            this.uploadedVideos.push(file)
+            this.showSuccess(`Video added: ${file.name}`)
+
+            // Use existing EventBuilder upload functionality
+            if (window.eventBuilder) {
+                await window.eventBuilder.handleVideoUpload(file)
+            }
+
+            console.log("[Enhanced] Video uploaded:", file.name, "Size:", this.formatFileSize(file.size))
+        } catch (error) {
+            this.showError(`Failed to upload video: ${error.message}`)
+        }
+    }
+
+    formatFileSize(bytes) {
+        if (bytes === 0) return "0 Bytes"
+        const k = 1024
+        const sizes = ["Bytes", "KB", "MB", "GB"]
+        const i = Math.floor(Math.log(bytes) / Math.log(k))
+        return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
+    }
+
+    showSuccess(message) {
+        this.showNotification(message, "success")
+    }
+
+    showError(message) {
+        this.showNotification(message, "error")
+    }
+
+    showNotification(message, type = "info") {
+        // Create notification element
+        const notification = document.createElement("div")
+        notification.className = `enhanced-notification enhanced-notification-${type}`
+        notification.textContent = message
+
+        // Style the notification
+        Object.assign(notification.style, {
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            padding: "12px 20px",
+            borderRadius: "8px",
+            color: "white",
+            fontWeight: "500",
+            fontSize: "14px",
+            zIndex: "1000",
+            transform: "translateX(100%)",
+            transition: "transform 0.3s ease",
+            backgroundColor: type === "success" ? "#10b981" : type === "error" ? "#ef4444" : "#3b82f6",
+        })
+
+        document.body.appendChild(notification)
+
+        // Animate in
+        requestAnimationFrame(() => {
+            notification.style.transform = "translateX(0)"
+        })
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.transform = "translateX(100%)"
+            setTimeout(() => {
+                document.body.removeChild(notification)
+            }, 300)
+        }, 3000)
+    }
+
+    showExamples() {
+        console.log("[Enhanced] Showing image examples")
+        this.showNotification("Opening image examples...", "info")
+    }
+
+    showVideoDetails() {
+        console.log("[Enhanced] Showing video details")
+        this.showNotification("Opening video format details...", "info")
+    }
+
+    // Public API methods
+    getUploadedImages() {
+        return this.uploadedImages
+    }
+
+    getUploadedVideos() {
+        return this.uploadedVideos
+    }
+
+    clearUploads() {
+        this.uploadedImages = []
+        this.uploadedVideos = []
+        console.log("[Enhanced] Uploads cleared")
+    }
+}
+
+// Global functions for template access (Legacy support)
 function uploadImage() {
     document.getElementById('imageInput')?.click();
 }
@@ -750,6 +984,53 @@ function handleLineupImageUpload(event) {
     if (file && window.eventBuilder) {
         window.eventBuilder.handleLineupImageUpload(file);
     }
+}
+
+// Add ripple effects to enhanced upload buttons
+function addRippleEffects() {
+    const buttons = document.querySelectorAll(".enhanced-upload-btn")
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", function (e) {
+            const ripple = document.createElement("span")
+            const rect = this.getBoundingClientRect()
+            const size = Math.max(rect.width, rect.height)
+            const x = e.clientX - rect.left - size / 2
+            const y = e.clientY - rect.top - size / 2
+
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `
+
+            this.style.position = "relative"
+            this.style.overflow = "hidden"
+            this.appendChild(ripple)
+
+            setTimeout(() => {
+                ripple.remove()
+            }, 600)
+        })
+    })
+}
+
+// Cleanup function for upload sections
+function checkUploadSectionState() {
+    // Remove any old upload-related elements that might interfere
+    const oldElements = document.querySelectorAll('.pic1-upload-card, .drag-drop-area, .upload-image-btn');
+    oldElements.forEach(el => {
+        if (el && !el.closest('.enhanced-upload-card')) {
+            console.log('Removing old upload element:', el.className);
+        }
+    });
 }
 
 // Lineup section functions
@@ -1027,6 +1308,15 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (window.Config && window.authUtils) {
                 window.eventBuilder = new EventBuilder();
+
+                // Initialize Enhanced Media Upload Manager
+                console.log("[Enhanced] Initializing Enhanced Media Upload Manager")
+                window.enhancedMediaUploadManager = new EnhancedMediaUploadManager();
+
+                // Add ripple effects to enhanced upload buttons
+                setTimeout(() => {
+                    addRippleEffects();
+                }, 500);
 
                 // Check upload section state after initialization
                 setTimeout(() => {
