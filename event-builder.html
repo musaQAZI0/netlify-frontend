@@ -525,7 +525,18 @@
 
             <!-- Save Button -->
             <div class="save-section">
+                <div class="save-status" id="saveStatus" style="display: none;">
+                    <div class="save-status-content">
+                        <span class="save-status-text"></span>
+                        <div class="save-progress-bar">
+                            <div class="save-progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
                 <button class="save-btn" onclick="saveAndContinue()">Save and continue</button>
+                <div class="auto-save-indicator" id="autoSaveIndicator" style="display: none;">
+                    <span class="auto-save-text">Auto-saving...</span>
+                </div>
             </div>
         </main>
     </div>

@@ -1627,6 +1627,109 @@ select:focus {
   }
 }
 
+/* Save Status Indicators */
+.save-status {
+  background: var(--color-blue-50);
+  border: 1px solid var(--color-blue-200);
+  border-radius: var(--border-radius-md);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: var(--transition-all);
+}
+
+.save-status.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.save-status.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.save-status-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.save-status-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-900);
+}
+
+.save-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--color-gray-200);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.save-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary-blue), var(--color-blue-600));
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.auto-save-indicator {
+  text-align: center;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+.auto-save-text {
+  font-size: 0.75rem;
+  color: var(--color-gray-500);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auto-save-text::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-gray-300);
+  border-top-color: var(--color-blue-600);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enhanced Save Button */
+.save-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.save-btn:disabled::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transform: translateY(-50%);
+}
+
 /* Media Subsection Styles */
 .media-subsection {
   margin-bottom: 32px;

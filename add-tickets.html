@@ -292,27 +292,48 @@
             }
         }
 
-        function loadEventData() {
+        async function loadEventData() {
             try {
-                const editingEvent = JSON.parse(localStorage.getItem('editingEvent') || '{}');
-                if (editingEvent.id) {
-                    // Get fresh event data from data manager
-                    const freshEventData = window.dataManager.getEventById(editingEvent.id);
-                    if (freshEventData) {
-                        currentEventData = freshEventData;
-                        populateEventInfo();
-                    } else {
-                        console.error('Event not found in data manager');
-                        window.location.href = 'event-builder.html';
-                    }
-                } else {
-                    // Redirect back to event builder if no event data
+                // Get event ID from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('id');
+
+                if (!eventId) {
+                    console.error('No event ID provided');
                     window.location.href = 'event-builder.html';
+                    return;
+                }
+
+                // Fetch event data from database
+                const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.success && data.event) {
+                    currentEventData = data.event;
+                    populateEventInfo();
+                } else {
+                    throw new Error('Event not found');
                 }
             } catch (error) {
                 console.error('Failed to load event data:', error);
+                alert('Failed to load event data. Redirecting to event builder.');
                 window.location.href = 'event-builder.html';
             }
+        }
+
+        function getAuthToken() {
+            // Get token from localStorage or wherever it's stored
+            return localStorage.getItem('authToken') || '';
         }
 
         function populateEventInfo() {
@@ -346,8 +367,8 @@
 
         function loadTickets() {
             try {
-                // Get tickets from the event data in data manager
-                eventTickets = currentEventData.tickets || [];
+                // Get tickets from the event data fetched from database
+                eventTickets = currentEventData.pricing?.tickets || [];
                 renderTicketsList();
             } catch (error) {
                 console.error('Failed to load tickets:', error);
@@ -443,7 +464,7 @@
             });
         }
 
-        function saveTicket() {
+        async function saveTicket() {
             try {
                 // Validate required fields
                 const ticketName = document.getElementById('ticketName').value.trim();
@@ -451,7 +472,7 @@
                     alert('Please enter a ticket name.');
                     return;
                 }
-                
+
                 if (currentTicketType === 'paid') {
                     const price = parseFloat(document.getElementById('ticketPrice').value);
                     if (isNaN(price) || price < 0) {
@@ -459,13 +480,14 @@
                         return;
                     }
                 }
-                
+
                 const ticketData = {
                     name: ticketName,
                     type: currentTicketType,
                     price: currentTicketType === 'paid' ? parseFloat(document.getElementById('ticketPrice').value) : 0,
                     suggestedDonation: currentTicketType === 'donation' ? parseFloat(document.getElementById('suggestedDonation').value) || 0 : 0,
-                    quantity: document.getElementById('ticketQuantity').value ? parseInt(document.getElementById('ticketQuantity').value) : 0,
+                    quantity: document.getElementById('ticketQuantity').value ? parseInt(document.getElementById('ticketQuantity').value) : null,
+                    available: document.getElementById('ticketQuantity').value ? parseInt(document.getElementById('ticketQuantity').value) : null,
                     description: document.getElementById('ticketDescription').value.trim(),
                     salesStart: document.getElementById('saleStart').value,
                     salesEnd: document.getElementById('saleEnd').value,
@@ -474,27 +496,56 @@
                     maxQuantity: document.getElementById('maxQuantity').value ? parseInt(document.getElementById('maxQuantity').value) : 10
                 };
 
+                // Get current event ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('id');
+
                 if (editingTicketId) {
-                    // Update existing ticket using data manager
-                    const updatedTicket = window.dataManager.updateTicket(currentEventData.id, editingTicketId, ticketData);
-                    showNotification('Ticket updated successfully!');
+                    // Update existing ticket - find and replace in tickets array
+                    const ticketIndex = eventTickets.findIndex(t => t.id === editingTicketId);
+                    if (ticketIndex !== -1) {
+                        eventTickets[ticketIndex] = { ...eventTickets[ticketIndex], ...ticketData };
+                    }
                 } else {
-                    // Add new ticket using data manager
-                    const newTicket = window.dataManager.addTicketToEvent(currentEventData.id, ticketData);
-                    showNotification('Ticket created successfully!');
+                    // Add new ticket with generated ID
+                    ticketData.id = generateTicketId();
+                    eventTickets.push(ticketData);
                 }
-                
-                // Refresh event data and tickets
-                currentEventData = window.dataManager.getEventById(currentEventData.id);
-                eventTickets = currentEventData.tickets || [];
-                
-                // Update localStorage for cross-page persistence
-                localStorage.setItem('editingEvent', JSON.stringify(currentEventData));
-                
-                // Update display
-                renderTicketsList();
-                closeTicketForm();
-                
+
+                // Update event with new tickets array
+                const updateData = {
+                    pricing: {
+                        ...currentEventData.pricing,
+                        tickets: eventTickets
+                    }
+                };
+
+                const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: JSON.stringify(updateData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    // Update current event data
+                    currentEventData = data.event;
+                    eventTickets = currentEventData.pricing?.tickets || [];
+
+                    showNotification(editingTicketId ? 'Ticket updated successfully!' : 'Ticket created successfully!');
+                    renderTicketsList();
+                    closeTicketForm();
+                } else {
+                    throw new Error(data.message || 'Failed to save ticket');
+                }
+
             } catch (error) {
                 console.error('Failed to save ticket:', error);
                 alert('Failed to save ticket: ' + error.message);
@@ -529,7 +580,7 @@
             showTicketForm();
         }
 
-        function deleteTicket(ticketId) {
+        async function deleteTicket(ticketId) {
             if (confirm('Are you sure you want to delete this ticket?')) {
                 try {
                     // Find the ticket to delete
@@ -538,23 +589,47 @@
                         alert('Ticket not found.');
                         return;
                     }
-                    
-                    // Remove ticket from event using data manager
+
+                    // Remove ticket from array
                     const updatedTickets = eventTickets.filter(t => t.id !== ticketId);
-                    const updatedEvent = window.dataManager.updateEvent(currentEventData.id, {
-                        tickets: updatedTickets
+
+                    // Get current event ID from URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const eventId = urlParams.get('id');
+
+                    // Update event with new tickets array
+                    const updateData = {
+                        pricing: {
+                            ...currentEventData.pricing,
+                            tickets: updatedTickets
+                        }
+                    };
+
+                    const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${getAuthToken()}`
+                        },
+                        body: JSON.stringify(updateData)
                     });
-                    
-                    // Update local data
-                    currentEventData = updatedEvent;
-                    eventTickets = updatedEvent.tickets || [];
-                    
-                    // Update localStorage
-                    localStorage.setItem('editingEvent', JSON.stringify(currentEventData));
-                    
-                    renderTicketsList();
-                    showNotification('Ticket deleted successfully!');
-                    
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    if (data.success) {
+                        // Update current event data
+                        currentEventData = data.event;
+                        eventTickets = currentEventData.pricing?.tickets || [];
+
+                        renderTicketsList();
+                        showNotification('Ticket deleted successfully!');
+                    } else {
+                        throw new Error(data.message || 'Failed to delete ticket');
+                    }
+
                 } catch (error) {
                     console.error('Failed to delete ticket:', error);
                     alert('Failed to delete ticket: ' + error.message);
@@ -563,7 +638,7 @@
         }
 
         function generateTicketId() {
-            return window.dataManager.generateId();
+            return 'ticket_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         }
 
         function toggleAdvanced() {
@@ -603,42 +678,61 @@
             }, 3000);
         }
 
-        function saveAndContinue() {
+        async function saveAndContinue() {
             try {
                 // Validate that at least one ticket exists
                 if (!eventTickets || eventTickets.length === 0) {
                     alert('Please create at least one ticket before continuing.');
                     return;
                 }
-                
-                // Update event with current status
-                const updatedEvent = window.dataManager.updateEvent(currentEventData.id, {
+
+                // Get current event ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('id');
+
+                // Update event with tickets configured status
+                const updateData = {
                     ticketsConfigured: true,
                     updatedAt: new Date().toISOString()
+                };
+
+                const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: JSON.stringify(updateData)
                 });
-                
-                // Update localStorage
-                localStorage.setItem('editingEvent', JSON.stringify(updatedEvent));
-                
-                // Mark tickets step as completed
-                const ticketsStep = document.getElementById('ticketsStep');
-                if (ticketsStep) {
-                    ticketsStep.classList.add('completed');
-                    ticketsStep.classList.remove('active');
-                    const stepIcon = ticketsStep.querySelector('.step-icon');
-                    if (stepIcon) {
-                        stepIcon.innerHTML = `
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M9 12l2 2 4-4"/>
-                                <circle cx="12" cy="12" r="10"/>
-                            </svg>
-                        `;
-                    }
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
-                // Navigate to publish page
-                window.location.href = 'publish-event.html';
-                
+
+                const data = await response.json();
+                if (data.success) {
+                    // Mark tickets step as completed
+                    const ticketsStep = document.getElementById('ticketsStep');
+                    if (ticketsStep) {
+                        ticketsStep.classList.add('completed');
+                        ticketsStep.classList.remove('active');
+                        const stepIcon = ticketsStep.querySelector('.step-icon');
+                        if (stepIcon) {
+                            stepIcon.innerHTML = `
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 12l2 2 4-4"/>
+                                    <circle cx="12" cy="12" r="10"/>
+                                </svg>
+                            `;
+                        }
+                    }
+
+                    // Navigate to publish page with event ID
+                    window.location.href = `publish-event.html?id=${eventId}`;
+                } else {
+                    throw new Error(data.message || 'Failed to save progress');
+                }
+
             } catch (error) {
                 console.error('Failed to save and continue:', error);
                 alert('Failed to save progress: ' + error.message);
@@ -646,22 +740,33 @@
         }
 
         function previewEvent() {
-            try {
-                // Update localStorage with current event data
-                localStorage.setItem('editingEvent', JSON.stringify(currentEventData));
-                window.location.href = 'event-preview.html';
-            } catch (error) {
-                console.error('Failed to save event data for preview:', error);
-                window.location.href = 'event-preview.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `event-preview.html?id=${eventId}`;
+            } else {
+                alert('Event ID not found');
             }
         }
 
         function goToPublish() {
-            window.location.href = 'publish-event.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `publish-event.html?id=${eventId}`;
+            } else {
+                alert('Event ID not found');
+            }
         }
 
         function goToBuilder() {
-            window.location.href = 'event-builder.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `event-builder.html?id=${eventId}`;
+            } else {
+                window.location.href = 'event-builder.html';
+            }
         }
     </script>
 </body>

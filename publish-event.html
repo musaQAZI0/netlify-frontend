@@ -14,7 +14,7 @@
         <aside class="left-sidebar">
             <div class="sidebar-content">
                 <div class="back-link">
-                    <a href="add-tickets.html">
+                    <a href="#" onclick="goToTickets()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M15 18l-6-6 6-6"/>
                         </svg>
@@ -377,14 +377,47 @@
             }
         }
 
-        function loadEventData() {
-            const editingEvent = JSON.parse(localStorage.getItem('editingEvent') || '{}');
-            if (editingEvent.id) {
-                currentEventData = editingEvent;
-                populateEventInfo();
-            } else {
+        async function loadEventData() {
+            try {
+                // Get event ID from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('id');
+
+                if (!eventId) {
+                    console.error('No event ID provided');
+                    window.location.href = 'event-builder.html';
+                    return;
+                }
+
+                // Fetch event data from database
+                const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.success && data.event) {
+                    currentEventData = data.event;
+                    populateEventInfo();
+                } else {
+                    throw new Error('Event not found');
+                }
+            } catch (error) {
+                console.error('Failed to load event data:', error);
+                alert('Failed to load event data. Redirecting to event builder.');
                 window.location.href = 'event-builder.html';
             }
+        }
+
+        function getAuthToken() {
+            return localStorage.getItem('authToken') || '';
         }
 
         function populateEventInfo() {
@@ -408,8 +441,8 @@
         }
 
         function loadTickets() {
-            const tickets = JSON.parse(localStorage.getItem(`tickets_${currentEventData.id}`) || '[]');
-            eventTickets = tickets;
+            // Get tickets from the event data fetched from database
+            eventTickets = currentEventData.pricing?.tickets || [];
         }
 
         function formatTime(timeStr) {
@@ -538,45 +571,84 @@
             updateRequirements();
         }
 
-        function publishEvent() {
+        async function publishEvent() {
             const allRequirementsMet = Object.values(publishRequirements).every(req => req);
-            
+
             if (!allRequirementsMet) {
                 alert('Please complete all requirements before publishing.');
                 return;
             }
 
-            // Update event data
-            currentEventData.status = 'published';
-            currentEventData.eventType = document.getElementById('eventType').value;
-            currentEventData.category = document.getElementById('eventCategory').value;
-            currentEventData.publishedAt = new Date().toISOString();
-
-            // Save to data manager
             try {
-                window.dataManager.updateEvent(currentEventData.id, currentEventData);
-                localStorage.setItem('editingEvent', JSON.stringify(currentEventData));
-                
-                // Show success message and redirect
-                alert('Event published successfully!');
-                window.location.href = 'dashboard-home.html';
+                // Get event ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('id');
+
+                // Update event data
+                const updateData = {
+                    status: 'published',
+                    eventType: document.getElementById('eventType').value,
+                    category: document.getElementById('eventCategory').value,
+                    publishedAt: new Date().toISOString()
+                };
+
+                const response = await fetch(`https://crowd-backend-zxxp.onrender.com/api/events/${eventId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: JSON.stringify(updateData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    // Show success message and redirect
+                    alert('Event published successfully!');
+                    window.location.href = 'dashboard-home.html';
+                } else {
+                    throw new Error(data.message || 'Failed to publish event');
+                }
             } catch (error) {
                 console.error('Failed to publish event:', error);
-                alert('Failed to publish event. Please try again.');
+                alert('Failed to publish event: ' + error.message);
             }
         }
 
         function previewEvent() {
-            window.location.href = 'event-preview.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `event-preview.html?id=${eventId}`;
+            } else {
+                alert('Event ID not found');
+            }
         }
 
         function goToBuilder() {
-            window.location.href = 'event-builder.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `event-builder.html?id=${eventId}`;
+            } else {
+                window.location.href = 'event-builder.html';
+            }
         }
 
         function goToTickets() {
-            window.location.href = 'add-tickets.html';
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `add-tickets.html?id=${eventId}`;
+            } else {
+                alert('Event ID not found');
+            }
         }
+
 
         // Update requirements when page loads and when data changes
         setInterval(updateRequirements, 1000);
