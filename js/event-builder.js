@@ -827,6 +827,7 @@ function addAgendaSection() {
     }
 }
 
+
 function deleteAgendaSection() {
     const agendaSection = document.getElementById('agendaSection');
     const agendaCard = document.getElementById('agendaCard');
@@ -1044,12 +1045,30 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initializeWhenReady, 100);
 });
 
-// Ensure all onclick functions are available globally
+// Make all functions globally available (must be at the end after all functions are defined)
 window.addLineupSection = addLineupSection;
 window.addAgendaSection = addAgendaSection;
-window.expandUploadSection = expandUploadSection;
-window.collapseUploadSection = collapseUploadSection;
+window.deleteLineupSection = deleteLineupSection;
+window.deleteAgendaSection = deleteAgendaSection;
+// Upload section functions removed as we now use direct card layout
 window.saveAndContinue = saveAndContinue;
 window.handleImageUpload = handleImageUpload;
 window.handleVideoUpload = handleVideoUpload;
 window.handleLineupImageUpload = handleLineupImageUpload;
+
+// Additional upload functions
+window.uploadImage = function() {
+    document.getElementById('imageInput').click();
+};
+
+window.uploadVideo = function() {
+    document.getElementById('videoInput').click();
+};
+
+// Debug: Log functions to verify they're available
+console.log('Functions available:', {
+    addLineupSection: typeof window.addLineupSection,
+    addAgendaSection: typeof window.addAgendaSection,
+    uploadImage: typeof window.uploadImage,
+    uploadVideo: typeof window.uploadVideo
+});

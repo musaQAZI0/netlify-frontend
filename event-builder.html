@@ -153,111 +153,69 @@
                     
                     <div class="main-form">
                         <!-- Event Media Upload Section -->
-                        <div class="media-upload-section">
-                            <!-- Initial Upload Area with Background Image -->
-                            <div class="upload-hero-section" id="uploadHeroSection" onclick="expandUploadSection()">
-                                <div class="upload-hero-background">
-                                    <div class="upload-hero-overlay">
-                                        <div class="upload-hero-content">
-                                            <div class="upload-hero-icon">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                                    <polyline points="7,10 12,15 17,10"/>
-                                                    <line x1="12" x2="12" y1="15" y2="3"/>
-                                                </svg>
-                                            </div>
-                                            <h3>Upload photos and video</h3>
-                                        </div>
-                                        <div class="upload-hero-plus">
-                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
-                                                <circle cx="12" cy="12" r="10"/>
-                                                <line x1="12" x2="12" y1="8" y2="16"/>
-                                                <line x1="8" x2="16" y1="12" y2="12"/>
+                        <div class="upload-card-section">
+                            <div class="section-header">
+                                <h3>Add images and video</h3>
+                            </div>
+
+                            <!-- Images Section -->
+                            <div class="media-subsection">
+                                <h4>Images</h4>
+                                <div class="pro-tip">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <span><strong>Pro tip:</strong> Use photos that set the mood, and avoid distracting text overlays. <a href="#" class="view-examples">View examples →</a></span>
+                                </div>
+                                <div class="image-upload-area" onclick="uploadImage()">
+                                    <div class="upload-placeholder" id="uploadPlaceholder">
+                                        <div class="upload-icon">
+                                            <svg width="48" height="48" viewBox="0 0 24 24" fill="#d1d5db">
+                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                                <polyline points="21,15 16,10 5,21"/>
                                             </svg>
                                         </div>
+                                        <p>Drag and drop an image or</p>
+                                        <button type="button" class="upload-btn" onclick="document.getElementById('imageInput').click()">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                <polyline points="7,10 12,15 17,10"/>
+                                                <line x1="12" x2="12" y1="15" y2="3"/>
+                                            </svg>
+                                            Upload Image
+                                        </button>
                                     </div>
+                                    <img id="eventImage" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                                </div>
+                                <div class="upload-specs">
+                                    <span>• Recommended image size: 2160 x 1080px</span>
+                                    <span>• Maximum file size: 10MB</span>
+                                    <span>• Supported image files: JPEG, PNG</span>
                                 </div>
                             </div>
 
-                            <!-- Expanded Upload Form (Initially Hidden) -->
-                            <div class="upload-expanded-section" id="uploadExpandedSection" style="display: none;">
-                                <div class="section-header">
-                                    <h3>Add images and video</h3>
-                                    <button class="collapse-btn" onclick="collapseUploadSection()">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#64748b">
-                                            <line x1="18" x2="6" y1="6" y2="18"/>
-                                            <line x1="6" x2="18" y1="6" y2="18"/>
+                            <!-- Video Section -->
+                            <div class="media-subsection">
+                                <h4>Video</h4>
+                                <p class="video-description">Add a video to show your event's vibe. The video will appear with your event images.</p>
+                                <div class="video-upload-area">
+                                    <button type="button" class="upload-video-btn" onclick="document.getElementById('videoInput').click()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <polygon points="23 7 16 12 23 17 23 7"/>
+                                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
                                         </svg>
+                                        Upload video
                                     </button>
                                 </div>
-
-                                <!-- Images Section -->
-                                <div class="media-subsection">
-                                    <h4>Images</h4>
-                                    <div class="pro-tip">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#3b82f6">
-                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                        </svg>
-                                        <span><strong>Pro tip:</strong> Use photos that set the mood, and avoid distracting text overlays. <a href="#">View examples →</a></span>
-                                    </div>
-                                    <div class="image-upload-area" onclick="uploadImage()">
-                                        <div class="upload-placeholder" id="uploadPlaceholder">
-                                            <div class="upload-icon">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#ccc">
-                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                                                    <polyline points="21,15 16,10 5,21"/>
-                                                </svg>
-                                            </div>
-                                            <p>Drag and drop an image or</p>
-                                            <button type="button" class="upload-btn">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                                    <polyline points="7,10 12,15 17,10"/>
-                                                    <line x1="12" x2="12" y1="15" y2="3"/>
-                                                </svg>
-                                                Upload Image
-                                            </button>
-                                        </div>
-                                        <img id="eventImage" style="display: none; width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
-                                    </div>
-                                    <div class="upload-specs">
-                                        <span>• Recommended image size: 2160 x 1080px</span>
-                                        <span>• Maximum file size: 10MB</span>
-                                        <span>• Supported image files: JPEG, PNG</span>
-                                    </div>
+                                <div class="upload-specs">
+                                    <span>• Min resolution: 480p</span>
+                                    <span>• Ratio: any vertical</span>
+                                    <span>• Length: up to 1 min</span>
+                                    <span>• Formats: MP4, MOV</span>
+                                    <span><a href="#" class="view-details">View more details →</a></span>
                                 </div>
-
-                                <!-- Video Section -->
-                                <div class="media-subsection">
-                                    <h4>Video</h4>
-                                    <p class="video-description">Add a video to show your event's vibe. The video will appear with your event images.</p>
-                                    <div class="video-upload-area" onclick="uploadVideo()">
-                                        <div class="upload-placeholder" id="videoUploadPlaceholder">
-                                            <div class="upload-icon">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#ccc">
-                                                    <polygon points="23 7 16 12 23 17 23 7"/>
-                                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                                                </svg>
-                                            </div>
-                                            <p>Drag and drop a video or</p>
-                                            <button type="button" class="upload-btn">
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                                    <polygon points="23 7 16 12 23 17 23 7"/>
-                                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
-                                                </svg>
-                                                Upload video
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="upload-specs">
-                                        <span>• Min resolution: 480p</span>
-                                        <span>• Ratio: any vertical</span>
-                                        <span>• Length: up to 1 min</span>
-                                        <span>• Formats: MP4, MOV</span>
-                                        <span><a href="#">View more details →</a></span>
-                                    </div>
-                                </div>
+                            </div>
                             </div>
                         </div>
 
