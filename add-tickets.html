@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Tickets - Crowd</title>
     <link rel="stylesheet" href="add-tickets-styles.css">
-    <script src="js/data-manager.js"></script>
 </head>
 <body>
     <div class="tickets-container">
@@ -319,25 +318,47 @@
         let inventoryTiers = [];
         let ticketGroups = [];
 
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!window.dataManager.isAuthenticated()) {
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Pure database authentication check
+            const isAuthenticated = await checkAuthenticationStatus();
+            if (!isAuthenticated) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            loadUserData();
-            loadEventData();
+            await loadUserData();
+            await loadEventData();
             loadTickets();
             initializeForm();
             showTicketForm(); // Show form by default
         });
 
-        function loadUserData() {
-            const currentUser = window.dataManager.getCurrentUser();
-            if (currentUser) {
-                const initials = (currentUser.firstName.charAt(0) + currentUser.lastName.charAt(0)).toUpperCase();
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('userName').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+        async function loadUserData() {
+            try {
+                const response = await fetch('https://crowd-backend-zxxp.onrender.com/api/auth/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.user) {
+                        const user = data.user;
+                        const initials = (user.firstName?.charAt(0) + user.lastName?.charAt(0)).toUpperCase() || 'U';
+                        document.getElementById('userAvatar').textContent = initials;
+                        document.getElementById('userName').textContent = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}: Failed to load profile`);
+                }
+            } catch (error) {
+                console.error('Failed to load user data:', error);
+                // Don't redirect, just show default user info
+                document.getElementById('userAvatar').textContent = 'U';
+                document.getElementById('userName').textContent = 'User';
             }
         }
 
@@ -470,19 +491,43 @@
             }
         }
 
-        function getAuthToken() {
-            // Try multiple sources for auth token
-            let token = localStorage.getItem('authToken');
+        // Pure database authentication check
+        async function checkAuthenticationStatus() {
+            try {
+                const token = getAuthToken();
+                if (!token) {
+                    console.log('No auth token found');
+                    return false;
+                }
 
-            if (!token && window.dataManager && window.dataManager.getAuthToken) {
-                token = window.dataManager.getAuthToken();
+                const response = await fetch('https://crowd-backend-zxxp.onrender.com/api/auth/verify', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                console.log('Auth verification result:', data);
+
+                return response.ok && data.success;
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+                return false;
             }
+        }
 
+        function getAuthToken() {
+            // Get from URL parameters first (for direct links)
+            const urlParams = new URLSearchParams(window.location.search);
+            let token = urlParams.get('token');
+
+            // Fall back to localStorage only for minimal compatibility
             if (!token) {
-                // Try other common token storage locations
-                token = localStorage.getItem('token') ||
-                       localStorage.getItem('jwt') ||
-                       localStorage.getItem('access_token') || '';
+                token = localStorage.getItem('authToken') ||
+                       localStorage.getItem('token') ||
+                       localStorage.getItem('jwt') || '';
             }
 
             console.log('Auth token found:', token ? 'Yes (length: ' + token.length + ')' : 'No');
