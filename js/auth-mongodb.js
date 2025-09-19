@@ -115,29 +115,71 @@ class MongoAuthAPI {
     }
     
     // Get user profile
-    async getProfile() {
+    async getProfile(retryAfterRefresh = true) {
         try {
             const response = await fetch(`${this.baseURL}/auth/profile`, {
                 method: 'GET',
                 headers: this.getAuthHeaders()
             });
-            
+
             if (!response.ok) {
+                // Handle token expiration - try to refresh first
+                if (response.status === 401 && retryAfterRefresh) {
+                    console.log('Token expired, attempting refresh');
+                    try {
+                        await this.refreshToken();
+                        // Retry the request with new token
+                        return await this.getProfile(false); // Don't retry again if this fails
+                    } catch (refreshError) {
+                        console.error('Token refresh failed:', refreshError);
+                        this.handleTokenExpiration();
+                        throw new Error('Token expired');
+                    }
+                }
+
                 const error = await response.json();
                 throw new Error(error.message || 'Failed to get profile');
             }
-            
+
             const data = await response.json();
-            
+
             // Update stored user data
             if (data.user) {
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
             }
-            
+
             return data;
         } catch (error) {
             console.error('Profile API error:', error);
+
+            // Handle token expiration specifically
+            if (error.message === 'Token expired') {
+                this.handleTokenExpiration();
+            }
+
             throw error;
+        }
+    }
+
+    // Handle token expiration
+    handleTokenExpiration() {
+        // Clear stored auth data
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('currentUser');
+
+        // Store current page for redirect after login
+        const currentPath = window.location.pathname + window.location.search;
+        localStorage.setItem('redirectAfterLogin', currentPath);
+
+        // Show user-friendly message
+        if (typeof showErrorMessage === 'function') {
+            showErrorMessage('Your session has expired. Please login again.', false);
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        } else {
+            alert('Your session has expired. Please login again.');
+            window.location.href = 'login.html';
         }
     }
     
@@ -233,11 +275,69 @@ class MongoAuthAPI {
         }
     }
     
+    // Refresh authentication token
+    async refreshToken() {
+        try {
+            const currentToken = localStorage.getItem('authToken');
+            if (!currentToken) {
+                throw new Error('No token to refresh');
+            }
+
+            const response = await fetch(`${this.baseURL}/auth/refresh`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${currentToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to refresh token');
+            }
+
+            const data = await response.json();
+
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+                console.log('Token refreshed successfully');
+                return data.token;
+            }
+
+            throw new Error('No token in refresh response');
+        } catch (error) {
+            console.error('Token refresh failed:', error);
+            // If refresh fails, handle as expired token
+            this.handleTokenExpiration();
+            throw error;
+        }
+    }
+
     // Check if user is authenticated
     isAuthenticated() {
         const token = localStorage.getItem('authToken');
         const user = localStorage.getItem('currentUser');
         return !!(token && user);
+    }
+
+    // Check if token is close to expiration (optional - requires JWT parsing)
+    async checkTokenValidity() {
+        try {
+            const response = await fetch(`${this.baseURL}/auth/verify`, {
+                method: 'GET',
+                headers: this.getAuthHeaders()
+            });
+
+            if (response.status === 401) {
+                // Try to refresh token
+                await this.refreshToken();
+                return true;
+            }
+
+            return response.ok;
+        } catch (error) {
+            console.error('Token validity check failed:', error);
+            return false;
+        }
     }
     
     // Get current user

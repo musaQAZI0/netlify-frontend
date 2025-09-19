@@ -1484,11 +1484,28 @@
       try {
         const response = await fetch(`${API_BASE}/events?organizerId=org_12345`);
         if (response.ok) {
-          collections = await response.json();
+          const data = await response.json();
+
+          // Handle different response formats
+          if (data && data.success && Array.isArray(data.events)) {
+            collections = data.events;
+          } else if (Array.isArray(data)) {
+            collections = data;
+          } else {
+            console.warn('Unexpected collections data format:', data);
+            collections = [];
+          }
+
+          displayCollections();
+        } else {
+          console.error('Failed to load collections:', response.status, response.statusText);
+          collections = [];
           displayCollections();
         }
       } catch (error) {
         console.error('Error loading collections:', error);
+        collections = [];
+        displayCollections();
       }
     }
 
@@ -1496,15 +1513,31 @@
     function displayCollections() {
       const grid = document.getElementById('collectionsGrid');
       const newCollectionCard = grid.querySelector('.collection-card.new');
-      
+
       // Clear existing collections (keep new card)
       const existingCards = grid.querySelectorAll('.collection-card:not(.new)');
       existingCards.forEach(card => card.remove());
 
-      collections.forEach(collection => {
-        const collectionCard = createCollectionCard(collection);
-        grid.appendChild(collectionCard);
-      });
+      // Ensure collections is an array before using forEach
+      if (Array.isArray(collections) && collections.length > 0) {
+        collections.forEach(collection => {
+          const collectionCard = createCollectionCard(collection);
+          grid.appendChild(collectionCard);
+        });
+      } else {
+        // Show empty state if no collections
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'empty-collections-message';
+        emptyMessage.innerHTML = '<p>No collections found. Create your first collection!</p>';
+        emptyMessage.style.cssText = `
+          grid-column: 1 / -1;
+          text-align: center;
+          padding: 2rem;
+          color: #666;
+          font-style: italic;
+        `;
+        grid.appendChild(emptyMessage);
+      }
     }
 
     // Create collection card element
@@ -1576,11 +1609,26 @@
         }
       } catch (error) {
         console.error('Error loading user profile:', error);
-        // If API fails, still show cached data if available
+
+        // Handle token expiration specifically
+        if (error.message === 'Token expired') {
+          // Don't try to show cached data if token expired
+          console.log('Token expired, user will be redirected to login');
+          return;
+        }
+
+        // If API fails but token is still valid, show cached data if available
         const userStr = localStorage.getItem('currentUser');
         if (userStr) {
-          const user = JSON.parse(userStr);
-          updateUserDisplay(user);
+          try {
+            const user = JSON.parse(userStr);
+            updateUserDisplay(user);
+            console.log('Using cached user data due to API error');
+          } catch (parseError) {
+            console.error('Error parsing cached user data:', parseError);
+            // Clear corrupted data
+            localStorage.removeItem('currentUser');
+          }
         }
       }
     }
