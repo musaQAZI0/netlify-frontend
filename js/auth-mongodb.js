@@ -27,22 +27,43 @@ class MongoAuthAPI {
                 },
                 body: JSON.stringify(userData)
             });
-            
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.message || 'Registration failed');
+
+            // Handle different response types
+            let data;
+            let errorMessage;
+
+            try {
+                data = await response.json();
+                errorMessage = data.message || 'Registration failed';
+            } catch (jsonError) {
+                // Response is not JSON (like rate limit messages)
+                const textResponse = await response.text();
+                console.warn('Non-JSON response received:', textResponse);
+
+                if (response.status === 429) {
+                    errorMessage = 'Too many registration attempts. Please wait a few minutes and try again.';
+                } else if (response.status === 500) {
+                    errorMessage = 'Server error. Please try again later.';
+                } else {
+                    errorMessage = textResponse || 'Registration failed';
+                }
+
+                data = { success: false, message: errorMessage };
             }
-            
+
+            if (!response.ok) {
+                throw new Error(errorMessage);
+            }
+
             // Store auth data
             if (data.token) {
                 localStorage.setItem('authToken', data.token);
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
             }
-            
+
             console.log('User registered successfully:', data.user);
             return data;
-            
+
         } catch (error) {
             console.error('Registration error:', error);
             throw error;
@@ -59,20 +80,41 @@ class MongoAuthAPI {
                 },
                 body: JSON.stringify({ email, password })
             });
-            
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
+
+            // Handle different response types
+            let data;
+            let errorMessage;
+
+            try {
+                data = await response.json();
+                errorMessage = data.message || 'Login failed';
+            } catch (jsonError) {
+                // Response is not JSON (like rate limit messages)
+                const textResponse = await response.text();
+                console.warn('Non-JSON response received:', textResponse);
+
+                if (response.status === 429) {
+                    errorMessage = 'Too many login attempts. Please wait a few minutes and try again.';
+                } else if (response.status === 500) {
+                    errorMessage = 'Server error. Please try again later.';
+                } else {
+                    errorMessage = textResponse || 'Login failed';
+                }
+
+                data = { success: false, message: errorMessage };
             }
-            
+
+            if (!response.ok) {
+                throw new Error(errorMessage);
+            }
+
             // Store auth data
             localStorage.setItem('authToken', data.token);
             localStorage.setItem('currentUser', JSON.stringify(data.user));
-            
+
             console.log('User logged in successfully:', data.user);
             return data;
-            
+
         } catch (error) {
             console.error('Login error:', error);
             throw error;
@@ -137,8 +179,20 @@ class MongoAuthAPI {
                     }
                 }
 
-                const error = await response.json();
-                throw new Error(error.message || 'Failed to get profile');
+                // Handle different response types
+                let errorMessage;
+                try {
+                    const error = await response.json();
+                    errorMessage = error.message || 'Failed to get profile';
+                } catch (jsonError) {
+                    const textResponse = await response.text();
+                    if (response.status === 429) {
+                        errorMessage = 'Too many requests. Please wait a few minutes and try again.';
+                    } else {
+                        errorMessage = textResponse || 'Failed to get profile';
+                    }
+                }
+                throw new Error(errorMessage);
             }
 
             const data = await response.json();
