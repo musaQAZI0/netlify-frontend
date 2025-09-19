@@ -456,9 +456,9 @@ class EventBuilderAPI {
         try {
             const formData = new FormData();
             formData.append('image', file);
-            
+
             const token = await this.getAuthToken();
-            const response = await fetch(`${this.baseURL}/events/upload-image`, {
+            const response = await fetch(`${this.baseURL}/api/events/upload-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -466,9 +466,40 @@ class EventBuilderAPI {
                 credentials: 'include',
                 body: formData
             });
-            
+
+            // Handle token expiration
+            if (response.status === 401) {
+                console.log('Token expired during image upload, trying to refresh...');
+                // Try to refresh token using the MongoDB auth API
+                if (window.mongoAuthAPI || window.authAPI) {
+                    try {
+                        const authAPI = window.mongoAuthAPI || window.authAPI;
+                        await authAPI.refreshToken();
+
+                        // Retry with new token
+                        const newToken = await this.getAuthToken();
+                        const retryResponse = await fetch(`${this.baseURL}/api/events/upload-image`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${newToken}`
+                            },
+                            credentials: 'include',
+                            body: formData
+                        });
+
+                        const retryData = await retryResponse.json();
+                        if (retryData.success) {
+                            return retryData.imageUrl;
+                        }
+                    } catch (refreshError) {
+                        console.error('Token refresh failed:', refreshError);
+                    }
+                }
+                throw new Error('Token expired');
+            }
+
             const data = await response.json();
-            
+
             if (data.success) {
                 return data.imageUrl;
             } else {
@@ -1160,6 +1191,11 @@ class EventBuilder {
         setTimeout(() => {
             notification.remove();
         }, duration);
+    }
+
+    // Delegate saveEvent to API for backward compatibility
+    async saveEvent() {
+        return await this.api.saveEvent();
     }
 }
 
@@ -2073,4 +2109,24 @@ console.log('Functions available:', {
     uploadImage: typeof window.uploadImage,
     uploadVideo: typeof window.uploadVideo,
     saveAndContinue: typeof window.saveAndContinue
+});
+
+// Global error handling for async response listener errors (usually from browser extensions)
+window.addEventListener('error', function(event) {
+    if (event.error && event.error.message && event.error.message.includes('message channel closed')) {
+        // Silently ignore this error as it's caused by browser extensions
+        console.debug('Ignoring browser extension error:', event.error.message);
+        event.preventDefault();
+        return false;
+    }
+});
+
+// Handle unhandled promise rejections gracefully
+window.addEventListener('unhandledrejection', function(event) {
+    if (event.reason && event.reason.message && event.reason.message.includes('message channel closed')) {
+        // Silently ignore this error as it's caused by browser extensions
+        console.debug('Ignoring browser extension promise rejection:', event.reason.message);
+        event.preventDefault();
+        return false;
+    }
 });
