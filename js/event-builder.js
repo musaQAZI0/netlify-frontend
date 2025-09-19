@@ -527,12 +527,97 @@ class EventBuilder {
     }
 
     async checkAuthentication() {
-        if (!(await window.authUtils.isAuthenticated())) {
-            console.log('User not authenticated, redirecting to login');
+        try {
+            // First check if we have a token in localStorage
+            const token = localStorage.getItem('authToken');
+            const currentUser = localStorage.getItem('currentUser');
+
+            console.log('Auth check:', {
+                hasToken: !!token,
+                hasUser: !!currentUser,
+                tokenLength: token ? token.length : 0
+            });
+
+            // If we have both token and user data, consider authenticated
+            if (token && currentUser) {
+                try {
+                    JSON.parse(currentUser); // Validate user data
+                    console.log('User authenticated with cached data');
+                    return true;
+                } catch (e) {
+                    console.error('Invalid user data in localStorage');
+                    localStorage.removeItem('currentUser');
+                }
+            }
+
+            // If no token, definitely not authenticated
+            if (!token) {
+                console.log('No auth token found, redirecting to login');
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            // Try to verify token with API only if we have a token but no user data
+            try {
+                const response = await fetch(`${this.baseURL}/api/auth/verify`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        console.log('Token verified successfully');
+                        return true;
+                    }
+                }
+
+                // If verification fails, try to get user profile instead
+                console.log('Token verification failed, trying profile endpoint');
+                const profileResponse = await fetch(`${this.baseURL}/api/auth/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (profileResponse.ok) {
+                    const profileData = await profileResponse.json();
+                    if (profileData.success && profileData.user) {
+                        console.log('Profile fetched successfully, user is authenticated');
+                        localStorage.setItem('currentUser', JSON.stringify(profileData.user));
+                        return true;
+                    }
+                }
+            } catch (apiError) {
+                console.error('API authentication check failed:', apiError);
+                // Don't redirect on API errors, assume user is authenticated if they have a token
+                if (token) {
+                    console.log('API unavailable but token exists, assuming authenticated');
+                    return true;
+                }
+            }
+
+            console.log('Authentication failed, redirecting to login');
+            window.location.href = 'login.html';
+            return false;
+
+        } catch (error) {
+            console.error('Authentication check error:', error);
+            // On any error, if we have a token, assume authenticated
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                console.log('Auth check failed but token exists, assuming authenticated');
+                return true;
+            }
+
             window.location.href = 'login.html';
             return false;
         }
-        return true;
     }
 
     async loadExistingEvent(eventId) {

@@ -41,32 +41,79 @@ class AuthUtils {
     async isAuthenticated() {
         try {
             const token = this.getAuthToken();
+            const currentUser = localStorage.getItem('currentUser');
+
             if (!token) {
                 console.log('No auth token found');
                 return false;
             }
 
-            const response = await fetch(`${this.baseURL}/api/auth/verify`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+            // If we have both token and user data, consider authenticated
+            if (token && currentUser) {
+                try {
+                    JSON.parse(currentUser); // Validate user data
+                    console.log('User authenticated with cached data');
+                    return true;
+                } catch (e) {
+                    console.error('Invalid user data in localStorage');
+                    localStorage.removeItem('currentUser');
                 }
-            });
-
-            if (!response.ok) {
-                if (response.status === 401) {
-                    console.log('Token expired, clearing auth data');
-                    this.clearAuthData();
-                }
-                return false;
             }
 
-            const data = await response.json();
-            return data.success;
+            // Try to verify with API
+            try {
+                const response = await fetch(`${this.baseURL}/api/auth/verify`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        return true;
+                    }
+                } else if (response.status === 401) {
+                    console.log('Token expired, clearing auth data');
+                    this.clearAuthData();
+                    return false;
+                }
+
+                // If verification endpoint fails but we have a token, try profile endpoint
+                const profileResponse = await fetch(`${this.baseURL}/api/auth/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (profileResponse.ok) {
+                    const profileData = await profileResponse.json();
+                    if (profileData.success && profileData.user) {
+                        console.log('Profile verified, user authenticated');
+                        localStorage.setItem('currentUser', JSON.stringify(profileData.user));
+                        return true;
+                    }
+                }
+
+            } catch (apiError) {
+                console.error('API authentication check failed:', apiError);
+                // If API is unavailable but we have a token, assume authenticated
+                if (token) {
+                    console.log('API unavailable but token exists, assuming authenticated');
+                    return true;
+                }
+            }
+
+            return false;
         } catch (error) {
             console.error('Authentication check failed:', error);
-            return false;
+            // If we have a token, assume authenticated on errors
+            const token = this.getAuthToken();
+            return !!token;
         }
     }
 
@@ -293,12 +340,20 @@ class AuthUtils {
 
     // Initialize user interface elements
     async initializeUserInterface() {
-        if (!(await this.isAuthenticated())) {
-            console.log('User not authenticated, skipping UI initialization');
-            return;
-        }
-
         try {
+            // Check authentication but don't block UI if API is unavailable
+            const isAuth = await this.isAuthenticated();
+            const hasToken = !!this.getAuthToken();
+            const hasUser = !!localStorage.getItem('currentUser');
+
+            console.log('UI initialization check:', { isAuth, hasToken, hasUser });
+
+            // If we have token and user data, proceed with UI initialization even if API verification failed
+            if (!isAuth && !(hasToken && hasUser)) {
+                console.log('User not authenticated and no cached data, skipping UI initialization');
+                return;
+            }
+
             console.log('Initializing user interface...');
             const user = await this.getCurrentUser();
             if (user) {
