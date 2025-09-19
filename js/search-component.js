@@ -353,7 +353,6 @@ class SearchComponent {
                     this.reverseGeocode(position.coords.latitude, position.coords.longitude);
                 },
                 (error) => {
-                    console.error('Geolocation error:', error);
                     this.locationText.textContent = 'Unable to get location';
                     setTimeout(() => {
                         this.locationText.textContent = 'Choose a location';
@@ -378,22 +377,8 @@ class SearchComponent {
                         this.updateLocationWithCoordinates(position.coords);
                     },
                     (error) => {
-                        // Handle different types of geolocation errors gracefully
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                console.log('User denied the request for Geolocation');
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                console.log('Location information is unavailable');
-                                break;
-                            case error.TIMEOUT:
-                                console.log('The request to get user location timed out');
-                                break;
-                            default:
-                                console.log('An unknown error occurred while retrieving location');
-                                break;
-                        }
-                        // Don't show error to user, just use default behavior
+                        // Handle geolocation errors silently
+                        // Just use default behavior without showing errors to user
                     },
                     { 
                         timeout: 5000,
@@ -402,10 +387,8 @@ class SearchComponent {
                     }
                 );
             } catch (error) {
-                console.log('Geolocation API error:', error);
+                // Geolocation API error - handle silently
             }
-        } else {
-            console.log('Geolocation is not supported by this browser');
         }
     }
 

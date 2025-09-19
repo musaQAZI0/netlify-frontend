@@ -2459,8 +2459,56 @@
             loadUserData();
         }
 
+        // Track if user data is already being loaded to prevent duplicate calls
+        let isLoadingUserData = false;
+
+        // Process user data and update UI elements
+        function processUserData(user) {
+            console.log('Processing user data for UI update:', user);
+
+            const userEmailEl = document.getElementById('userEmail');
+            const userAvatarEl = document.getElementById('userAvatar');
+            const mobileUserAvatarEl = document.getElementById('mobileUserAvatar');
+
+            if (userEmailEl) {
+                // Show name if available, otherwise email
+                const displayText = user.name || user.email || 'User';
+                userEmailEl.textContent = displayText;
+                console.log('Updated user email display to:', displayText);
+            }
+
+            if (userAvatarEl) {
+                // Set avatar to first letter of name or email
+                const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
+                userAvatarEl.textContent = avatarText;
+                console.log('Updated user avatar to:', avatarText);
+
+                // Sync with mobile avatar
+                if (mobileUserAvatarEl) {
+                    mobileUserAvatarEl.textContent = avatarText;
+                }
+            }
+
+            // Update dropdown email
+            const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+            if (dropdownUserEmail) {
+                dropdownUserEmail.textContent = user.email || user.name || 'user@example.com';
+                console.log('Updated dropdown email to:', user.email || user.name || 'user@example.com');
+            }
+
+            console.log('User data successfully processed and UI updated');
+        }
+
         // Load user data from localStorage
         function loadUserData() {
+            // Prevent duplicate loading
+            if (isLoadingUserData) {
+                console.log('User data loading already in progress, skipping...');
+                return;
+            }
+
+            isLoadingUserData = true;
+
             // Check if we're in OAuth callback flow
             const urlParams = new URLSearchParams(window.location.search);
             const hasToken = urlParams.get('token');
@@ -2468,17 +2516,19 @@
             if (hasToken) {
                 // OAuth callback - give it a moment to process
                 console.log('OAuth callback detected, waiting for token processing...');
-                setTimeout(loadUserData, 500);
+                setTimeout(() => {
+                    isLoadingUserData = false;
+                    loadUserData();
+                }, 500);
                 return;
             }
 
             const userStr = localStorage.getItem('currentUser');
             const token = localStorage.getItem('authToken');
-            
-            console.log('Loading user data:', { 
-                hasToken: !!token, 
-                hasUserStr: !!userStr, 
-                userStr: userStr 
+
+            console.log('Loading user data:', {
+                hasToken: !!token,
+                hasUserStr: !!userStr
             });
 
             if (!token || !userStr) {
@@ -2493,46 +2543,19 @@
                 };
                 localStorage.setItem('currentUser', JSON.stringify(demoUser));
                 localStorage.setItem('authToken', 'demo-token-123');
-                console.log('Demo user created, reloading user data...');
-                loadUserData();
+                console.log('Demo user created, processing...');
+
+                // Process the demo user directly instead of calling loadUserData again
+                processUserData(demoUser);
+                isLoadingUserData = false;
                 return;
             }
 
             try {
                 const user = JSON.parse(userStr);
-                const userEmailEl = document.getElementById('userEmail');
-                const userAvatarEl = document.getElementById('userAvatar');
-                const mobileUserAvatarEl = document.getElementById('mobileUserAvatar');
 
-                if (userEmailEl) {
-                    // Show name if available, otherwise email
-                    const displayText = user.name || user.email || 'User';
-                    userEmailEl.textContent = displayText;
-                    console.log('Updated user email display to:', displayText);
-                }
-
-                if (userAvatarEl) {
-                    // Set avatar to first letter of name or email
-                    const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
-                    userAvatarEl.textContent = avatarText;
-                    console.log('Updated user avatar to:', avatarText);
-
-                    // Sync with mobile avatar
-                    if (mobileUserAvatarEl) {
-                        mobileUserAvatarEl.textContent = avatarText;
-                    }
-                }
-
-                // Update dropdown email
-                const dropdownUserEmail = document.getElementById('dropdownUserEmail');
-                if (dropdownUserEmail) {
-                    dropdownUserEmail.textContent = user.email || user.name || 'user@example.com';
-                    console.log('Updated dropdown email to:', user.email || user.name || 'user@example.com');
-                }
-
-                console.log('User data successfully loaded and UI updated');
-
-                // mobile-specific handlers removed to restore previous behavior
+                // Process user data using the dedicated function
+                processUserData(user);
 
                 console.log('User loaded:', user.name || user.email);
             } catch (error) {
@@ -2541,6 +2564,9 @@
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('currentUser');
                 window.location.href = 'index.html';
+            } finally {
+                // Always reset loading flag
+                isLoadingUserData = false;
             }
         }
 

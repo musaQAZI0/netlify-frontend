@@ -119,11 +119,9 @@ class GooglePlacesIntegration {
     // Test autocomplete service to debug issues
     testAutocompleteService(input) {
         try {
-            // Use new AutocompleteSuggestion if available, fallback to legacy
-            const service = google.maps.places.AutocompleteSuggestion ?
-                new google.maps.places.AutocompleteSuggestion() :
-                new google.maps.places.AutocompleteService();
-            
+            // Always use AutocompleteService as it has getPlacePredictions method
+            const service = new google.maps.places.AutocompleteService();
+
             // Test with a sample query
             service.getPlacePredictions({
                 input: 'New York',
