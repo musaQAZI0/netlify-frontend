@@ -1,82 +1,116 @@
 // Authentication and User Profile Utilities
 class AuthUtils {
     constructor() {
-        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
+        this.baseURL = window.Config ? window.Config.API_BASE_URL :
+            (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:3000'
+                : 'https://crowd-backend-zxxp.onrender.com');
         this.currentUser = null;
+        this.TOKEN_KEY = 'authToken';
     }
 
-    // Get authentication token from database session
-    async getAuthToken() {
-        try {
-            const response = await fetch(`${this.baseURL}/auth/session`, {
-                method: 'GET',
-                credentials: 'include'
-            });
-            const data = await response.json();
-            return data.token || '';
-        } catch (error) {
-            console.error('Failed to get auth token:', error);
-            return '';
+    // Get authentication token from localStorage (consistent with auth-mongodb.js)
+    getAuthToken() {
+        // Get from URL parameters first (for direct links)
+        const urlParams = new URLSearchParams(window.location.search);
+        let token = urlParams.get('token');
+
+        // Use standardized token management
+        if (!token) {
+            token = localStorage.getItem(this.TOKEN_KEY);
+        }
+
+        // Store token consistently if found in URL
+        if (token && !localStorage.getItem(this.TOKEN_KEY)) {
+            localStorage.setItem(this.TOKEN_KEY, token);
+        }
+
+        return token || '';
+    }
+
+    // Set authentication token in localStorage
+    setAuthToken(token) {
+        if (token) {
+            localStorage.setItem(this.TOKEN_KEY, token);
+        } else {
+            localStorage.removeItem(this.TOKEN_KEY);
         }
     }
 
-    // Set authentication token in database session
-    async setAuthToken(token) {
-        try {
-            await fetch(`${this.baseURL}/auth/session`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({ token })
-            });
-        } catch (error) {
-            console.error('Failed to set auth token:', error);
-        }
-    }
-
-    // Check if user is authenticated via database
+    // Check if user is authenticated using consistent token approach
     async isAuthenticated() {
         try {
-            const response = await fetch(`${this.baseURL}/auth/verify`, {
+            const token = this.getAuthToken();
+            if (!token) {
+                console.log('No auth token found');
+                return false;
+            }
+
+            const response = await fetch(`${this.baseURL}/api/auth/verify`, {
                 method: 'GET',
-                credentials: 'include'
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
             });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    console.log('Token expired, clearing auth data');
+                    this.clearAuthData();
+                }
+                return false;
+            }
+
             const data = await response.json();
-            return response.ok && data.success;
+            return data.success;
         } catch (error) {
             console.error('Authentication check failed:', error);
             return false;
         }
     }
 
-    // API request helper with database authentication
+    // Clear authentication data
+    clearAuthData() {
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem('currentUser');
+        this.currentUser = null;
+    }
+
+    // API request helper with consistent authentication
     async apiRequest(endpoint, options = {}) {
-        const token = await this.getAuthToken();
+        const token = this.getAuthToken();
 
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            credentials: 'include',
             ...options
         };
 
         try {
-            const response = await fetch(`${this.baseURL}${endpoint}`, config);
-            const data = await response.json();
+            const response = await fetch(`${this.baseURL}/api${endpoint}`, config);
 
             if (!response.ok) {
                 if (response.status === 401) {
                     // Token expired or invalid
-                    await this.logout();
+                    console.log('Token expired during API request');
+                    this.clearAuthData();
                     throw new Error('Session expired. Please log in again.');
                 }
-                throw new Error(data.message || 'API request failed');
+                const errorText = await response.text();
+                let errorMessage;
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    errorMessage = errorJson.message || `HTTP ${response.status}: ${response.statusText}`;
+                } catch {
+                    errorMessage = `HTTP ${response.status}: ${errorText || response.statusText}`;
+                }
+                throw new Error(errorMessage);
             }
 
+            const data = await response.json();
             return data;
         } catch (error) {
             console.error('API Request failed:', error);
@@ -86,18 +120,27 @@ class AuthUtils {
 
     // Get current user profile
     async getCurrentUser() {
-        if (!(await this.isAuthenticated())) {
-            return null;
-        }
-
         try {
-            if (this.currentUser) {
+            // First check localStorage
+            const cachedUser = localStorage.getItem('currentUser');
+            if (cachedUser) {
+                try {
+                    this.currentUser = JSON.parse(cachedUser);
+                } catch (e) {
+                    localStorage.removeItem('currentUser');
+                }
+            }
+
+            // If we have cached user and they're authenticated, return it
+            if (this.currentUser && await this.isAuthenticated()) {
                 return this.currentUser;
             }
 
+            // Otherwise try to fetch from API
             const data = await this.apiRequest('/auth/profile');
             if (data.success && data.user) {
                 this.currentUser = data.user;
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
                 return this.currentUser;
             }
 
@@ -137,8 +180,9 @@ class AuthUtils {
             });
 
             if (data.success && data.token) {
-                await this.setAuthToken(data.token);
+                this.setAuthToken(data.token);
                 this.currentUser = data.user;
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
                 return { success: true, user: data.user };
             }
 
@@ -173,15 +217,22 @@ class AuthUtils {
     // Logout user
     async logout() {
         try {
-            await fetch(`${this.baseURL}/auth/logout`, {
-                method: 'POST',
-                credentials: 'include'
-            });
+            const token = this.getAuthToken();
+            if (token) {
+                await fetch(`${this.baseURL}/api/auth/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            }
         } catch (error) {
             console.error('Logout request failed:', error);
         }
 
-        this.currentUser = null;
+        // Clear all authentication data
+        this.clearAuthData();
 
         // Redirect to login page
         window.location.href = 'login.html';

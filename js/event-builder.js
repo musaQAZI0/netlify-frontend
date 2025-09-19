@@ -1,7 +1,10 @@
 // Event Builder API Integration
 class EventBuilderAPI {
     constructor() {
-        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
+        this.baseURL = window.Config ? window.Config.API_BASE_URL :
+            (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:3000'
+                : 'https://crowd-backend-zxxp.onrender.com');
         this.currentEventData = {
             title: '',
             description: '',
@@ -24,32 +27,36 @@ class EventBuilderAPI {
         };
         this.eventId = null;
         this.isEditing = false;
+        this.TOKEN_KEY = 'authToken';
     }
 
-    // Get authentication token from database session
-    async getAuthToken() {
-        try {
-            const response = await fetch(`${this.baseURL}/auth/session`, {
-                method: 'GET',
-                credentials: 'include'
-            });
-            const data = await response.json();
-            return data.token || '';
-        } catch (error) {
-            console.error('Failed to get auth token:', error);
-            return '';
+    // Get authentication token from localStorage (consistent with auth-utils.js)
+    getAuthToken() {
+        // Get from URL parameters first (for direct links)
+        const urlParams = new URLSearchParams(window.location.search);
+        let token = urlParams.get('token');
+
+        // Use standardized token management
+        if (!token) {
+            token = localStorage.getItem(this.TOKEN_KEY);
         }
+
+        // Store token consistently if found in URL
+        if (token && !localStorage.getItem(this.TOKEN_KEY)) {
+            localStorage.setItem(this.TOKEN_KEY, token);
+        }
+
+        return token || '';
     }
 
-    // API request helper with database-only authentication
+    // API request helper with consistent authentication
     async apiRequest(endpoint, options = {}) {
-        const token = await this.getAuthToken();
+        const token = this.getAuthToken();
 
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`
             },
-            credentials: 'include',
             ...options
         };
 
@@ -59,13 +66,28 @@ class EventBuilderAPI {
         }
 
         try {
-            const response = await fetch(`${this.baseURL}${endpoint}`, config);
-            const data = await response.json();
+            const response = await fetch(`${this.baseURL}/api${endpoint}`, config);
 
             if (!response.ok) {
-                throw new Error(data.message || 'API request failed');
+                if (response.status === 401) {
+                    console.log('Token expired, clearing auth data');
+                    localStorage.removeItem(this.TOKEN_KEY);
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'login.html';
+                    return;
+                }
+                const errorText = await response.text();
+                let errorMessage;
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    errorMessage = errorJson.message || `HTTP ${response.status}: ${response.statusText}`;
+                } catch {
+                    errorMessage = `HTTP ${response.status}: ${errorText || response.statusText}`;
+                }
+                throw new Error(errorMessage);
             }
 
+            const data = await response.json();
             return data;
         } catch (error) {
             console.error('API Request failed:', error);
