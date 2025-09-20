@@ -168,65 +168,6 @@ class EventBuilderAPI {
         }
     }
 
-    // Collect form data from the page
-    collectFormData() {
-        const formData = {
-            // Event title
-            title: document.getElementById('eventTitle')?.textContent?.trim() ||
-                   document.getElementById('eventTitle')?.value?.trim() || '',
-
-            // Date and time
-            startDate: document.getElementById('eventDate')?.value || '',
-            startTime: document.getElementById('startTime')?.value || '',
-            endTime: document.getElementById('endTime')?.value || '',
-
-            // Location data - prioritize form fields, then API extraction methods
-            venue: this.getVenueValue(),
-            address: this.getAddressValue(),
-            city: this.getCityValue(),
-            state: this.getStateValue(),
-            country: this.getCountryValue(),
-            zipCode: this.getZipCodeValue(),
-
-            // Overview/description
-            description: document.getElementById('overviewDescription')?.value?.trim() || '',
-
-            // Status
-            status: document.getElementById('eventStatus')?.value || 'draft',
-
-            // Current images and videos
-            images: this.currentEventData.images || [],
-            videos: this.currentEventData.videos || [],
-
-            // Lineup data
-            lineup: this.collectLineupData(),
-
-            // Agenda data
-            agenda: this.collectAgendaData(),
-
-            // Good to know data
-            goodToKnow: this.collectGoodToKnowData()
-        };
-
-        // Debug log for location data
-        console.log('Collected form data - Location:', {
-            venue: formData.venue,
-            city: formData.city,
-            address: formData.address,
-            locationInput: document.getElementById('locationInput')?.value
-        });
-
-        // Combine date and time for proper datetime objects
-        if (formData.startDate && formData.startTime) {
-            formData.startDateTime = `${formData.startDate}T${formData.startTime}`;
-        }
-
-        if (formData.startDate && formData.endTime) {
-            formData.endDateTime = `${formData.startDate}T${formData.endTime}`;
-        }
-
-        return formData;
-    }
 
     // Collect lineup data
     collectLineupData() {
@@ -407,7 +348,7 @@ class EventBuilderAPI {
     async saveEvent(eventData = null) {
         try {
             // Collect form data if not provided
-            const formData = eventData || (window.eventBuilder ? window.eventBuilder.collectFormData() : this.getBasicFormData());
+            const formData = eventData || this.collectFormData();
 
             // Validate the data
             const validation = this.validateFormData(formData);
@@ -566,25 +507,64 @@ class EventBuilderAPI {
         return '';
     }
 
-    // Basic form data collection for API class (fallback)
-    getBasicFormData() {
-        return {
+    // Collect form data from the page (API class version)
+    collectFormData() {
+        const formData = {
+            // Event title
             title: document.getElementById('eventTitle')?.textContent?.trim() ||
                    document.getElementById('eventTitle')?.value?.trim() || '',
+
+            // Date and time
             startDate: document.getElementById('eventDate')?.value || '',
             startTime: document.getElementById('startTime')?.value || '',
             endTime: document.getElementById('endTime')?.value || '',
+
+            // Location data - use API extraction methods
             venue: this.extractVenueFromSources(),
+            address: this.getAddressFromSources(),
             city: this.extractCityFromSources(),
-            address: '',
-            state: '',
-            country: '',
-            zipCode: '',
+            state: this.getStateFromSources(),
+            country: this.getCountryFromSources(),
+            zipCode: this.getZipCodeFromSources(),
+
+            // Overview/description
             description: document.getElementById('overviewDescription')?.value?.trim() || '',
+
+            // Status
             status: document.getElementById('eventStatus')?.value || 'draft',
+
+            // Current images and videos
             images: this.currentEventData.images || [],
-            videos: this.currentEventData.videos || []
+            videos: this.currentEventData.videos || [],
+
+            // Lineup data
+            lineup: this.collectLineupData(),
+
+            // Agenda data
+            agenda: this.collectAgendaData(),
+
+            // Good to know data
+            goodToKnow: this.collectGoodToKnowData()
         };
+
+        // Debug log for location data
+        console.log('Collected form data - Location:', {
+            venue: formData.venue,
+            city: formData.city,
+            address: formData.address,
+            locationInput: document.getElementById('locationInput')?.value
+        });
+
+        // Combine date and time for proper datetime objects
+        if (formData.startDate && formData.startTime) {
+            formData.startDateTime = `${formData.startDate}T${formData.startTime}`;
+        }
+
+        if (formData.startDate && formData.endTime) {
+            formData.endDateTime = `${formData.startDate}T${formData.endTime}`;
+        }
+
+        return formData;
     }
 
     extractCityFromSources() {
@@ -603,6 +583,44 @@ class EventBuilderAPI {
         }
 
         return '';
+    }
+
+    // Additional helper methods for API class
+    getAddressFromSources() {
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.address) return googlePlacesData.address;
+        return this.currentEventData?.address || '';
+    }
+
+    getStateFromSources() {
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.state) return googlePlacesData.state;
+        return this.currentEventData?.state || '';
+    }
+
+    getCountryFromSources() {
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.country) return googlePlacesData.country;
+        return this.currentEventData?.country || '';
+    }
+
+    getZipCodeFromSources() {
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.zipCode) return googlePlacesData.zipCode;
+        return this.currentEventData?.zipCode || '';
+    }
+
+    // Placeholder methods for data collection
+    collectLineupData() {
+        return []; // TODO: Implement lineup data collection
+    }
+
+    collectAgendaData() {
+        return []; // TODO: Implement agenda data collection
+    }
+
+    collectGoodToKnowData() {
+        return window.goodToKnowManager ? window.goodToKnowManager.getData() : [];
     }
 }
 
