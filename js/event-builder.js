@@ -180,7 +180,7 @@ class EventBuilderAPI {
             startTime: document.getElementById('startTime')?.value || '',
             endTime: document.getElementById('endTime')?.value || '',
 
-            // Location data - prioritize form fields, then Google Places, then currentEventData
+            // Location data - prioritize form fields, then API extraction methods
             venue: this.getVenueValue(),
             address: this.getAddressValue(),
             city: this.getCityValue(),
@@ -407,7 +407,7 @@ class EventBuilderAPI {
     async saveEvent(eventData = null) {
         try {
             // Collect form data if not provided
-            const formData = eventData || this.collectFormData();
+            const formData = eventData || (window.eventBuilder ? window.eventBuilder.collectFormData() : this.getBasicFormData());
 
             // Validate the data
             const validation = this.validateFormData(formData);
@@ -566,6 +566,27 @@ class EventBuilderAPI {
         return '';
     }
 
+    // Basic form data collection for API class (fallback)
+    getBasicFormData() {
+        return {
+            title: document.getElementById('eventTitle')?.textContent?.trim() ||
+                   document.getElementById('eventTitle')?.value?.trim() || '',
+            startDate: document.getElementById('eventDate')?.value || '',
+            startTime: document.getElementById('startTime')?.value || '',
+            endTime: document.getElementById('endTime')?.value || '',
+            venue: this.extractVenueFromSources(),
+            city: this.extractCityFromSources(),
+            address: '',
+            state: '',
+            country: '',
+            zipCode: '',
+            description: document.getElementById('overviewDescription')?.value?.trim() || '',
+            status: document.getElementById('eventStatus')?.value || 'draft',
+            images: this.currentEventData.images || [],
+            videos: this.currentEventData.videos || []
+        };
+    }
+
     extractCityFromSources() {
         // 1. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
@@ -593,6 +614,8 @@ class EventBuilder {
     constructor() {
         this.api = window.eventBuilderAPI;
         this.autoSaveTimeout = null;
+        // Make this instance globally available
+        window.eventBuilder = this;
         this.init();
     }
 
