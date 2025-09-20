@@ -375,16 +375,19 @@ class EventBuilderAPI {
         }
 
         // Location validation - check all possible sources
-        const hasVenue = formData.venue || this.getVenueValue();
-        const hasCity = formData.city || this.getCityValue();
+        const extractedVenue = this.extractVenueFromSources();
+        const extractedCity = this.extractCityFromSources();
+        const hasVenue = formData.venue || extractedVenue;
+        const hasCity = formData.city || extractedCity;
 
         console.log('Location validation check:', {
             formDataVenue: formData.venue,
             formDataCity: formData.city,
-            extractedVenue: this.getVenueValue(),
-            extractedCity: this.getCityValue(),
+            extractedVenue,
+            extractedCity,
             hasVenue,
-            hasCity
+            hasCity,
+            locationInput: document.getElementById('locationInput')?.value
         });
 
         if (!hasVenue && !hasCity) {
@@ -534,6 +537,43 @@ class EventBuilderAPI {
                 reader.readAsDataURL(file);
             });
         }
+    }
+
+    // Helper methods for location extraction (moved from EventBuilder for API access)
+    extractVenueFromSources() {
+        // 1. Check Google Places data
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.venue) return googlePlacesData.venue;
+
+        // 2. Check currentEventData
+        if (this.currentEventData?.venue) return this.currentEventData.venue;
+
+        // 3. Extract from location input if available
+        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        if (locationInput && window.googlePlaces) {
+            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+            if (extracted.venueName) return extracted.venueName;
+        }
+
+        return '';
+    }
+
+    extractCityFromSources() {
+        // 1. Check Google Places data
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.city) return googlePlacesData.city;
+
+        // 2. Check currentEventData
+        if (this.currentEventData?.city) return this.currentEventData.city;
+
+        // 3. Extract from location input if available
+        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        if (locationInput && window.googlePlaces) {
+            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+            if (extracted.city) return extracted.city;
+        }
+
+        return '';
     }
 }
 
@@ -1051,47 +1091,21 @@ class EventBuilder {
 
     // Helper methods to get location data from multiple sources
     getVenueValue() {
-        // 1. Check form field
+        // 1. Check form field first
         const formValue = document.getElementById('venueName')?.value?.trim();
         if (formValue) return formValue;
 
-        // 2. Check Google Places data
-        const googlePlacesData = window.googlePlaces?.getLocationData();
-        if (googlePlacesData?.venue) return googlePlacesData.venue;
-
-        // 3. Check currentEventData
-        if (this.api?.currentEventData?.venue) return this.api.currentEventData.venue;
-
-        // 4. Extract from location input if available
-        const locationInput = document.getElementById('locationInput')?.value?.trim();
-        if (locationInput && window.googlePlaces) {
-            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
-            if (extracted.venueName) return extracted.venueName;
-        }
-
-        return '';
+        // 2. Use API extraction method for other sources
+        return this.api.extractVenueFromSources();
     }
 
     getCityValue() {
-        // 1. Check form field
+        // 1. Check form field first
         const formValue = document.getElementById('cityName')?.value?.trim();
         if (formValue) return formValue;
 
-        // 2. Check Google Places data
-        const googlePlacesData = window.googlePlaces?.getLocationData();
-        if (googlePlacesData?.city) return googlePlacesData.city;
-
-        // 3. Check currentEventData
-        if (this.api?.currentEventData?.city) return this.api.currentEventData.city;
-
-        // 4. Extract from location input if available
-        const locationInput = document.getElementById('locationInput')?.value?.trim();
-        if (locationInput && window.googlePlaces) {
-            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
-            if (extracted.city) return extracted.city;
-        }
-
-        return '';
+        // 2. Use API extraction method for other sources
+        return this.api.extractCityFromSources();
     }
 
     getAddressValue() {
