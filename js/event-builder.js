@@ -180,13 +180,19 @@ class EventBuilderAPI {
             startTime: document.getElementById('startTime')?.value || '',
             endTime: document.getElementById('endTime')?.value || '',
 
-            // Location data
-            venue: document.getElementById('venueName')?.value?.trim() || '',
-            address: document.getElementById('streetAddress')?.value?.trim() || '',
-            city: document.getElementById('cityName')?.value?.trim() || '',
-            state: document.getElementById('stateName')?.value?.trim() || '',
-            country: document.getElementById('countryName')?.value?.trim() || 'United States',
-            zipCode: document.getElementById('zipCode')?.value?.trim() || '',
+            // Location data - prioritize Google Places data if available
+            venue: document.getElementById('venueName')?.value?.trim() ||
+                   this.currentEventData.venue || '',
+            address: document.getElementById('streetAddress')?.value?.trim() ||
+                     this.currentEventData.address || '',
+            city: document.getElementById('cityName')?.value?.trim() ||
+                  this.currentEventData.city || '',
+            state: document.getElementById('stateName')?.value?.trim() ||
+                   this.currentEventData.state || '',
+            country: document.getElementById('countryName')?.value?.trim() ||
+                     this.currentEventData.country || 'United States',
+            zipCode: document.getElementById('zipCode')?.value?.trim() ||
+                     this.currentEventData.zipCode || '',
 
             // Overview/description
             description: document.getElementById('overviewDescription')?.value?.trim() || '',
@@ -366,8 +372,11 @@ class EventBuilderAPI {
             }
         }
 
-        // Location validation (basic)
-        if (!formData.venue && !formData.city) {
+        // Location validation - check both form data and Google Places data
+        const hasVenue = formData.venue || this.currentEventData?.venue;
+        const hasCity = formData.city || this.currentEventData?.city;
+
+        if (!hasVenue && !hasCity) {
             errors.push('Either venue name or city is required');
         }
 
@@ -458,7 +467,7 @@ class EventBuilderAPI {
             formData.append('image', file);
 
             const token = await this.getAuthToken();
-            const response = await fetch(`${this.baseURL}/api/events/upload-image`, {
+            const response = await fetch(`${this.baseURL}/events/upload-image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -478,7 +487,7 @@ class EventBuilderAPI {
 
                         // Retry with new token
                         const newToken = await this.getAuthToken();
-                        const retryResponse = await fetch(`${this.baseURL}/api/events/upload-image`, {
+                        const retryResponse = await fetch(`${this.baseURL}/events/upload-image`, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `Bearer ${newToken}`
