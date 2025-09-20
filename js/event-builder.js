@@ -328,6 +328,7 @@ class EventBuilderAPI {
 
     // Validate form data
     validateFormData(formData) {
+        console.log('🔍 VALIDATION STARTED - formData:', formData);
         const errors = [];
 
         // Required fields validation
@@ -375,8 +376,10 @@ class EventBuilderAPI {
         }
 
         // Location validation - check all possible sources
+        console.log('🗺️ STARTING LOCATION VALIDATION');
         const extractedVenue = this.extractVenueFromSources();
         const extractedCity = this.extractCityFromSources();
+        console.log('🗺️ EXTRACTED VALUES:', { extractedVenue, extractedCity });
         const hasVenue = formData.venue || extractedVenue;
         const hasCity = formData.city || extractedCity;
 
@@ -541,8 +544,10 @@ class EventBuilderAPI {
 
     // Helper methods for location extraction (moved from EventBuilder for API access)
     extractVenueFromSources() {
+        console.log('🏟️ Extracting venue from sources...');
         // 1. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
+        console.log('🏟️ Google Places data:', googlePlacesData);
         if (googlePlacesData?.venue) return googlePlacesData.venue;
 
         // 2. Check currentEventData
@@ -550,11 +555,14 @@ class EventBuilderAPI {
 
         // 3. Extract from location input if available
         const locationInput = document.getElementById('locationInput')?.value?.trim();
+        console.log('🏟️ Location input value:', locationInput);
         if (locationInput && window.googlePlaces) {
             const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+            console.log('🏟️ Extracted from input:', extracted);
             if (extracted.venueName) return extracted.venueName;
         }
 
+        console.log('🏟️ No venue found, returning empty string');
         return '';
     }
 
