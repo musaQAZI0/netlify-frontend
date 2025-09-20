@@ -857,11 +857,14 @@ class EventBuilder {
     }
 
     setupLocationEventHandlers() {
+        // Initialize map picker
+        this.initializeMapPicker();
+
         // Get location data from Google Places integration periodically
         const syncLocationData = () => {
             if (window.googlePlaces) {
                 const locationData = window.googlePlaces.getLocationData();
-                
+
                 // Update event data with proper backend structure
                 this.api.currentEventData.location = {
                     type: 'venue',
@@ -887,7 +890,7 @@ class EventBuilder {
                 this.api.currentEventData.country = locationData.country;
                 this.api.currentEventData.address = locationData.address;
                 this.api.currentEventData.zipCode = locationData.zipCode;
-                
+
                 this.scheduleAutoSave();
             }
         };
@@ -901,6 +904,138 @@ class EventBuilder {
             syncLocationData();
             return originalSaveAndContinue.call(this);
         };
+    }
+
+    // Initialize map-based location picker
+    initializeMapPicker() {
+        // Setup map toggle button
+        const mapToggleBtn = document.getElementById('mapToggleBtn');
+        const mapContainer = document.getElementById('mapContainer');
+
+        if (mapToggleBtn && mapContainer) {
+            mapToggleBtn.addEventListener('click', () => {
+                const isVisible = mapContainer.style.display !== 'none';
+
+                if (isVisible) {
+                    // Hide map
+                    mapContainer.style.display = 'none';
+                    mapToggleBtn.textContent = 'Select Location on Map';
+                    if (window.mapLocationPicker) {
+                        window.mapLocationPicker.hide();
+                    }
+                } else {
+                    // Show map
+                    mapContainer.style.display = 'block';
+                    mapToggleBtn.textContent = 'Hide Map';
+
+                    // Initialize map if not already done
+                    if (!window.mapLocationPicker || !window.mapLocationPicker.isInitialized) {
+                        this.initializeMap();
+                    } else {
+                        window.mapLocationPicker.show();
+                    }
+                }
+            });
+        }
+    }
+
+    // Initialize the Google Map
+    initializeMap() {
+        if (window.google && window.google.maps && window.MapLocationPicker) {
+            if (!window.mapLocationPicker) {
+                window.mapLocationPicker = new MapLocationPicker();
+            }
+
+            const success = window.mapLocationPicker.initialize('mapLocationPicker');
+
+            if (success) {
+                // Set callback for when location is selected
+                window.mapLocationPicker.onLocationSelected((locationData) => {
+                    console.log('Map location selected:', locationData);
+
+                    // Extract venue name and city as requested
+                    const venueName = locationData.venueName;
+                    const city = locationData.city;
+
+                    console.log('Extracted:', { venueName, city });
+
+                    // Update form fields
+                    if (venueName) {
+                        const venueInput = document.getElementById('venueName');
+                        if (venueInput) venueInput.value = venueName;
+                    }
+
+                    if (city) {
+                        const cityInput = document.getElementById('cityName');
+                        if (cityInput) cityInput.value = city;
+                    }
+
+                    // Update other fields
+                    if (locationData.address) {
+                        const addressInput = document.getElementById('streetAddress');
+                        if (addressInput) addressInput.value = locationData.address;
+                    }
+
+                    if (locationData.state) {
+                        const stateInput = document.getElementById('stateName');
+                        if (stateInput) stateInput.value = locationData.state;
+                    }
+
+                    if (locationData.zipCode) {
+                        const zipInput = document.getElementById('zipCode');
+                        if (zipInput) zipInput.value = locationData.zipCode;
+                    }
+
+                    if (locationData.country) {
+                        const countryInput = document.getElementById('countryName');
+                        if (countryInput) countryInput.value = locationData.country;
+                    }
+
+                    // Update event data
+                    this.api.currentEventData.venue = venueName;
+                    this.api.currentEventData.city = city;
+                    this.api.currentEventData.address = locationData.address;
+                    this.api.currentEventData.state = locationData.state;
+                    this.api.currentEventData.country = locationData.country;
+                    this.api.currentEventData.zipCode = locationData.zipCode;
+                    this.api.currentEventData.latitude = locationData.lat;
+                    this.api.currentEventData.longitude = locationData.lng;
+                    this.api.currentEventData.placeId = locationData.placeId;
+
+                    // Update structured location data
+                    this.api.currentEventData.location = {
+                        type: 'venue',
+                        venue: {
+                            name: venueName,
+                            address: {
+                                street: locationData.address,
+                                city: city,
+                                state: locationData.state,
+                                country: locationData.country,
+                                zipCode: locationData.zipCode
+                            }
+                        },
+                        coordinates: {
+                            lat: locationData.lat,
+                            lng: locationData.lng
+                        },
+                        placeId: locationData.placeId
+                    };
+
+                    // Trigger auto-save
+                    this.scheduleAutoSave();
+                    this.updateSidebar();
+                });
+
+                console.log('Map location picker initialized successfully');
+            } else {
+                console.error('Failed to initialize map location picker');
+            }
+        } else {
+            console.log('Waiting for Google Maps API or MapLocationPicker to load...');
+            // Retry after a short delay
+            setTimeout(() => this.initializeMap(), 1000);
+        }
     }
 
     updateDateTimeData() {

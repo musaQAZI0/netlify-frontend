@@ -678,6 +678,92 @@ body {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+/* Map Location Picker Styles */
+.map-picker-section {
+    margin-top: 16px;
+}
+
+.map-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    color: #4285f4;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.map-toggle-btn:hover {
+    background: #e8f0fe;
+    border-color: #4285f4;
+}
+
+.map-toggle-btn:focus {
+    outline: 2px solid #4285f4;
+    outline-offset: 2px;
+}
+
+.map-toggle-btn svg {
+    flex-shrink: 0;
+}
+
+.map-container {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#mapLocationPicker {
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+}
+
+.selected-location {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 12px;
+}
+
+.selected-location strong {
+    color: #1f2937;
+    font-size: 14px;
+}
+
+.location-details {
+    margin-top: 8px;
+}
+
+.venue-name {
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.location-address {
+    color: #6f7287;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.map-instructions {
+    color: #6f7287;
+    font-size: 12px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #f0f9ff;
+    border-radius: 4px;
+    border-left: 3px solid #0ea5e9;
+}
+
 /* Overview Section */
 .overview-section {
   background: white;
