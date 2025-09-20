@@ -106,6 +106,9 @@ class GooglePlacesIntegration {
             // Test autocomplete service directly
             this.testAutocompleteService(locationInput);
 
+            // Setup auto-extraction from location input
+            this.setupLocationInputAutoExtraction();
+
             console.log('Google Places Autocomplete initialized successfully for USA');
             this.isInitialized = true;
             return true;
@@ -199,6 +202,155 @@ class GooglePlacesIntegration {
         this.populateLocationFields(place);
         this.showLocationDetails();
         this.updateEventData(place);
+    }
+
+    // Enhanced extraction from location input text
+    extractVenueAndCityFromInput(inputText) {
+        if (!inputText || inputText.trim().length < 3) {
+            return { venueName: '', city: '' };
+        }
+
+        const text = inputText.trim();
+
+        // Try to extract venue name and city from text patterns
+        const extractedData = { venueName: '', city: '' };
+
+        // Pattern 1: "Venue Name, City, State"
+        const commaPattern = /^([^,]+),\s*([^,]+)(?:,\s*(.+))?$/;
+        const commaMatch = text.match(commaPattern);
+
+        if (commaMatch) {
+            const [, potentialVenue, potentialCity, rest] = commaMatch;
+
+            // If the first part looks like a venue (contains common venue words)
+            const venueKeywords = ['hotel', 'restaurant', 'cafe', 'bar', 'center', 'hall', 'stadium',
+                                   'theater', 'club', 'mall', 'park', 'building', 'plaza', 'square'];
+
+            const hasVenueKeyword = venueKeywords.some(keyword =>
+                potentialVenue.toLowerCase().includes(keyword)
+            );
+
+            if (hasVenueKeyword || potentialVenue.length > 10) {
+                extractedData.venueName = potentialVenue.trim();
+                extractedData.city = potentialCity.trim();
+            } else {
+                // First part might be a city, second part might be state
+                extractedData.city = potentialVenue.trim();
+            }
+        }
+        // Pattern 2: Just a city name or venue name
+        else {
+            // Check if it's likely a venue name (longer text with specific words)
+            const venueIndicators = ['hotel', 'restaurant', 'cafe', 'bar', 'center', 'hall', 'stadium',
+                                     'theater', 'club', 'mall', 'park', 'building', 'plaza', 'square',
+                                     'conference', 'convention', 'arena', 'auditorium', 'gallery'];
+
+            const hasVenueIndicator = venueIndicators.some(indicator =>
+                text.toLowerCase().includes(indicator)
+            );
+
+            if (hasVenueIndicator) {
+                extractedData.venueName = text;
+            } else {
+                // Might be a city name
+                extractedData.city = text;
+            }
+        }
+
+        console.log('Extracted from input:', { input: text, extracted: extractedData });
+        return extractedData;
+    }
+
+    // Auto-extract venue/city when user types in location bar
+    setupLocationInputAutoExtraction() {
+        const locationInput = document.getElementById('locationInput');
+        if (!locationInput) return;
+
+        // Add input event listener for real-time extraction
+        locationInput.addEventListener('input', (e) => {
+            const inputText = e.target.value;
+
+            // Extract venue and city from the input text
+            const extracted = this.extractVenueAndCityFromInput(inputText);
+
+            // Auto-populate venue and city fields if they're empty
+            const venueField = document.getElementById('venueName');
+            const cityField = document.getElementById('cityName');
+
+            if (extracted.venueName && venueField && !venueField.value) {
+                venueField.value = extracted.venueName;
+                console.log('Auto-populated venue:', extracted.venueName);
+            }
+
+            if (extracted.city && cityField && !cityField.value) {
+                cityField.value = extracted.city;
+                console.log('Auto-populated city:', extracted.city);
+            }
+
+            // Show location details if we extracted something
+            if (extracted.venueName || extracted.city) {
+                this.showLocationDetails();
+            }
+        });
+
+        // Also trigger on blur to catch final input
+        locationInput.addEventListener('blur', (e) => {
+            const inputText = e.target.value;
+            if (inputText && inputText.length > 5) {
+                // Try to get more detailed information using Places API
+                this.searchPlaceByText(inputText);
+            }
+        });
+    }
+
+    // Search for place details using text search
+    async searchPlaceByText(query) {
+        if (!window.google || !window.google.maps || !window.google.maps.places) {
+            return;
+        }
+
+        try {
+            const service = new google.maps.places.PlacesService(document.createElement('div'));
+
+            const request = {
+                query: query,
+                fields: ['name', 'formatted_address', 'address_components', 'geometry', 'place_id', 'types']
+            };
+
+            service.textSearch(request, (results, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+                    const place = results[0];
+                    console.log('Found place via text search:', place);
+
+                    // Extract venue name and city
+                    const venueName = place.name || '';
+                    const addressComponents = place.address_components || [];
+                    const locationData = this.parseAddressComponents(addressComponents);
+
+                    // Update fields if they're still empty
+                    const venueField = document.getElementById('venueName');
+                    const cityField = document.getElementById('cityName');
+
+                    if (venueName && venueField && !venueField.value) {
+                        venueField.value = venueName;
+                        console.log('Text search populated venue:', venueName);
+                    }
+
+                    if (locationData.city && cityField && !cityField.value) {
+                        cityField.value = locationData.city;
+                        console.log('Text search populated city:', locationData.city);
+                    }
+
+                    // Store the place for reference
+                    this.selectedPlace = place;
+                    this.showLocationDetails();
+                } else {
+                    console.log('No places found for text search:', query);
+                }
+            });
+        } catch (error) {
+            console.error('Error in text search:', error);
+        }
     }
 
     // Populate location detail fields from place data
@@ -377,7 +529,7 @@ class GooglePlacesIntegration {
         const countryNameEl = document.getElementById('countryName');
         const locationInputEl = document.getElementById('locationInput');
 
-        return {
+        const locationData = {
             venue: venueNameEl?.value || '',
             address: streetAddressEl?.value || '',
             city: cityNameEl?.value || '',
@@ -389,6 +541,66 @@ class GooglePlacesIntegration {
             longitude: this.selectedPlace?.geometry?.location?.lng() || null,
             placeId: this.selectedPlace?.place_id || null
         };
+
+        // If venue or city is still empty, try to extract from location input
+        if ((!locationData.venue || !locationData.city) && locationInputEl?.value) {
+            const extracted = this.extractVenueAndCityFromInput(locationInputEl.value);
+
+            if (!locationData.venue && extracted.venueName) {
+                locationData.venue = extracted.venueName;
+                console.log('Extracted venue from input:', extracted.venueName);
+            }
+
+            if (!locationData.city && extracted.city) {
+                locationData.city = extracted.city;
+                console.log('Extracted city from input:', extracted.city);
+            }
+        }
+
+        return locationData;
+    }
+
+    // Public method to get venue and city names specifically
+    getVenueAndCity() {
+        const locationData = this.getLocationData();
+        return {
+            venueName: locationData.venue,
+            city: locationData.city
+        };
+    }
+
+    // Demo method showing how to extract venue and city as requested
+    extractVenueAndCityExample() {
+        // Extract venue name and city from location bar
+        const selectedPlace = this.selectedPlace;
+        const locationInput = document.getElementById('locationInput');
+
+        if (selectedPlace) {
+            // From Google Places selection
+            const venueName = selectedPlace.name;
+            const addressComponents = selectedPlace.address_components || [];
+            const cityComponent = addressComponents.find(component =>
+                component.types.includes('locality')
+            );
+            const city = cityComponent ? cityComponent.long_name : '';
+
+            console.log('From Places selection:');
+            console.log('const venueName =', venueName); // e.g., "Pearl Continental Hotel"
+            console.log('const city =', city);           // e.g., "Lahore"
+
+            return { venueName, city };
+        } else if (locationInput?.value) {
+            // From text input extraction
+            const extracted = this.extractVenueAndCityFromInput(locationInput.value);
+
+            console.log('From text input extraction:');
+            console.log('const venueName =', extracted.venueName); // e.g., "Pearl Continental Hotel"
+            console.log('const city =', extracted.city);           // e.g., "Lahore"
+
+            return extracted;
+        }
+
+        return { venueName: '', city: '' };
     }
 
     // Load existing location data
@@ -450,6 +662,26 @@ window.addEventListener('load', () => {
         }
     }, 2000);
 });
+
+// Global helper function to extract venue and city names as requested
+window.extractVenueAndCity = function() {
+    if (window.googlePlaces) {
+        const result = window.googlePlaces.getVenueAndCity();
+
+        // Output as requested in the original ask
+        const venueName = result.venueName;
+        const city = result.city;
+
+        console.log('Extracted location data:');
+        console.log('const venueName =', `"${venueName}"`); // e.g., "Pearl Continental Hotel"
+        console.log('const city =', `"${city}"`);           // e.g., "Lahore"
+
+        return { venueName, city };
+    } else {
+        console.error('Google Places not initialized');
+        return { venueName: '', city: '' };
+    }
+};
 
 // Export for modules
 if (typeof module !== 'undefined' && module.exports) {
