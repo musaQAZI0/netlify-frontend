@@ -180,19 +180,13 @@ class EventBuilderAPI {
             startTime: document.getElementById('startTime')?.value || '',
             endTime: document.getElementById('endTime')?.value || '',
 
-            // Location data - prioritize Google Places data if available
-            venue: document.getElementById('venueName')?.value?.trim() ||
-                   this.currentEventData.venue || '',
-            address: document.getElementById('streetAddress')?.value?.trim() ||
-                     this.currentEventData.address || '',
-            city: document.getElementById('cityName')?.value?.trim() ||
-                  this.currentEventData.city || '',
-            state: document.getElementById('stateName')?.value?.trim() ||
-                   this.currentEventData.state || '',
-            country: document.getElementById('countryName')?.value?.trim() ||
-                     this.currentEventData.country || 'United States',
-            zipCode: document.getElementById('zipCode')?.value?.trim() ||
-                     this.currentEventData.zipCode || '',
+            // Location data - prioritize form fields, then Google Places, then currentEventData
+            venue: this.getVenueValue(),
+            address: this.getAddressValue(),
+            city: this.getCityValue(),
+            state: this.getStateValue(),
+            country: this.getCountryValue(),
+            zipCode: this.getZipCodeValue(),
 
             // Overview/description
             description: document.getElementById('overviewDescription')?.value?.trim() || '',
@@ -213,6 +207,14 @@ class EventBuilderAPI {
             // Good to know data
             goodToKnow: this.collectGoodToKnowData()
         };
+
+        // Debug log for location data
+        console.log('Collected form data - Location:', {
+            venue: formData.venue,
+            city: formData.city,
+            address: formData.address,
+            locationInput: document.getElementById('locationInput')?.value
+        });
 
         // Combine date and time for proper datetime objects
         if (formData.startDate && formData.startTime) {
@@ -372,9 +374,18 @@ class EventBuilderAPI {
             }
         }
 
-        // Location validation - check both form data and Google Places data
-        const hasVenue = formData.venue || this.currentEventData?.venue;
-        const hasCity = formData.city || this.currentEventData?.city;
+        // Location validation - check all possible sources
+        const hasVenue = formData.venue || this.getVenueValue();
+        const hasCity = formData.city || this.getCityValue();
+
+        console.log('Location validation check:', {
+            formDataVenue: formData.venue,
+            formDataCity: formData.city,
+            extractedVenue: this.getVenueValue(),
+            extractedCity: this.getCityValue(),
+            hasVenue,
+            hasCity
+        });
 
         if (!hasVenue && !hasCity) {
             errors.push('Either venue name or city is required');
@@ -1036,6 +1047,91 @@ class EventBuilder {
             // Retry after a short delay
             setTimeout(() => this.initializeMap(), 1000);
         }
+    }
+
+    // Helper methods to get location data from multiple sources
+    getVenueValue() {
+        // 1. Check form field
+        const formValue = document.getElementById('venueName')?.value?.trim();
+        if (formValue) return formValue;
+
+        // 2. Check Google Places data
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.venue) return googlePlacesData.venue;
+
+        // 3. Check currentEventData
+        if (this.api?.currentEventData?.venue) return this.api.currentEventData.venue;
+
+        // 4. Extract from location input if available
+        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        if (locationInput && window.googlePlaces) {
+            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+            if (extracted.venueName) return extracted.venueName;
+        }
+
+        return '';
+    }
+
+    getCityValue() {
+        // 1. Check form field
+        const formValue = document.getElementById('cityName')?.value?.trim();
+        if (formValue) return formValue;
+
+        // 2. Check Google Places data
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.city) return googlePlacesData.city;
+
+        // 3. Check currentEventData
+        if (this.api?.currentEventData?.city) return this.api.currentEventData.city;
+
+        // 4. Extract from location input if available
+        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        if (locationInput && window.googlePlaces) {
+            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+            if (extracted.city) return extracted.city;
+        }
+
+        return '';
+    }
+
+    getAddressValue() {
+        const formValue = document.getElementById('streetAddress')?.value?.trim();
+        if (formValue) return formValue;
+
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.address) return googlePlacesData.address;
+
+        return this.api?.currentEventData?.address || '';
+    }
+
+    getStateValue() {
+        const formValue = document.getElementById('stateName')?.value?.trim();
+        if (formValue) return formValue;
+
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.state) return googlePlacesData.state;
+
+        return this.api?.currentEventData?.state || '';
+    }
+
+    getCountryValue() {
+        const formValue = document.getElementById('countryName')?.value?.trim();
+        if (formValue) return formValue;
+
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.country) return googlePlacesData.country;
+
+        return this.api?.currentEventData?.country || 'United States';
+    }
+
+    getZipCodeValue() {
+        const formValue = document.getElementById('zipCode')?.value?.trim();
+        if (formValue) return formValue;
+
+        const googlePlacesData = window.googlePlaces?.getLocationData();
+        if (googlePlacesData?.zipCode) return googlePlacesData.zipCode;
+
+        return this.api?.currentEventData?.zipCode || '';
     }
 
     updateDateTimeData() {
