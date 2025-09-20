@@ -1856,28 +1856,13 @@ async function saveAndContinue() {
             throw new Error('Event builder not initialized');
         }
 
-        // Show loading state
-        const saveBtn = document.querySelector('.save-btn');
-        const originalText = saveBtn?.textContent || 'Save and continue';
-        if (saveBtn) {
-            saveBtn.textContent = 'Saving...';
-            saveBtn.disabled = true;
+        if (typeof window.eventBuilder.saveAndContinue !== 'function') {
+            console.error('saveAndContinue method not found on eventBuilder:', Object.keys(window.eventBuilder));
+            throw new Error('saveAndContinue method is not available');
         }
 
-        // Save the event
-        const result = await window.eventBuilder.saveEvent();
-
-        // Show success message
-        if (window.eventBuilder.showSuccess) {
-            window.eventBuilder.showSuccess('Event saved successfully!');
-        }
-
-        // Navigate to add tickets step
-        setTimeout(() => {
-            goToTickets();
-        }, 1000);
-
-        return result;
+        // Use the EventBuilder's saveAndContinue method which includes validation and UI updates
+        await window.eventBuilder.saveAndContinue();
 
     } catch (error) {
         console.error('Save failed:', error);
