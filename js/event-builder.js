@@ -899,10 +899,10 @@ class EventBuilder {
         setInterval(syncLocationData, 3000);
         
         // Also sync immediately when form is submitted
-        const originalSaveAndContinue = this.saveAndContinue;
-        this.saveAndContinue = () => {
+        const originalSaveAndContinue = this.saveAndContinue.bind(this);
+        this.saveAndContinue = async () => {
             syncLocationData();
-            return originalSaveAndContinue.call(this);
+            return await originalSaveAndContinue();
         };
     }
 
