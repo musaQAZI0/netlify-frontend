@@ -2139,12 +2139,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.eventBuilder = new EventBuilder();
 
                 // Ensure saveEvent is accessible on the global eventBuilder instance
-                if (typeof window.eventBuilder.saveEvent === 'function') {
-                    // Method is already available
-                    console.log('saveEvent method is available on eventBuilder');
+                console.log('EventBuilder created, checking methods...');
+                console.log('eventBuilder.api exists:', !!window.eventBuilder.api);
+                console.log('eventBuilder.api.saveEvent exists:', !!(window.eventBuilder.api && window.eventBuilder.api.saveEvent));
+
+                // Explicitly bind the saveEvent method
+                if (window.eventBuilder.api && typeof window.eventBuilder.api.saveEvent === 'function') {
+                    window.eventBuilder.saveEvent = window.eventBuilder.api.saveEvent.bind(window.eventBuilder.api);
+                    console.log('saveEvent method bound to eventBuilder instance');
                 } else {
-                    console.error('saveEvent method not found on eventBuilder instance');
+                    console.error('Could not bind saveEvent method - API not available');
                 }
+
+                // Verify it's working
+                if (typeof window.eventBuilder.saveEvent === 'function') {
+                    console.log('✓ saveEvent method is available on eventBuilder');
+                } else {
+                    console.error('✗ saveEvent method not found on eventBuilder instance');
+                }
+
+                // Call the helper function
+                window.ensureSaveEventAvailable();
 
                 // Initialize Enhanced Media Upload Manager
                 console.log("[Enhanced] Initializing Enhanced Media Upload Manager")
@@ -2415,11 +2430,38 @@ function setupFormEventListeners() {
 
 // Expose saveEvent globally for backward compatibility
 window.saveEvent = async function() {
+    console.log('Global saveEvent called');
+    console.log('window.eventBuilder exists:', !!window.eventBuilder);
+    if (window.eventBuilder) {
+        console.log('eventBuilder methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(window.eventBuilder)));
+        console.log('saveEvent type:', typeof window.eventBuilder.saveEvent);
+    }
+
     if (window.eventBuilder && typeof window.eventBuilder.saveEvent === 'function') {
         return await window.eventBuilder.saveEvent();
     } else {
+        console.error('Event builder not initialized or saveEvent method not available');
+        console.error('Available methods on eventBuilder:', window.eventBuilder ? Object.keys(window.eventBuilder) : 'eventBuilder not found');
         throw new Error('Event builder not initialized or saveEvent method not available');
     }
+};
+
+// Also expose it directly on window.eventBuilder when it's created
+window.ensureSaveEventAvailable = function() {
+    if (window.eventBuilder && !window.eventBuilder.saveEvent) {
+        console.log('Adding saveEvent method to eventBuilder instance');
+        window.eventBuilder.saveEvent = window.eventBuilder.api.saveEvent.bind(window.eventBuilder.api);
+    }
+};
+
+// Add global fallback for getVenueValue function
+window.getVenueValue = function() {
+    if (window.eventBuilder && typeof window.eventBuilder.getVenueValue === 'function') {
+        return window.eventBuilder.getVenueValue();
+    }
+    // Fallback implementation
+    const formValue = document.getElementById('venueName')?.value?.trim();
+    return formValue || '';
 };
 
 // Debug: Log functions to verify they're available
