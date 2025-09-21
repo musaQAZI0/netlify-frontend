@@ -511,12 +511,44 @@ class EventBuilderAPI {
         }
 
         // 1. Check the main location input field and extract venue from it
-        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        const locationInputElement = document.getElementById('locationInput');
+        const locationInput = locationInputElement?.value?.trim();
+        console.log('🏟️ Location input element found:', !!locationInputElement);
         console.log('🏟️ Location input value:', locationInput);
-        if (locationInput) {
+
+        // Debug: Check all possible location input fields
+        console.log('🔍 DEBUG - All location-related fields:');
+        const possibleFields = ['locationInput', 'location-input', 'address', 'venue', 'venueName', 'city', 'cityName'];
+        possibleFields.forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element) {
+                console.log(`  ${fieldId}: "${element.value}" (found)`);
+            } else {
+                console.log(`  ${fieldId}: not found`);
+            }
+        });
+
+        // Also check by class name
+        const locationInputsByClass = document.querySelectorAll('.location-input');
+        console.log('🔍 Elements with .location-input class:', locationInputsByClass.length);
+        locationInputsByClass.forEach((el, i) => {
+            console.log(`  .location-input[${i}]: "${el.value}" (id: ${el.id})`);
+        });
+
+        // If locationInput is still undefined, try the class-based selector
+        let actualLocationInput = locationInput;
+        if (!actualLocationInput && locationInputsByClass.length > 0) {
+            const locationInputByClass = locationInputsByClass[0];
+            if (locationInputByClass && locationInputByClass.value) {
+                actualLocationInput = locationInputByClass.value.trim();
+                console.log('🏟️ Using location from class selector:', actualLocationInput);
+            }
+        }
+
+        if (actualLocationInput) {
             // Try to extract venue name from the location input
             // For "KFC, Via Flaminia Conca, Rimini" -> "KFC" would be the venue
-            const parts = locationInput.split(',');
+            const parts = actualLocationInput.split(',');
             if (parts.length > 0) {
                 const potentialVenue = parts[0].trim();
                 // If the first part looks like a venue name (not just a street address)
@@ -528,7 +560,7 @@ class EventBuilderAPI {
 
             // Use Google Places extraction if available
             if (window.googlePlaces) {
-                const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+                const extracted = window.googlePlaces.extractVenueAndCityFromInput(actualLocationInput);
                 console.log('🏟️ Extracted from Google Places:', extracted);
                 if (extracted.venueName) return extracted.venueName;
             }
@@ -616,8 +648,29 @@ class EventBuilderAPI {
         }
 
         // 1. Check the main location input field and extract city from it
-        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        const locationInputElement = document.getElementById('locationInput');
+        const locationInput = locationInputElement?.value?.trim();
+        console.log('🏙️ Location input element found:', !!locationInputElement);
         console.log('🏙️ Location input value:', locationInput);
+
+        // If locationInput is still undefined, try the class-based selector
+        if (!locationInput) {
+            const locationInputByClass = document.querySelector('.location-input');
+            if (locationInputByClass && locationInputByClass.value) {
+                console.log('🏙️ Found location via class selector:', locationInputByClass.value);
+                const classBasedInput = locationInputByClass.value.trim();
+                if (classBasedInput) {
+                    const parts = classBasedInput.split(',').map(p => p.trim());
+                    if (parts.length > 1) {
+                        const potentialCity = parts[parts.length - 1];
+                        if (potentialCity && potentialCity.length > 2) {
+                            console.log('🏙️ Extracted city from class-based input:', potentialCity);
+                            return potentialCity;
+                        }
+                    }
+                }
+            }
+        }
         if (locationInput) {
             // Try to extract city from the location input
             // For "KFC, Via Flaminia Conca, Rimini" -> "Rimini" would be the city
