@@ -528,20 +528,43 @@ class EventBuilderAPI {
             }
         });
 
-        // Also check by class name
-        const locationInputsByClass = document.querySelectorAll('.location-input');
-        console.log('🔍 Elements with .location-input class:', locationInputsByClass.length);
-        locationInputsByClass.forEach((el, i) => {
-            console.log(`  .location-input[${i}]: "${el.value}" (id: ${el.id})`);
+        // Check for input fields in the location section
+        console.log('🔍 ALL INPUT FIELDS in document:');
+        const allInputs = document.querySelectorAll('input[type="text"], input:not([type])');
+        allInputs.forEach((input, i) => {
+            if (input.value && input.value.trim()) {
+                console.log(`  input[${i}]: "${input.value}" (id: "${input.id}", class: "${input.className}", placeholder: "${input.placeholder}")`);
+            }
         });
 
-        // If locationInput is still undefined, try the class-based selector
+        // Also check by class name variations
+        const possibleClasses = ['.location-input', '.location', '.address', '.venue', '.city'];
+        possibleClasses.forEach(className => {
+            const elements = document.querySelectorAll(className);
+            if (elements.length > 0) {
+                console.log(`🔍 Elements with ${className} class:`, elements.length);
+                elements.forEach((el, i) => {
+                    console.log(`  ${className}[${i}]: "${el.value}" (id: ${el.id})`);
+                });
+            }
+        });
+
+        // Try to find any input field with location data
         let actualLocationInput = locationInput;
-        if (!actualLocationInput && locationInputsByClass.length > 0) {
-            const locationInputByClass = locationInputsByClass[0];
-            if (locationInputByClass && locationInputByClass.value) {
-                actualLocationInput = locationInputByClass.value.trim();
-                console.log('🏟️ Using location from class selector:', actualLocationInput);
+        if (!actualLocationInput) {
+            // Check all text inputs for location-like data
+            const allInputs = document.querySelectorAll('input[type="text"], input:not([type])');
+            for (const input of allInputs) {
+                if (input.value && input.value.trim() && (
+                    input.placeholder?.toLowerCase().includes('location') ||
+                    input.placeholder?.toLowerCase().includes('address') ||
+                    input.placeholder?.toLowerCase().includes('venue') ||
+                    input.value.includes(',') // Location-like format
+                )) {
+                    actualLocationInput = input.value.trim();
+                    console.log('🏟️ Found location in input field:', actualLocationInput, 'from element:', input);
+                    break;
+                }
             }
         }
 
