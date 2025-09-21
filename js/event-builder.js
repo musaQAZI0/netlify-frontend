@@ -501,6 +501,15 @@ class EventBuilderAPI {
     // Helper methods for location extraction (moved from EventBuilder for API access)
     extractVenueFromSources() {
         console.log('🏟️ Extracting venue from sources...');
+
+        // 0. Check the venue form field first (most direct)
+        const venueNameField = document.getElementById('venueName')?.value?.trim();
+        console.log('🏟️ Venue name field value:', venueNameField);
+        if (venueNameField) {
+            console.log('🏟️ Found venue in form field:', venueNameField);
+            return venueNameField;
+        }
+
         // 1. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         console.log('🏟️ Google Places data:', googlePlacesData);
@@ -583,6 +592,14 @@ class EventBuilderAPI {
     }
 
     extractCityFromSources() {
+        // 0. Check the city form field first (most direct)
+        const cityNameField = document.getElementById('cityName')?.value?.trim();
+        console.log('🏙️ City name field value:', cityNameField);
+        if (cityNameField) {
+            console.log('🏙️ Found city in form field:', cityNameField);
+            return cityNameField;
+        }
+
         // 1. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         if (googlePlacesData?.city) return googlePlacesData.city;
