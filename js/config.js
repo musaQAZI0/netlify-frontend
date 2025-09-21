@@ -9,7 +9,7 @@ const Config = {
     
     // API base URL - Always use Render production backend
     get API_BASE_URL() {
-        return 'https://crowd-backend-zxxp.onrender.com/api'; // Production backend on Render
+        return 'https://crowd-backend-zxxp.onrender.com'; // Production backend on Render
     },
     
     // Frontend URL - Always use current domain
