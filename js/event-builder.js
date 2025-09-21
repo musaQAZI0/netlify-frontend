@@ -324,6 +324,15 @@ class EventBuilderAPI {
         const hasVenue = formData.venue || extractedVenue;
         const hasCity = formData.city || extractedCity;
 
+        // Check if any location fields are filled
+        const venueName = document.getElementById('venueName')?.value?.trim() || '';
+        const cityName = document.getElementById('cityName')?.value?.trim() || '';
+        const streetAddress = document.getElementById('streetAddress')?.value?.trim() || '';
+        const stateName = document.getElementById('stateName')?.value?.trim() || '';
+        const zipCode = document.getElementById('zipCode')?.value?.trim() || '';
+
+        const hasAnyLocationInfo = hasVenue || hasCity || venueName || cityName || streetAddress || stateName || zipCode;
+
         console.log('Location validation check:', {
             formDataVenue: formData.venue,
             formDataCity: formData.city,
@@ -331,11 +340,16 @@ class EventBuilderAPI {
             extractedCity,
             hasVenue,
             hasCity,
-            locationInput: document.getElementById('locationInput')?.value
+            venueName,
+            cityName,
+            streetAddress,
+            hasAnyLocationInfo,
+            status: formData.status
         });
 
-        if (!hasVenue && !hasCity) {
-            errors.push('Either venue name or city is required');
+        // For draft events, location is optional. For published events, require at least some location info
+        if (formData.status !== 'draft' && !hasAnyLocationInfo) {
+            errors.push('Location information is required for published events. Please provide at least a venue name, city, or address.');
         }
 
         return {
@@ -583,6 +597,18 @@ class EventBuilderAPI {
             const allElements = document.querySelectorAll('input, textarea, [contenteditable]');
             for (const element of allElements) {
                 const value = element.value || element.textContent || '';
+                const trimmedValue = value.trim();
+
+                // Skip if empty or looks like placeholder/test data
+                if (!trimmedValue ||
+                    /^[\d\s]+$/.test(trimmedValue) || // Just numbers and spaces
+                    trimmedValue === '1 2 3 4 5 6 7 8 9 0' || // Specific placeholder
+                    trimmedValue.length < 3 || // Too short
+                    element.id === 'overviewDescription' // Skip description field
+                ) {
+                    continue;
+                }
+
                 if (value && value.trim() && (
                     value.includes(',') || // Location-like format
                     value.toLowerCase().includes('kfc') || // Your specific case
@@ -691,7 +717,20 @@ class EventBuilderAPI {
             venue: formData.venue,
             city: formData.city,
             address: formData.address,
+            state: formData.state,
+            country: formData.country,
+            zipCode: formData.zipCode,
             locationInput: document.getElementById('locationInput')?.value
+        });
+
+        // Additional debug for all form fields
+        console.log('Form field values:', {
+            venueName: document.getElementById('venueName')?.value,
+            streetAddress: document.getElementById('streetAddress')?.value,
+            cityName: document.getElementById('cityName')?.value,
+            stateName: document.getElementById('stateName')?.value,
+            zipCode: document.getElementById('zipCode')?.value,
+            countryName: document.getElementById('countryName')?.value
         });
 
         // Combine date and time for proper datetime objects
@@ -772,26 +811,54 @@ class EventBuilderAPI {
 
     // Additional helper methods for API class
     getAddressFromSources() {
+        // 1. Check form field first
+        const streetAddressField = document.getElementById('streetAddress')?.value?.trim();
+        if (streetAddressField) return streetAddressField;
+
+        // 2. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         if (googlePlacesData?.address) return googlePlacesData.address;
+
+        // 3. Check current event data
         return this.currentEventData?.address || '';
     }
 
     getStateFromSources() {
+        // 1. Check form field first
+        const stateNameField = document.getElementById('stateName')?.value?.trim();
+        if (stateNameField) return stateNameField;
+
+        // 2. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         if (googlePlacesData?.state) return googlePlacesData.state;
+
+        // 3. Check current event data
         return this.currentEventData?.state || '';
     }
 
     getCountryFromSources() {
+        // 1. Check form field first
+        const countryNameField = document.getElementById('countryName')?.value?.trim();
+        if (countryNameField) return countryNameField;
+
+        // 2. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         if (googlePlacesData?.country) return googlePlacesData.country;
+
+        // 3. Check current event data
         return this.currentEventData?.country || '';
     }
 
     getZipCodeFromSources() {
+        // 1. Check form field first
+        const zipCodeField = document.getElementById('zipCode')?.value?.trim();
+        if (zipCodeField) return zipCodeField;
+
+        // 2. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         if (googlePlacesData?.zipCode) return googlePlacesData.zipCode;
+
+        // 3. Check current event data
         return this.currentEventData?.zipCode || '';
     }
 
