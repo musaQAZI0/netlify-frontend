@@ -510,22 +510,37 @@ class EventBuilderAPI {
             return venueNameField;
         }
 
-        // 1. Check Google Places data
+        // 1. Check the main location input field and extract venue from it
+        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        console.log('🏟️ Location input value:', locationInput);
+        if (locationInput) {
+            // Try to extract venue name from the location input
+            // For "KFC, Via Flaminia Conca, Rimini" -> "KFC" would be the venue
+            const parts = locationInput.split(',');
+            if (parts.length > 0) {
+                const potentialVenue = parts[0].trim();
+                // If the first part looks like a venue name (not just a street address)
+                if (potentialVenue && !potentialVenue.match(/^\d+\s+/) && !potentialVenue.toLowerCase().includes('via ') && !potentialVenue.toLowerCase().includes('street')) {
+                    console.log('🏟️ Extracted venue from location input:', potentialVenue);
+                    return potentialVenue;
+                }
+            }
+
+            // Use Google Places extraction if available
+            if (window.googlePlaces) {
+                const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+                console.log('🏟️ Extracted from Google Places:', extracted);
+                if (extracted.venueName) return extracted.venueName;
+            }
+        }
+
+        // 2. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         console.log('🏟️ Google Places data:', googlePlacesData);
         if (googlePlacesData?.venue) return googlePlacesData.venue;
 
-        // 2. Check currentEventData
+        // 3. Check currentEventData
         if (this.currentEventData?.venue) return this.currentEventData.venue;
-
-        // 3. Extract from location input if available
-        const locationInput = document.getElementById('locationInput')?.value?.trim();
-        console.log('🏟️ Location input value:', locationInput);
-        if (locationInput && window.googlePlaces) {
-            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
-            console.log('🏟️ Extracted from input:', extracted);
-            if (extracted.venueName) return extracted.venueName;
-        }
 
         console.log('🏟️ No venue found, returning empty string');
         return '';
@@ -600,19 +615,36 @@ class EventBuilderAPI {
             return cityNameField;
         }
 
-        // 1. Check Google Places data
+        // 1. Check the main location input field and extract city from it
+        const locationInput = document.getElementById('locationInput')?.value?.trim();
+        console.log('🏙️ Location input value:', locationInput);
+        if (locationInput) {
+            // Try to extract city from the location input
+            // For "KFC, Via Flaminia Conca, Rimini" -> "Rimini" would be the city
+            const parts = locationInput.split(',').map(p => p.trim());
+            if (parts.length > 1) {
+                // The last part is usually the city
+                const potentialCity = parts[parts.length - 1];
+                if (potentialCity && potentialCity.length > 2) {
+                    console.log('🏙️ Extracted city from location input:', potentialCity);
+                    return potentialCity;
+                }
+            }
+
+            // Use Google Places extraction if available
+            if (window.googlePlaces) {
+                const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
+                console.log('🏙️ Extracted from Google Places:', extracted);
+                if (extracted.city) return extracted.city;
+            }
+        }
+
+        // 2. Check Google Places data
         const googlePlacesData = window.googlePlaces?.getLocationData();
         if (googlePlacesData?.city) return googlePlacesData.city;
 
-        // 2. Check currentEventData
+        // 3. Check currentEventData
         if (this.currentEventData?.city) return this.currentEventData.city;
-
-        // 3. Extract from location input if available
-        const locationInput = document.getElementById('locationInput')?.value?.trim();
-        if (locationInput && window.googlePlaces) {
-            const extracted = window.googlePlaces.extractVenueAndCityFromInput(locationInput);
-            if (extracted.city) return extracted.city;
-        }
 
         return '';
     }
