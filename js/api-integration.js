@@ -36,7 +36,7 @@ window.addEventListener('error', function(event) {
 class CrowdAPI {
     constructor() {
         // Use configuration from config.js
-        this.baseURL = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
+        this.baseURL = window.Config ? `${window.Config.API_BASE_URL}/api` : 'https://crowd-backend-zxxp.onrender.com/api';
         this.headers = {
             'Content-Type': 'application/json',
         };

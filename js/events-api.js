@@ -3,7 +3,7 @@ class EventsAPI {
     constructor() {
         // Use Config if available, otherwise detect environment
         if (window.Config && window.Config.API_BASE_URL) {
-            this.baseURL = window.Config.API_BASE_URL;
+            this.baseURL = `${window.Config.API_BASE_URL}/api`;
         } else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             this.baseURL = 'http://localhost:3002/api';
         } else {
