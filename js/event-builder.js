@@ -424,7 +424,7 @@ class EventBuilderAPI {
             const formData = new FormData();
             formData.append('image', file);
 
-            const token = await this.getAuthToken();
+            const token = this.getAuthToken();
             const response = await fetch(`${this.baseURL}/events/upload-image`, {
                 method: 'POST',
                 headers: {
@@ -441,10 +441,13 @@ class EventBuilderAPI {
                 if (window.mongoAuthAPI || window.authAPI) {
                     try {
                         const authAPI = window.mongoAuthAPI || window.authAPI;
+                        console.log('Attempting to refresh token...');
                         await authAPI.refreshToken();
+                        console.log('Token refreshed successfully');
 
                         // Retry with new token
-                        const newToken = await this.getAuthToken();
+                        const newToken = this.getAuthToken();
+                        console.log('Retrying upload with new token...');
                         const retryResponse = await fetch(`${this.baseURL}/events/upload-image`, {
                             method: 'POST',
                             headers: {
@@ -454,15 +457,27 @@ class EventBuilderAPI {
                             body: formData
                         });
 
+                        if (!retryResponse.ok) {
+                            throw new Error(`Upload failed after token refresh: ${retryResponse.status} ${retryResponse.statusText}`);
+                        }
+
                         const retryData = await retryResponse.json();
                         if (retryData.success) {
+                            console.log('Image upload successful after token refresh');
                             return retryData.imageUrl;
+                        } else {
+                            throw new Error(retryData.message || 'Upload failed after token refresh');
                         }
                     } catch (refreshError) {
                         console.error('Token refresh failed:', refreshError);
+                        // Clear the invalid token
+                        localStorage.removeItem('authToken');
+                        throw new Error('Authentication failed. Please log in again.');
                     }
                 }
-                throw new Error('Token expired');
+                // Clear the invalid token if no auth API available
+                localStorage.removeItem('authToken');
+                throw new Error('Token expired and unable to refresh. Please log in again.');
             }
 
             const data = await response.json();
@@ -2123,6 +2138,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.Config && window.authUtils) {
                 window.eventBuilder = new EventBuilder();
 
+                // Ensure saveEvent is accessible on the global eventBuilder instance
+                if (typeof window.eventBuilder.saveEvent === 'function') {
+                    // Method is already available
+                    console.log('saveEvent method is available on eventBuilder');
+                } else {
+                    console.error('saveEvent method not found on eventBuilder instance');
+                }
+
                 // Initialize Enhanced Media Upload Manager
                 console.log("[Enhanced] Initializing Enhanced Media Upload Manager")
                 window.enhancedMediaUploadManager = new EnhancedMediaUploadManager();
@@ -2390,13 +2413,23 @@ function setupFormEventListeners() {
     }
 }
 
+// Expose saveEvent globally for backward compatibility
+window.saveEvent = async function() {
+    if (window.eventBuilder && typeof window.eventBuilder.saveEvent === 'function') {
+        return await window.eventBuilder.saveEvent();
+    } else {
+        throw new Error('Event builder not initialized or saveEvent method not available');
+    }
+};
+
 // Debug: Log functions to verify they're available
 console.log('Functions available:', {
     addLineupSection: typeof window.addLineupSection,
     addAgendaSection: typeof window.addAgendaSection,
     uploadImage: typeof window.uploadImage,
     uploadVideo: typeof window.uploadVideo,
-    saveAndContinue: typeof window.saveAndContinue
+    saveAndContinue: typeof window.saveAndContinue,
+    saveEvent: typeof window.saveEvent
 });
 
 // Global error handling for async response listener errors (usually from browser extensions)
