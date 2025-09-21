@@ -528,12 +528,37 @@ class EventBuilderAPI {
             }
         });
 
-        // Check for input fields in the location section
-        console.log('🔍 ALL INPUT FIELDS in document:');
-        const allInputs = document.querySelectorAll('input[type="text"], input:not([type])');
+        // Check for ALL input fields (including empty ones)
+        console.log('🔍 ALL INPUT FIELDS in document (including empty):');
+        const allInputs = document.querySelectorAll('input');
         allInputs.forEach((input, i) => {
-            if (input.value && input.value.trim()) {
-                console.log(`  input[${i}]: "${input.value}" (id: "${input.id}", class: "${input.className}", placeholder: "${input.placeholder}")`);
+            console.log(`  input[${i}]: "${input.value}" (id: "${input.id}", class: "${input.className}", placeholder: "${input.placeholder}", type: "${input.type}")`);
+        });
+
+        // Check for ALL elements with common location-related attributes
+        console.log('🔍 ELEMENTS with location-related attributes:');
+        const selectors = [
+            '[placeholder*="location" i]',
+            '[placeholder*="address" i]',
+            '[placeholder*="venue" i]',
+            '[placeholder*="search" i]',
+            '[class*="location" i]',
+            '[class*="address" i]',
+            '[class*="venue" i]',
+            '[class*="search" i]',
+            '[id*="location" i]',
+            '[id*="address" i]',
+            '[id*="venue" i]',
+            '[id*="search" i]'
+        ];
+
+        selectors.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            if (elements.length > 0) {
+                console.log(`  ${selector}: found ${elements.length} elements`);
+                elements.forEach((el, i) => {
+                    console.log(`    [${i}]: "${el.value || el.textContent}" (tag: ${el.tagName}, id: "${el.id}", class: "${el.className}")`);
+                });
             }
         });
 
@@ -552,17 +577,37 @@ class EventBuilderAPI {
         // Try to find any input field with location data
         let actualLocationInput = locationInput;
         if (!actualLocationInput) {
-            // Check all text inputs for location-like data
-            const allInputs = document.querySelectorAll('input[type="text"], input:not([type])');
-            for (const input of allInputs) {
-                if (input.value && input.value.trim() && (
-                    input.placeholder?.toLowerCase().includes('location') ||
-                    input.placeholder?.toLowerCase().includes('address') ||
-                    input.placeholder?.toLowerCase().includes('venue') ||
-                    input.value.includes(',') // Location-like format
+            console.log('🔍 Checking for specific patterns...');
+
+            // Check all possible input patterns
+            const allElements = document.querySelectorAll('input, textarea, [contenteditable]');
+            for (const element of allElements) {
+                const value = element.value || element.textContent || '';
+                if (value && value.trim() && (
+                    value.includes(',') || // Location-like format
+                    value.toLowerCase().includes('kfc') || // Your specific case
+                    value.toLowerCase().includes('rimini') ||
+                    (element.placeholder && (
+                        element.placeholder.toLowerCase().includes('search') ||
+                        element.placeholder.toLowerCase().includes('location') ||
+                        element.placeholder.toLowerCase().includes('address') ||
+                        element.placeholder.toLowerCase().includes('venue')
+                    ))
                 )) {
-                    actualLocationInput = input.value.trim();
-                    console.log('🏟️ Found location in input field:', actualLocationInput, 'from element:', input);
+                    actualLocationInput = value.trim();
+                    console.log('🏟️ FOUND LOCATION DATA:', actualLocationInput);
+                    console.log('🏟️ Found in element:', element.tagName, 'id:', element.id, 'class:', element.className, 'placeholder:', element.placeholder);
+                    break;
+                }
+            }
+
+            // Also try to manually check the specific ID from the HTML
+            const manualChecks = ['locationInput', 'location', 'search', 'address-search', 'venue-search'];
+            for (const id of manualChecks) {
+                const element = document.getElementById(id);
+                if (element && element.value) {
+                    console.log(`🔍 Manual check ${id}:`, element.value);
+                    actualLocationInput = element.value.trim();
                     break;
                 }
             }
