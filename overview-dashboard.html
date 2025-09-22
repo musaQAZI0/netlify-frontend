@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CROWD Overview - Social Proof Dashboard</title>
+    <link rel="stylesheet" href="overview-dashboard-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#f05537">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span>crowd</span>
+                    <span class="overview-badge">Overview</span>
+                </div>
+                <div class="header-right">
+                    <div class="live-indicator">
+                        <div class="live-dot"></div>
+                        <span>Live Data</span>
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <span class="user-name" id="userName">Loading...</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h1>Welcome to CROWD</h1>
+                <p class="welcome-subtitle">See what's happening across our platform in real-time. Join thousands of event creators building amazing experiences.</p>
+                <div class="quick-actions">
+                    <button class="cta-button primary" onclick="createEvent()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <line x1="12" x2="12" y1="5" y2="19"/>
+                            <line x1="5" x2="19" y1="12" y2="12"/>
+                        </svg>
+                        Create Your First Event
+                    </button>
+                    <button class="cta-button secondary" onclick="explorePlatform()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        Explore Platform
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Statistics -->
+            <div class="stats-section">
+                <h2>Platform Activity</h2>
+                <div class="stats-grid">
+                    <div class="stat-card live-users">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </div>
+                            <div class="live-indicator small">
+                                <div class="live-dot"></div>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="liveUsersCount">0</div>
+                        <div class="stat-label">Users Online Now</div>
+                        <div class="stat-change positive" id="userGrowth">+12% from yesterday</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                    <line x1="16" x2="16" y1="2" y2="6"/>
+                                    <line x1="8" x2="8" y1="2" y2="6"/>
+                                    <line x1="3" x2="21" y1="10" y2="10"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalEventsCount">0</div>
+                        <div class="stat-label">Total Events Created</div>
+                        <div class="stat-change positive" id="eventsGrowth">+15% this month</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M2 2l20 20"/>
+                                    <path d="M8.35 2.69A10 10 0 0 1 21.4 15.65"/>
+                                    <path d="M19.08 19.08A10 10 0 1 1 4.92 4.92"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="totalTicketsCount">0</div>
+                        <div class="stat-label">Tickets Sold Today</div>
+                        <div class="stat-change positive" id="ticketsGrowth">+8% from yesterday</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="averageEventDuration">0</div>
+                        <div class="stat-label">Avg Event Duration</div>
+                        <div class="stat-change neutral" id="durationChange">2.5 hours</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Sales Charts -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h3>Ticket Sales Overview</h3>
+                    <div class="chart-controls">
+                        <button class="chart-period active" data-period="daily" onclick="updateChartPeriod('daily')">Daily</button>
+                        <button class="chart-period" data-period="monthly" onclick="updateChartPeriod('monthly')">Monthly</button>
+                        <button class="chart-period" data-period="yearly" onclick="updateChartPeriod('yearly')">Yearly</button>
+                    </div>
+                    <canvas id="ticketSalesChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Event Hotspots Heatmap -->
+            <div class="heatmap-section">
+                <h3>Event Hotspots</h3>
+                <p class="section-subtitle">See where events are happening across your region</p>
+                <div class="heatmap-container">
+                    <div id="heatMap" class="heat-map"></div>
+                    <div class="heatmap-legend">
+                        <div class="legend-item">
+                            <div class="legend-color low"></div>
+                            <span>Low Activity</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color medium"></div>
+                            <span>Medium Activity</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color high"></div>
+                            <span>High Activity</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Items -->
+            <div class="popular-section">
+                <div class="popular-grid">
+                    <!-- Popular Events -->
+                    <div class="popular-card">
+                        <h3>🔥 Trending Events</h3>
+                        <div class="popular-list" id="popularEvents">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                        <button class="view-all-btn" onclick="viewAllEvents()">View All Events →</button>
+                    </div>
+
+                    <!-- Popular Venues -->
+                    <div class="popular-card">
+                        <h3>🏢 Top Venues</h3>
+                        <div class="popular-list" id="popularVenues">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                        <button class="view-all-btn" onclick="openVenueDirectory()">Browse Venues →</button>
+                    </div>
+
+                    <!-- Popular Influencers -->
+                    <div class="popular-card">
+                        <h3>⭐ Featured Influencers</h3>
+                        <div class="popular-list" id="popularInfluencers">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                        <button class="view-all-btn" onclick="openInfluencerDirectory()">Browse Influencers →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="actions-section">
+                <h3>Quick Actions</h3>
+                <div class="actions-grid">
+                    <div class="action-card" onclick="createEvent()">
+                        <div class="action-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                                <line x1="16" x2="16" y1="2" y2="6"/>
+                                <line x1="8" x2="8" y1="2" y2="6"/>
+                                <line x1="3" x2="21" y1="10" y2="10"/>
+                            </svg>
+                        </div>
+                        <h4>Create Event</h4>
+                        <p>Start planning your next event</p>
+                    </div>
+
+                    <div class="action-card" onclick="sendPromotion()">
+                        <div class="action-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7,10 12,15 17,10"/>
+                                <line x1="12" x2="12" y1="15" y2="3"/>
+                            </svg>
+                        </div>
+                        <h4>Send Promotion</h4>
+                        <p>Reach out to influencers and venues</p>
+                    </div>
+
+                    <div class="action-card" onclick="openEventTools()">
+                        <div class="action-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                            </svg>
+                        </div>
+                        <h4>Event Tools</h4>
+                        <p>Access advanced event management tools</p>
+                    </div>
+
+                    <div class="action-card" onclick="viewAnalytics()">
+                        <div class="action-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 3v18h18"/>
+                                <path d="M7 16l4-4 4 4 6-6"/>
+                            </svg>
+                        </div>
+                        <h4>View Analytics</h4>
+                        <p>Deep dive into your event data</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            API_BASE_URL: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:3000'
+                : 'https://crowd-backend-zxxp.onrender.com',
+            RETRY_ATTEMPTS: 3,
+            RETRY_DELAY: 1000,
+            TOKEN_KEY: 'authToken',
+            UPDATE_INTERVAL: 30000 // Update every 30 seconds
+        };
+
+        let chartInstance = null;
+        let heatmapData = [];
+        let updateInterval = null;
+
+        // Utility functions
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return input;
+            return input.trim().replace(/[<>\"'&]/g, function(match) {
+                const htmlEscapes = {
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;',
+                    '&': '&amp;'
+                };
+                return htmlEscapes[match];
+            });
+        }
+
+        async function makeApiRequest(url, options = {}, retryCount = 0) {
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    let errorMessage;
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMessage = errorJson.message || `HTTP ${response.status}: ${response.statusText}`;
+                    } catch {
+                        errorMessage = `HTTP ${response.status}: ${errorText || response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error(`API Request failed (attempt ${retryCount + 1}):`, error);
+
+                if (retryCount < CONFIG.RETRY_ATTEMPTS - 1 &&
+                    (error.name === 'TypeError' || error.message.includes('network'))) {
+                    console.log(`Retrying in ${CONFIG.RETRY_DELAY}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
+                    return makeApiRequest(url, options, retryCount + 1);
+                }
+
+                throw error;
+            }
+        }
+
+        function getAuthToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let token = urlParams.get('token');
+
+            if (!token) {
+                token = localStorage.getItem(CONFIG.TOKEN_KEY);
+            }
+
+            if (token && !localStorage.getItem(CONFIG.TOKEN_KEY)) {
+                localStorage.setItem(CONFIG.TOKEN_KEY, token);
+            }
+
+            return token || '';
+        }
+
+        // Authentication check
+        async function checkAuthenticationStatus() {
+            try {
+                const token = getAuthToken();
+                if (!token) {
+                    console.log('No auth token found');
+                    return false;
+                }
+
+                const data = await makeApiRequest(`${CONFIG.API_BASE_URL}/api/auth/verify`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                return data.success;
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+                return false;
+            }
+        }
+
+        // Load user data
+        async function loadUserData() {
+            try {
+                const data = await makeApiRequest(`${CONFIG.API_BASE_URL}/api/auth/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    }
+                });
+
+                if (data.success && data.user) {
+                    const user = data.user;
+                    const firstName = sanitizeInput(user.firstName || '');
+                    const lastName = sanitizeInput(user.lastName || '');
+                    const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || 'U';
+                    const fullName = `${firstName} ${lastName}`.trim() || 'User';
+
+                    document.getElementById('userAvatar').textContent = initials;
+                    document.getElementById('userName').textContent = fullName;
+                }
+            } catch (error) {
+                console.error('Failed to load user data:', error);
+                document.getElementById('userAvatar').textContent = 'U';
+                document.getElementById('userName').textContent = 'User';
+            }
+        }
+
+        // Load platform statistics
+        async function loadPlatformStats() {
+            try {
+                // Simulate real-time data for now - replace with actual API calls
+                const liveUsers = Math.floor(Math.random() * 500) + 1200;
+                const totalEvents = Math.floor(Math.random() * 100) + 15000;
+                const todayTickets = Math.floor(Math.random() * 200) + 850;
+                const avgDuration = '2.5h';
+
+                animateCounter('liveUsersCount', liveUsers);
+                animateCounter('totalEventsCount', totalEvents);
+                animateCounter('totalTicketsCount', todayTickets);
+                document.getElementById('averageEventDuration').textContent = avgDuration;
+            } catch (error) {
+                console.error('Failed to load platform stats:', error);
+            }
+        }
+
+        // Animate counter
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const duration = 2000;
+            const startTime = performance.now();
+            const startValue = 0;
+
+            function animate(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOut);
+
+                element.textContent = currentValue.toLocaleString();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', async function() {
+            const isAuthenticated = await checkAuthenticationStatus();
+            if (!isAuthenticated) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            await loadUserData();
+            await loadPlatformStats();
+            initializeCharts();
+            initializeHeatmap();
+            loadPopularItems();
+
+            // Set up auto-refresh
+            updateInterval = setInterval(async () => {
+                await loadPlatformStats();
+                updateChartData();
+            }, CONFIG.UPDATE_INTERVAL);
+        });
+
+        // Navigation functions
+        function createEvent() {
+            window.location.href = 'event-builder.html';
+        }
+
+        function explorePlatform() {
+            window.location.href = 'dashboard-home.html';
+        }
+
+        function openEventTools() {
+            window.location.href = 'event-tools.html';
+        }
+
+        function openVenueDirectory() {
+            window.location.href = 'venue-directory.html';
+        }
+
+        function openInfluencerDirectory() {
+            window.location.href = 'influencer-directory.html';
+        }
+
+        function viewAnalytics() {
+            window.location.href = 'analytics.html';
+        }
+
+        function sendPromotion() {
+            // Open promotion modal or page
+            alert('Promotion feature coming soon!');
+        }
+
+        // Chart functionality will be implemented in the next steps
+        function initializeCharts() {
+            // Initialize charts
+            console.log('Charts initialized');
+        }
+
+        function initializeHeatmap() {
+            // Initialize heatmap
+            console.log('Heatmap initialized');
+        }
+
+        function loadPopularItems() {
+            // Load popular events, venues, and influencers
+            console.log('Popular items loaded');
+        }
+
+        function updateChartPeriod(period) {
+            document.querySelectorAll('.chart-period').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-period="${period}"]`).classList.add('active');
+            updateChartData(period);
+        }
+
+        function updateChartData(period = 'daily') {
+            // Update chart with new data
+            console.log('Chart updated for period:', period);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (updateInterval) {
+                clearInterval(updateInterval);
+            }
+        });
+    </script>
+</body>
+</html>
