@@ -2734,8 +2734,8 @@ window.addEventListener('unhandledrejection', function(event) {
 // Enhanced Event Builder UI Functionality
 document.addEventListener("DOMContentLoaded", () => {
     // More options toggle functionality for date/time
-    const moreOptionsBtn = document.getElementById("moreOptionsBtn");
-    const moreOptionsContent = document.getElementById("moreOptionsContent");
+    const moreOptionsBtn = document.getElementById("more-options-btn");
+    const moreOptionsContent = document.getElementById("more-options-content");
 
     if (moreOptionsBtn && moreOptionsContent) {
         moreOptionsBtn.addEventListener("click", () => {
@@ -2834,7 +2834,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Enhanced location input with validation
-    const locationInput = document.getElementById("locationInput");
+    const locationInput = document.getElementById("location");
     if (locationInput) {
         locationInput.addEventListener("input", function () {
             const value = this.value.toLowerCase();
@@ -2917,6 +2917,44 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     });
+
+    // Date picker enhancement (basic)
+    const dateInput = document.getElementById("eventDate");
+    if (dateInput) {
+        dateInput.addEventListener("click", () => {
+            // In a real implementation, you would integrate with a date picker library
+            console.log("Date picker would open here");
+        });
+    }
+
+    // Time picker enhancement (basic)
+    const timeInputs = document.querySelectorAll("#startTime, #endTime");
+    timeInputs.forEach((input) => {
+        input.addEventListener("click", function () {
+            // In a real implementation, you would integrate with a time picker library
+            console.log("Time picker would open here for", this.id);
+        });
+    });
+
+    // Form submission handling
+    const eventForm = document.querySelector(".event-form");
+    if (eventForm) {
+        eventForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            // Collect form data
+            const formData = {
+                date: document.getElementById("eventDate")?.value || '',
+                startTime: document.getElementById("startTime")?.value || '',
+                endTime: document.getElementById("endTime")?.value || '',
+                locationType: document.querySelector(".location-btn.active")?.getAttribute("data-type") || '',
+                location: document.getElementById("location")?.value || '',
+            };
+
+            console.log("Form submitted with data:", formData);
+            alert("Event form submitted! Check console for data.");
+        });
+    }
 
     // Initialize form state
     console.log("Enhanced event form functionality initialized successfully");
