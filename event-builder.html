@@ -261,82 +261,149 @@
                             <h1 contenteditable="true" class="event-title" id="eventTitle" data-placeholder="Enter event title">Event Title</h1>
                         </div>
 
-                        <!-- Date and Time / Location Section -->
-                        <div class="details-grid">
-                            <div class="details-section">
-                                <div class="section-header">
-                                    <h3>Date and time</h3>
-                                    <div class="add-button">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
-                                            <line x1="12" x2="12" y1="5" y2="19"/>
-                                            <line x1="5" x2="19" y1="12" y2="12"/>
+                        <!-- Date and Time Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h3>Date and time</h3>
+                                <div class="add-button">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <line x1="12" x2="12" y1="5" y2="19"/>
+                                        <line x1="5" x2="19" y1="12" y2="12"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="datetime-grid">
+                                <div class="input-group">
+                                    <label for="eventDate">Date</label>
+                                    <div class="input-wrapper">
+                                        <input type="date" id="eventDate" class="form-input">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
                                         </svg>
                                     </div>
                                 </div>
-                                
-                                <!-- Date and Time Inputs -->
-                                <div class="datetime-inputs">
-                                    <div class="input-group">
-                                        <label for="eventDate">Date</label>
-                                        <input type="date" id="eventDate" class="date-input">
+
+                                <div class="input-group">
+                                    <label for="startTime">Start time</label>
+                                    <div class="input-wrapper">
+                                        <input type="time" id="startTime" class="form-input">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12,6 12,12 16,14"></polyline>
+                                        </svg>
                                     </div>
-                                    <div class="input-group">
-                                        <label for="startTime">Start Time</label>
-                                        <input type="time" id="startTime" class="time-input">
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="endTime">End Time</label>
-                                        <input type="time" id="endTime" class="time-input">
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="endTime">End time</label>
+                                    <div class="input-wrapper">
+                                        <input type="time" id="endTime" class="form-input">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <polyline points="12,6 12,12 16,14"></polyline>
+                                        </svg>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="details-section">
-                                <div class="section-header">
-                                    <h3>Location</h3>
-                                    <div class="add-button">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
-                                            <line x1="12" x2="12" y1="5" y2="19"/>
-                                            <line x1="5" x2="19" y1="12" y2="12"/>
+                            <button class="more-options-btn" id="moreOptionsBtn">More options</button>
+                            <div class="more-options-content" id="moreOptionsContent">
+                                <p>EDT, Display start and end time, English (US)</p>
+                            </div>
+                        </div>
+
+                        <!-- Location Section -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h3>Location</h3>
+                                <div class="add-button">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <line x1="12" x2="12" y1="5" y2="19"/>
+                                        <line x1="5" x2="19" y1="12" y2="12"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="location-buttons">
+                                <button class="location-btn active" data-type="venue" id="venueBtn">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Venue
+                                </button>
+                                <button class="location-btn" data-type="online" id="onlineBtn">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                    Online event
+                                </button>
+                                <button class="location-btn" data-type="tba" id="tbaBtn">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    To be announced
+                                </button>
+                            </div>
+
+                            <!-- Venue Content -->
+                            <div class="location-content" id="venue-content">
+                                <div class="input-group">
+                                    <label for="locationInput">Location <span class="required">*</span></label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="locationInput" class="form-input" placeholder="Search for a venue or address">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <path d="m21 21-4.35-4.35"></path>
                                         </svg>
                                     </div>
                                 </div>
-                                <div class="location-display">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                        <circle cx="12" cy="10" r="3"/>
+
+                                <button class="add-details-btn" id="addDetailsBtn">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                        <polyline points="14,2 14,8 20,8"></polyline>
                                     </svg>
-                                    <div class="location-text">
-                                        <input type="text" class="location-input" id="locationInput" placeholder="Search for a venue or address">
-                                    </div>
-                                </div>
+                                    Add location details
+                                </button>
+
+                                <!-- Detailed Location Fields (Initially Hidden) -->
                                 <div class="location-details" id="locationDetails" style="display: none; margin-top: 12px;">
                                     <div class="location-components">
                                         <div class="input-group">
                                             <label for="venueName">Venue Name</label>
-                                            <input type="text" id="venueName" class="venue-input" placeholder="Venue name">
+                                            <input type="text" id="venueName" class="form-input" placeholder="Venue name">
                                         </div>
                                         <div class="input-group">
                                             <label for="streetAddress">Street Address</label>
-                                            <input type="text" id="streetAddress" class="address-input" placeholder="Street address">
+                                            <input type="text" id="streetAddress" class="form-input" placeholder="Street address">
                                         </div>
                                         <div class="input-row">
                                             <div class="input-group">
                                                 <label for="cityName">City</label>
-                                                <input type="text" id="cityName" class="city-input" placeholder="City">
+                                                <input type="text" id="cityName" class="form-input" placeholder="City">
                                             </div>
                                             <div class="input-group">
                                                 <label for="stateName">State</label>
-                                                <input type="text" id="stateName" class="state-input" placeholder="State">
+                                                <input type="text" id="stateName" class="form-input" placeholder="State">
                                             </div>
                                             <div class="input-group">
                                                 <label for="zipCode">ZIP Code</label>
-                                                <input type="text" id="zipCode" class="zip-input" placeholder="ZIP">
+                                                <input type="text" id="zipCode" class="form-input" placeholder="ZIP">
                                             </div>
                                         </div>
                                         <div class="input-group">
                                             <label for="countryName">Country</label>
-                                            <input type="text" id="countryName" class="country-input" placeholder="Country" value="United States">
+                                            <input type="text" id="countryName" class="form-input" placeholder="Country" value="United States">
                                         </div>
                                     </div>
                                 </div>
@@ -359,6 +426,42 @@
                                             Click on the map to select a venue location. You can also drag the marker to fine-tune the position.
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <!-- Online Event Content -->
+                            <div class="location-content hidden" id="online-content">
+                                <div class="info-box online-info">
+                                    <p>Online events have unique event pages where you can add links to livestreams and more</p>
+                                </div>
+                                <div class="online-details" style="margin-top: 16px;">
+                                    <div class="input-group">
+                                        <label for="onlinePlatform">Platform</label>
+                                        <select id="onlinePlatform" class="form-input">
+                                            <option value="">Select platform</option>
+                                            <option value="zoom">Zoom</option>
+                                            <option value="teams">Microsoft Teams</option>
+                                            <option value="youtube">YouTube Live</option>
+                                            <option value="facebook">Facebook Live</option>
+                                            <option value="twitch">Twitch</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="onlineUrl">Meeting/Stream URL</label>
+                                        <input type="url" id="onlineUrl" class="form-input" placeholder="https://">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="accessInstructions">Access Instructions</label>
+                                        <textarea id="accessInstructions" class="form-input" placeholder="Provide instructions on how attendees can join the event" rows="3"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- To Be Announced Content -->
+                            <div class="location-content hidden" id="tba-content">
+                                <div class="info-box tba-info">
+                                    <p>Location details will be announced later</p>
                                 </div>
                             </div>
                         </div>

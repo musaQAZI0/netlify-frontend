@@ -2730,3 +2730,194 @@ window.addEventListener('unhandledrejection', function(event) {
         return false;
     }
 });
+
+// Enhanced Event Builder UI Functionality
+document.addEventListener("DOMContentLoaded", () => {
+    // More options toggle functionality for date/time
+    const moreOptionsBtn = document.getElementById("moreOptionsBtn");
+    const moreOptionsContent = document.getElementById("moreOptionsContent");
+
+    if (moreOptionsBtn && moreOptionsContent) {
+        moreOptionsBtn.addEventListener("click", () => {
+            moreOptionsContent.classList.toggle("show");
+        });
+    }
+
+    // Location type switching functionality
+    const locationBtns = document.querySelectorAll(".location-btn");
+    const locationContents = document.querySelectorAll(".location-content");
+
+    locationBtns.forEach((btn) => {
+        btn.addEventListener("click", function () {
+            const type = this.getAttribute("data-type");
+
+            // Remove active class from all buttons
+            locationBtns.forEach((b) => b.classList.remove("active"));
+
+            // Add active class to clicked button
+            this.classList.add("active");
+
+            // Hide all location contents
+            locationContents.forEach((content) => {
+                content.classList.add("hidden");
+            });
+
+            // Show selected location content
+            const targetContent = document.getElementById(`${type}-content`);
+            if (targetContent) {
+                targetContent.classList.remove("hidden");
+                targetContent.classList.add("fade-in");
+
+                // Update event data based on location type
+                if (window.eventBuilder && window.eventBuilder.api) {
+                    window.eventBuilder.api.currentEventData.isOnline = (type === 'online');
+                    window.eventBuilder.api.currentEventData.locationType = type;
+                }
+
+                // Remove fade-in class after animation
+                setTimeout(() => {
+                    targetContent.classList.remove("fade-in");
+                }, 300);
+            }
+        });
+    });
+
+    // Add location details toggle
+    const addDetailsBtn = document.getElementById("addDetailsBtn");
+    const locationDetails = document.getElementById("locationDetails");
+
+    if (addDetailsBtn && locationDetails) {
+        addDetailsBtn.addEventListener("click", () => {
+            const isVisible = locationDetails.style.display !== "none";
+            locationDetails.style.display = isVisible ? "none" : "block";
+            addDetailsBtn.textContent = isVisible ?
+                "Add location details" :
+                "Hide location details";
+
+            if (!isVisible) {
+                locationDetails.classList.add("fade-in");
+                setTimeout(() => {
+                    locationDetails.classList.remove("fade-in");
+                }, 300);
+            }
+        });
+    }
+
+    // Form input enhancements
+    const formInputs = document.querySelectorAll(".form-input");
+
+    formInputs.forEach((input) => {
+        // Add focus/blur effects
+        input.addEventListener("focus", function () {
+            if (this.parentElement.classList.contains("input-wrapper")) {
+                this.parentElement.classList.add("focused");
+            }
+        });
+
+        input.addEventListener("blur", function () {
+            if (this.parentElement.classList.contains("input-wrapper")) {
+                this.parentElement.classList.remove("focused");
+            }
+        });
+
+        // Add input validation for required fields
+        const label = input.previousElementSibling;
+        if (input.hasAttribute("required") || (label && label.textContent.includes("*"))) {
+            input.addEventListener("blur", function () {
+                if (this.value.trim() === "") {
+                    this.style.borderColor = "#ef4444";
+                } else {
+                    this.style.borderColor = "#d1d5db";
+                }
+            });
+        }
+    });
+
+    // Enhanced location input with validation
+    const locationInput = document.getElementById("locationInput");
+    if (locationInput) {
+        locationInput.addEventListener("input", function () {
+            const value = this.value.toLowerCase();
+
+            // Simple validation
+            if (value.length > 0) {
+                this.style.borderColor = "#10b981";
+            } else {
+                this.style.borderColor = "#ef4444";
+            }
+
+            // Update event data
+            if (window.eventBuilder && window.eventBuilder.api) {
+                window.eventBuilder.api.currentEventData.venue = this.value;
+            }
+        });
+    }
+
+    // Online platform selection handling
+    const onlinePlatform = document.getElementById("onlinePlatform");
+    const onlineUrl = document.getElementById("onlineUrl");
+
+    if (onlinePlatform && onlineUrl) {
+        onlinePlatform.addEventListener("change", function () {
+            const platform = this.value;
+
+            // Update placeholder based on platform
+            const placeholders = {
+                'zoom': 'https://zoom.us/j/123456789',
+                'teams': 'https://teams.microsoft.com/l/meetup-join/...',
+                'youtube': 'https://youtube.com/watch?v=...',
+                'facebook': 'https://facebook.com/events/...',
+                'twitch': 'https://twitch.tv/...',
+                'other': 'https://'
+            };
+
+            onlineUrl.placeholder = placeholders[platform] || 'https://';
+
+            // Update event data
+            if (window.eventBuilder && window.eventBuilder.api) {
+                window.eventBuilder.api.currentEventData.onlinePlatform = platform;
+            }
+        });
+    }
+
+    // Online URL and access instructions handling
+    if (onlineUrl) {
+        onlineUrl.addEventListener("input", function () {
+            if (window.eventBuilder && window.eventBuilder.api) {
+                window.eventBuilder.api.currentEventData.onlineUrl = this.value;
+            }
+        });
+    }
+
+    const accessInstructions = document.getElementById("accessInstructions");
+    if (accessInstructions) {
+        accessInstructions.addEventListener("input", function () {
+            if (window.eventBuilder && window.eventBuilder.api) {
+                window.eventBuilder.api.currentEventData.accessInstructions = this.value;
+            }
+        });
+    }
+
+    // Keyboard navigation enhancements
+    document.addEventListener("keydown", (e) => {
+        // Tab navigation improvements
+        if (e.key === "Tab") {
+            const focusableElements = document.querySelectorAll('input, button, select, textarea, [tabindex]:not([tabindex="-1"])');
+
+            // Add visual focus indicators
+            focusableElements.forEach((el) => {
+                el.addEventListener("focus", function () {
+                    this.style.outline = "2px solid #3b82f6";
+                    this.style.outlineOffset = "2px";
+                });
+
+                el.addEventListener("blur", function () {
+                    this.style.outline = "none";
+                });
+            });
+        }
+    });
+
+    // Initialize form state
+    console.log("Enhanced event form functionality initialized successfully");
+});
