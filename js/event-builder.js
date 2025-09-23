@@ -3453,3 +3453,259 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize form state
     console.log("Enhanced event form functionality initialized successfully");
 });
+
+// Date and Time Picker JavaScript Functions
+let currentMonth = 10; // November (0-based)
+let currentYear = 2025;
+let selectedDate = 2; // November 2nd
+
+const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+function generateCalendar() {
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+    // Adjust for Monday start
+    const mondayFirstDay = (firstDay === 0) ? 6 : firstDay - 1;
+
+    let daysHTML = '';
+
+    // Previous month days
+    for (let i = mondayFirstDay - 1; i >= 0; i--) {
+        const day = daysInPrevMonth - i;
+        daysHTML += `<div class="day other-month">${day}</div>`;
+    }
+
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const isSelected = day === selectedDate;
+        const isToday = day === 2 && currentMonth === 10 && currentYear === 2025; // Nov 2, 2025
+        let classes = 'day';
+        if (isSelected) classes += ' selected';
+        if (isToday && !isSelected) classes += ' today';
+
+        daysHTML += `<div class="${classes}" onclick="selectDay(${day})">${day}</div>`;
+    }
+
+    // Next month days to fill the grid
+    const totalCells = Math.ceil((mondayFirstDay + daysInMonth) / 7) * 7;
+    const remainingCells = totalCells - mondayFirstDay - daysInMonth;
+
+    for (let day = 1; day <= remainingCells; day++) {
+        daysHTML += `<div class="day other-month">${day}</div>`;
+    }
+
+    const calendarDays = document.getElementById('calendar-days');
+    const monthYear = document.getElementById('month-year');
+
+    if (calendarDays) {
+        calendarDays.innerHTML = daysHTML;
+    }
+    if (monthYear) {
+        monthYear.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+}
+
+function selectDay(day) {
+    selectedDate = day;
+    generateCalendar();
+
+    // Update the date input
+    const formattedDate = `${String(currentMonth + 1).padStart(2, '0')}/${String(day).padStart(2, '0')}/${currentYear}`;
+    const dateInput = document.getElementById('date-input');
+    if (dateInput) {
+        dateInput.value = formattedDate;
+    }
+
+    // Update sidebar if it exists
+    updateSidebarDateTime();
+}
+
+function previousMonth() {
+    if (currentMonth === 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else {
+        currentMonth--;
+    }
+    generateCalendar();
+}
+
+function nextMonth() {
+    if (currentMonth === 11) {
+        currentMonth = 0;
+        currentYear++;
+    } else {
+        currentMonth++;
+    }
+    generateCalendar();
+}
+
+function generateTimeOptions(startHour = 0, endHour = 23) {
+    const times = [];
+    for (let hour = startHour; hour <= endHour; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+            const time12 = convertTo12Hour(hour, minute);
+            times.push(time12);
+        }
+    }
+    return times;
+}
+
+function convertTo12Hour(hour, minute) {
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    const displayMinute = minute.toString().padStart(2, '0');
+    return `${displayHour}:${displayMinute} ${period}`;
+}
+
+function populateTimeDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    if (!dropdown) return;
+
+    const times = generateTimeOptions();
+
+    dropdown.innerHTML = times.map(time =>
+        `<div class="dropdown-option" onclick="selectTime('${dropdownId.replace('-dropdown', '')}', '${time}')">${time}</div>`
+    ).join('');
+}
+
+function toggleCalendar() {
+    const calendar = document.getElementById('calendar-container');
+    if (!calendar) return;
+
+    // Close all time dropdowns first
+    document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+        dropdown.classList.remove('show');
+    });
+
+    calendar.classList.toggle('show');
+
+    // Generate calendar if opening
+    if (calendar.classList.contains('show')) {
+        generateCalendar();
+    }
+}
+
+function toggleDropdown(dropdownId) {
+    // Close calendar first
+    const calendar = document.getElementById('calendar-container');
+    if (calendar) {
+        calendar.classList.remove('show');
+    }
+
+    // Close all other dropdowns
+    const allDropdowns = document.querySelectorAll('.dropdown-content');
+    allDropdowns.forEach(dropdown => {
+        if (dropdown.id !== dropdownId) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    // Populate the dropdown with time options if it's empty
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown && dropdown.children.length === 0) {
+        populateTimeDropdown(dropdownId);
+    }
+
+    // Toggle the clicked dropdown
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+}
+
+function selectTime(inputId, time) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.value = time;
+    }
+
+    // Close all dropdowns
+    document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+        dropdown.classList.remove('show');
+    });
+
+    // Update sidebar if it exists
+    updateSidebarDateTime();
+}
+
+function selectDate() {
+    // Close the calendar
+    const calendar = document.getElementById('calendar-container');
+    if (calendar) {
+        calendar.classList.remove('show');
+    }
+
+    // Update sidebar
+    updateSidebarDateTime();
+}
+
+function updateSidebarDateTime() {
+    const dateInput = document.getElementById('date-input');
+    const startTimeInput = document.getElementById('start-time');
+    const sidebarDateTime = document.getElementById('eventDateTimeSidebar');
+
+    if (dateInput && startTimeInput && sidebarDateTime) {
+        const dateValue = dateInput.value;
+        const timeValue = startTimeInput.value;
+
+        if (dateValue && timeValue) {
+            // Convert MM/DD/YYYY to a readable format
+            const dateParts = dateValue.split('/');
+            if (dateParts.length === 3) {
+                const month = parseInt(dateParts[0]) - 1;
+                const day = parseInt(dateParts[1]);
+                const year = parseInt(dateParts[2]);
+                const dateObj = new Date(year, month, day);
+                const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+                const formattedDate = dateObj.toLocaleDateString('en-US', options);
+                sidebarDateTime.textContent = `${formattedDate}, ${timeValue}`;
+            }
+        }
+    }
+}
+
+// Close dropdowns and calendar when clicking outside
+document.addEventListener('click', function(event) {
+    const isCalendarClick = event.target.closest('.calendar-container') || event.target.id === 'date-input';
+    const isDropdownClick = event.target.matches('.input-field') && event.target.id !== 'date-input';
+
+    if (!isCalendarClick) {
+        const calendar = document.getElementById('calendar-container');
+        if (calendar) {
+            calendar.classList.remove('show');
+        }
+    }
+
+    if (!isDropdownClick) {
+        document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+            dropdown.classList.remove('show');
+        });
+    }
+});
+
+// Initialize the date/time picker when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Set default date to tomorrow
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    currentMonth = tomorrow.getMonth();
+    currentYear = tomorrow.getFullYear();
+    selectedDate = tomorrow.getDate();
+
+    // Set initial display values
+    const dateInput = document.getElementById('date-input');
+    if (dateInput) {
+        const formattedDate = `${String(currentMonth + 1).padStart(2, '0')}/${String(selectedDate).padStart(2, '0')}/${currentYear}`;
+        dateInput.value = formattedDate;
+    }
+
+    // Update sidebar
+    updateSidebarDateTime();
+});
