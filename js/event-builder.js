@@ -775,14 +775,31 @@ class EventBuilderAPI {
     }
 
     // Collect form data from the page (API class version)
+    convertDateFormat(dateStr) {
+        if (!dateStr) return '';
+
+        // Check if it's already in YYYY-MM-DD format
+        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            return dateStr;
+        }
+
+        // Convert MM/DD/YYYY to YYYY-MM-DD
+        if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+            const [month, day, year] = dateStr.split('/');
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        }
+
+        return dateStr; // Return as-is if format is unknown
+    }
+
     collectFormData() {
         const formData = {
             // Event title
             title: document.getElementById('eventTitle')?.textContent?.trim() ||
                    document.getElementById('eventTitle')?.value?.trim() || '',
 
-            // Date and time
-            startDate: document.getElementById('eventDate')?.value || '',
+            // Date and time - convert MM/DD/YYYY to YYYY-MM-DD format
+            startDate: this.convertDateFormat(document.getElementById('eventDate')?.value || ''),
             startTime: document.getElementById('startTime')?.value || '',
             endTime: document.getElementById('endTime')?.value || '',
 
@@ -2836,6 +2853,161 @@ window.addEventListener('unhandledrejection', function(event) {
 
 // Enhanced Event Builder UI Functionality
 document.addEventListener("DOMContentLoaded", () => {
+
+    // Date Picker Functionality
+    const dateDisplay = document.getElementById('eventDate');
+    const datePicker = document.getElementById('datePicker');
+    const calendar = document.getElementById('calendar');
+    const currentMonthYear = document.getElementById('currentMonthYear');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+
+    let currentDate = new Date();
+    let selectedDate = null;
+
+    function formatDate(date) {
+        return date.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric'
+        });
+    }
+
+    function updateCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        currentMonthYear.textContent = new Date(year, month).toLocaleDateString('en-US', {
+            month: 'long',
+            year: 'numeric'
+        });
+
+        // Clear calendar
+        calendar.innerHTML = '';
+
+        // Get first day of month and number of days
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+        // Add previous month's trailing days
+        for (let i = firstDay - 1; i >= 0; i--) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day other-month';
+            dayDiv.textContent = daysInPrevMonth - i;
+            calendar.appendChild(dayDiv);
+        }
+
+        // Add current month's days
+        const today = new Date();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            dayDiv.textContent = day;
+
+            const dayDate = new Date(year, month, day);
+
+            // Highlight today
+            if (dayDate.toDateString() === today.toDateString()) {
+                dayDiv.classList.add('today');
+            }
+
+            // Highlight selected date
+            if (selectedDate && dayDate.toDateString() === selectedDate.toDateString()) {
+                dayDiv.classList.add('selected');
+            }
+
+            dayDiv.addEventListener('click', () => {
+                selectedDate = new Date(year, month, day);
+                dateDisplay.value = formatDate(selectedDate);
+                datePicker.classList.remove('show');
+                updateCalendar();
+            });
+
+            calendar.appendChild(dayDiv);
+        }
+
+        // Add next month's leading days
+        const totalCells = calendar.children.length;
+        const remainingCells = 42 - totalCells; // 6 rows × 7 days
+        for (let day = 1; day <= remainingCells; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day other-month';
+            dayDiv.textContent = day;
+            calendar.appendChild(dayDiv);
+        }
+    }
+
+    // Date picker event listeners
+    if (dateDisplay && datePicker) {
+        dateDisplay.addEventListener('click', () => {
+            datePicker.classList.toggle('show');
+            updateCalendar();
+        });
+
+        prevMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar();
+        });
+
+        // Close date picker when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!dateDisplay.contains(e.target) && !datePicker.contains(e.target)) {
+                datePicker.classList.remove('show');
+            }
+        });
+    }
+
+    // Time Picker Functionality
+    function setupTimePicker(displayId, pickerId, hourId, minuteId, ampmId) {
+        const display = document.getElementById(displayId);
+        const picker = document.getElementById(pickerId);
+        const hourSelect = document.getElementById(hourId);
+        const minuteSelect = document.getElementById(minuteId);
+        const ampmSelect = document.getElementById(ampmId);
+
+        function updateTimeDisplay() {
+            if (hourSelect && minuteSelect && ampmSelect) {
+                const time = `${hourSelect.value}:${minuteSelect.value} ${ampmSelect.value}`;
+                display.value = time;
+            }
+        }
+
+        if (display && picker) {
+            display.addEventListener('click', () => {
+                picker.classList.toggle('show');
+            });
+
+            // Update display when selects change
+            [hourSelect, minuteSelect, ampmSelect].forEach(select => {
+                if (select) {
+                    select.addEventListener('change', () => {
+                        updateTimeDisplay();
+                        picker.classList.remove('show');
+                    });
+                }
+            });
+
+            // Close time picker when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!display.contains(e.target) && !picker.contains(e.target)) {
+                    picker.classList.remove('show');
+                }
+            });
+
+            // Set initial value
+            updateTimeDisplay();
+        }
+    }
+
+    // Setup both time pickers
+    setupTimePicker('startTime', 'startTimePicker', 'startHour', 'startMinute', 'startAMPM');
+    setupTimePicker('endTime', 'endTimePicker', 'endHour', 'endMinute', 'endAMPM');
 
     // Location type switching functionality
     const locationBtns = document.querySelectorAll(".location-btn");
