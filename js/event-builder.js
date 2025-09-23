@@ -2836,15 +2836,6 @@ window.addEventListener('unhandledrejection', function(event) {
 
 // Enhanced Event Builder UI Functionality
 document.addEventListener("DOMContentLoaded", () => {
-    // More options toggle functionality for date/time
-    const moreOptionsBtn = document.getElementById("more-options-btn");
-    const moreOptionsContent = document.getElementById("more-options-content");
-
-    if (moreOptionsBtn && moreOptionsContent) {
-        moreOptionsBtn.addEventListener("click", () => {
-            moreOptionsContent.classList.toggle("show");
-        });
-    }
 
     // Location type switching functionality
     const locationBtns = document.querySelectorAll(".location-btn");

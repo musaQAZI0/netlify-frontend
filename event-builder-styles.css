@@ -2645,39 +2645,6 @@ select:focus {
   stroke-width: 2;
 }
 
-/* More Options */
-.more-options-btn {
-  background: none;
-  border: none;
-  color: #3b82f6;
-  font-size: 0.875rem;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  transition: color 0.2s;
-}
-
-.more-options-btn:hover {
-  color: #2563eb;
-}
-
-.more-options-content {
-  margin-top: 0.5rem;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.more-options-content.show {
-  opacity: 1;
-  max-height: 100px;
-}
-
-.more-options-content p {
-  font-size: 0.875rem;
-  color: #6b7280;
-}
 
 /* Location Styles */
 .location-buttons {
