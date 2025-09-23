@@ -262,144 +262,159 @@
                         </div>
 
                         <!-- Date and Time Section -->
-                        <section class="form-section">
-                            <h2>Date and time</h2>
+                        <div class="datetime-section">
+                            <div class="section-header">
+                                <h2>Date and time</h2>
+                                <div class="add-button">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <line x1="12" x2="12" y1="5" y2="19"/>
+                                        <line x1="5" x2="19" y1="12" y2="12"/>
+                                    </svg>
+                                </div>
+                            </div>
 
-                            <div class="datetime-grid">
-                                <div class="input-group">
-                                    <label for="eventDate">Date</label>
-                                    <div class="input-wrapper">
-                                        <div class="date-picker-container">
-                                            <input type="text" id="eventDate" class="form-input date-display" placeholder="Select date" readonly>
-                                            <svg class="input-icon calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                                            </svg>
-                                            <div class="date-picker-dropdown" id="datePicker">
-                                                <div class="date-picker-header">
-                                                    <button type="button" class="date-nav-btn" id="prevMonth">&lt;</button>
-                                                    <span class="current-month-year" id="currentMonthYear"></span>
-                                                    <button type="button" class="date-nav-btn" id="nextMonth">&gt;</button>
-                                                </div>
-                                                <div class="date-picker-weekdays">
-                                                    <div class="weekday">S</div>
-                                                    <div class="weekday">M</div>
-                                                    <div class="weekday">T</div>
-                                                    <div class="weekday">W</div>
-                                                    <div class="weekday">T</div>
-                                                    <div class="weekday">F</div>
-                                                    <div class="weekday">S</div>
-                                                </div>
-                                                <div class="date-picker-calendar" id="calendar"></div>
+                            <div class="datetime-form">
+                                <!-- Date Picker -->
+                                <div class="date-input-group">
+                                    <label>Event date</label>
+                                    <div class="date-input-container" onclick="toggleDatePicker()">
+                                        <input type="text" id="dateDisplay" readonly placeholder="Select date" value="Mon, Sep 1, 2025">
+                                        <svg class="calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                            <line x1="16" y1="2" x2="16" y2="6"/>
+                                            <line x1="8" y1="2" x2="8" y2="6"/>
+                                            <line x1="3" y1="10" x2="21" y2="10"/>
+                                        </svg>
+                                    </div>
+
+                                    <div class="date-picker-dropdown" id="datePicker" style="display: none;">
+                                        <div class="date-picker-header">
+                                            <button type="button" class="nav-button" onclick="previousMonth()">&lt;</button>
+                                            <h3 id="monthYear">September 2025</h3>
+                                            <button type="button" class="nav-button" onclick="nextMonth()">&gt;</button>
+                                        </div>
+
+                                        <div class="calendar-grid">
+                                            <div class="weekday-header">
+                                                <div class="weekday">S</div>
+                                                <div class="weekday">M</div>
+                                                <div class="weekday">T</div>
+                                                <div class="weekday">W</div>
+                                                <div class="weekday">T</div>
+                                                <div class="weekday">F</div>
+                                                <div class="weekday">S</div>
+                                            </div>
+                                            <div class="calendar-dates" id="calendarDates">
+                                                <!-- Calendar dates will be populated by JavaScript -->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="input-group">
-                                    <label for="startTime">Start time</label>
-                                    <div class="input-wrapper">
-                                        <div class="time-picker-container">
-                                            <input type="text" id="startTime" class="form-input time-display" placeholder="Select time" readonly>
-                                            <svg class="input-icon clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <circle cx="12" cy="12" r="10"></circle>
-                                                <polyline points="12,6 12,12 16,14"></polyline>
+                                <!-- Time Inputs -->
+                                <div class="time-inputs-row">
+                                    <!-- Start Time -->
+                                    <div class="time-input-group">
+                                        <label>Start time</label>
+                                        <div class="time-input-container" onclick="toggleStartTimePicker()">
+                                            <input type="text" id="startTimeDisplay" readonly placeholder="10:00 AM" value="10:00 AM">
+                                            <svg class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <polyline points="12,6 12,12 16,14"/>
                                             </svg>
-                                            <div class="time-picker-dropdown" id="startTimePicker">
-                                                <div class="time-selectors">
-                                                    <div class="time-column">
-                                                        <label>Hour</label>
-                                                        <select class="time-select hour-select" id="startHour">
-                                                            <option value="1">1</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                            <option value="6">6</option>
-                                                            <option value="7">7</option>
-                                                            <option value="8">8</option>
-                                                            <option value="9">9</option>
-                                                            <option value="10" selected>10</option>
-                                                            <option value="11">11</option>
-                                                            <option value="12">12</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="time-column">
-                                                        <label>Minute</label>
-                                                        <select class="time-select minute-select" id="startMinute">
-                                                            <option value="00" selected>00</option>
-                                                            <option value="15">15</option>
-                                                            <option value="30">30</option>
-                                                            <option value="45">45</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="time-column">
-                                                        <label>AM/PM</label>
-                                                        <select class="time-select ampm-select" id="startAMPM">
-                                                            <option value="AM" selected>AM</option>
-                                                            <option value="PM">PM</option>
-                                                        </select>
-                                                    </div>
+                                        </div>
+
+                                        <div class="time-picker-dropdown" id="startTimePicker" style="display: none;">
+                                            <div class="time-selectors">
+                                                <div class="time-column">
+                                                    <label>Hour</label>
+                                                    <select id="startHour" onchange="updateStartTime()">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10" selected>10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                    </select>
+                                                </div>
+                                                <div class="time-column">
+                                                    <label>Minute</label>
+                                                    <select id="startMinute" onchange="updateStartTime()">
+                                                        <option value="00" selected>00</option>
+                                                        <option value="15">15</option>
+                                                        <option value="30">30</option>
+                                                        <option value="45">45</option>
+                                                    </select>
+                                                </div>
+                                                <div class="time-column">
+                                                    <label>AM/PM</label>
+                                                    <select id="startAmPm" onchange="updateStartTime()">
+                                                        <option value="AM" selected>AM</option>
+                                                        <option value="PM">PM</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="input-group">
-                                    <label for="endTime">End time</label>
-                                    <div class="input-wrapper">
-                                        <div class="time-picker-container">
-                                            <input type="text" id="endTime" class="form-input time-display" placeholder="Select time" readonly>
-                                            <svg class="input-icon clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <circle cx="12" cy="12" r="10"></circle>
-                                                <polyline points="12,6 12,12 16,14"></polyline>
+                                    <!-- End Time -->
+                                    <div class="time-input-group">
+                                        <label>End time</label>
+                                        <div class="time-input-container" onclick="toggleEndTimePicker()">
+                                            <input type="text" id="endTimeDisplay" readonly placeholder="12:00 PM" value="12:00 PM">
+                                            <svg class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <polyline points="12,6 12,12 16,14"/>
                                             </svg>
-                                            <div class="time-picker-dropdown" id="endTimePicker">
-                                                <div class="time-selectors">
-                                                    <div class="time-column">
-                                                        <label>Hour</label>
-                                                        <select class="time-select hour-select" id="endHour">
-                                                            <option value="1">1</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                            <option value="6">6</option>
-                                                            <option value="7">7</option>
-                                                            <option value="8">8</option>
-                                                            <option value="9">9</option>
-                                                            <option value="10">10</option>
-                                                            <option value="11">11</option>
-                                                            <option value="12" selected>12</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="time-column">
-                                                        <label>Minute</label>
-                                                        <select class="time-select minute-select" id="endMinute">
-                                                            <option value="00" selected>00</option>
-                                                            <option value="15">15</option>
-                                                            <option value="30">30</option>
-                                                            <option value="45">45</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="time-column">
-                                                        <label>AM/PM</label>
-                                                        <select class="time-select ampm-select" id="endAMPM">
-                                                            <option value="AM">AM</option>
-                                                            <option value="PM" selected>PM</option>
-                                                        </select>
-                                                    </div>
+                                        </div>
+
+                                        <div class="time-picker-dropdown" id="endTimePicker" style="display: none;">
+                                            <div class="time-selectors">
+                                                <div class="time-column">
+                                                    <label>Hour</label>
+                                                    <select id="endHour" onchange="updateEndTime()">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12" selected>12</option>
+                                                    </select>
+                                                </div>
+                                                <div class="time-column">
+                                                    <label>Minute</label>
+                                                    <select id="endMinute" onchange="updateEndTime()">
+                                                        <option value="00" selected>00</option>
+                                                        <option value="15">15</option>
+                                                        <option value="30">30</option>
+                                                        <option value="45">45</option>
+                                                    </select>
+                                                </div>
+                                                <div class="time-column">
+                                                    <label>AM/PM</label>
+                                                    <select id="endAmPm" onchange="updateEndTime()">
+                                                        <option value="AM">AM</option>
+                                                        <option value="PM" selected>PM</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                        </section>
+                        </div>
 
                         <!-- Location Section -->
                         <section class="form-section">

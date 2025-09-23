@@ -3458,3 +3458,247 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize form state
     console.log("Enhanced event form functionality initialized successfully");
 });
+// Enhanced Date/Time Picker Functions for New Design
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let selectedDate = null;
+
+// Toggle date picker dropdown
+function toggleDatePicker() {
+    const datePicker = document.getElementById("datePicker");
+    if (datePicker.style.display === "block") {
+        datePicker.style.display = "none";
+    } else {
+        datePicker.style.display = "block";
+        generateCalendar();
+    }
+}
+
+// Toggle start time picker dropdown
+function toggleStartTimePicker() {
+    const timePicker = document.getElementById("startTimePicker");
+    if (timePicker.style.display === "block") {
+        timePicker.style.display = "none";
+    } else {
+        timePicker.style.display = "block";
+    }
+}
+
+// Toggle end time picker dropdown
+function toggleEndTimePicker() {
+    const timePicker = document.getElementById("endTimePicker");
+    if (timePicker.style.display === "block") {
+        timePicker.style.display = "none";
+    } else {
+        timePicker.style.display = "block";
+    }
+}
+
+// Navigate to previous month
+function previousMonth() {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    generateCalendar();
+}
+
+// Navigate to next month
+function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    generateCalendar();
+}
+
+// Generate calendar for current month/year
+function generateCalendar() {
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    const monthYear = document.getElementById("monthYear");
+    const calendarDates = document.getElementById("calendarDates");
+
+    if (!monthYear || !calendarDates) return;
+
+    monthYear.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+    // Clear previous dates
+    calendarDates.innerHTML = "";
+
+    // Get first day of month and number of days
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const today = new Date();
+
+    // Add empty cells for days before month starts
+    for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement("div");
+        emptyCell.className = "calendar-date other-month";
+        const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+        const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+        const prevMonthDays = new Date(prevYear, prevMonth + 1, 0).getDate();
+        const dayNum = prevMonthDays - firstDay + i + 1;
+        emptyCell.textContent = dayNum;
+        calendarDates.appendChild(emptyCell);
+    }
+
+    // Add days of current month
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateCell = document.createElement("div");
+        dateCell.className = "calendar-date";
+        dateCell.textContent = day;
+
+        const cellDate = new Date(currentYear, currentMonth, day);
+
+        // Check if today
+        if (cellDate.toDateString() === today.toDateString()) {
+            dateCell.classList.add("today");
+        }
+
+        // Check if selected
+        if (selectedDate && cellDate.toDateString() === selectedDate.toDateString()) {
+            dateCell.classList.add("selected");
+        }
+
+        // Add click handler
+        dateCell.addEventListener("click", () => selectDate(day));
+
+        calendarDates.appendChild(dateCell);
+    }
+
+    // Add empty cells for remaining days
+    const totalCells = calendarDates.children.length;
+    const remainingCells = 42 - totalCells; // 6 rows * 7 days
+    for (let i = 1; i <= remainingCells && i <= 14; i++) {
+        const emptyCell = document.createElement("div");
+        emptyCell.className = "calendar-date other-month";
+        emptyCell.textContent = i;
+        calendarDates.appendChild(emptyCell);
+    }
+}
+
+// Select a date
+function selectDate(day) {
+    selectedDate = new Date(currentYear, currentMonth, day);
+
+    const dateDisplay = document.getElementById("dateDisplay");
+    if (dateDisplay) {
+        const options = { weekday: "short", month: "short", day: "numeric", year: "numeric" };
+        dateDisplay.value = selectedDate.toLocaleDateString("en-US", options);
+    }
+
+    // Close date picker
+    const datePicker = document.getElementById("datePicker");
+    if (datePicker) {
+        datePicker.style.display = "none";
+    }
+
+    // Update sidebar
+    updateSidebarDateTime();
+
+    // Regenerate calendar to show selected date
+    generateCalendar();
+}
+
+// Update start time display
+function updateStartTime() {
+    const hour = document.getElementById("startHour").value;
+    const minute = document.getElementById("startMinute").value;
+    const ampm = document.getElementById("startAmPm").value;
+
+    const timeDisplay = document.getElementById("startTimeDisplay");
+    if (timeDisplay) {
+        timeDisplay.value = `${hour}:${minute} ${ampm}`;
+    }
+
+    updateSidebarDateTime();
+}
+
+// Update end time display
+function updateEndTime() {
+    const hour = document.getElementById("endHour").value;
+    const minute = document.getElementById("endMinute").value;
+    const ampm = document.getElementById("endAmPm").value;
+
+    const timeDisplay = document.getElementById("endTimeDisplay");
+    if (timeDisplay) {
+        timeDisplay.value = `${hour}:${minute} ${ampm}`;
+    }
+}
+
+// Update sidebar date/time display
+function updateSidebarDateTime() {
+    const dateDisplay = document.getElementById("dateDisplay");
+    const startTimeDisplay = document.getElementById("startTimeDisplay");
+    const sidebarDateTime = document.getElementById("eventDateTimeSidebar");
+
+    if (dateDisplay && startTimeDisplay && sidebarDateTime) {
+        const dateValue = dateDisplay.value;
+        const timeValue = startTimeDisplay.value;
+
+        if (dateValue && timeValue) {
+            sidebarDateTime.textContent = `${dateValue}, ${timeValue}`;
+        }
+    }
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener("click", function(event) {
+    const datePicker = document.getElementById("datePicker");
+    const startTimePicker = document.getElementById("startTimePicker");
+    const endTimePicker = document.getElementById("endTimePicker");
+
+    const dateContainer = document.querySelector(".date-input-container");
+    const startTimeContainer = document.querySelector(".time-input-container:first-of-type");
+    const endTimeContainer = document.querySelector(".time-input-container:last-of-type");
+
+    // Close date picker if clicked outside
+    if (datePicker && dateContainer &&
+        !dateContainer.contains(event.target) &&
+        !datePicker.contains(event.target)) {
+        datePicker.style.display = "none";
+    }
+
+    // Close start time picker if clicked outside
+    if (startTimePicker && startTimeContainer &&
+        !startTimeContainer.contains(event.target) &&
+        !startTimePicker.contains(event.target)) {
+        startTimePicker.style.display = "none";
+    }
+
+    // Close end time picker if clicked outside
+    if (endTimePicker && endTimeContainer &&
+        !endTimeContainer.contains(event.target) &&
+        !endTimePicker.contains(event.target)) {
+        endTimePicker.style.display = "none";
+    }
+});
+
+// Initialize the enhanced date/time picker on page load
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize calendar with current date
+    const today = new Date();
+    currentMonth = today.getMonth();
+    currentYear = today.getFullYear();
+
+    // Set default date to tomorrow
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    selectedDate = tomorrow;
+
+    // Set initial display values
+    const dateDisplay = document.getElementById("dateDisplay");
+    if (dateDisplay) {
+        const options = { weekday: "short", month: "short", day: "numeric", year: "numeric" };
+        dateDisplay.value = selectedDate.toLocaleDateString("en-US", options);
+    }
+
+    // Update sidebar
+    updateSidebarDateTime();
+});
