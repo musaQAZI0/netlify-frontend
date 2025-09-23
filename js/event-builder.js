@@ -380,14 +380,61 @@ class EventBuilderAPI {
             // Additional cleanup - remove any category-related fields
             delete dataToSend.eventCategory;
 
+            // Helper function to convert AM/PM time to 24-hour format
+            function convertToMilitaryTime(timeStr) {
+                if (!timeStr) return null;
+
+                // If already in 24-hour format (contains no AM/PM), return as is
+                if (!timeStr.includes('AM') && !timeStr.includes('PM')) {
+                    return timeStr;
+                }
+
+                const timeParts = timeStr.trim().split(' ');
+                if (timeParts.length !== 2) return timeStr; // Invalid format
+
+                const [time, period] = timeParts;
+                const [hours, minutes] = time.split(':');
+                let hour = parseInt(hours);
+
+                if (period.toUpperCase() === 'PM' && hour !== 12) {
+                    hour += 12;
+                } else if (period.toUpperCase() === 'AM' && hour === 12) {
+                    hour = 0;
+                }
+
+                return `${hour.toString().padStart(2, '0')}:${minutes}`;
+            }
+
             // Transform date/time data to match backend schema
             if (dataToSend.startDateTime || (dataToSend.startDate && dataToSend.startTime)) {
-                const startDateTime = dataToSend.startDateTime || `${dataToSend.startDate}T${dataToSend.startTime}`;
-                const endDateTime = dataToSend.endDateTime || `${dataToSend.startDate}T${dataToSend.endTime || '23:59'}`;
+                // Convert AM/PM times to 24-hour format
+                const convertedStartTime = convertToMilitaryTime(dataToSend.startTime);
+                const convertedEndTime = convertToMilitaryTime(dataToSend.endTime);
+
+                const startDateTime = dataToSend.startDateTime || `${dataToSend.startDate}T${convertedStartTime}`;
+
+                // Ensure endTime exists, default to 1 hour after start time
+                let endTime = convertedEndTime;
+                if (!endTime && convertedStartTime) {
+                    // Parse start time and add 1 hour
+                    const [hours, minutes] = convertedStartTime.split(':');
+                    const endHour = parseInt(hours) + 1;
+                    endTime = `${endHour.toString().padStart(2, '0')}:${minutes}`;
+                }
+                const endDateTime = dataToSend.endDateTime || `${dataToSend.startDate}T${endTime || '23:59'}`;
+
+                const startDate = new Date(startDateTime);
+                const endDate = new Date(endDateTime);
+
+                // Validate dates are not invalid
+                if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                    console.error('Invalid date/time:', { startDateTime, endDateTime, startDate, endDate });
+                    throw new Error('Invalid date/time values provided');
+                }
 
                 dataToSend.dateTime = {
-                    start: new Date(startDateTime),
-                    end: new Date(endDateTime)
+                    start: startDate,
+                    end: endDate
                 };
 
                 // Remove old date/time fields
@@ -399,49 +446,41 @@ class EventBuilderAPI {
                 delete dataToSend.endDateTime;
             }
 
-            // Transform location data to match backend schema
-            if (dataToSend.venue || dataToSend.city || dataToSend.address || dataToSend.location) {
-                // Get location data from Google Places if available
-                const placesData = window.googlePlaces ? window.googlePlaces.getLocationData() : {};
+            // Transform location data to match backend schema - ALWAYS create location object
+            // Get location data from Google Places if available
+            const placesData = window.googlePlaces ? window.googlePlaces.getLocationData() : {};
+            const rawLocation = document.getElementById('locationInput')?.value?.trim();
 
-                dataToSend.location = {
-                    type: 'venue', // Default to venue for now
-                    venue: {
-                        name: dataToSend.venue || placesData.venue || '',
-                        address: {
-                            street: dataToSend.address || placesData.address || '',
-                            city: dataToSend.city || placesData.city || '',
-                            state: dataToSend.state || placesData.state || '',
-                            country: dataToSend.country || placesData.country || 'United States',
-                            zipCode: dataToSend.zipCode || placesData.zipCode || ''
-                        }
+            // Create location object (required by backend)
+            dataToSend.location = {
+                type: 'venue', // Default to venue type
+                venue: {
+                    name: dataToSend.venue || placesData.venue || rawLocation || 'Event Location',
+                    address: {
+                        street: dataToSend.address || placesData.address || '',
+                        city: dataToSend.city || placesData.city || '',
+                        state: dataToSend.state || placesData.state || '',
+                        country: dataToSend.country || placesData.country || 'United States',
+                        zipCode: dataToSend.zipCode || placesData.zipCode || ''
                     }
+                }
+            };
+
+            // Add coordinates if available
+            if (placesData.latitude && placesData.longitude) {
+                dataToSend.location.venue.coordinates = {
+                    latitude: placesData.latitude,
+                    longitude: placesData.longitude
                 };
-
-                // Add coordinates if available
-                if (placesData.latitude && placesData.longitude) {
-                    dataToSend.location.venue.coordinates = {
-                        latitude: placesData.latitude,
-                        longitude: placesData.longitude
-                    };
-                }
-
-                // Remove old location fields
-                delete dataToSend.venue;
-                delete dataToSend.city;
-                delete dataToSend.address;
-                delete dataToSend.state;
-                delete dataToSend.country;
-                delete dataToSend.zipCode;
-
-                // If we only have the raw location string and no structured data, use it as venue name
-                if (!dataToSend.location.venue.name && !dataToSend.location.venue.address.city) {
-                    const rawLocation = document.getElementById('locationInput')?.value?.trim();
-                    if (rawLocation) {
-                        dataToSend.location.venue.name = rawLocation;
-                    }
-                }
             }
+
+            // Remove old location fields (always clean up)
+            delete dataToSend.venue;
+            delete dataToSend.city;
+            delete dataToSend.address;
+            delete dataToSend.state;
+            delete dataToSend.country;
+            delete dataToSend.zipCode;
 
             // Remove undefined/null values
             Object.keys(dataToSend).forEach(key => {
