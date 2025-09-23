@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="event-editor-styles.css">
     <script src="js/data-manager.js"></script>
+    <script src="js/google-places.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiq2Anse5vuEDCI3oKqD2iezo1MfoOiVk&libraries=places&loading=async&callback=initGooglePlaces" async defer></script>
 </head>
 <body>
     <div class="editor-container">
@@ -192,7 +194,7 @@
                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                                     <circle cx="12" cy="10" r="3"/>
                                 </svg>
-                                <input type="text" class="input-field" id="eventLocation" placeholder="Enter event location" oninput="saveEventData()">
+                                <input type="text" class="input-field" id="locationInput" placeholder="Enter event location" oninput="saveEventData()">
                             </div>
                         </div>
                     </div>
@@ -289,6 +291,11 @@
 
             loadEventData();
             loadUserData();
+
+            // Initialize Google Places if API is already loaded
+            if (window.google && window.google.maps && window.google.maps.places) {
+                initGooglePlaces();
+            }
         });
 
         function loadUserData() {
@@ -339,7 +346,7 @@
             }
             
             // Location
-            document.getElementById('eventLocation').value = eventData.location || '';
+            document.getElementById('locationInput').value = eventData.location || '';
             
             // Status
             document.getElementById('eventStatus').value = eventData.status || 'draft';
@@ -382,7 +389,7 @@
                     date: document.getElementById('eventDate').value,
                     startTime: document.getElementById('startTime').value,
                     endTime: document.getElementById('endTime').value,
-                    location: document.getElementById('eventLocation').value.trim(),
+                    location: document.getElementById('locationInput').value.trim(),
                     status: document.getElementById('eventStatus').value,
                     overviewDescription: document.getElementById('overviewDescription').value.trim(),
                     whyAttend: document.getElementById('whyAttend').value.trim(),
@@ -508,6 +515,16 @@
         // Save on page unload
         window.addEventListener('beforeunload', function() {
             saveEventData();
+        });
+
+        // Fallback initialization if Google Places fails
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (!window.google && window.googlePlaces) {
+                    console.log('Google Maps API not available, using manual location entry only');
+                    window.googlePlaces.setupManualLocationEntry();
+                }
+            }, 3000);
         });
     </script>
 </body>
