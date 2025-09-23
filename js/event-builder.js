@@ -380,6 +380,69 @@ class EventBuilderAPI {
             // Additional cleanup - remove any category-related fields
             delete dataToSend.eventCategory;
 
+            // Transform date/time data to match backend schema
+            if (dataToSend.startDateTime || (dataToSend.startDate && dataToSend.startTime)) {
+                const startDateTime = dataToSend.startDateTime || `${dataToSend.startDate}T${dataToSend.startTime}`;
+                const endDateTime = dataToSend.endDateTime || `${dataToSend.startDate}T${dataToSend.endTime || '23:59'}`;
+
+                dataToSend.dateTime = {
+                    start: new Date(startDateTime),
+                    end: new Date(endDateTime)
+                };
+
+                // Remove old date/time fields
+                delete dataToSend.startDate;
+                delete dataToSend.endDate;
+                delete dataToSend.startTime;
+                delete dataToSend.endTime;
+                delete dataToSend.startDateTime;
+                delete dataToSend.endDateTime;
+            }
+
+            // Transform location data to match backend schema
+            if (dataToSend.venue || dataToSend.city || dataToSend.address || dataToSend.location) {
+                // Get location data from Google Places if available
+                const placesData = window.googlePlaces ? window.googlePlaces.getLocationData() : {};
+
+                dataToSend.location = {
+                    type: 'venue', // Default to venue for now
+                    venue: {
+                        name: dataToSend.venue || placesData.venue || '',
+                        address: {
+                            street: dataToSend.address || placesData.address || '',
+                            city: dataToSend.city || placesData.city || '',
+                            state: dataToSend.state || placesData.state || '',
+                            country: dataToSend.country || placesData.country || 'United States',
+                            zipCode: dataToSend.zipCode || placesData.zipCode || ''
+                        }
+                    }
+                };
+
+                // Add coordinates if available
+                if (placesData.latitude && placesData.longitude) {
+                    dataToSend.location.venue.coordinates = {
+                        latitude: placesData.latitude,
+                        longitude: placesData.longitude
+                    };
+                }
+
+                // Remove old location fields
+                delete dataToSend.venue;
+                delete dataToSend.city;
+                delete dataToSend.address;
+                delete dataToSend.state;
+                delete dataToSend.country;
+                delete dataToSend.zipCode;
+
+                // If we only have the raw location string and no structured data, use it as venue name
+                if (!dataToSend.location.venue.name && !dataToSend.location.venue.address.city) {
+                    const rawLocation = document.getElementById('locationInput')?.value?.trim();
+                    if (rawLocation) {
+                        dataToSend.location.venue.name = rawLocation;
+                    }
+                }
+            }
+
             // Remove undefined/null values
             Object.keys(dataToSend).forEach(key => {
                 if (dataToSend[key] === undefined || dataToSend[key] === null) {
@@ -685,6 +748,7 @@ class EventBuilderAPI {
             endTime: document.getElementById('endTime')?.value || '',
 
             // Location data - use API extraction methods
+            location: document.getElementById('locationInput')?.value?.trim() || '',
             venue: this.extractVenueFromSources(),
             address: this.getAddressFromSources(),
             city: this.extractCityFromSources(),
