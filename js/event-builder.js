@@ -2834,7 +2834,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Enhanced location input with validation
-    const locationInput = document.getElementById("location");
+    const locationInput = document.getElementById("locationInput");
     if (locationInput) {
         locationInput.addEventListener("input", function () {
             const value = this.value.toLowerCase();
@@ -2948,7 +2948,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 startTime: document.getElementById("startTime")?.value || '',
                 endTime: document.getElementById("endTime")?.value || '',
                 locationType: document.querySelector(".location-btn.active")?.getAttribute("data-type") || '',
-                location: document.getElementById("location")?.value || '',
+                location: document.getElementById("locationInput")?.value || '',
             };
 
             console.log("Form submitted with data:", formData);
