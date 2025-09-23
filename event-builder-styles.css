@@ -2853,12 +2853,16 @@ select:focus {
 }
 
 @media (max-width: 768px) {
-    .inputs-row {
-        flex-direction: column;
-    }
-
     .date-time-section {
         padding: 20px;
+    }
+
+    .inputs-row {
+        gap: 10px;
+    }
+
+    .input-group {
+        min-width: 120px;
     }
 }
 
