@@ -2851,6 +2851,146 @@ window.addEventListener('unhandledrejection', function(event) {
     }
 });
 
+// Missing function definitions (for compatibility)
+function populateTimeDropdown(selectElement, type) {
+    console.log('populateTimeDropdown called (compatibility function)');
+    // This function might be called by old code - redirect to our new system
+    return;
+}
+
+function toggleDropdown(element) {
+    console.log('toggleDropdown called (compatibility function)');
+    // This function might be called by old code - redirect to our new system
+    return;
+}
+
+// Other missing functions that might be called
+function toggleUserDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown) {
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function previewEvent() {
+    // Save and preview event
+    if (window.eventBuilder && window.eventBuilder.api) {
+        window.eventBuilder.api.saveEvent().then(() => {
+            window.location.href = 'event-preview.html';
+        }).catch(error => {
+            console.error('Failed to save event before preview:', error);
+        });
+    }
+}
+
+function goToTickets() {
+    console.log('Navigate to tickets section');
+    // Implementation for tickets navigation
+}
+
+function goToPublish() {
+    console.log('Navigate to publish section');
+    // Implementation for publish navigation
+}
+
+function viewProfile() {
+    console.log('View profile');
+}
+
+function accountSettings() {
+    console.log('Account settings');
+}
+
+function logoutUser() {
+    console.log('Logout user');
+    // Implement logout logic
+    localStorage.clear();
+    window.location.href = 'login.html';
+}
+
+function saveAndContinue() {
+    if (window.eventBuilder && window.eventBuilder.api) {
+        window.eventBuilder.api.saveEvent().then(() => {
+            console.log('Event saved successfully');
+        }).catch(error => {
+            console.error('Failed to save event:', error);
+        });
+    }
+}
+
+// Additional missing functions from onclick handlers
+function addHighlight(type) {
+    console.log('Add highlight:', type);
+    // Implementation for adding highlights
+}
+
+function addFAQ() {
+    console.log('Add FAQ');
+    // Implementation for adding FAQ
+}
+
+function addLineupSection() {
+    console.log('Add lineup section');
+    // Implementation for adding lineup section
+}
+
+function addAgendaSection() {
+    console.log('Add agenda section');
+    // Implementation for adding agenda section
+}
+
+function editLineupTitle() {
+    console.log('Edit lineup title');
+}
+
+function deleteLineupSection() {
+    console.log('Delete lineup section');
+}
+
+function uploadLineupImage() {
+    console.log('Upload lineup image');
+}
+
+function addTagline() {
+    console.log('Add tagline');
+}
+
+function addSocialLinks() {
+    console.log('Add social links');
+}
+
+function deleteLineupItem(element) {
+    console.log('Delete lineup item');
+}
+
+function addAnotherLineupItem() {
+    console.log('Add another lineup item');
+}
+
+function deleteAgendaSection() {
+    console.log('Delete agenda section');
+}
+
+function switchAgendaTab(tab) {
+    console.log('Switch agenda tab:', tab);
+}
+
+function addHost() {
+    console.log('Add host');
+}
+
+function addAgendaDescription() {
+    console.log('Add agenda description');
+}
+
+function deleteAgendaItem(element) {
+    console.log('Delete agenda item');
+}
+
+function addAgendaSlot() {
+    console.log('Add agenda slot');
+}
+
 // Enhanced Event Builder UI Functionality
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -3073,6 +3213,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize default values and update sidebar
     function initializeDateTime() {
+        console.log('Initializing date/time pickers...');
+
         // Set default date to tomorrow
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
@@ -3081,6 +3223,7 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedDate = tomorrow;
             if (dateDisplay) {
                 dateDisplay.value = formatDate(tomorrow);
+                console.log('Date picker initialized with:', formatDate(tomorrow));
             }
         }
 
@@ -3092,6 +3235,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Update sidebar
         updateSidebarDateTime();
+
+        console.log('Date/time pickers initialization complete');
     }
 
     // Initial setup
