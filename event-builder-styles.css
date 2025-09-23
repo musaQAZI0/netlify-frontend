@@ -2753,6 +2753,17 @@ select:focus {
   font-weight: 600;
 }
 
+.calendar-day.selected.today {
+  background-color: #3b82f6;
+  color: white;
+}
+
+/* Add a cursor pointer to readonly inputs */
+.date-display[readonly], .time-display[readonly] {
+  cursor: pointer;
+  background-color: white;
+}
+
 /* Time Picker Styles */
 .time-picker-container {
   position: relative;

@@ -2922,6 +2922,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 dateDisplay.value = formatDate(selectedDate);
                 datePicker.classList.remove('show');
                 updateCalendar();
+                // Trigger change event for form validation and sidebar update
+                dateDisplay.dispatchEvent(new Event('change', { bubbles: true }));
             });
 
             calendar.appendChild(dayDiv);
@@ -2939,18 +2941,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Date picker event listeners
-    if (dateDisplay && datePicker) {
-        dateDisplay.addEventListener('click', () => {
+    if (dateDisplay && datePicker && prevMonthBtn && nextMonthBtn) {
+
+        dateDisplay.addEventListener('click', (e) => {
+            e.stopPropagation();
             datePicker.classList.toggle('show');
             updateCalendar();
         });
 
-        prevMonthBtn.addEventListener('click', () => {
+        prevMonthBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             currentDate.setMonth(currentDate.getMonth() - 1);
             updateCalendar();
         });
 
-        nextMonthBtn.addEventListener('click', () => {
+        nextMonthBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             currentDate.setMonth(currentDate.getMonth() + 1);
             updateCalendar();
         });
@@ -2961,10 +2967,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 datePicker.classList.remove('show');
             }
         });
+
+        // Prevent dropdown from closing when clicking inside
+        datePicker.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     }
 
     // Time Picker Functionality
-    function setupTimePicker(displayId, pickerId, hourId, minuteId, ampmId) {
+    function setupTimePicker(displayId, pickerId, hourId, minuteId, ampmId, defaultHour = '10', defaultMinute = '00', defaultAMPM = 'AM') {
         const display = document.getElementById(displayId);
         const picker = document.getElementById(pickerId);
         const hourSelect = document.getElementById(hourId);
@@ -2975,11 +2986,19 @@ document.addEventListener("DOMContentLoaded", () => {
             if (hourSelect && minuteSelect && ampmSelect) {
                 const time = `${hourSelect.value}:${minuteSelect.value} ${ampmSelect.value}`;
                 display.value = time;
+                // Trigger change event for form validation
+                display.dispatchEvent(new Event('change', { bubbles: true }));
             }
         }
 
-        if (display && picker) {
-            display.addEventListener('click', () => {
+        if (display && picker && hourSelect && minuteSelect && ampmSelect) {
+            // Set default values
+            hourSelect.value = defaultHour;
+            minuteSelect.value = defaultMinute;
+            ampmSelect.value = defaultAMPM;
+
+            display.addEventListener('click', (e) => {
+                e.stopPropagation();
                 picker.classList.toggle('show');
             });
 
@@ -2988,7 +3007,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (select) {
                     select.addEventListener('change', () => {
                         updateTimeDisplay();
-                        picker.classList.remove('show');
+                        // Keep picker open for multiple selections
+                        // picker.classList.remove('show');
                     });
                 }
             });
@@ -3000,14 +3020,82 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
+            // Prevent dropdown from closing when clicking inside
+            picker.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
             // Set initial value
             updateTimeDisplay();
         }
     }
 
-    // Setup both time pickers
-    setupTimePicker('startTime', 'startTimePicker', 'startHour', 'startMinute', 'startAMPM');
-    setupTimePicker('endTime', 'endTimePicker', 'endHour', 'endMinute', 'endAMPM');
+    // Function to update sidebar datetime display
+    function updateSidebarDateTime() {
+        const eventDate = document.getElementById('eventDate')?.value;
+        const startTime = document.getElementById('startTime')?.value;
+        const sidebarElement = document.getElementById('eventDateTimeSidebar');
+
+        if (eventDate && startTime && sidebarElement) {
+            try {
+                // Convert MM/DD/YYYY to a readable format
+                const [month, day, year] = eventDate.split('/');
+                const dateObj = new Date(year, month - 1, day);
+
+                const dateStr = dateObj.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                sidebarElement.textContent = `${dateStr}, ${startTime}`;
+            } catch (error) {
+                console.log('Error updating sidebar datetime:', error);
+            }
+        }
+    }
+
+    // Setup both time pickers with default values
+    setupTimePicker('startTime', 'startTimePicker', 'startHour', 'startMinute', 'startAMPM', '10', '00', 'AM');
+    setupTimePicker('endTime', 'endTimePicker', 'endHour', 'endMinute', 'endAMPM', '12', '00', 'PM');
+
+    // Add event listeners to update sidebar when date/time changes
+    const eventDateInput = document.getElementById('eventDate');
+    const startTimeInput = document.getElementById('startTime');
+
+    if (eventDateInput) {
+        eventDateInput.addEventListener('change', updateSidebarDateTime);
+    }
+    if (startTimeInput) {
+        startTimeInput.addEventListener('change', updateSidebarDateTime);
+    }
+
+    // Initialize default values and update sidebar
+    function initializeDateTime() {
+        // Set default date to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        if (!selectedDate) {
+            selectedDate = tomorrow;
+            if (dateDisplay) {
+                dateDisplay.value = formatDate(tomorrow);
+            }
+        }
+
+        // Update calendar to show the correct month
+        if (selectedDate) {
+            currentDate = new Date(selectedDate);
+            updateCalendar();
+        }
+
+        // Update sidebar
+        updateSidebarDateTime();
+    }
+
+    // Initial setup
+    setTimeout(initializeDateTime, 100);
 
     // Location type switching functionality
     const locationBtns = document.querySelectorAll(".location-btn");
