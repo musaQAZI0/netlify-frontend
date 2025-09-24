@@ -221,7 +221,6 @@ class EventBuilderAPI {
             enabled: true,
             schedules: [{
                 title: 'Agenda',
-                date: new Date(),
                 items
             }]
         };
@@ -273,21 +272,6 @@ class EventBuilderAPI {
             errors.push('Event description must be at least 10 characters long');
         }
 
-        if (!formData.startDate) {
-            errors.push('Event date is required');
-        }
-
-
-        // Date validation
-        if (formData.startDate) {
-            const eventDate = new Date(formData.startDate);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (eventDate < today) {
-                errors.push('Event date cannot be in the past');
-            }
-        }
 
 
         // Location validation - check all possible sources
@@ -683,23 +667,6 @@ class EventBuilderAPI {
         return '';
     }
 
-    // Collect form data from the page (API class version)
-    convertDateFormat(dateStr) {
-        if (!dateStr) return '';
-
-        // Check if it's already in YYYY-MM-DD format
-        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
-            return dateStr;
-        }
-
-        // Convert MM/DD/YYYY to YYYY-MM-DD
-        if (dateStr.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
-            const [month, day, year] = dateStr.split('/');
-            return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-        }
-
-        return dateStr; // Return as-is if format is unknown
-    }
 
     collectFormData() {
         const formData = {
@@ -707,10 +674,10 @@ class EventBuilderAPI {
             title: document.getElementById('eventTitle')?.textContent?.trim() ||
                    document.getElementById('eventTitle')?.value?.trim() || '',
 
-            // Date and time - convert MM/DD/YYYY to YYYY-MM-DD format
-            startDate: this.convertDateFormat(document.getElementById('eventDate')?.value || ''),
-            startTime: document.getElementById('startTime')?.value || '',
-            endTime: document.getElementById('endTime')?.value || '',
+            // Date and time
+            eventDate: document.getElementById('eventDate')?.value?.trim() || '',
+            startTime: document.getElementById('startTime')?.value?.trim() || '',
+            endTime: document.getElementById('endTime')?.value?.trim() || '',
 
             // Location data - use API extraction methods
             location: document.getElementById('locationInput')?.value?.trim() || '',
@@ -762,14 +729,6 @@ class EventBuilderAPI {
             countryName: document.getElementById('countryName')?.value
         });
 
-        // Combine date and time for proper datetime objects
-        if (formData.startDate && formData.startTime) {
-            formData.startDateTime = `${formData.startDate}T${formData.startTime}`;
-        }
-
-        if (formData.startDate && formData.endTime) {
-            formData.endDateTime = `${formData.startDate}T${formData.endTime}`;
-        }
 
         return formData;
     }
@@ -1062,12 +1021,6 @@ class EventBuilder {
     }
 
     initializeNewEvent() {
-        // Set default dates
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        
-        this.api.currentEventData.startDate = tomorrow.toISOString().split('T')[0];
-        this.api.currentEventData.endDate = tomorrow.toISOString().split('T')[0];
         
         this.populateFields();
         console.log('New event initialized');
@@ -1098,17 +1051,6 @@ class EventBuilder {
             this.setFieldValue('locationInput', `${data.venue ? data.venue + ', ' : ''}${data.city}, ${data.state}`);
         }
         
-        // Set date fields
-        this.setFieldValue('eventDate', data.startDate);
-        
-        // Extract time from full date if available
-        if (data.startDate) {
-            const startDate = new Date(data.startDate + 'T10:00:00'); // Default 10:00 AM
-            const endDate = new Date(data.endDate || data.startDate + 'T12:00:00'); // Default 12:00 PM
-            
-            this.setFieldValue('startTime', this.formatTimeForInput(startDate));
-            this.setFieldValue('endTime', this.formatTimeForInput(endDate));
-        }
         
         // Handle image
         if (data.imageUrl) {
@@ -1135,9 +1077,6 @@ class EventBuilder {
         }
     }
 
-    formatTimeForInput(date) {
-        return date.toTimeString().substring(0, 5); // HH:MM format
-    }
 
     displayImage(imageUrl) {
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
@@ -1164,30 +1103,6 @@ class EventBuilder {
             titleEl.textContent = data.title || 'Event Title';
         }
         
-        // Update date/time
-        if (data.startDate) {
-            const date = new Date(data.startDate);
-            const timeStr = this.formatDisplayTime(date);
-            const dateStr = date.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric',
-                year: 'numeric'
-            });
-            
-            const dateTimeEl = document.getElementById('eventDateTimeSidebar');
-            if (dateTimeEl) {
-                dateTimeEl.textContent = `${dateStr}, ${timeStr}`;
-            }
-        }
-    }
-
-    formatDisplayTime(date) {
-        return date.toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit',
-            hour12: true
-        });
     }
 
     setupEventHandlers() {
@@ -1223,18 +1138,6 @@ class EventBuilder {
         }
 
 
-        // Date inputs
-        const dateInputs = ['eventDate', 'startTime', 'endTime'];
-        dateInputs.forEach(inputId => {
-            const input = document.getElementById(inputId);
-            if (input) {
-                input.addEventListener('change', () => {
-                    this.updateDateTimeData();
-                    this.updateSidebar();
-                    this.scheduleAutoSave();
-                });
-            }
-        });
     }
 
     setupLocationEventHandlers() {
@@ -1478,16 +1381,6 @@ class EventBuilder {
         return this.api?.currentEventData?.zipCode || '';
     }
 
-    updateDateTimeData() {
-        const eventDate = document.getElementById('eventDate')?.value;
-        const startTime = document.getElementById('startTime')?.value || '10:00';
-        const endTime = document.getElementById('endTime')?.value || '12:00';
-
-        if (eventDate) {
-            this.api.currentEventData.startDate = `${eventDate}T${startTime}:00`;
-            this.api.currentEventData.endDate = `${eventDate}T${endTime}:00`;
-        }
-    }
 
     setupAutoSave() {
         // Auto-save every 30 seconds if there are changes
@@ -1644,25 +1537,16 @@ class EventBuilder {
 
         const requiredFields = [
             { field: 'title', message: 'Please enter an event title' },
-            { field: 'description', message: 'Please enter an event description' },
-            { field: 'startDate', message: 'Please select an event date' }
+            { field: 'description', message: 'Please enter an event description' }
         ];
 
         for (const { field, message } of requiredFields) {
             const value = this.api.currentEventData[field];
 
-            // Special handling for dates
-            if (field === 'startDate') {
-                if (!value || !Date.parse(value)) {
-                    this.showError(message);
-                    return false;
-                }
-            } else {
-                // For string fields
-                if (!value || (typeof value === 'string' && value.trim() === '')) {
-                    this.showError(message);
-                    return false;
-                }
+            // For string fields
+            if (!value || (typeof value === 'string' && value.trim() === '')) {
+                this.showError(message);
+                return false;
             }
         }
 
@@ -1683,18 +1567,6 @@ class EventBuilder {
             this.api.currentEventData.description = descriptionEl.value.trim();
         }
 
-        // Date and time
-        const dateEl = document.getElementById('eventDate');
-        const startTimeEl = document.getElementById('startTime');
-        const endTimeEl = document.getElementById('endTime');
-
-        if (dateEl && dateEl.value) {
-            const startTime = startTimeEl ? startTimeEl.value : '00:00';
-            const endTime = endTimeEl ? endTimeEl.value : '23:59';
-
-            this.api.currentEventData.startDate = new Date(`${dateEl.value}T${startTime}`);
-            this.api.currentEventData.endDate = new Date(`${dateEl.value}T${endTime}`);
-        }
 
         // Image - preserve existing imageUrl if it exists
         const eventImage = document.getElementById('eventImage');
@@ -2396,6 +2268,184 @@ window.addEventListener('error', (event) => {
     }
 });
 
+// Date and Time Picker Functionality
+let currentMonth = 10; // November (0-based)
+let currentYear = 2025;
+let selectedDate = 2; // November 2nd
+
+const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+function generateCalendar() {
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+    // Adjust for Monday start
+    const mondayFirstDay = (firstDay === 0) ? 6 : firstDay - 1;
+
+    let daysHTML = '';
+
+    // Previous month days
+    for (let i = mondayFirstDay - 1; i >= 0; i--) {
+        const day = daysInPrevMonth - i;
+        daysHTML += `<div class="day other-month">${day}</div>`;
+    }
+
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const isSelected = day === selectedDate;
+        const isToday = day === 2 && currentMonth === 10 && currentYear === 2025; // Nov 2, 2025
+        let classes = 'day';
+        if (isSelected) classes += ' selected';
+        if (isToday && !isSelected) classes += ' today';
+
+        daysHTML += `<div class="${classes}" onclick="selectDay(${day})">${day}</div>`;
+    }
+
+    // Next month days to fill the grid
+    const totalCells = Math.ceil((mondayFirstDay + daysInMonth) / 7) * 7;
+    const remainingCells = totalCells - mondayFirstDay - daysInMonth;
+
+    for (let day = 1; day <= remainingCells; day++) {
+        daysHTML += `<div class="day other-month">${day}</div>`;
+    }
+
+    document.getElementById('calendarDays').innerHTML = daysHTML;
+    document.getElementById('monthYear').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+}
+
+function selectDay(day) {
+    selectedDate = day;
+    generateCalendar();
+
+    // Update the date input
+    const formattedDate = `${String(currentMonth + 1).padStart(2, '0')}/${String(day).padStart(2, '0')}/${currentYear}`;
+    document.getElementById('eventDate').value = formattedDate;
+
+    // Update event data if available
+    if (window.eventBuilder && window.eventBuilder.api) {
+        window.eventBuilder.api.currentEventData.eventDate = formattedDate;
+        window.eventBuilder.scheduleAutoSave();
+    }
+}
+
+function previousMonth() {
+    if (currentMonth === 0) {
+        currentMonth = 11;
+        currentYear--;
+    } else {
+        currentMonth--;
+    }
+    generateCalendar();
+}
+
+function nextMonth() {
+    if (currentMonth === 11) {
+        currentMonth = 0;
+        currentYear++;
+    } else {
+        currentMonth++;
+    }
+    generateCalendar();
+}
+
+function generateTimeOptions(startHour = 0, endHour = 23) {
+    const times = [];
+    for (let hour = startHour; hour <= endHour; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+            const time12 = convertTo12Hour(hour, minute);
+            times.push(time12);
+        }
+    }
+    return times;
+}
+
+function convertTo12Hour(hour, minute) {
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+    const displayMinute = minute.toString().padStart(2, '0');
+    return `${displayHour}:${displayMinute} ${period}`;
+}
+
+function populateTimeDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    const times = generateTimeOptions();
+
+    dropdown.innerHTML = times.map(time =>
+        `<div class="time-option" onclick="selectTime('${dropdownId.replace('Dropdown', '')}', '${time}')">${time}</div>`
+    ).join('');
+}
+
+function toggleCalendar() {
+    const calendar = document.getElementById('calendarContainer');
+
+    // Close all time dropdowns first
+    document.querySelectorAll('.time-dropdown').forEach(dropdown => {
+        dropdown.classList.remove('show');
+    });
+
+    calendar.classList.toggle('show');
+
+    // Generate calendar if it's being shown
+    if (calendar.classList.contains('show')) {
+        generateCalendar();
+    }
+}
+
+function toggleTimeDropdown(dropdownId) {
+    // Close calendar first
+    document.getElementById('calendarContainer').classList.remove('show');
+
+    // Close all other dropdowns
+    const allDropdowns = document.querySelectorAll('.time-dropdown');
+    allDropdowns.forEach(dropdown => {
+        if (dropdown.id !== dropdownId) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    // Populate the dropdown with time options if it's empty
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown.children.length === 0) {
+        populateTimeDropdown(dropdownId);
+    }
+
+    // Toggle the clicked dropdown
+    dropdown.classList.toggle('show');
+}
+
+function selectTime(inputId, time) {
+    document.getElementById(inputId).value = time;
+
+    // Update event data if available
+    if (window.eventBuilder && window.eventBuilder.api) {
+        if (inputId === 'startTime') {
+            window.eventBuilder.api.currentEventData.startTime = time;
+        } else if (inputId === 'endTime') {
+            window.eventBuilder.api.currentEventData.endTime = time;
+        }
+        window.eventBuilder.scheduleAutoSave();
+    }
+
+    // Close all dropdowns
+    document.querySelectorAll('.time-dropdown').forEach(dropdown => {
+        dropdown.classList.remove('show');
+    });
+}
+
+function selectDate() {
+    // Close the calendar
+    document.getElementById('calendarContainer').classList.remove('show');
+
+    // Update sidebar if available
+    if (window.eventBuilder && typeof window.eventBuilder.updateSidebar === 'function') {
+        window.eventBuilder.updateSidebar();
+    }
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Wait for config and auth-utils to load
@@ -2441,6 +2491,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     initializeFormData();
                     enableAutoSave();
                     setupFormEventListeners();
+                    setupDateTimeClickHandlers();
                 }, 800);
 
                 // Check upload section state after initialization
@@ -2479,6 +2530,28 @@ window.uploadImage = function() {
 window.uploadVideo = function() {
     document.getElementById('videoInput').click();
 };
+
+// Setup date and time click handlers
+function setupDateTimeClickHandlers() {
+    // Close dropdowns and calendar when clicking outside
+    document.addEventListener('click', function(event) {
+        const isCalendarClick = event.target.closest('.calendar-container') || event.target.id === 'eventDate';
+        const isTimeDropdownClick = event.target.closest('.time-dropdown') ||
+                                  event.target.id === 'startTime' ||
+                                  event.target.id === 'endTime';
+
+        if (!isCalendarClick) {
+            const calendar = document.getElementById('calendarContainer');
+            if (calendar) calendar.classList.remove('show');
+        }
+
+        if (!isTimeDropdownClick) {
+            document.querySelectorAll('.time-dropdown').forEach(dropdown => {
+                dropdown.classList.remove('show');
+            });
+        }
+    });
+}
 
 // Auto-save functionality
 function enableAutoSave() {
@@ -2536,8 +2609,8 @@ function initializeFormData() {
             console.log('No event ID provided, starting new event');
         }
 
-        // Set default date and time
-        setDefaultDateTime();
+        // Set default values
+        setDefaultValues();
 
     } catch (error) {
         console.error('Error initializing form data:', error);
@@ -2557,31 +2630,6 @@ function populateFormWithEventData(eventData) {
             }
         }
 
-        // Date and time
-        if (eventData.startDate || eventData.dateTime?.start) {
-            const startDate = eventData.startDate || eventData.dateTime?.start;
-            if (startDate) {
-                const date = new Date(startDate);
-                const dateField = document.getElementById('eventDate');
-                if (dateField) {
-                    dateField.value = date.toISOString().split('T')[0];
-                }
-
-                const timeField = document.getElementById('startTime');
-                if (timeField && eventData.startTime) {
-                    timeField.value = eventData.startTime;
-                } else if (timeField) {
-                    timeField.value = date.toTimeString().slice(0, 5);
-                }
-            }
-        }
-
-        if (eventData.endTime) {
-            const endTimeField = document.getElementById('endTime');
-            if (endTimeField) {
-                endTimeField.value = eventData.endTime;
-            }
-        }
 
         // Location
         const fields = {
@@ -2620,25 +2668,10 @@ function populateFormWithEventData(eventData) {
     }
 }
 
-// Set default date and time
-function setDefaultDateTime() {
-    const dateField = document.getElementById('eventDate');
-    const startTimeField = document.getElementById('startTime');
-    const endTimeField = document.getElementById('endTime');
-
-    if (dateField && !dateField.value) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        dateField.value = tomorrow.toISOString().split('T')[0];
-    }
-
-    if (startTimeField && !startTimeField.value) {
-        startTimeField.value = '18:00'; // Default to 6 PM
-    }
-
-    if (endTimeField && !endTimeField.value) {
-        endTimeField.value = '20:00'; // Default to 8 PM
-    }
+// Initialize default form values
+function setDefaultValues() {
+    // Any default values for form fields can be set here
+    console.log('Setting default form values');
 }
 
 // Update sidebar display with current form data
@@ -2646,8 +2679,6 @@ function updateSidebarDisplay() {
     try {
         const title = document.getElementById('eventTitle')?.textContent ||
                      document.getElementById('eventTitle')?.value || 'Event Title';
-        const date = document.getElementById('eventDate')?.value;
-        const startTime = document.getElementById('startTime')?.value;
 
         // Update sidebar title
         const sidebarTitle = document.getElementById('eventTitleSidebar');
@@ -2655,20 +2686,6 @@ function updateSidebarDisplay() {
             sidebarTitle.textContent = title;
         }
 
-        // Update sidebar date/time
-        const sidebarDateTime = document.getElementById('eventDateTimeSidebar');
-        if (sidebarDateTime && date && startTime) {
-            const eventDate = new Date(date + 'T' + startTime);
-            const options = {
-                weekday: 'short',
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            sidebarDateTime.textContent = eventDate.toLocaleDateString('en-US', options);
-        }
     } catch (error) {
         console.error('Error updating sidebar:', error);
     }
@@ -2677,7 +2694,7 @@ function updateSidebarDisplay() {
 // Setup form event listeners
 function setupFormEventListeners() {
     // Listen for form changes and update sidebar
-    const formFields = ['eventTitle', 'eventDate', 'startTime'];
+    const formFields = ['eventTitle', 'eventDate', 'startTime', 'endTime'];
     formFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
@@ -3075,23 +3092,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Date picker enhancement (basic)
-    const dateInput = document.getElementById("eventDate");
-    if (dateInput) {
-        dateInput.addEventListener("click", () => {
-            // In a real implementation, you would integrate with a date picker library
-            console.log("Date picker would open here");
-        });
-    }
-
-    // Time picker enhancement (basic)
-    const timeInputs = document.querySelectorAll("#startTime, #endTime");
-    timeInputs.forEach((input) => {
-        input.addEventListener("click", function () {
-            // In a real implementation, you would integrate with a time picker library
-            console.log("Time picker would open here for", this.id);
-        });
-    });
 
     // Form submission handling
     const eventForm = document.querySelector(".event-form");
@@ -3101,9 +3101,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Collect form data
             const formData = {
-                date: document.getElementById("eventDate")?.value || '',
-                startTime: document.getElementById("startTime")?.value || '',
-                endTime: document.getElementById("endTime")?.value || '',
                 locationType: document.querySelector(".location-btn.active")?.getAttribute("data-type") || '',
                 location: document.getElementById("locationInput")?.value || '',
             };
