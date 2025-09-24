@@ -2522,6 +2522,16 @@ window.handleImageUpload = handleImageUpload;
 window.handleVideoUpload = handleVideoUpload;
 window.handleLineupImageUpload = handleLineupImageUpload;
 
+// Date and Time Picker functions
+window.toggleCalendar = toggleCalendar;
+window.toggleTimeDropdown = toggleTimeDropdown;
+window.selectDay = selectDay;
+window.selectDate = selectDate;
+window.selectTime = selectTime;
+window.previousMonth = previousMonth;
+window.nextMonth = nextMonth;
+window.generateCalendar = generateCalendar;
+
 // Additional upload functions
 window.uploadImage = function() {
     document.getElementById('imageInput').click();
