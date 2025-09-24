@@ -8,8 +8,6 @@ class EventBuilderAPI {
         this.currentEventData = {
             title: '',
             description: '',
-            startDate: null,
-            endDate: null,
             venue: '',
             city: '',
             state: '',
@@ -146,8 +144,6 @@ class EventBuilderAPI {
                 this.currentEventData = {
                     title: data.event.title || '',
                     description: data.event.description || '',
-                    startDate: data.event.startDate ? new Date(data.event.startDate).toISOString().split('T')[0] : null,
-                    endDate: data.event.endDate ? new Date(data.event.endDate).toISOString().split('T')[0] : null,
                     venue: data.event.venue || '',
                     city: data.event.city || '',
                     state: data.event.state || '',
@@ -210,15 +206,11 @@ class EventBuilderAPI {
         const agendaItems = agendaSection.querySelectorAll('.agenda-item');
         const items = Array.from(agendaItems).map(item => {
             const title = item.querySelector('.agenda-title')?.value?.trim() || '';
-            const startTime = item.querySelector('.agenda-start-time')?.value || '';
-            const endTime = item.querySelector('.agenda-end-time')?.value || '';
 
             if (!title) return null; // Skip empty entries
 
             return {
                 title,
-                startTime,
-                endTime,
                 description: '',
                 host: '',
                 order: 0
@@ -285,13 +277,6 @@ class EventBuilderAPI {
             errors.push('Event date is required');
         }
 
-        if (!formData.startTime) {
-            errors.push('Start time is required');
-        }
-
-        if (!formData.endTime) {
-            errors.push('End time is required');
-        }
 
         // Date validation
         if (formData.startDate) {
@@ -304,17 +289,6 @@ class EventBuilderAPI {
             }
         }
 
-        // Time validation
-        if (formData.startTime && formData.endTime) {
-            const start = formData.startTime.split(':').map(Number);
-            const end = formData.endTime.split(':').map(Number);
-            const startMinutes = start[0] * 60 + start[1];
-            const endMinutes = end[0] * 60 + end[1];
-
-            if (endMinutes <= startMinutes) {
-                errors.push('End time must be after start time');
-            }
-        }
 
         // Location validation - check all possible sources
         console.log('🗺️ STARTING LOCATION VALIDATION');
@@ -380,71 +354,6 @@ class EventBuilderAPI {
             // Additional cleanup - remove any category-related fields
             delete dataToSend.eventCategory;
 
-            // Helper function to convert AM/PM time to 24-hour format
-            function convertToMilitaryTime(timeStr) {
-                if (!timeStr) return null;
-
-                // If already in 24-hour format (contains no AM/PM), return as is
-                if (!timeStr.includes('AM') && !timeStr.includes('PM')) {
-                    return timeStr;
-                }
-
-                const timeParts = timeStr.trim().split(' ');
-                if (timeParts.length !== 2) return timeStr; // Invalid format
-
-                const [time, period] = timeParts;
-                const [hours, minutes] = time.split(':');
-                let hour = parseInt(hours);
-
-                if (period.toUpperCase() === 'PM' && hour !== 12) {
-                    hour += 12;
-                } else if (period.toUpperCase() === 'AM' && hour === 12) {
-                    hour = 0;
-                }
-
-                return `${hour.toString().padStart(2, '0')}:${minutes}`;
-            }
-
-            // Transform date/time data to match backend schema
-            if (dataToSend.startDateTime || (dataToSend.startDate && dataToSend.startTime)) {
-                // Convert AM/PM times to 24-hour format
-                const convertedStartTime = convertToMilitaryTime(dataToSend.startTime);
-                const convertedEndTime = convertToMilitaryTime(dataToSend.endTime);
-
-                const startDateTime = dataToSend.startDateTime || `${dataToSend.startDate}T${convertedStartTime}`;
-
-                // Ensure endTime exists, default to 1 hour after start time
-                let endTime = convertedEndTime;
-                if (!endTime && convertedStartTime) {
-                    // Parse start time and add 1 hour
-                    const [hours, minutes] = convertedStartTime.split(':');
-                    const endHour = parseInt(hours) + 1;
-                    endTime = `${endHour.toString().padStart(2, '0')}:${minutes}`;
-                }
-                const endDateTime = dataToSend.endDateTime || `${dataToSend.startDate}T${endTime || '23:59'}`;
-
-                const startDate = new Date(startDateTime);
-                const endDate = new Date(endDateTime);
-
-                // Validate dates are not invalid
-                if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-                    console.error('Invalid date/time:', { startDateTime, endDateTime, startDate, endDate });
-                    throw new Error('Invalid date/time values provided');
-                }
-
-                dataToSend.dateTime = {
-                    start: startDate,
-                    end: endDate
-                };
-
-                // Remove old date/time fields
-                delete dataToSend.startDate;
-                delete dataToSend.endDate;
-                delete dataToSend.startTime;
-                delete dataToSend.endTime;
-                delete dataToSend.startDateTime;
-                delete dataToSend.endDateTime;
-            }
 
             // Transform location data to match backend schema - ALWAYS create location object
             // Get location data from Google Places if available

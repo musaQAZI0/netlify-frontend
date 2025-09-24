@@ -70,14 +70,6 @@ body {
   color: #1e293b;
 }
 
-.event-datetime {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #64748b;
-  font-size: 14px;
-  margin-bottom: 16px;
-}
 
 .status-select {
   width: 100%;
@@ -616,12 +608,6 @@ body {
   height: 32px;
 }
 
-/* Date Time Inputs */
-.datetime-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
 
 .input-group {
   display: flex;
@@ -635,22 +621,6 @@ body {
   color: #374151;
 }
 
-.date-input,
-.time-input {
-  padding: 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 14px;
-  background: white;
-  transition: border-color 0.2s;
-}
-
-.date-input:focus,
-.time-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
 
 /* Location Display */
 .location-display {
@@ -2528,33 +2498,6 @@ select:focus {
   margin-bottom: 16px;
 }
 
-.agenda-time-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.time-input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.time-input-group label {
-  font-size: 14px;
-  color: #374151;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.agenda-start-time, .agenda-end-time {
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 14px;
-}
 
 .agenda-optional-fields {
   display: flex;
@@ -2776,9 +2719,6 @@ select:focus {
     justify-content: center;
   }
 
-  .datetime-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 768px) {
@@ -2792,9 +2732,6 @@ select:focus {
     margin: 0 auto;
   }
 
-  .agenda-time-section {
-    grid-template-columns: 1fr;
-  }
 
   .sections-grid {
     grid-template-columns: 1fr;
