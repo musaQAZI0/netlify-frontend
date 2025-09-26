@@ -1,3 +1,85 @@
+// Global functions for HTML onclick handlers - defined early to ensure availability
+function toggleEventCalendar() {
+    const calendar = document.getElementById('event-calendar-container');
+    if (calendar) {
+        calendar.classList.toggle('show');
+    }
+}
+
+function toggleEndDateCalendar() {
+    const calendar = document.getElementById('end-date-calendar-container');
+    if (calendar) {
+        calendar.classList.toggle('show');
+    }
+}
+
+function toggleTimeDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown) {
+        // Close other dropdowns first
+        document.querySelectorAll('.dropdown-content').forEach(d => {
+            if (d.id !== dropdownId) {
+                d.classList.remove('show');
+            }
+        });
+        dropdown.classList.toggle('show');
+    }
+}
+
+function previousEventMonth() {
+    if (window.dateTimePicker) {
+        window.dateTimePicker.currentMonth--;
+        if (window.dateTimePicker.currentMonth < 0) {
+            window.dateTimePicker.currentMonth = 11;
+            window.dateTimePicker.currentYear--;
+        }
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function nextEventMonth() {
+    if (window.dateTimePicker) {
+        window.dateTimePicker.currentMonth++;
+        if (window.dateTimePicker.currentMonth > 11) {
+            window.dateTimePicker.currentMonth = 0;
+            window.dateTimePicker.currentYear++;
+        }
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function selectEventDate() {
+    if (window.dateTimePicker) {
+        const calendar = document.getElementById('event-calendar-container');
+        if (calendar) {
+            calendar.classList.remove('show');
+        }
+    }
+}
+
+function previousEndDateMonth() {
+    if (window.dateTimePicker) {
+        // Similar logic for end date calendar
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function nextEndDateMonth() {
+    if (window.dateTimePicker) {
+        // Similar logic for end date calendar
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function selectEndDate() {
+    if (window.dateTimePicker) {
+        const calendar = document.getElementById('end-date-calendar-container');
+        if (calendar) {
+            calendar.classList.remove('show');
+        }
+    }
+}
+
 // Event Builder API Integration
 class EventBuilderAPI {
     constructor() {
@@ -3148,85 +3230,4 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Enhanced event form functionality initialized successfully");
 });
 
-// Global functions for HTML onclick handlers
-function toggleEventCalendar() {
-    const calendar = document.getElementById('event-calendar-container');
-    if (calendar) {
-        calendar.classList.toggle('show');
-    }
-}
-
-function toggleEndDateCalendar() {
-    const calendar = document.getElementById('end-date-calendar-container');
-    if (calendar) {
-        calendar.classList.toggle('show');
-    }
-}
-
-function toggleTimeDropdown(dropdownId) {
-    const dropdown = document.getElementById(dropdownId);
-    if (dropdown) {
-        // Close other dropdowns first
-        document.querySelectorAll('.dropdown-content').forEach(d => {
-            if (d.id !== dropdownId) {
-                d.classList.remove('show');
-            }
-        });
-        dropdown.classList.toggle('show');
-    }
-}
-
-function previousEventMonth() {
-    if (window.dateTimePicker) {
-        window.dateTimePicker.currentMonth--;
-        if (window.dateTimePicker.currentMonth < 0) {
-            window.dateTimePicker.currentMonth = 11;
-            window.dateTimePicker.currentYear--;
-        }
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function nextEventMonth() {
-    if (window.dateTimePicker) {
-        window.dateTimePicker.currentMonth++;
-        if (window.dateTimePicker.currentMonth > 11) {
-            window.dateTimePicker.currentMonth = 0;
-            window.dateTimePicker.currentYear++;
-        }
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function selectEventDate() {
-    if (window.dateTimePicker) {
-        const calendar = document.getElementById('event-calendar-container');
-        if (calendar) {
-            calendar.classList.remove('show');
-        }
-    }
-}
-
-function previousEndDateMonth() {
-    if (window.dateTimePicker) {
-        // Similar logic for end date calendar
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function nextEndDateMonth() {
-    if (window.dateTimePicker) {
-        // Similar logic for end date calendar
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function selectEndDate() {
-    if (window.dateTimePicker) {
-        const calendar = document.getElementById('end-date-calendar-container');
-        if (calendar) {
-            calendar.classList.remove('show');
-        }
-    }
-}
 
