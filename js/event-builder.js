@@ -674,11 +674,6 @@ class EventBuilderAPI {
             title: document.getElementById('eventTitle')?.textContent?.trim() ||
                    document.getElementById('eventTitle')?.value?.trim() || '',
 
-            // Date and time
-            eventDate: document.getElementById('eventDate')?.value?.trim() || '',
-            startTime: document.getElementById('startTime')?.value?.trim() || '',
-            endTime: document.getElementById('endTime')?.value?.trim() || '',
-
             // Location data - use API extraction methods
             location: document.getElementById('locationInput')?.value?.trim() || '',
             venue: this.extractVenueFromSources(),
@@ -2268,183 +2263,6 @@ window.addEventListener('error', (event) => {
     }
 });
 
-// Date and Time Picker Functionality
-let currentMonth = 10; // November (0-based)
-let currentYear = 2025;
-let selectedDate = 2; // November 2nd
-
-const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-function generateCalendar() {
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-
-    // Adjust for Monday start
-    const mondayFirstDay = (firstDay === 0) ? 6 : firstDay - 1;
-
-    let daysHTML = '';
-
-    // Previous month days
-    for (let i = mondayFirstDay - 1; i >= 0; i--) {
-        const day = daysInPrevMonth - i;
-        daysHTML += `<div class="day other-month">${day}</div>`;
-    }
-
-    // Current month days
-    for (let day = 1; day <= daysInMonth; day++) {
-        const isSelected = day === selectedDate;
-        const isToday = day === 2 && currentMonth === 10 && currentYear === 2025; // Nov 2, 2025
-        let classes = 'day';
-        if (isSelected) classes += ' selected';
-        if (isToday && !isSelected) classes += ' today';
-
-        daysHTML += `<div class="${classes}" onclick="selectDay(${day})">${day}</div>`;
-    }
-
-    // Next month days to fill the grid
-    const totalCells = Math.ceil((mondayFirstDay + daysInMonth) / 7) * 7;
-    const remainingCells = totalCells - mondayFirstDay - daysInMonth;
-
-    for (let day = 1; day <= remainingCells; day++) {
-        daysHTML += `<div class="day other-month">${day}</div>`;
-    }
-
-    document.getElementById('calendarDays').innerHTML = daysHTML;
-    document.getElementById('monthYear').textContent = `${monthNames[currentMonth]} ${currentYear}`;
-}
-
-function selectDay(day) {
-    selectedDate = day;
-    generateCalendar();
-
-    // Update the date input
-    const formattedDate = `${String(currentMonth + 1).padStart(2, '0')}/${String(day).padStart(2, '0')}/${currentYear}`;
-    document.getElementById('eventDate').value = formattedDate;
-
-    // Update event data if available
-    if (window.eventBuilder && window.eventBuilder.api) {
-        window.eventBuilder.api.currentEventData.eventDate = formattedDate;
-        window.eventBuilder.scheduleAutoSave();
-    }
-}
-
-function previousMonth() {
-    if (currentMonth === 0) {
-        currentMonth = 11;
-        currentYear--;
-    } else {
-        currentMonth--;
-    }
-    generateCalendar();
-}
-
-function nextMonth() {
-    if (currentMonth === 11) {
-        currentMonth = 0;
-        currentYear++;
-    } else {
-        currentMonth++;
-    }
-    generateCalendar();
-}
-
-function generateTimeOptions(startHour = 0, endHour = 23) {
-    const times = [];
-    for (let hour = startHour; hour <= endHour; hour++) {
-        for (let minute = 0; minute < 60; minute += 30) {
-            const time12 = convertTo12Hour(hour, minute);
-            times.push(time12);
-        }
-    }
-    return times;
-}
-
-function convertTo12Hour(hour, minute) {
-    const period = hour >= 12 ? 'PM' : 'AM';
-    const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-    const displayMinute = minute.toString().padStart(2, '0');
-    return `${displayHour}:${displayMinute} ${period}`;
-}
-
-function populateTimeDropdown(dropdownId) {
-    const dropdown = document.getElementById(dropdownId);
-    const times = generateTimeOptions();
-
-    dropdown.innerHTML = times.map(time =>
-        `<div class="time-option" onclick="selectTime('${dropdownId.replace('Dropdown', '')}', '${time}')">${time}</div>`
-    ).join('');
-}
-
-function toggleCalendar() {
-    const calendar = document.getElementById('calendarContainer');
-
-    // Close all time dropdowns first
-    document.querySelectorAll('.time-dropdown').forEach(dropdown => {
-        dropdown.classList.remove('show');
-    });
-
-    calendar.classList.toggle('show');
-
-    // Generate calendar if it's being shown
-    if (calendar.classList.contains('show')) {
-        generateCalendar();
-    }
-}
-
-function toggleTimeDropdown(dropdownId) {
-    // Close calendar first
-    document.getElementById('calendarContainer').classList.remove('show');
-
-    // Close all other dropdowns
-    const allDropdowns = document.querySelectorAll('.time-dropdown');
-    allDropdowns.forEach(dropdown => {
-        if (dropdown.id !== dropdownId) {
-            dropdown.classList.remove('show');
-        }
-    });
-
-    // Populate the dropdown with time options if it's empty
-    const dropdown = document.getElementById(dropdownId);
-    if (dropdown.children.length === 0) {
-        populateTimeDropdown(dropdownId);
-    }
-
-    // Toggle the clicked dropdown
-    dropdown.classList.toggle('show');
-}
-
-function selectTime(inputId, time) {
-    document.getElementById(inputId).value = time;
-
-    // Update event data if available
-    if (window.eventBuilder && window.eventBuilder.api) {
-        if (inputId === 'startTime') {
-            window.eventBuilder.api.currentEventData.startTime = time;
-        } else if (inputId === 'endTime') {
-            window.eventBuilder.api.currentEventData.endTime = time;
-        }
-        window.eventBuilder.scheduleAutoSave();
-    }
-
-    // Close all dropdowns
-    document.querySelectorAll('.time-dropdown').forEach(dropdown => {
-        dropdown.classList.remove('show');
-    });
-}
-
-function selectDate() {
-    // Close the calendar
-    document.getElementById('calendarContainer').classList.remove('show');
-
-    // Update sidebar if available
-    if (window.eventBuilder && typeof window.eventBuilder.updateSidebar === 'function') {
-        window.eventBuilder.updateSidebar();
-    }
-}
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -2491,7 +2309,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     initializeFormData();
                     enableAutoSave();
                     setupFormEventListeners();
-                    setupDateTimeClickHandlers();
                 }, 800);
 
                 // Check upload section state after initialization
@@ -2522,15 +2339,6 @@ window.handleImageUpload = handleImageUpload;
 window.handleVideoUpload = handleVideoUpload;
 window.handleLineupImageUpload = handleLineupImageUpload;
 
-// Date and Time Picker functions
-window.toggleCalendar = toggleCalendar;
-window.toggleTimeDropdown = toggleTimeDropdown;
-window.selectDay = selectDay;
-window.selectDate = selectDate;
-window.selectTime = selectTime;
-window.previousMonth = previousMonth;
-window.nextMonth = nextMonth;
-window.generateCalendar = generateCalendar;
 
 // Additional upload functions
 window.uploadImage = function() {
@@ -2541,33 +2349,12 @@ window.uploadVideo = function() {
     document.getElementById('videoInput').click();
 };
 
-// Setup date and time click handlers
-function setupDateTimeClickHandlers() {
-    // Close dropdowns and calendar when clicking outside
-    document.addEventListener('click', function(event) {
-        const isCalendarClick = event.target.closest('.calendar-container') || event.target.id === 'eventDate';
-        const isTimeDropdownClick = event.target.closest('.time-dropdown') ||
-                                  event.target.id === 'startTime' ||
-                                  event.target.id === 'endTime';
-
-        if (!isCalendarClick) {
-            const calendar = document.getElementById('calendarContainer');
-            if (calendar) calendar.classList.remove('show');
-        }
-
-        if (!isTimeDropdownClick) {
-            document.querySelectorAll('.time-dropdown').forEach(dropdown => {
-                dropdown.classList.remove('show');
-            });
-        }
-    });
-}
 
 // Auto-save functionality
 function enableAutoSave() {
     // Auto-save on form field changes
     const formFields = [
-        'eventTitle', 'eventDate', 'startTime', 'endTime',
+        'eventTitle',
         'venueName', 'streetAddress', 'cityName', 'stateName', 'zipCode',
         'overviewDescription', 'eventStatus'
     ];
@@ -2704,7 +2491,7 @@ function updateSidebarDisplay() {
 // Setup form event listeners
 function setupFormEventListeners() {
     // Listen for form changes and update sidebar
-    const formFields = ['eventTitle', 'eventDate', 'startTime', 'endTime'];
+    const formFields = ['eventTitle'];
     formFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
@@ -2787,12 +2574,6 @@ window.addEventListener('unhandledrejection', function(event) {
     }
 });
 
-// Missing function definitions (for compatibility)
-function populateTimeDropdown(selectElement, type) {
-    console.log('populateTimeDropdown called (compatibility function)');
-    // This function might be called by old code - redirect to our new system
-    return;
-}
 
 
 // Other missing functions that might be called
@@ -2925,7 +2706,6 @@ function addAgendaSlot() {
 // Enhanced Event Builder UI Functionality
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Legacy calendar code removed - using new date/time picker implementation below
 
     // Location type switching functionality
     const locationBtns = document.querySelectorAll(".location-btn");
@@ -3103,6 +2883,239 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
+    // EventDateTimePicker Class
+    class EventDateTimePicker {
+        constructor() {
+            this.currentDate = new Date();
+            this.selectedStartDate = null;
+            this.selectedEndDate = null;
+            this.isMultiDay = false;
+            this.currentMonth = this.currentDate.getMonth();
+            this.currentYear = this.currentDate.getFullYear();
+
+            this.init();
+        }
+
+        init() {
+            this.generateCalendar();
+            this.populateTimeDropdowns();
+            this.attachEventListeners();
+        }
+
+        generateCalendar() {
+            const calendar = document.querySelector('.calendar-grid');
+            if (!calendar) return;
+
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            const monthYear = document.querySelector('.month-year');
+            if (monthYear) {
+                monthYear.textContent = `${monthNames[this.currentMonth]} ${this.currentYear}`;
+            }
+
+            const firstDay = new Date(this.currentYear, this.currentMonth, 1);
+            const lastDay = new Date(this.currentYear, this.currentMonth + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - (firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1));
+
+            calendar.innerHTML = '';
+
+            for (let i = 0; i < 42; i++) {
+                const date = new Date(startDate);
+                date.setDate(startDate.getDate() + i);
+
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = date.getDate();
+
+                if (date.getMonth() !== this.currentMonth) {
+                    dayElement.classList.add('other-month');
+                }
+
+                if (date < new Date().setHours(0, 0, 0, 0)) {
+                    dayElement.classList.add('past');
+                } else {
+                    dayElement.addEventListener('click', () => this.selectDate(date));
+                }
+
+                if (this.selectedStartDate && this.isSameDate(date, this.selectedStartDate)) {
+                    dayElement.classList.add('selected', 'start-date');
+                }
+
+                if (this.selectedEndDate && this.isSameDate(date, this.selectedEndDate)) {
+                    dayElement.classList.add('selected', 'end-date');
+                }
+
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        selectDate(date) {
+            if (!this.selectedStartDate || (this.selectedStartDate && this.selectedEndDate)) {
+                this.selectedStartDate = new Date(date);
+                this.selectedEndDate = null;
+            } else if (date >= this.selectedStartDate) {
+                this.selectedEndDate = new Date(date);
+            } else {
+                this.selectedStartDate = new Date(date);
+                this.selectedEndDate = null;
+            }
+
+            this.updateSelectedDates();
+            this.generateCalendar();
+        }
+
+        updateSelectedDates() {
+            const startDateDisplay = document.querySelector('.selected-start-date');
+            const endDateDisplay = document.querySelector('.selected-end-date');
+            const multiDayToggle = document.getElementById('multiDayToggle');
+
+            if (this.selectedStartDate && startDateDisplay) {
+                startDateDisplay.textContent = this.formatDate(this.selectedStartDate);
+                if (window.eventBuilder && window.eventBuilder.api) {
+                    window.eventBuilder.api.currentEventData.startDate = this.selectedStartDate.toISOString();
+                }
+            }
+
+            if (this.selectedEndDate && endDateDisplay) {
+                endDateDisplay.textContent = this.formatDate(this.selectedEndDate);
+                if (window.eventBuilder && window.eventBuilder.api) {
+                    window.eventBuilder.api.currentEventData.endDate = this.selectedEndDate.toISOString();
+                }
+            }
+
+            if (multiDayToggle) {
+                this.isMultiDay = this.selectedStartDate && this.selectedEndDate &&
+                    !this.isSameDate(this.selectedStartDate, this.selectedEndDate);
+                multiDayToggle.checked = this.isMultiDay;
+            }
+        }
+
+        populateTimeDropdowns() {
+            const startTimeSelect = document.getElementById('startTime');
+            const endTimeSelect = document.getElementById('endTime');
+
+            if (startTimeSelect) this.populateTimeSelect(startTimeSelect);
+            if (endTimeSelect) this.populateTimeSelect(endTimeSelect);
+        }
+
+        populateTimeSelect(select) {
+            select.innerHTML = '';
+            for (let hour = 1; hour <= 12; hour++) {
+                for (let minute = 0; minute < 60; minute += 30) {
+                    const timeValue = `${hour}:${minute.toString().padStart(2, '0')}`;
+
+                    const amOption = document.createElement('option');
+                    amOption.value = `${timeValue} AM`;
+                    amOption.textContent = `${timeValue} AM`;
+                    select.appendChild(amOption);
+
+                    const pmOption = document.createElement('option');
+                    pmOption.value = `${timeValue} PM`;
+                    pmOption.textContent = `${timeValue} PM`;
+                    select.appendChild(pmOption);
+                }
+            }
+        }
+
+        attachEventListeners() {
+            // Calendar navigation
+            const prevButton = document.querySelector('.nav-btn.prev');
+            const nextButton = document.querySelector('.nav-btn.next');
+
+            if (prevButton) {
+                prevButton.addEventListener('click', () => {
+                    this.currentMonth--;
+                    if (this.currentMonth < 0) {
+                        this.currentMonth = 11;
+                        this.currentYear--;
+                    }
+                    this.generateCalendar();
+                });
+            }
+
+            if (nextButton) {
+                nextButton.addEventListener('click', () => {
+                    this.currentMonth++;
+                    if (this.currentMonth > 11) {
+                        this.currentMonth = 0;
+                        this.currentYear++;
+                    }
+                    this.generateCalendar();
+                });
+            }
+
+            // Multi-day toggle
+            const multiDayToggle = document.getElementById('multiDayToggle');
+            if (multiDayToggle) {
+                multiDayToggle.addEventListener('change', (e) => {
+                    this.isMultiDay = e.target.checked;
+                    if (!this.isMultiDay) {
+                        this.selectedEndDate = null;
+                        this.updateSelectedDates();
+                        this.generateCalendar();
+                    }
+                });
+            }
+
+            // Time dropdowns
+            const startTimeSelect = document.getElementById('startTime');
+            const endTimeSelect = document.getElementById('endTime');
+            const timezoneSelect = document.getElementById('timezone');
+
+            if (startTimeSelect) {
+                startTimeSelect.addEventListener('change', (e) => {
+                    if (window.eventBuilder && window.eventBuilder.api) {
+                        window.eventBuilder.api.currentEventData.startTime = e.target.value;
+                    }
+                });
+            }
+
+            if (endTimeSelect) {
+                endTimeSelect.addEventListener('change', (e) => {
+                    if (window.eventBuilder && window.eventBuilder.api) {
+                        window.eventBuilder.api.currentEventData.endTime = e.target.value;
+                    }
+                });
+            }
+
+            if (timezoneSelect) {
+                timezoneSelect.addEventListener('change', (e) => {
+                    if (window.eventBuilder && window.eventBuilder.api) {
+                        window.eventBuilder.api.currentEventData.timezone = e.target.value;
+                    }
+                });
+            }
+
+            // Close calendar when clicking outside
+            document.addEventListener('click', (e) => {
+                const dateTimeSection = document.querySelector('.date-time-section');
+                if (dateTimeSection && !dateTimeSection.contains(e.target)) {
+                    // Optional: Close any open dropdowns or calendars
+                }
+            });
+        }
+
+        formatDate(date) {
+            const options = {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        isSameDate(date1, date2) {
+            return date1.getFullYear() === date2.getFullYear() &&
+                   date1.getMonth() === date2.getMonth() &&
+                   date1.getDate() === date2.getDate();
+        }
+    }
+
     // Form submission handling
     const eventForm = document.querySelector(".event-form");
     if (eventForm) {
@@ -3118,6 +3131,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Form submitted with data:", formData);
             alert("Event form submitted! Check console for data.");
         });
+    }
+
+    // Initialize date time picker
+    if (typeof EventDateTimePicker !== 'undefined') {
+        new EventDateTimePicker();
     }
 
     // Initialize form state
