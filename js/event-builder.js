@@ -2995,28 +2995,52 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         populateTimeDropdowns() {
-            const startTimeSelect = document.getElementById('startTime');
-            const endTimeSelect = document.getElementById('endTime');
+            const startTimeDropdown = document.getElementById('start-dropdown');
+            const endTimeDropdown = document.getElementById('end-dropdown');
 
-            if (startTimeSelect) this.populateTimeSelect(startTimeSelect);
-            if (endTimeSelect) this.populateTimeSelect(endTimeSelect);
+            if (startTimeDropdown) this.populateTimeDropdown(startTimeDropdown, 'start-time');
+            if (endTimeDropdown) this.populateTimeDropdown(endTimeDropdown, 'end-time');
         }
 
-        populateTimeSelect(select) {
-            select.innerHTML = '';
+        populateTimeDropdown(dropdown, inputId) {
+            dropdown.innerHTML = '';
             for (let hour = 1; hour <= 12; hour++) {
                 for (let minute = 0; minute < 60; minute += 30) {
                     const timeValue = `${hour}:${minute.toString().padStart(2, '0')}`;
 
-                    const amOption = document.createElement('option');
-                    amOption.value = `${timeValue} AM`;
+                    const amOption = document.createElement('div');
+                    amOption.className = 'dropdown-option';
                     amOption.textContent = `${timeValue} AM`;
-                    select.appendChild(amOption);
+                    amOption.onclick = () => this.selectTime(inputId, `${timeValue} AM`);
+                    dropdown.appendChild(amOption);
 
-                    const pmOption = document.createElement('option');
-                    pmOption.value = `${timeValue} PM`;
+                    const pmOption = document.createElement('div');
+                    pmOption.className = 'dropdown-option';
                     pmOption.textContent = `${timeValue} PM`;
-                    select.appendChild(pmOption);
+                    pmOption.onclick = () => this.selectTime(inputId, `${timeValue} PM`);
+                    dropdown.appendChild(pmOption);
+                }
+            }
+        }
+
+        selectTime(inputId, time) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.value = time;
+            }
+
+            // Close the dropdown
+            const dropdown = document.getElementById(inputId.replace('-time', '-dropdown'));
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+
+            // Update event data
+            if (window.eventBuilder && window.eventBuilder.api) {
+                if (inputId === 'start-time') {
+                    window.eventBuilder.api.currentEventData.startTime = time;
+                } else if (inputId === 'end-time') {
+                    window.eventBuilder.api.currentEventData.endTime = time;
                 }
             }
         }
@@ -3061,26 +3085,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
 
-            // Time dropdowns
-            const startTimeSelect = document.getElementById('startTime');
-            const endTimeSelect = document.getElementById('endTime');
-            const timezoneSelect = document.getElementById('timezone');
-
-            if (startTimeSelect) {
-                startTimeSelect.addEventListener('change', (e) => {
-                    if (window.eventBuilder && window.eventBuilder.api) {
-                        window.eventBuilder.api.currentEventData.startTime = e.target.value;
-                    }
-                });
-            }
-
-            if (endTimeSelect) {
-                endTimeSelect.addEventListener('change', (e) => {
-                    if (window.eventBuilder && window.eventBuilder.api) {
-                        window.eventBuilder.api.currentEventData.endTime = e.target.value;
-                    }
-                });
-            }
+            // Time dropdowns - handled in selectTime method
+            const timezoneSelect = document.getElementById('timezone-select');
 
             if (timezoneSelect) {
                 timezoneSelect.addEventListener('change', (e) => {
@@ -3135,10 +3141,92 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initialize date time picker
     if (typeof EventDateTimePicker !== 'undefined') {
-        new EventDateTimePicker();
+        window.dateTimePicker = new EventDateTimePicker();
     }
 
     // Initialize form state
     console.log("Enhanced event form functionality initialized successfully");
 });
+
+// Global functions for HTML onclick handlers
+function toggleEventCalendar() {
+    const calendar = document.getElementById('event-calendar-container');
+    if (calendar) {
+        calendar.classList.toggle('show');
+    }
+}
+
+function toggleEndDateCalendar() {
+    const calendar = document.getElementById('end-date-calendar-container');
+    if (calendar) {
+        calendar.classList.toggle('show');
+    }
+}
+
+function toggleTimeDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    if (dropdown) {
+        // Close other dropdowns first
+        document.querySelectorAll('.dropdown-content').forEach(d => {
+            if (d.id !== dropdownId) {
+                d.classList.remove('show');
+            }
+        });
+        dropdown.classList.toggle('show');
+    }
+}
+
+function previousEventMonth() {
+    if (window.dateTimePicker) {
+        window.dateTimePicker.currentMonth--;
+        if (window.dateTimePicker.currentMonth < 0) {
+            window.dateTimePicker.currentMonth = 11;
+            window.dateTimePicker.currentYear--;
+        }
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function nextEventMonth() {
+    if (window.dateTimePicker) {
+        window.dateTimePicker.currentMonth++;
+        if (window.dateTimePicker.currentMonth > 11) {
+            window.dateTimePicker.currentMonth = 0;
+            window.dateTimePicker.currentYear++;
+        }
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function selectEventDate() {
+    if (window.dateTimePicker) {
+        const calendar = document.getElementById('event-calendar-container');
+        if (calendar) {
+            calendar.classList.remove('show');
+        }
+    }
+}
+
+function previousEndDateMonth() {
+    if (window.dateTimePicker) {
+        // Similar logic for end date calendar
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function nextEndDateMonth() {
+    if (window.dateTimePicker) {
+        // Similar logic for end date calendar
+        window.dateTimePicker.generateCalendar();
+    }
+}
+
+function selectEndDate() {
+    if (window.dateTimePicker) {
+        const calendar = document.getElementById('end-date-calendar-container');
+        if (calendar) {
+            calendar.classList.remove('show');
+        }
+    }
+}
 
