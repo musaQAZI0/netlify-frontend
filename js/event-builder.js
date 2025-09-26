@@ -26,6 +26,11 @@ function toggleTimeDropdown(dropdownId) {
     }
 }
 
+// Explicitly add functions to window object to ensure global accessibility
+window.toggleEventCalendar = toggleEventCalendar;
+window.toggleEndDateCalendar = toggleEndDateCalendar;
+window.toggleTimeDropdown = toggleTimeDropdown;
+
 function previousEventMonth() {
     if (window.dateTimePicker) {
         window.dateTimePicker.currentMonth--;
@@ -79,6 +84,14 @@ function selectEndDate() {
         }
     }
 }
+
+// Add all calendar navigation functions to window object
+window.previousEventMonth = previousEventMonth;
+window.nextEventMonth = nextEventMonth;
+window.selectEventDate = selectEventDate;
+window.previousEndDateMonth = previousEndDateMonth;
+window.nextEndDateMonth = nextEndDateMonth;
+window.selectEndDate = selectEndDate;
 
 // Event Builder API Integration
 class EventBuilderAPI {
