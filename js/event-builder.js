@@ -954,6 +954,9 @@ class EventBuilderAPI {
             title: document.getElementById('eventTitle')?.textContent?.trim() ||
                    document.getElementById('eventTitle')?.value?.trim() || '',
 
+            // Date and time data
+            dateTime: this.collectDateTimeData(),
+
             // Location data - use API extraction methods
             location: document.getElementById('locationInput')?.value?.trim() || '',
             venue: this.extractVenueFromSources(),
@@ -1006,6 +1009,96 @@ class EventBuilderAPI {
 
 
         return formData;
+    }
+
+    collectDateTimeData() {
+        // Get date values
+        const startDateValue = document.getElementById('event-date')?.value?.trim();
+        const endDateValue = document.getElementById('event-end-date')?.value?.trim();
+
+        // Get time values (these should have the 24-hour format stored in data-value)
+        const startTimeInput = document.getElementById('start-time');
+        const endTimeInput = document.getElementById('end-time');
+
+        const startTimeValue = startTimeInput?.dataset?.value || startTimeInput?.value?.trim();
+        const endTimeValue = endTimeInput?.dataset?.value || endTimeInput?.value?.trim();
+
+        // Get timezone
+        const timezone = document.getElementById('timezone-select')?.value || 'America/New_York';
+
+        console.log('Date/Time collection:', {
+            startDate: startDateValue,
+            endDate: endDateValue,
+            startTime: startTimeValue,
+            endTime: endTimeValue,
+            timezone: timezone
+        });
+
+        // Create start datetime
+        let startDateTime = null;
+        if (startDateValue && startTimeValue) {
+            startDateTime = this.combineDateAndTime(startDateValue, startTimeValue, timezone);
+        } else if (startDateValue) {
+            // Default to 12:00 PM if no time specified
+            startDateTime = this.combineDateAndTime(startDateValue, '12:00', timezone);
+        }
+
+        // Create end datetime
+        let endDateTime = null;
+        if (endDateValue && endTimeValue) {
+            endDateTime = this.combineDateAndTime(endDateValue, endTimeValue, timezone);
+        } else if (startDateTime && endTimeValue) {
+            // Use start date with end time if end date not specified
+            endDateTime = this.combineDateAndTime(startDateValue, endTimeValue, timezone);
+        } else if (startDateTime) {
+            // Default end time to 2 hours after start
+            const endTime = new Date(startDateTime);
+            endTime.setHours(endTime.getHours() + 2);
+            endDateTime = endTime.toISOString();
+        }
+
+        return {
+            start: startDateTime,
+            end: endDateTime,
+            timezone: timezone
+        };
+    }
+
+    combineDateAndTime(dateValue, timeValue, timezone) {
+        try {
+            // Parse the formatted date (e.g., "Friday, December 15, 2024")
+            const date = new Date(dateValue);
+
+            // Parse time value (could be "14:30" or "2:30 PM")
+            let hours, minutes;
+
+            if (timeValue.includes(':')) {
+                const [hourStr, minuteStr] = timeValue.split(':');
+                hours = parseInt(hourStr);
+                minutes = parseInt(minuteStr);
+
+                // Handle AM/PM format
+                if (timeValue.includes('PM') && hours !== 12) {
+                    hours += 12;
+                } else if (timeValue.includes('AM') && hours === 12) {
+                    hours = 0;
+                }
+            } else {
+                hours = 12;
+                minutes = 0;
+            }
+
+            // Set the time on the date
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+
+            return date.toISOString();
+        } catch (error) {
+            console.error('Error combining date and time:', error);
+            return null;
+        }
     }
 
     extractCityFromSources() {
