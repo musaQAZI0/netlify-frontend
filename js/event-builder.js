@@ -2995,8 +2995,12 @@ function logoutUser() {
 
 function saveAndContinue() {
     if (window.eventBuilder && window.eventBuilder.api) {
-        window.eventBuilder.api.saveEvent().then(() => {
+        window.eventBuilder.api.saveEvent().then((result) => {
             console.log('Event saved successfully');
+            // Redirect to add-tickets page with event ID
+            if (window.eventBuilder.api.eventId) {
+                window.location.href = `add-tickets.html?id=${window.eventBuilder.api.eventId}`;
+            }
         }).catch(error => {
             console.error('Failed to save event:', error);
         });
