@@ -3092,3 +3092,107 @@ select:focus {
         padding: 1rem;
     }
 }
+
+/* Add this CSS for time dropdowns */
+.time-input {
+    cursor: pointer;
+    background: white;
+}
+
+.time-input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 100%;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 1000;
+    border-radius: 12px;
+    max-height: 240px;
+    overflow-y: auto;
+    top: 100%;
+    border: 1px solid #e2e8f0;
+    margin-top: 8px;
+    animation: fadeInScale 0.2s ease-out;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-option {
+    color: #374151;
+    padding: 14px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid #f1f5f9;
+    transition: all 0.2s;
+}
+
+.dropdown-option:hover {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    color: #3b82f6;
+    transform: translateX(4px);
+}
+
+.dropdown-option:last-child {
+    border-bottom: none;
+    border-radius: 0 0 12px 12px;
+}
+
+.dropdown-option:first-child {
+    border-radius: 12px 12px 0 0;
+}
+
+/* Enhanced scrollbar for dropdowns */
+.dropdown-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Fix calendar positioning */
+.calendar-input-wrapper {
+    position: relative;
+}
+
+.calendar-container {
+    left: 0;
+    right: auto;
+}

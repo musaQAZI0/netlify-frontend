@@ -3160,4 +3160,67 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Enhanced event form functionality initialized successfully");
 });
 
+// Add this function to populate time dropdowns
+function populateTimeDropdowns() {
+    const timeDropdowns = ['start-dropdown', 'end-dropdown'];
+
+    timeDropdowns.forEach(dropdownId => {
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) return;
+
+        dropdown.innerHTML = ''; // Clear existing options
+
+        // Generate time options from 00:00 to 23:30 in 30-minute intervals
+        for (let hour = 0; hour < 24; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                const option = document.createElement('div');
+                option.className = 'dropdown-option';
+                option.textContent = timeString;
+                option.onclick = () => selectTime(dropdownId, timeString);
+                dropdown.appendChild(option);
+            }
+        }
+    });
+}
+
+// Add this function to handle time selection
+function selectTime(dropdownId, timeString) {
+    const inputId = dropdownId.replace('-dropdown', '-time');
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.value = timeString;
+        document.getElementById(dropdownId).classList.remove('show');
+    }
+}
+
+// Add this function to toggle time dropdowns
+function toggleTimeDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    if (!dropdown) return;
+
+    // Close other dropdowns first
+    document.querySelectorAll('.dropdown-content').forEach(dd => {
+        if (dd.id !== dropdownId) {
+            dd.classList.remove('show');
+        }
+    });
+
+    dropdown.classList.toggle('show');
+}
+
+// Call this function when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    populateTimeDropdowns();
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-content').forEach(dd => {
+                dd.classList.remove('show');
+            });
+        }
+    });
+});
+
 
