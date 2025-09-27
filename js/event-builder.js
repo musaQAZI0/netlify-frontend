@@ -72,7 +72,10 @@ class EventDateTimePicker {
             // Mark past dates
             if (date < today) {
                 dayElement.classList.add('past');
-            } else if (date.getMonth() === this.currentMonth) {
+            }
+
+            // Add click event to all future dates (not just current month)
+            if (date >= today) {
                 dayElement.addEventListener('click', () => this.selectDate(date));
             }
 
