@@ -6,10 +6,12 @@ class EventDateTimePicker {
         this.currentMonth = now.getMonth();
         this.currentYear = now.getFullYear();
         this.selectedDate = null;
+        this.selectedEndDate = null;
         this.monthNames = [
             'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
+        this.activeCalendar = 'start'; // 'start' or 'end'
         this.init();
     }
 
@@ -32,9 +34,10 @@ class EventDateTimePicker {
         });
     }
 
-    generateCalendar() {
-        const monthYear = document.getElementById('event-month-year');
-        const daysContainer = document.getElementById('event-calendar-days');
+    generateCalendar(calendarType = 'start') {
+        const isEndDate = calendarType === 'end';
+        const monthYear = document.getElementById(isEndDate ? 'end-date-month-year' : 'event-month-year');
+        const daysContainer = document.getElementById(isEndDate ? 'end-date-calendar-days' : 'event-calendar-days');
 
         if (!monthYear || !daysContainer) return;
 
@@ -76,7 +79,7 @@ class EventDateTimePicker {
 
             // Add click event to all future dates (not just current month)
             if (date >= today) {
-                dayElement.addEventListener('click', () => this.selectDate(date));
+                dayElement.addEventListener('click', () => this.selectDate(date, calendarType));
             }
 
             // Mark today
@@ -85,7 +88,8 @@ class EventDateTimePicker {
             }
 
             // Mark selected date
-            if (this.selectedDate && this.isSameDate(date, this.selectedDate)) {
+            const selectedDate = isEndDate ? this.selectedEndDate : this.selectedDate;
+            if (selectedDate && this.isSameDate(date, selectedDate)) {
                 dayElement.classList.add('selected');
             }
 
@@ -93,9 +97,34 @@ class EventDateTimePicker {
         }
     }
 
-    selectDate(date) {
-        this.selectedDate = new Date(date);
-        this.generateCalendar(); // Refresh to show selection
+    selectDate(date, calendarType = 'start') {
+        const isEndDate = calendarType === 'end';
+
+        if (isEndDate) {
+            this.selectedEndDate = new Date(date);
+        } else {
+            this.selectedDate = new Date(date);
+        }
+
+        this.generateCalendar(calendarType); // Refresh to show selection
+
+        // Update the input field immediately
+        const dateInput = document.getElementById(isEndDate ? 'event-end-date' : 'event-date');
+        const selectedDate = isEndDate ? this.selectedEndDate : this.selectedDate;
+
+        if (dateInput && selectedDate) {
+            dateInput.value = this.formatDate(selectedDate);
+
+            // Trigger change event for form validation
+            const event = new Event('change', { bubbles: true });
+            dateInput.dispatchEvent(event);
+        }
+
+        // Close the calendar
+        const calendar = document.getElementById(isEndDate ? 'end-date-calendar-container' : 'event-calendar-container');
+        if (calendar) {
+            calendar.classList.remove('show');
+        }
 
         // Enable the select button
         const selectBtn = document.getElementById('select-date-btn') ||
@@ -144,6 +173,21 @@ function toggleEventCalendar() {
     const calendar = document.getElementById('event-calendar-container');
     if (calendar) {
         calendar.classList.toggle('show');
+        if (window.dateTimePicker) {
+            window.dateTimePicker.activeCalendar = 'start';
+            window.dateTimePicker.generateCalendar('start');
+        }
+    }
+}
+
+function toggleEndDateCalendar() {
+    const calendar = document.getElementById('end-date-calendar-container');
+    if (calendar) {
+        calendar.classList.toggle('show');
+        if (window.dateTimePicker) {
+            window.dateTimePicker.activeCalendar = 'end';
+            window.dateTimePicker.generateCalendar('end');
+        }
     }
 }
 
@@ -155,7 +199,7 @@ function previousEventMonth() {
             window.dateTimePicker.currentMonth = 11;
             window.dateTimePicker.currentYear--;
         }
-        window.dateTimePicker.generateCalendar();
+        window.dateTimePicker.generateCalendar('start');
     }
 }
 
@@ -166,7 +210,29 @@ function nextEventMonth() {
             window.dateTimePicker.currentMonth = 0;
             window.dateTimePicker.currentYear++;
         }
-        window.dateTimePicker.generateCalendar();
+        window.dateTimePicker.generateCalendar('start');
+    }
+}
+
+function previousEndDateMonth() {
+    if (window.dateTimePicker) {
+        window.dateTimePicker.currentMonth--;
+        if (window.dateTimePicker.currentMonth < 0) {
+            window.dateTimePicker.currentMonth = 11;
+            window.dateTimePicker.currentYear--;
+        }
+        window.dateTimePicker.generateCalendar('end');
+    }
+}
+
+function nextEndDateMonth() {
+    if (window.dateTimePicker) {
+        window.dateTimePicker.currentMonth++;
+        if (window.dateTimePicker.currentMonth > 11) {
+            window.dateTimePicker.currentMonth = 0;
+            window.dateTimePicker.currentYear++;
+        }
+        window.dateTimePicker.generateCalendar('end');
     }
 }
 
@@ -185,73 +251,32 @@ function selectEventDate() {
     }
 }
 
+function selectEndDate() {
+    const dateInput = document.getElementById('event-end-date');
+    const calendar = document.getElementById('end-date-calendar-container');
+
+    if (window.dateTimePicker && window.dateTimePicker.selectedEndDate && dateInput) {
+        dateInput.value = window.dateTimePicker.formatDate(window.dateTimePicker.selectedEndDate);
+        calendar.classList.remove('show');
+
+        // Trigger change event for form validation
+        const event = new Event('change', { bubbles: true });
+        dateInput.dispatchEvent(event);
+    }
+}
+
 // Add functions to window object
 window.toggleEventCalendar = toggleEventCalendar;
+window.toggleEndDateCalendar = toggleEndDateCalendar;
 window.previousEventMonth = previousEventMonth;
 window.nextEventMonth = nextEventMonth;
-window.selectEventDate = selectEventDate;
-
-function previousEventMonth() {
-    if (window.dateTimePicker) {
-        window.dateTimePicker.currentMonth--;
-        if (window.dateTimePicker.currentMonth < 0) {
-            window.dateTimePicker.currentMonth = 11;
-            window.dateTimePicker.currentYear--;
-        }
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function nextEventMonth() {
-    if (window.dateTimePicker) {
-        window.dateTimePicker.currentMonth++;
-        if (window.dateTimePicker.currentMonth > 11) {
-            window.dateTimePicker.currentMonth = 0;
-            window.dateTimePicker.currentYear++;
-        }
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function selectEventDate() {
-    if (window.dateTimePicker) {
-        const calendar = document.getElementById('event-calendar-container');
-        if (calendar) {
-            calendar.classList.remove('show');
-        }
-    }
-}
-
-function previousEndDateMonth() {
-    if (window.dateTimePicker) {
-        // Similar logic for end date calendar
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function nextEndDateMonth() {
-    if (window.dateTimePicker) {
-        // Similar logic for end date calendar
-        window.dateTimePicker.generateCalendar();
-    }
-}
-
-function selectEndDate() {
-    if (window.dateTimePicker) {
-        const calendar = document.getElementById('end-date-calendar-container');
-        if (calendar) {
-            calendar.classList.remove('show');
-        }
-    }
-}
-
-// Add all calendar navigation functions to window object
-window.previousEventMonth = previousEventMonth;
-window.nextEventMonth = nextEventMonth;
-window.selectEventDate = selectEventDate;
 window.previousEndDateMonth = previousEndDateMonth;
 window.nextEndDateMonth = nextEndDateMonth;
+window.selectEventDate = selectEventDate;
 window.selectEndDate = selectEndDate;
+
+
+
 
 // Event Builder API Integration
 class EventBuilderAPI {
