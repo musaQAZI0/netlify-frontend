@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food & Drink Events in Punjab, Pakistan | Crowd</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #2d2d2d;
+            background: #fff;
+            padding-top: 70px;
+            /* Space for fixed header */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Desktop Header */
+        .desktop-header {
+            display: none;
+            padding: 8px 16px;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: flex;
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a3247;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .mobile-header .logo {
+            width: 32px;
+            height: 32px;
+            background-color: #e53e3e;
+            border-radius: 6px;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-left: 0.25rem;
+        }
+
+        /* Search Section Styles */
+        .search-section {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 2rem;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .mobile-header .search-container {
+            flex: 1;
+            margin: 0 12px;
+            border-radius: 20px;
+            background-color: #f8f8f8;
+            box-shadow: none;
+            border: 1px solid #d0d0d0;
+        }
+
+        .search-section-inner,
+        .location-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+        }
+
+        .search-icon,
+        .location-icon {
+            width: 18px;
+            height: 18px;
+            color: #666;
+        }
+
+        .mobile-header .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-input,
+        .location-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            color: #333;
+            width: 100%;
+        }
+
+        .mobile-header .search-input {
+            padding: 8px 12px 8px 36px;
+            width: 100%;
+        }
+
+        .search-input::placeholder,
+        .location-input::placeholder {
+            color: #999;
+        }
+
+        .mobile-header .search-input:focus {
+            border-color: #e53e3e;
+            background-color: white;
+            box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.1);
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: #ddd;
+        }
+
+        .search-button {
+            background: #3a3247;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 4px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .mobile-header .search-button {
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #e53e3e;
+            width: 28px;
+            height: 28px;
+            margin-left: 0;
+            font-size: 12px;
+        }
+
+        .search-button:hover {
+            background: #2f2a3c;
+        }
+
+        .mobile-header .search-button:hover {
+            background-color: #d63031;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .search-button-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        /* Navigation Actions */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        /* Integrated Navigation Styles */
+        .integrated-nav-container {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: #f8f8f9;
+            transform: translateY(-1px);
+        }
+
+        .nav-item.active {
+            color: #3a3247;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* User Menu Styles */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+            cursor: pointer;
+            color: #39364f;
+            position: relative;
+        }
+
+        .mobile-header .user-menu {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            justify-content: center;
+            padding: 0;
+            gap: 0;
+            font-size: 16px;
+        }
+
+        .user-menu:hover {
+            background: #f8f8f9;
+        }
+
+        .mobile-header .user-menu:hover {
+            background-color: #e8e8e8;
+            transform: scale(1.05);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3a3247;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .mobile-header .user-avatar {
+            display: none;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #585163;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #716b7a;
+        }
+
+        .mobile-header .dropdown-arrow {
+            display: none;
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 220px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            padding: 8px 0;
+            z-index: 1200;
+        }
+
+        .mobile-header .user-dropdown {
+            width: 280px;
+            right: -8px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: dropdownSlide 0.2s ease-out;
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .dropdown-email {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .user-dropdown .menu-group {
+            padding: 4px 0;
+        }
+
+        .user-dropdown a,
+        .dropdown-item {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #111;
+            font-size: 13px;
+            transition: background 0.12s;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-header .dropdown-item {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-dropdown a:hover,
+        .dropdown-item:hover {
+            background: #f8f8f9;
+        }
+
+        .mobile-header .dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .user-dropdown .divider,
+        .dropdown-divider {
+            height: 1px;
+            background: #f0f0f2;
+            margin: 4px 0;
+        }
+
+        .mobile-header .dropdown-divider {
+            background-color: #e9ecef;
+            margin: 8px 0;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Mobile dropdown item icons */
+        .mobile-header .dropdown-item::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            opacity: 0.7;
+        }
+
+        .mobile-header .dropdown-item.manage::before {
+            content: '📅';
+        }
+
+        .mobile-header .dropdown-item.tickets::before {
+            content: '🎫';
+        }
+
+        .mobile-header .dropdown-item.liked::before {
+            content: '❤️';
+        }
+
+        .mobile-header .dropdown-item.following::before {
+            content: '👥';
+        }
+
+        .mobile-header .dropdown-item.interests::before {
+            content: '⭐';
+        }
+
+        .mobile-header .dropdown-item.settings::before {
+            content: '⚙️';
+        }
+
+        .mobile-header .dropdown-item.organize::before {
+            content: '📊';
+        }
+
+        .mobile-header .dropdown-item.help::before {
+            content: '❓';
+        }
+
+        .mobile-header .dropdown-item.logout::before {
+            content: '🚪';
+        }
+
+        /* Overlay */
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(2px);
+        }
+
+        .dropdown-overlay.show {
+            display: block;
+        }
+
+        /* Desktop Media Query */
+        @media (min-width: 769px) {
+            .mobile-header {
+                display: none;
+            }
+
+            .desktop-header {
+                display: flex;
+            }
+
+            body {
+                padding-top: 80px;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .desktop-header {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-header {
+                padding: 10px 12px;
+            }
+
+            .mobile-header .search-container {
+                margin: 0 8px;
+            }
+
+            .mobile-header .user-dropdown {
+                width: 260px;
+                right: -8px;
+            }
+
+            .mobile-header .logo {
+                width: 28px;
+                height: 28px;
+                font-size: 16px;
+            }
+
+            .mobile-header .user-menu {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: #f8f9fa;
+            padding: 15px 0;
+        }
+
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .breadcrumb-nav a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb-nav a:hover {
+            color: #333;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #240f4c 0%, #3a1f5c 100%);
+            color: white;
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-text h1 {
+            font-size: 48px;
+            font-weight: bold;
+            color: #fc86bc;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero-text .location {
+            color: #fff58c;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            color: #fff58c;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .hero-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Filters */
+        .filters {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border: 1px solid #d0d0d0;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tag:hover {
+            border-color: #ccc;
+            background: #f5f5f5;
+        }
+
+        .filter-tag.active {
+            border-color: #333;
+            background: #333;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 50px 0;
+            min-height: 60vh;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* Event Cards */
+        .event-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .event-date {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            color: #f05537;
+        }
+
+        .event-content {
+            padding: 20px;
+        }
+
+        .event-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d2d2d;
+        }
+
+        .event-location {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .event-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f05537;
+        }
+
+        .event-attendees {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Loading Cards */
+        .loading-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading-placeholder {
+            background: #f0f0f0;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-placeholder::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .loading-image {
+            height: 200px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .loading-content {
+            padding: 20px;
+        }
+
+        .loading-title {
+            height: 20px;
+            margin-bottom: 12px;
+            width: 80%;
+        }
+
+        .loading-subtitle {
+            height: 16px;
+            margin-bottom: 8px;
+            width: 60%;
+        }
+
+        .loading-price {
+            height: 16px;
+            width: 40%;
+        }
+
+        /* Footer */
+        .footer {
+            background: #39364f;
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #555;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .footer-meta a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-meta a:hover {
+            color: white;
+        }
+
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #2d2d2d;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2d2d2d;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        .auth-btn {
+            width: 100%;
+            background: #f05537;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .auth-btn:hover {
+            background: #e04429;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .auth-toggle a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 36px;
+            }
+
+            .hero-text .location {
+                font-size: 20px;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero {
+                padding: 40px 0;
+            }
+
+            .main-content {
+                padding: 30px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Unified Header -->
+    <div class="header">
+        <!-- Desktop Header -->
+        <nav class="desktop-header">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display: none; align-items: center; gap: 0.25rem;">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">crowd</span>
+                </div>
+            </a>
+
+            <div class="search-section" data-search-component>
+                <div class="search-container">
+                    <div class="search-section-inner">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search events" id="desktopSearchInput"
+                            aria-label="Search events">
+                    </div>
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="location-section">
+                        <svg class="location-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M11.6 11.6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-7.6C8.5 4 6 6.5 6 9.6 6 13.8 11.6 20 11.6 20s5.6-6.2 5.6-10.4c0-3.1-2.5-5.6-5.6-5.6z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="location-input" placeholder="Choose a location"
+                            id="desktopLocationInput" aria-label="Choose a location">
+                    </div>
+                    <button class="search-button" type="button" onclick="performSearch('desktop')" aria-label="Search">
+                        <svg class="search-button-icon" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <div class="integrated-nav-container">
+                    <a href="event-builder.html" class="nav-item" data-tab="create">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span class="nav-text">Create an event</span>
+                    </a>
+
+                    <a href="likes.html" class="nav-item" data-tab="likes">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                        <span class="nav-text">Likes</span>
+                    </a>
+
+                    <a href="tickets-profile.html" class="nav-item" data-tab="tickets">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="nav-text">Tickets</span>
+                    </a>
+                </div>
+
+                <div class="user-menu" id="desktopUserMenuButton">
+                    <div class="user-avatar" id="desktopUserAvatar">U</div>
+                    <div>
+                        <div class="user-email" id="desktopUserEmail">Loading...</div>
+                    </div>
+                    <span class="dropdown-arrow">▾</span>
+
+                    <div class="user-dropdown" id="desktopUserDropdown" role="menu" aria-hidden="true">
+                        <div class="menu-group">
+                            <a href="Find events.html" role="menuitem">Find events</a>
+                            <a href="logged_in_Version.html" role="menuitem">Browse events</a>
+                            <a href="organizer-dashboard.html" role="menuitem">Manage my events</a>
+                            <a href="tickets-profile.html" role="menuitem">Tickets</a>
+                            <a href="likes.html" role="menuitem">Liked</a>
+                            <a href="tickets-profile.html" role="menuitem">Following</a>
+                            <a href="intrest.html" role="menuitem">Interests</a>
+                        </div>
+                        <div class="divider" aria-hidden="true"></div>
+                        <div class="menu-group">
+                            <a href="settings-new.html" role="menuitem">Account settings</a>
+                            <div style="padding:10px 16px;color:#6b6b6b;font-size:14px;">
+                                <span id="desktopDropdownUserEmail">user@example.com</span>
+                            </div>
+                            <a href="#" id="desktopLogoutLink" role="menuitem">Log out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <a href="index.html" class="logo">E</a>
+
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-input" placeholder="Search events" id="mobileSearchInput">
+                <button class="search-button" onclick="performSearch('mobile')">🔍</button>
+            </div>
+
+            <div class="user-menu" id="mobileUserProfile">
+                👤
+                <div class="user-dropdown" id="mobileDropdown">
+                    <div class="dropdown-header">
+                        <div class="dropdown-email" id="mobileUserEmail">user@example.com</div>
+                    </div>
+                    <div class="dropdown-item manage">Manage my events</div>
+                    <div class="dropdown-item tickets">Tickets</div>
+                    <div class="dropdown-item liked">Liked</div>
+                    <div class="dropdown-item following">Following</div>
+                    <div class="dropdown-item interests">Interests</div>
+                    <div class="dropdown-item settings">Account settings</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item organize">Organize</div>
+                    <div class="dropdown-item help">Help</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item logout">Log out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for mobile dropdown -->
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+    <!-- Breadcrumbs -->
+    <section class="breadcrumbs">
+        <div class="container">
+            <nav class="breadcrumb-nav">
+                <a href="index.html">Home</a> /
+                <a href="#" onclick="goToCountry()">Pakistan</a> /
+                <a href="#" onclick="goToRegion()">Punjab</a> /
+                <a href="#" onclick="goToEvents()">Events</a> /
+                <span>Food & Drink</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Food & Drink Events</h1>
+                    <div class="location">in Punjab, Pakistan</div>
+                    <p>Discover amazing culinary experiences and food events in your area</p>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=400&fit=crop"
+                        alt="Food & Drink Events" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="filter-tags">
+                <div class="filter-tag" onclick="toggleFilter(this, 'location')">
+                    <span>Punjab</span>
+                    <span>▼</span>
+                </div>
+                <div class="filter-tag" onclick="toggleFilter(this, 'date')">
+                    <span>Date</span>
+                    <span>▼</span>
+                </div>
+                <div class="filter-tag" onclick="toggleFilter(this, 'price')">
+                    <span>Price</span>
+                    <span>▼</span>
+                </div>
+                <div class="filter-tag" onclick="toggleFilter(this, 'category')">
+                    <span>Category</span>
+                    <span>▼</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="events-grid" id="eventsGrid">
+                <!-- Events will be dynamically loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAuthModal()">×</button>
+            <h2 class="modal-title" id="modalTitle">Log In</h2>
+            <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <button type="submit" class="auth-btn" id="authButton">Log In</button>
+            </form>
+            <div class="auth-toggle">
+                <span id="authToggleText">Don't have an account?</span>
+                <a href="#" onclick="toggleAuthMode()" id="authToggleLink">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Use Crowd</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showCreateEvents()">Create Events</a></li>
+                        <li><a href="#" onclick="showPricing()">Pricing</a></li>
+                        <li><a href="#" onclick="showMarketing()">Event Marketing</a></li>
+                        <li><a href="#" onclick="showMobileApp()">Mobile App</a></li>
+                        <li><a href="#" onclick="showCheckIn()">Check-In App</a></li>
+                        <li><a href="Help_center.html">Help Center</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Plan Events</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showSellTickets()">Sell Tickets Online</a></li>
+                        <li><a href="#" onclick="showEventManagement()">Event Management</a></li>
+                        <li><a href="#" onclick="showPayment()">Payment Solutions</a></li>
+                        <li><a href="#" onclick="showVirtual()">Virtual Events</a></li>
+                        <li><a href="#" onclick="showQR()">QR Check-In</a></li>
+                        <li><a href="#" onclick="showAnalytics()">Analytics</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Find Events</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="showFoodEvents()">Food & Drink Events</a></li>
+                        <li><a href="#" onclick="showMusicEvents()">Music Events</a></li>
+                        <li><a href="#" onclick="showBusinessEvents()">Business Events</a></li>
+                        <li><a href="#" onclick="showArtsEvents()">Arts Events</a></li>
+                        <li><a href="#" onclick="showSportsEvents()">Sports Events</a></li>
+                        <li><a href="#" onclick="browseAll()">Browse All</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" onclick="contactSupport()">Contact Support</a></li>
+                        <li><a href="#" onclick="contactSales()">Contact Sales</a></li>
+                        <li><a href="#" onclick="openFacebook()">Facebook</a></li>
+                        <li><a href="#" onclick="openTwitter()">Twitter</a></li>
+                        <li><a href="#" onclick="openInstagram()">Instagram</a></li>
+                        <li><a href="#" onclick="openLinkedIn()">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>&copy; 2025 Crowd</div>
+                <div class="footer-meta">
+                    <a href="#" onclick="showAbout()">About</a>
+                    <a href="#" onclick="showPrivacy()">Privacy</a>
+                    <a href="#" onclick="showTerms()">Terms</a>
+                    <a href="#" onclick="showSecurity()">Security</a>
+                    <a href="#" onclick="showAccessibility()">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header Search functionality
+        function performSearch(source) {
+            const searchInput = source === 'desktop' ?
+                document.getElementById('desktopSearchInput') :
+                document.getElementById('mobileSearchInput');
+            const locationInput = document.getElementById('desktopLocationInput');
+
+            const searchTerm = searchInput?.value.trim() || '';
+            const location = locationInput?.value.trim() || '';
+
+            if (searchTerm || location) {
+                console.log(`${source} search:`, { searchTerm, location });
+                showTopNotification(`Searching for: ${searchTerm} ${location ? `in ${location}` : ''}`, 'info');
+            }
+        }
+
+        // Desktop user menu functionality
+        function initializeDesktopMenu() {
+            const userMenuButton = document.getElementById('desktopUserMenuButton');
+            const userDropdown = document.getElementById('desktopUserDropdown');
+            const logoutLink = document.getElementById('desktopLogoutLink');
+
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (userDropdown.classList.contains('show')) {
+                        userDropdown.classList.remove('show');
+                    } else {
+                        userDropdown.classList.add('show');
+                    }
+                });
+            }
+
+            if (logoutLink) {
+                logoutLink.addEventListener('click', handleLogout);
+            }
+        }
+
+        // Mobile user menu functionality
+        function initializeMobileMenu() {
+            const userProfile = document.getElementById('mobileUserProfile');
+            const dropdown = document.getElementById('mobileDropdown');
+            const dropdownOverlay = document.getElementById('dropdownOverlay');
+
+            function showMobileDropdown() {
+                dropdown.classList.add('show');
+                dropdownOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function hideMobileDropdown() {
+                dropdown.classList.remove('show');
+                dropdownOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            if (userProfile) {
+                userProfile.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    if (dropdown.classList.contains('show')) {
+                        hideMobileDropdown();
+                    } else {
+                        showMobileDropdown();
+                    }
+                });
+            }
+
+            if (dropdownOverlay) {
+                dropdownOverlay.addEventListener('click', hideMobileDropdown);
+            }
+
+            // Handle mobile dropdown item clicks
+            const dropdownItems = document.querySelectorAll('.mobile-header .dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    console.log('Mobile menu clicked:', this.textContent.trim());
+
+                    if (this.classList.contains('logout')) {
+                        handleLogout(e);
+                    }
+
+                    hideMobileDropdown();
+
+                    // Add haptic feedback on mobile
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(50);
+                    }
+                });
+            });
+
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    hideMobileDropdown();
+                }
+            });
+
+            // Handle orientation change
+            window.addEventListener('orientationchange', function () {
+                hideMobileDropdown();
+            });
+        }
+
+        // Shared logout functionality
+        function handleLogout(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                sessionStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Load user data function
+        function loadUserData() {
+            const userStr = localStorage.getItem('currentUser');
+
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    updateUserElements(user);
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                    loadDemoUserData();
+                }
+            } else {
+                loadDemoUserData();
+            }
+        }
+
+        function updateUserElements(user) {
+            // Desktop elements
+            const desktopUserEmail = document.getElementById('desktopUserEmail');
+            const desktopUserAvatar = document.getElementById('desktopUserAvatar');
+            const desktopDropdownUserEmail = document.getElementById('desktopDropdownUserEmail');
+
+            // Mobile elements
+            const mobileUserEmail = document.getElementById('mobileUserEmail');
+
+            const displayText = user.name || user.email || 'User';
+            const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
+            const emailText = user.email || user.name || 'user@example.com';
+
+            if (desktopUserEmail) desktopUserEmail.textContent = displayText;
+            if (desktopUserAvatar) desktopUserAvatar.textContent = avatarText;
+            if (desktopDropdownUserEmail) desktopDropdownUserEmail.textContent = emailText;
+            if (mobileUserEmail) mobileUserEmail.textContent = emailText;
+        }
+
+        function loadDemoUserData() {
+            const demoUser = {
+                name: 'Demo User',
+                email: 'demo@example.com'
+            };
+            updateUserElements(demoUser);
+        }
+
+        // Global click handler to close dropdowns
+        function initializeGlobalHandlers() {
+            document.addEventListener('click', function (e) {
+                const desktopUserDropdown = document.getElementById('desktopUserDropdown');
+                const desktopUserMenuButton = document.getElementById('desktopUserMenuButton');
+                const mobileUserProfile = document.getElementById('mobileUserProfile');
+                const mobileDropdown = document.getElementById('mobileDropdown');
+
+                // Close desktop dropdown if clicking outside
+                if (!desktopUserMenuButton?.contains(e.target) && !desktopUserDropdown?.contains(e.target)) {
+                    desktopUserDropdown?.classList.remove('show');
+                }
+
+                // Close mobile dropdown if clicking outside
+                if (!mobileUserProfile?.contains(e.target) && !mobileDropdown?.contains(e.target)) {
+                    mobileDropdown?.classList.remove('show');
+                    document.getElementById('dropdownOverlay')?.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Search input enter key functionality
+            document.getElementById('desktopSearchInput')?.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('desktopLocationInput')?.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('mobileSearchInput')?.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch('mobile');
+                }
+            });
+
+            // Clear search on focus for better UX
+            document.getElementById('mobileSearchInput')?.addEventListener('focus', function () {
+                this.select();
+            });
+
+            document.getElementById('desktopSearchInput')?.addEventListener('focus', function () {
+                this.select();
+            });
+        }
+
+        // Global state variables
+        let events = [];
+        let filteredEvents = [];
+
+        // Sample events data
+        const sampleEvents = [
+            {
+                id: 1,
+                title: "Karachi Food Festival 2025",
+                location: "Expo Centre, Karachi",
+                date: "Mar 15",
+                price: "PKR 500",
+                image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=200&fit=crop",
+                attendees: 245,
+                category: "festival"
+            },
+            {
+                id: 2,
+                title: "Lahore Street Food Tour",
+                location: "Food Street, Lahore",
+                date: "Mar 18",
+                price: "PKR 750",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=200&fit=crop",
+                attendees: 89,
+                category: "tour"
+            },
+            {
+                id: 3,
+                title: "Traditional Punjabi Cooking Class",
+                location: "Culinary Institute, Islamabad",
+                date: "Mar 20",
+                price: "PKR 1,200",
+                image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop",
+                attendees: 32,
+                category: "class"
+            },
+            {
+                id: 4,
+                title: "Wine Tasting Evening",
+                location: "Pearl Continental, Lahore",
+                date: "Mar 22",
+                price: "PKR 2,500",
+                image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&h=200&fit=crop",
+                attendees: 67,
+                category: "tasting"
+            },
+            {
+                id: 5,
+                title: "BBQ Championship",
+                location: "Liberty Market, Lahore",
+                date: "Mar 25",
+                price: "Free",
+                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=200&fit=crop",
+                attendees: 156,
+                category: "competition"
+            },
+            {
+                id: 6,
+                title: "Dessert Making Workshop",
+                location: "Baking Studio, Karachi",
+                date: "Mar 28",
+                price: "PKR 800",
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=200&fit=crop",
+                attendees: 28,
+                category: "workshop"
+            }
+        ];
+
+        // Notification functions
+        function showTopNotification(message, type = 'info') {
+            let notification = document.getElementById('topNotification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'topNotification';
+                notification.className = 'top-notification';
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <span id="notificationMessage"></span>
+                        <button class="notification-close" onclick="hideTopNotification()">×</button>
+                    </div>
+                `;
+
+                // Add notification styles
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 70px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #333;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    z-index: 10000;
+                    opacity: 0;
+                    transition: all 0.3s ease;
+                    font-size: 14px;
+                `;
+
+                document.body.appendChild(notification);
+            }
+
+            document.getElementById('notificationMessage').textContent = message;
+            notification.className = `top-notification ${type}`;
+
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateX(-50%) translateY(0)';
+            }, 100);
+            setTimeout(() => hideTopNotification(), 4000);
+        }
+
+        function hideTopNotification() {
+            const notification = document.getElementById('topNotification');
+            if (notification) {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(-50%) translateY(-10px)';
+            }
+        }
+
+        // Filter functionality
+        function toggleFilter(element, filterType) {
+            element.classList.toggle('active');
+
+            switch (filterType) {
+                case 'location':
+                    showTopNotification('Location filter: Punjab, Pakistan selected', 'info');
+                    break;
+                case 'date':
+                    showTopNotification('Date filter options: Today, This Week, This Month', 'info');
+                    break;
+                case 'price':
+                    showTopNotification('Price filter: Free, Under 1000, 1000-2000, Above 2000', 'info');
+                    break;
+                case 'category':
+                    showTopNotification('Category filter: Festival, Workshop, Tour, Tasting, Competition', 'info');
+                    break;
+            }
+        }
+
+        // Event loading functions
+        function loadEvents() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            showLoading();
+
+            setTimeout(() => {
+                eventsGrid.innerHTML = '';
+
+                if (filteredEvents.length === 0) {
+                    eventsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #666; padding: 40px;">No events found. Try adjusting your search or filters.</p>';
+                    return;
+                }
+
+                filteredEvents.forEach(event => {
+                    const eventCard = createEventCard(event);
+                    eventsGrid.appendChild(eventCard);
+                });
+            }, 1000);
+        }
+
+        function showLoading() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            eventsGrid.innerHTML = '';
+
+            for (let i = 0; i < 6; i++) {
+                const loadingCard = document.createElement('div');
+                loadingCard.className = 'loading-card';
+                loadingCard.innerHTML = `
+                    <div class="loading-placeholder loading-image"></div>
+                    <div class="loading-content">
+                        <div class="loading-placeholder loading-title"></div>
+                        <div class="loading-placeholder loading-subtitle"></div>
+                        <div class="loading-placeholder loading-price"></div>
+                    </div>
+                `;
+                eventsGrid.appendChild(loadingCard);
+            }
+        }
+
+        function createEventCard(event) {
+            const card = document.createElement('div');
+            card.className = 'event-card';
+            card.onclick = () => showEventDetails(event);
+
+            card.innerHTML = `
+                <div class="event-image" style="background-image: url('${event.image}')">
+                    <div class="event-date">${event.date}</div>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-location">📍 ${event.location}</div>
+                    <div class="event-price">${event.price}</div>
+                    <div class="event-attendees">👥 ${event.attendees} attending</div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showEventDetails(event) {
+            alert(`Event: ${event.title}\nLocation: ${event.location}\nDate: ${event.date}\nPrice: ${event.price}\n\n${event.attendees} people are attending this event.`);
+        }
+
+        // Breadcrumb navigation
+        function goToCountry() { showTopNotification('Showing events in Pakistan...', 'info'); }
+        function goToRegion() { showTopNotification('Showing events in Punjab...', 'info'); }
+        function goToEvents() { showTopNotification('Showing all events...', 'info'); }
+
+        // Footer functions
+        function showCreateEvents() { window.location.href = 'create-events.html'; }
+        function showPricing() { showTopNotification('Opening pricing page...', 'info'); }
+        function showMarketing() { showTopNotification('Opening event marketing page...', 'info'); }
+        function showMobileApp() { showTopNotification('Opening mobile app download...', 'info'); }
+        function showCheckIn() { showTopNotification('Opening check-in app info...', 'info'); }
+        function showSellTickets() { showTopNotification('Opening sell tickets page...', 'info'); }
+        function showEventManagement() { showTopNotification('Opening event management page...', 'info'); }
+        function showPayment() { showTopNotification('Opening payment solutions page...', 'info'); }
+        function showVirtual() { showTopNotification('Opening virtual events page...', 'info'); }
+        function showQR() { showTopNotification('Opening QR check-in info...', 'info'); }
+        function showAnalytics() { showTopNotification('Opening analytics page...', 'info'); }
+        function showFoodEvents() { showTopNotification('You are already viewing food events!', 'info'); }
+        function showMusicEvents() { window.location.href = 'Music events.html'; }
+        function showBusinessEvents() { window.location.href = 'business_events.html'; }
+        function showArtsEvents() { window.location.href = 'Performing & Visual Arts projects.html'; }
+        function showSportsEvents() { showTopNotification('Sports events coming soon...', 'info'); }
+        function browseAll() { showTopNotification('Opening all events...', 'info'); }
+        function contactSupport() { showTopNotification('Opening contact support...', 'info'); }
+        function contactSales() { showTopNotification('Opening contact sales...', 'info'); }
+        function openFacebook() { window.open('https://facebook.com', '_blank'); }
+        function openTwitter() { window.open('https://twitter.com', '_blank'); }
+        function openInstagram() { window.open('https://instagram.com', '_blank'); }
+        function openLinkedIn() { window.open('https://linkedin.com', '_blank'); }
+        function showAbout() { showTopNotification('Opening about page...', 'info'); }
+        function showPrivacy() { showTopNotification('Opening privacy policy...', 'info'); }
+        function showTerms() { showTopNotification('Opening terms of service...', 'info'); }
+        function showSecurity() { showTopNotification('Opening security info...', 'info'); }
+        function showAccessibility() { showTopNotification('Opening accessibility info...', 'info'); }
+
+        // Auth modal functions
+        function toggleAuthMode() {
+            const modalTitle = document.getElementById('modalTitle');
+            const authButton = document.getElementById('authButton');
+            const nameGroup = document.getElementById('nameGroup');
+            const authToggleText = document.getElementById('authToggleText');
+            const authToggleLink = document.getElementById('authToggleLink');
+
+            if (modalTitle.textContent === 'Log In') {
+                modalTitle.textContent = 'Sign Up';
+                authButton.textContent = 'Sign Up';
+                nameGroup.style.display = 'block';
+                authToggleText.textContent = 'Already have an account?';
+                authToggleLink.textContent = 'Log In';
+            } else {
+                modalTitle.textContent = 'Log In';
+                authButton.textContent = 'Log In';
+                nameGroup.style.display = 'none';
+                authToggleText.textContent = "Don't have an account?";
+                authToggleLink.textContent = 'Sign Up';
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            document.getElementById('authForm').reset();
+        }
+
+        function handleAuthSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            showTopNotification('Authentication successful!', 'success');
+            closeAuthModal();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize header functionality
+            initializeDesktopMenu();
+            initializeMobileMenu();
+            initializeGlobalHandlers();
+            loadUserData();
+
+            // Initialize events functionality
+            events = [...sampleEvents];
+            filteredEvents = [...events];
+            loadEvents();
+
+            // Close auth modal when clicking outside
+            const authModal = document.getElementById('authModal');
+            if (authModal) {
+                authModal.addEventListener('click', function (event) {
+                    if (event.target === this) {
+                        closeAuthModal();
+                    }
+                });
+            }
+
+            console.log('Food events page with unified header initialized');
+        });
+    </script>
+</body>
+
+</html>
