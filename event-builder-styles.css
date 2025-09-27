@@ -2830,7 +2830,8 @@ select:focus {
   position: absolute;
   z-index: 1000;
   margin-top: 12px;
-  width: 340px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
   border: 1px solid rgba(226, 232, 240, 0.8);
   backdrop-filter: blur(20px);
   opacity: 0;
@@ -2838,12 +2839,14 @@ select:focus {
   transform: scale(0.92) translateY(-20px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: top center;
+  left: 50%;
+  transform: translateX(-50%) scale(0.92) translateY(-20px);
 }
 
 .calendar-container.show {
   opacity: 1;
   visibility: visible;
-  transform: scale(1) translateY(0);
+  transform: translateX(-50%) scale(1) translateY(0);
 }
 
 /* Calendar Header */
@@ -2898,12 +2901,22 @@ select:focus {
   background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
 }
 
+/* Calendar positioning improvements */
+.calendar-input-wrapper {
+  position: relative;
+}
+
+.calendar-input-wrapper .calendar-container {
+  top: 100%;
+  margin-top: 8px;
+}
+
 /* Weekdays Grid */
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 16px;
 }
 
 .weekday {
@@ -2912,14 +2925,16 @@ select:focus {
   color: #6b7280;
   font-size: 12px;
   text-transform: uppercase;
-  padding: 8px 0;
+  padding: 12px 0;
+  border-radius: 8px;
+  background: rgba(243, 244, 246, 0.5);
 }
 
 /* Days Grid */
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 6px;
 }
 
 /* Day Cells */
@@ -2934,8 +2949,8 @@ select:focus {
   border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   color: #374151;
-  position: relative;
   min-height: 44px;
+  position: relative;
 }
 
 .day:hover {
@@ -3112,17 +3127,42 @@ select:focus {
   }
 
   .calendar-container {
-    width: 300px;
-    left: 0;
-    right: 0;
+    width: 320px;
+    max-width: calc(100vw - 24px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.92) translateY(-20px);
+  }
+
+  .calendar-container.show {
+    transform: translateX(-50%) scale(1) translateY(0);
   }
 
   .calendar-grid {
-    padding: 1rem;
+    padding: 1.25rem;
   }
 
   .calendar-header {
-    padding: 1rem;
+    padding: 1.25rem;
+  }
+
+  .day {
+    min-height: 38px;
+    font-size: 13px;
+  }
+
+  .weekday {
+    padding: 10px 0;
+    font-size: 11px;
+  }
+
+  .nav-button {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .month-year {
+    font-size: 18px;
   }
 }
 
