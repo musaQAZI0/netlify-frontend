@@ -11,7 +11,13 @@
       "Bash(git pull:*)",
       "Bash(git diff:*)",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(node:*)",
+      "Bash(git merge:*)",
+      "Bash(git rm:*)",
+      "Bash(ls:*)",
+      "Bash(npm start)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
