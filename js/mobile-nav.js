@@ -255,7 +255,7 @@ mobileStyles.textContent = `
             display: block;
             width: 25px;
             height: 3px;
-            background: #39364f;
+            background: #1A3A4F;
             margin: 3px 0;
             transition: 0.3s;
             border-radius: 2px;

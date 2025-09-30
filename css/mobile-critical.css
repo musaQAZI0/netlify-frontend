@@ -57,7 +57,7 @@ html, body {
         display: block;
         width: 20px;
         height: 2px;
-        background: #333;
+        background: #1A3A4F;
         margin: 3px 0;
         transition: 0.3s;
         border-radius: 2px;
@@ -340,7 +340,7 @@ html, body {
     select:focus,
     textarea:focus,
     a:focus {
-        outline: 2px solid #007acc;
+        outline: 2px solid #FF6B1A;
         outline-offset: 2px;
     }
     
@@ -352,6 +352,6 @@ html, body {
     
     /* Better contrast for small screens */
     .text-muted {
-        color: #555 !important;
+        color: #B0B0B0 !important;
     }
 }
