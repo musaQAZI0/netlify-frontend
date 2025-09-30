@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Event Management - CROWD</title>
+    <link rel="stylesheet" href="css/live-event-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .post-event-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .automation-status {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .automation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .automation-card {
+            background: var(--background-white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .automation-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .automation-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .automation-icon.thankyou { background: var(--primary-blue); }
+        .automation-icon.survey { background: var(--accent-orange); }
+        .automation-icon.review { background: var(--primary-green); }
+
+        .automation-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .automation-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background-light);
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .message-template {
+            background: var(--background-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .template-header {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .template-content {
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        .survey-form {
+            background: var(--background-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .survey-question {
+            margin-bottom: 2rem;
+        }
+
+        .question-label {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffd700;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .review-card {
+            background: var(--background-white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .review-rating .star {
+            font-size: 1rem;
+            color: #ffd700;
+        }
+
+        .review-text {
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .review-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .review-tag {
+            background: var(--background-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--background-light);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-green));
+            transition: width 0.3s ease;
+        }
+
+        .automation-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-btn.start {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .control-btn.pause {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .control-btn.edit {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .response-rate {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .rate-indicator {
+            flex: 1;
+            height: 8px;
+            background: var(--background-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .rate-fill {
+            height: 100%;
+            background: var(--success-color);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="post-event-container">
+        <div class="automation-status">
+            <h1><i class="fas fa-robot"></i> Post-Event Automation Center</h1>
+            <p>Automatically engage with attendees after your event ends</p>
+            <div class="event-status">
+                <div class="status-dot"></div>
+                <span>Automation Active</span>
+            </div>
+        </div>
+
+        <div class="automation-grid">
+            <!-- Thank You Messages -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-icon thankyou">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="automation-title">Thank You Messages</div>
+                </div>
+
+                <div class="automation-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="thankYouSent">156</div>
+                        <div class="stat-label">Messages Sent</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="thankYouOpenRate">89%</div>
+                        <div class="stat-label">Open Rate</div>
+                    </div>
+                </div>
+
+                <div class="response-rate">
+                    <span>Delivery Progress:</span>
+                    <div class="rate-indicator">
+                        <div class="rate-fill" style="width: 92%"></div>
+                    </div>
+                    <span>92%</span>
+                </div>
+
+                <div class="message-template">
+                    <div class="template-header">Current Template:</div>
+                    <div class="template-content">
+                        "Thank you for joining us at Summer Music Festival 2024! 🎵 Your energy made the night unforgettable. We'd love to hear your feedback and keep you updated on future events."
+                    </div>
+                </div>
+
+                <div class="automation-controls">
+                    <button class="control-btn edit" onclick="postEvent.editThankYouTemplate()">
+                        <i class="fas fa-edit"></i> Edit Template
+                    </button>
+                    <button class="control-btn start" onclick="postEvent.sendThankYouMessages()">
+                        <i class="fas fa-paper-plane"></i> Send Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Survey Collection -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-icon survey">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="automation-title">Survey Collection</div>
+                </div>
+
+                <div class="automation-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="surveyResponses">89</div>
+                        <div class="stat-label">Responses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="surveyResponseRate">57%</div>
+                        <div class="stat-label">Response Rate</div>
+                    </div>
+                </div>
+
+                <div class="response-rate">
+                    <span>Collection Progress:</span>
+                    <div class="rate-indicator">
+                        <div class="rate-fill" style="width: 57%"></div>
+                    </div>
+                    <span>57%</span>
+                </div>
+
+                <div class="survey-form" id="surveyPreview">
+                    <div class="survey-question">
+                        <div class="question-label">How would you rate your overall experience?</div>
+                        <div class="rating-stars">
+                            <span class="star active">★</span>
+                            <span class="star active">★</span>
+                            <span class="star active">★</span>
+                            <span class="star active">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </div>
+
+                    <div class="survey-question">
+                        <div class="question-label">What was the highlight of the event?</div>
+                        <textarea class="form-textarea" placeholder="Share your favorite moment..." disabled></textarea>
+                    </div>
+                </div>
+
+                <div class="automation-controls">
+                    <button class="control-btn edit" onclick="postEvent.editSurvey()">
+                        <i class="fas fa-edit"></i> Edit Survey
+                    </button>
+                    <button class="control-btn start" onclick="postEvent.sendSurvey()">
+                        <i class="fas fa-poll"></i> Send Survey
+                    </button>
+                </div>
+            </div>
+
+            <!-- Review Collection -->
+            <div class="automation-card">
+                <div class="automation-header">
+                    <div class="automation-icon review">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="automation-title">Review Collection</div>
+                </div>
+
+                <div class="automation-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="reviewsCollected">42</div>
+                        <div class="stat-label">Reviews</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="averageRating">4.6</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                </div>
+
+                <div class="response-rate">
+                    <span>Collection Rate:</span>
+                    <div class="rate-indicator">
+                        <div class="rate-fill" style="width: 27%"></div>
+                    </div>
+                    <span>27%</span>
+                </div>
+
+                <div class="message-template">
+                    <div class="template-header">Review Request Template:</div>
+                    <div class="template-content">
+                        "We hope you had an amazing time! Would you mind leaving us a quick review? Your feedback helps us create even better events."
+                    </div>
+                </div>
+
+                <div class="automation-controls">
+                    <button class="control-btn edit" onclick="postEvent.editReviewRequest()">
+                        <i class="fas fa-edit"></i> Edit Request
+                    </button>
+                    <button class="control-btn start" onclick="postEvent.requestReviews()">
+                        <i class="fas fa-star"></i> Request Reviews
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Reviews Section -->
+        <div class="demo-section">
+            <h2><i class="fas fa-comments"></i> Recent Reviews & Feedback</h2>
+            <div class="review-grid" id="reviewsGrid">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Survey Analytics -->
+        <div class="demo-section">
+            <h2><i class="fas fa-chart-bar"></i> Survey Analytics</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h4>Overall Satisfaction</h4>
+                    <div class="stat-number" style="font-size: 2rem;">4.3/5</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 86%"></div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <h4>Would Recommend</h4>
+                    <div class="stat-number" style="font-size: 2rem;">91%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 91%"></div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <h4>Return Attendance</h4>
+                    <div class="stat-number" style="font-size: 2rem;">78%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automation Schedule -->
+        <div class="demo-section">
+            <h2><i class="fas fa-clock"></i> Automation Schedule</h2>
+            <div class="automation-grid">
+                <div class="feature-item">
+                    <h4><i class="fas fa-heart"></i> Thank You Messages</h4>
+                    <p><strong>Trigger:</strong> 2 hours after event ends</p>
+                    <p><strong>Status:</strong> <span style="color: var(--success-color);">✓ Completed</span></p>
+                    <p><strong>Next Send:</strong> Next event completion</p>
+                </div>
+                <div class="feature-item">
+                    <h4><i class="fas fa-clipboard-list"></i> Survey Requests</h4>
+                    <p><strong>Trigger:</strong> 24 hours after event ends</p>
+                    <p><strong>Status:</strong> <span style="color: var(--warning-color);">⏱ In Progress</span></p>
+                    <p><strong>Reminder:</strong> 72 hours (if no response)</p>
+                </div>
+                <div class="feature-item">
+                    <h4><i class="fas fa-star"></i> Review Requests</h4>
+                    <p><strong>Trigger:</strong> 48 hours after event ends</p>
+                    <p><strong>Status:</strong> <span style="color: var(--primary-blue);">⏳ Scheduled</span></p>
+                    <p><strong>Platform:</strong> Google, Facebook, App Store</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/post-event-automation.js"></script>
+</body>
+</html>

@@ -408,6 +408,24 @@
                     const errorText = await response.text();
                     console.error(`API Error Response: ${errorText}`);
 
+                    // Handle 401 Unauthorized - try token refresh
+                    if (response.status === 401 && retryCount === 0) {
+                        console.log('Token expired, attempting refresh...');
+                        const refreshed = await refreshAuthToken();
+                        if (refreshed) {
+                            console.log('Token refreshed, retrying request...');
+                            // Update the Authorization header with new token
+                            if (options.headers && options.headers.Authorization) {
+                                options.headers.Authorization = `Bearer ${getAuthToken()}`;
+                            }
+                            return makeApiRequest(url, options, retryCount + 1);
+                        } else {
+                            console.log('Token refresh failed, redirecting to login...');
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                    }
+
                     let errorMessage;
                     try {
                         const errorJson = JSON.parse(errorText);
@@ -686,6 +704,41 @@
 
             console.log('Auth token found:', token ? 'Yes (length: ' + token.length + ')' : 'No');
             return token || '';
+        }
+
+        async function refreshAuthToken() {
+            try {
+                console.log('Attempting to refresh auth token...');
+                const currentToken = getAuthToken();
+
+                if (!currentToken) {
+                    console.log('No current token to refresh');
+                    return false;
+                }
+
+                const response = await fetch(`${CONFIG.API_BASE_URL}/api/auth/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success && data.token) {
+                        localStorage.setItem(CONFIG.TOKEN_KEY, data.token);
+                        console.log('Token refreshed successfully');
+                        return true;
+                    }
+                }
+
+                console.log('Token refresh failed with status:', response.status);
+                return false;
+            } catch (error) {
+                console.error('Error refreshing token:', error);
+                return false;
+            }
         }
 
         function populateEventInfo() {
