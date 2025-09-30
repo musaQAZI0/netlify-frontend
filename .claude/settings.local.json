@@ -17,7 +17,13 @@
       "Bash(git rm:*)",
       "Bash(ls:*)",
       "Bash(npm start)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm install:*)",
+      "Bash(git stash:*)",
+      "Bash(python:*)"
     ],
     "deny": [],
     "ask": []
