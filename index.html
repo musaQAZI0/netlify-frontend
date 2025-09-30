@@ -61,7 +61,7 @@
             color: var(--white);
             text-align: center;
             overflow: hidden;
-            margin: 20px 20px -20px 20px;
+            margin: 0;
             border-radius: 0px;
         }
 
@@ -1042,18 +1042,18 @@
             justify-content: center;
             margin-bottom: 12px;
             border-radius: 50%;
-            background-color: #f8f7fa;
+            background-color: var(--text-muted);
             transition: background-color 0.2s ease, border-color 0.2s ease;
             border: 3px solid transparent;
         }
 
         .category-card:hover .icon-wrapper {
-            background-color: #f0f0f5;
+            background-color: var(--bg-light);
         }
 
         .category-card.active .icon-wrapper {
-            background-color: #c7d2fe;
-            border-color: #6366f1;
+            background-color: rgba(255, 107, 26, 0.1);
+            border-color: var(--primary-color);
         }
 
         .category-title {
@@ -1066,19 +1066,19 @@
         }
 
         .category-card.active .category-title {
-            color: #6366f1;
+            color: var(--primary-color);
             font-weight: 700;
         }
 
         .category-icon {
             width: 48px;
             height: 48px;
-            fill: #39364f;
+            fill: var(--text-dark);
             transition: fill 0.2s ease;
         }
 
         .category-card.active .category-icon {
-            fill: #6366f1;
+            fill: var(--primary-color);
         }
 
         /* Mobile responsive styles */
@@ -1264,8 +1264,8 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background: #efe8ff;
-            color: #5b21b6;
+            background: rgba(139, 195, 74, 0.15);
+            color: var(--accent-green);
             font-size: 12px;
             padding: 6px 10px;
             border-radius: 999px;
@@ -1465,7 +1465,7 @@
             cursor: pointer;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         }
 
         .destination-card:hover {
@@ -1527,25 +1527,25 @@
         }
 
         .card-newyork {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
         }
 
         .card-losangeles {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, var(--primary-hover) 0%, var(--accent-green) 100%);
         }
 
         .card-chicago {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
         }
 
         .card-washington {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--primary-color) 100%);
         }
 
 
         /* Footer */
         .footer {
-            background: #39364f;
+            background: var(--secondary-color);
             color: var(--white);
             padding: 3rem 0 1rem;
         }
@@ -1581,7 +1581,7 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 2rem;
-            border-top: 1px solid #504264;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             flex-wrap: wrap;
             gap: 1rem;
         }
