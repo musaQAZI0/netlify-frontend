@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Access - CROWD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Neue+Plak:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Neue Plak', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .access-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .access-logo {
+            margin-bottom: 2rem;
+        }
+
+        .access-logo img {
+            height: 80px;
+            width: auto;
+            margin-bottom: 1rem;
+        }
+
+        .access-logo h1 {
+            color: #333;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .access-options {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .access-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.25rem 2rem;
+            background: linear-gradient(135deg, #f05537, #ff6b6b);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .access-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(240, 85, 55, 0.3);
+        }
+
+        .access-btn i {
+            font-size: 1.3rem;
+        }
+
+        .access-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-left: 4px solid #f05537;
+        }
+
+        .access-info h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .access-info p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .credentials {
+            background: #e8f5e8;
+            border: 1px solid #c6f6d5;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+
+        .credentials strong {
+            color: #2f855a;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #f05537;
+            text-decoration: none;
+            margin-top: 2rem;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="access-container">
+        <div class="access-logo">
+            <img src="logo.jpg" alt="CROWD Logo">
+            <h1>Admin Access Portal</h1>
+            <p>Choose your admin panel</p>
+        </div>
+
+        <div class="access-options">
+            <a href="admin-login.html?redirect=admin-monetize.html" class="access-btn">
+                <i class="fas fa-dollar-sign"></i>
+                Monetize Applications
+            </a>
+
+            <a href="admin-login.html?redirect=admin-applications.html" class="access-btn">
+                <i class="fas fa-handshake"></i>
+                General Applications
+            </a>
+
+            <a href="admin-login.html?redirect=dashboard-home.html" class="access-btn">
+                <i class="fas fa-chart-line"></i>
+                Dashboard
+            </a>
+        </div>
+
+        <div class="access-info">
+            <h3>
+                <i class="fas fa-key"></i>
+                Default Admin Credentials
+            </h3>
+            <div class="credentials">
+                <strong>Username:</strong> admin<br>
+                <strong>Password:</strong> CrowdAdmin2024!
+            </div>
+            <p>
+                <strong>Important:</strong> Change these credentials in production!
+                Use environment variables ADMIN_USERNAME and ADMIN_PASSWORD.
+            </p>
+        </div>
+
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Main Site
+        </a>
+    </div>
+
+    <script>
+        // Auto-check if already logged in as admin
+        window.addEventListener('load', () => {
+            const adminToken = localStorage.getItem('adminToken');
+            if (adminToken) {
+                // Show logged in status
+                const container = document.querySelector('.access-container');
+                const loggedInNotice = document.createElement('div');
+                loggedInNotice.style.cssText = `
+                    background: #d4edda;
+                    border: 1px solid #c3e6cb;
+                    border-radius: 8px;
+                    padding: 1rem;
+                    margin-bottom: 1rem;
+                    color: #155724;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                `;
+                loggedInNotice.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    You are currently logged in as admin
+                `;
+                container.insertBefore(loggedInNotice, container.firstChild.nextSibling);
+
+                // Update buttons to direct access
+                const buttons = document.querySelectorAll('.access-btn');
+                buttons.forEach(btn => {
+                    const href = btn.getAttribute('href');
+                    const redirectParam = href.split('redirect=')[1];
+                    if (redirectParam) {
+                        btn.setAttribute('href', redirectParam);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build Event - Crowd</title>
+    <link rel="stylesheet" href="event-builder-styles.css">
+    <script src="js/config.js"></script>
+    <script src="js/auth-utils.js"></script>
+    <script src="js/google-places.js"></script>
+    <script src="js/map-location-picker.js"></script>
+    <script src="js/good-to-know.js"></script>
+    <script src="js/event-builder.js?v=2.7"></script>
+    <!-- Google Places API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiq2Anse5vuEDCI3oKqD2iezo1MfoOiVk&libraries=places&loading=async&callback=initGooglePlaces" async defer></script>
+    
+    <!-- Fallback initialization for demo without API key -->
+    <script>
+        // Initialize fallback mode when no API key is available
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (!window.google && window.googlePlaces) {
+                    console.log('🗺️ Google Places API not loaded - using manual location entry mode');
+                    window.googlePlaces.setupManualLocationEntry();
+                    
+                    // Show location details immediately for manual entry
+                    const locationDetails = document.getElementById('locationDetails');
+                    if (locationDetails) {
+                        locationDetails.style.display = 'block';
+                    }
+                }
+            }, 1000);
+        });
+    </script>
+</head>
+<body>
+    <div class="builder-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="back-link">
+                    <a href="dashboard-home.html">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                        Back to events
+                    </a>
+                </div>
+                
+                <div class="event-summary">
+                    <div class="event-image-placeholder"></div>
+                    <h2 id="eventTitleSidebar">Event Title</h2>
+                    
+                    <select class="status-select" id="eventStatus">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                    
+                    <a href="#" class="preview-link" onclick="previewEvent()">Preview ↗</a>
+                </div>
+
+                <div class="steps-section">
+                    <h3>Steps</h3>
+                    <div class="step-item active" id="buildStep">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                        <div class="step-content">
+                            <h4>Build event page</h4>
+                            <p>Add all of your event details and let attendees know what to expect</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item" id="ticketsStep" onclick="goToTickets()" style="cursor: pointer;">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                        <div class="step-content">
+                            <h4>Add tickets</h4>
+                            <p>Use our suggestions to help sell more tickets or manually create your own</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item" id="publishStep" onclick="goToPublish()" style="cursor: pointer;">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                        <div class="step-content">
+                            <h4>Publish</h4>
+                            <p>Review your event page and settings, then publish your event</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section">
+                    <div class="dashboard-toggle">
+                        <span>Dashboard</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="logo">
+                        <img src="logo.jpg" alt="Event Platform" class="logo-img" style="height: 40px; width: auto;">
+                    </div>
+                    <div class="header-right">
+                        <div class="user-menu" onclick="toggleUserDropdown()">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span class="user-name" id="userName">User</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z"/>
+                            </svg>
+                            <div class="user-dropdown" id="userDropdown" style="display: none;">
+                                <a href="#" onclick="viewProfile()">View Profile</a>
+                                <a href="#" onclick="accountSettings()">Account Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="logoutUser()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area" id="contentArea">
+                <!-- Build Event Page Content -->
+                <div class="build-content" id="buildContent">
+                    <div class="content-header">
+                        <p class="content-subtitle">A short and sweet sentence about your event.</p>
+                    </div>
+                    
+                    <div class="main-form">
+                        <!-- Enhanced Add images and video Section -->
+                        <div class="enhanced-upload-card">
+                            <h3>Add images and video</h3>
+
+                            <!-- Images Section -->
+                            <div class="enhanced-images-section">
+                                <h4>Images</h4>
+
+                                <!-- Pro Tip -->
+                                <div class="enhanced-pro-tip">
+                                    <div class="enhanced-pro-tip-icon">
+                                        <svg class="sparkles-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.582a.5.5 0 0 1 0 .962L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="enhanced-pro-tip-content">
+                                        <span class="enhanced-pro-tip-label">Pro tip:</span>
+                                        <span class="enhanced-pro-tip-text">Use photos that set the mood, and avoid distracting text overlays.</span>
+                                        <button class="enhanced-view-examples-btn">
+                                            View examples
+                                            <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M5 12h14m-7-7 7 7-7 7"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Drag and Drop Area -->
+                                <div class="enhanced-drop-zone" id="enhancedImageDropZone">
+                                    <div class="enhanced-drop-zone-content">
+                                        <div class="enhanced-drop-zone-icon">
+                                            <svg class="enhanced-image-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                                                <circle cx="9" cy="9" r="2"/>
+                                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                                            </svg>
+                                        </div>
+                                        <div class="enhanced-drop-zone-text">
+                                            <p class="enhanced-drop-zone-title">Drag and drop an image or</p>
+                                            <button class="enhanced-upload-btn" id="enhancedImageUploadBtn">
+                                                <svg class="enhanced-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                                    <polyline points="7,10 12,15 17,10"/>
+                                                    <line x1="12" x2="12" y1="15" y2="3"/>
+                                                </svg>
+                                                Upload Image
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <input type="file" id="enhancedImageInput" multiple accept="image/jpeg,image/png" style="display: none;">
+                                </div>
+
+                                <!-- Image Specifications -->
+                                <div class="enhanced-specifications">
+                                    <span class="enhanced-spec-item">• Recommended image size: 2160 x 1080px</span>
+                                    <span class="enhanced-spec-item">• Maximum file size: 10MB</span>
+                                    <span class="enhanced-spec-item">• Supported image files: JPEG, PNG</span>
+                                </div>
+                            </div>
+
+                            <!-- Video Section -->
+                            <div class="enhanced-video-section">
+                                <h4>Video</h4>
+                                <p class="enhanced-video-description">
+                                    Add a video to show your event's vibe. The video will appear with your event images.
+                                </p>
+
+                                <!-- Video Upload Area -->
+                                <div class="enhanced-video-upload-zone">
+                                    <button class="enhanced-upload-btn" id="enhancedVideoUploadBtn">
+                                        <svg class="enhanced-video-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="m22 8-6 4 6 4V8Z"/>
+                                            <rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+                                        </svg>
+                                        Upload video
+                                    </button>
+                                    <input type="file" id="enhancedVideoInput" multiple accept="video/mp4,video/mov" style="display: none;">
+                                </div>
+
+                                <!-- Video Specifications -->
+                                <div class="enhanced-video-specs">
+                                    <div class="enhanced-specifications">
+                                        <span class="enhanced-spec-item">• Min resolution: 480p</span>
+                                        <span class="enhanced-spec-item">• Ratio: any vertical</span>
+                                        <span class="enhanced-spec-item">• Length: up to 1 min</span>
+                                        <span class="enhanced-spec-item">• Formats: MP4, MOV</span>
+                                    </div>
+                                    <button class="enhanced-view-details-btn">
+                                        View more details
+                                        <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M5 12h14m-7-7 7 7-7 7"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Event Title -->
+                        <div class="title-section">
+                            <div class="add-button">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                                    <line x1="12" x2="12" y1="5" y2="19"/>
+                                    <line x1="5" x2="19" y1="12" y2="12"/>
+                                </svg>
+                            </div>
+                            <h1 contenteditable="true" class="event-title" id="eventTitle" data-placeholder="Enter event title">Event Title</h1>
+                        </div>
+
+
+                        <!-- Location Section -->
+                        <section class="form-section">
+                            <h2>Location</h2>
+
+                            <div class="location-buttons">
+                                <button class="location-btn active" data-type="venue">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Venue
+                                </button>
+                                <button class="location-btn" data-type="online">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                                    </svg>
+                                    Online event
+                                </button>
+                                <button class="location-btn" data-type="tba">
+                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    To be announced
+                                </button>
+                            </div>
+
+                            <!-- Venue Content -->
+                            <div class="location-content" id="venue-content">
+                                <div class="input-group">
+                                    <label for="locationInput">Location <span class="required">*</span></label>
+                                    <div class="input-wrapper">
+                                        <input type="text" id="locationInput" placeholder="Enter event location" class="form-input">
+                                        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <path d="m21 21-4.35-4.35"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Online Event Content -->
+                            <div class="location-content hidden" id="online-content">
+                                <div class="info-box online-info">
+                                    <p>Online events have unique event pages where you can add links to livestreams and more</p>
+                                </div>
+                            </div>
+
+                            <!-- To Be Announced Content -->
+                            <div class="location-content hidden" id="tba-content">
+                                <div class="info-box tba-info">
+                                    <p>Location details will be announced later</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Date and Time Section -->
+                        <section class="form-section">
+                            <h2>Date and time</h2>
+
+                            <div class="date-time-inputs">
+                                <div class="input-group">
+                                    <label for="event-date">Event Date <span class="required">*</span></label>
+                                    <div class="input-wrapper calendar-input-wrapper">
+                                        <input type="text" id="event-date" class="form-input date-input" placeholder="Select event date" readonly onclick="toggleEventCalendar()">
+                                        <div class="calendar-icon" onclick="toggleEventCalendar()">
+                                            <svg viewBox="0 0 100 100" class="calendar-svg">
+                                                <!-- Calendar base -->
+                                                <rect x="15" y="25" width="70" height="60" rx="8" ry="8" fill="white" stroke="#e2e8f0" stroke-width="3"/>
+
+                                                <!-- Calendar top section -->
+                                                <rect x="15" y="25" width="70" height="20" rx="8" ry="8" fill="#f1f5f9"/>
+                                                <rect x="15" y="35" width="70" height="10" fill="#f1f5f9"/>
+
+                                                <!-- Calendar rings -->
+                                                <rect x="30" y="15" width="8" height="20" rx="4" ry="4" fill="#374151"/>
+                                                <rect x="62" y="15" width="8" height="20" rx="4" ry="4" fill="#374151"/>
+
+                                                <!-- Calendar grid lines -->
+                                                <line x1="25" y1="55" x2="75" y2="55" stroke="#e2e8f0" stroke-width="1"/>
+                                                <line x1="25" y1="65" x2="75" y2="65" stroke="#e2e8f0" stroke-width="1"/>
+                                                <line x1="25" y1="75" x2="75" y2="75" stroke="#e2e8f0" stroke-width="1"/>
+
+                                                <line x1="35" y1="45" x2="35" y2="85" stroke="#e2e8f0" stroke-width="1"/>
+                                                <line x1="50" y1="45" x2="50" y2="85" stroke="#e2e8f0" stroke-width="1"/>
+                                                <line x1="65" y1="45" x2="65" y2="85" stroke="#e2e8f0" stroke-width="1"/>
+
+                                                <!-- Sample date highlight -->
+                                                <circle cx="42.5" cy="60" r="4" fill="#3b82f6"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Calendar Widget -->
+                                    <div class="calendar-container" id="event-calendar-container">
+                                        <div class="calendar-header">
+                                            <button class="nav-button" type="button" onclick="previousEventMonth()">‹</button>
+                                            <div class="month-year" id="event-month-year">November 2024</div>
+                                            <button class="nav-button" type="button" onclick="nextEventMonth()">›</button>
+                                        </div>
+
+                                        <div class="calendar-grid">
+                                            <div class="weekdays">
+                                                <div class="weekday">Mo</div>
+                                                <div class="weekday">Tu</div>
+                                                <div class="weekday">We</div>
+                                                <div class="weekday">Th</div>
+                                                <div class="weekday">Fr</div>
+                                                <div class="weekday">Sa</div>
+                                                <div class="weekday">Su</div>
+                                            </div>
+
+                                            <div class="days" id="event-calendar-days">
+                                                <!-- Days will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+
+                                        <button class="select-button" type="button" onclick="selectEventDate()">Select Date</button>
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="start-time">Start Time <span class="required">*</span></label>
+                                    <div class="dropdown">
+                                        <input type="text" id="start-time" class="form-input time-input" placeholder="Select start time" readonly onclick="toggleTimeDropdown('start-dropdown')">
+                                        <div id="start-dropdown" class="dropdown-content">
+                                            <!-- Time options will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="input-group">
+                                    <label for="end-time">End Time</label>
+                                    <div class="dropdown">
+                                        <input type="text" id="end-time" class="form-input time-input" placeholder="Select end time" readonly onclick="toggleTimeDropdown('end-dropdown')">
+                                        <div id="end-dropdown" class="dropdown-content">
+                                            <!-- Time options will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Timezone Selection -->
+                            <div class="input-group timezone-group">
+                                <label for="timezone-select">Timezone</label>
+                                <select id="timezone-select" class="form-input">
+                                    <option value="America/New_York">Eastern Time (ET)</option>
+                                    <option value="America/Chicago">Central Time (CT)</option>
+                                    <option value="America/Denver">Mountain Time (MT)</option>
+                                    <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                                    <option value="UTC">UTC</option>
+                                    <option value="Europe/London">London (GMT)</option>
+                                    <option value="Europe/Paris">Paris (CET)</option>
+                                    <option value="Asia/Tokyo">Tokyo (JST)</option>
+                                    <option value="Australia/Sydney">Sydney (AEDT)</option>
+                                </select>
+                            </div>
+
+                            <!-- End Date (hidden by default) -->
+                            <div class="input-group end-date-group" id="end-date-group" style="display: none;">
+                                <label for="event-end-date">End Date</label>
+                                <div class="input-wrapper calendar-input-wrapper">
+                                    <input type="text" id="event-end-date" class="form-input date-input" placeholder="Select end date" readonly onclick="toggleEndDateCalendar()">
+                                    <div class="calendar-icon" onclick="toggleEndDateCalendar()">
+                                        <svg viewBox="0 0 100 100" class="calendar-svg">
+                                            <!-- Calendar base -->
+                                            <rect x="15" y="25" width="70" height="60" rx="8" ry="8" fill="white" stroke="#e2e8f0" stroke-width="3"/>
+
+                                            <!-- Calendar top section -->
+                                            <rect x="15" y="25" width="70" height="20" rx="8" ry="8" fill="#f1f5f9"/>
+                                            <rect x="15" y="35" width="70" height="10" fill="#f1f5f9"/>
+
+                                            <!-- Calendar rings -->
+                                            <rect x="30" y="15" width="8" height="20" rx="4" ry="4" fill="#374151"/>
+                                            <rect x="62" y="15" width="8" height="20" rx="4" ry="4" fill="#374151"/>
+
+                                            <!-- Calendar grid lines -->
+                                            <line x1="25" y1="55" x2="75" y2="55" stroke="#e2e8f0" stroke-width="1"/>
+                                            <line x1="25" y1="65" x2="75" y2="65" stroke="#e2e8f0" stroke-width="1"/>
+                                            <line x1="25" y1="75" x2="75" y2="75" stroke="#e2e8f0" stroke-width="1"/>
+
+                                            <line x1="35" y1="45" x2="35" y2="85" stroke="#e2e8f0" stroke-width="1"/>
+                                            <line x1="50" y1="45" x2="50" y2="85" stroke="#e2e8f0" stroke-width="1"/>
+                                            <line x1="65" y1="45" x2="65" y2="85" stroke="#e2e8f0" stroke-width="1"/>
+
+                                            <!-- Sample date highlight -->
+                                            <circle cx="57.5" cy="70" r="4" fill="#10b981"/>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <!-- End Date Calendar Widget -->
+                                <div class="calendar-container" id="end-date-calendar-container">
+                                    <div class="calendar-header">
+                                        <button class="nav-button" type="button" onclick="previousEndDateMonth()">‹</button>
+                                        <div class="month-year" id="end-date-month-year">November 2024</div>
+                                        <button class="nav-button" type="button" onclick="nextEndDateMonth()">›</button>
+                                    </div>
+
+                                    <div class="calendar-grid">
+                                        <div class="weekdays">
+                                            <div class="weekday">Mo</div>
+                                            <div class="weekday">Tu</div>
+                                            <div class="weekday">We</div>
+                                            <div class="weekday">Th</div>
+                                            <div class="weekday">Fr</div>
+                                            <div class="weekday">Sa</div>
+                                            <div class="weekday">Su</div>
+                                        </div>
+
+                                        <div class="days" id="end-date-calendar-days">
+                                            <!-- Days will be populated by JavaScript -->
+                                        </div>
+                                    </div>
+
+                                    <button class="select-button" type="button" onclick="selectEndDate()">Select End Date</button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Overview Section -->
+                        <div class="overview-section">
+                            <div class="section-header">
+                                <h3>Overview</h3>
+                                <div class="add-button">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <line x1="12" x2="12" y1="5" y2="19"/>
+                                        <line x1="5" x2="19" y1="12" y2="12"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <textarea class="overview-description" id="overviewDescription" placeholder="Use this section to provide more details about your event. You can include things to know, venue information, accessibility options—anything that will help people know what to expect."></textarea>
+                        </div>
+
+                        <!-- Good to Know Section -->
+                        <div class="good-to-know-section">
+                            <div class="section-header">
+                                <h3>Good to know</h3>
+                                <div class="add-button">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6">
+                                        <line x1="12" x2="12" y1="5" y2="19"/>
+                                        <line x1="5" x2="19" y1="12" y2="12"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <div class="highlights-section">
+                                <h4>Highlights</h4>
+                                <div class="highlight-buttons">
+                                    <button class="highlight-btn" onclick="addHighlight('age')">+ Add Age info</button>
+                                    <button class="highlight-btn" onclick="addHighlight('parking')">+ Add Parking info</button>
+                                    <button class="highlight-btn" onclick="addHighlight('dresscode')">+ Add Dress Code</button>
+                                    <button class="highlight-btn" onclick="addHighlight('accessibility')">+ Add Accessibility</button>
+                                    <button class="highlight-btn" onclick="addHighlight('food')">+ Add Food & Drinks</button>
+                                </div>
+                                <div class="highlights-container" id="highlightsContainer">
+                                    <!-- Dynamic highlights will be added here -->
+                                </div>
+                            </div>
+                            
+                            <div class="faq-section">
+                                <h4>Frequently asked questions</h4>
+                                <div class="faq-tip">
+                                    <span class="tip-icon">💡</span>
+                                    <span>Events with FAQs have 8% more organic traffic</span>
+                                </div>
+                                <div class="faq-container" id="faqContainer">
+                                    <!-- Dynamic FAQs will be added here -->
+                                </div>
+                                <button class="add-question-btn" onclick="addFAQ()">+ Add question</button>
+                            </div>
+                        </div>
+
+                        <!-- Add More Sections -->
+                        <div class="more-sections-area">
+                            <div class="more-sections-header">
+                                <h3>Add more sections to your event page</h3>
+                                <p>Make your event stand out even more. These sections help attendees find information and answer their questions - which means more ticket sales and less time answering messages.</p>
+                            </div>
+
+                            <div class="sections-grid">
+                                <!-- Lineup Section -->
+                                <div class="section-card" id="lineupCard">
+                                    <div class="section-left">
+                                        <div class="section-icon">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                                <circle cx="12" cy="7" r="4"/>
+                                            </svg>
+                                        </div>
+                                        <div class="section-info">
+                                            <h4>Lineup <span class="new-badge">New</span></h4>
+                                            <a href="#" class="see-examples">See examples</a>
+                                        </div>
+                                    </div>
+                                    <div class="section-right">
+                                        <button class="add-section-btn" onclick="addLineupSection()">Add</button>
+                                    </div>
+                                </div>
+
+                                <!-- Agenda Section -->
+                                <div class="section-card" id="agendaCard">
+                                    <div class="section-left">
+                                        <div class="section-icon">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                                <line x1="16" x2="16" y1="2" y2="6"/>
+                                                <line x1="8" x2="8" y1="2" y2="6"/>
+                                                <line x1="3" x2="21" y1="10" y2="10"/>
+                                            </svg>
+                                        </div>
+                                        <div class="section-info">
+                                            <h4>Agenda</h4>
+                                            <a href="#" class="see-examples">See examples</a>
+                                        </div>
+                                    </div>
+                                    <div class="section-right">
+                                        <button class="add-section-btn" onclick="addAgendaSection()">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lineup Section (Initially Hidden) -->
+                        <div class="lineup-section" id="lineupSection" style="display: none;">
+                            <div class="section-header">
+                                <h3>Lineup <button class="edit-btn" onclick="editLineupTitle()">✏️</button></h3>
+                                <button class="delete-section-btn" onclick="deleteLineupSection()">Delete section</button>
+                            </div>
+                            <p class="section-description">Highlight your lineup of special guests with a section on your event page. Change the title of this section to fit your event's theme and add info about each person. You can set someone as a headliner to highlight them even more.</p>
+
+                            <div class="lineup-container" id="lineupContainer">
+                                <div class="lineup-item">
+                                    <div class="lineup-image">
+                                        <div class="image-upload-placeholder">
+                                            <span>Upload an image*</span>
+                                            <small>Image should be at least<br>320x320 pixels</small>
+                                            <button class="upload-btn-small" onclick="uploadLineupImage()">Upload</button>
+                                        </div>
+                                    </div>
+                                    <div class="lineup-details">
+                                        <input type="text" placeholder="Name" class="lineup-name">
+                                        <div class="tagline-section">
+                                            <button class="add-tagline-btn" onclick="addTagline()">🏷️ Add a tagline</button>
+                                        </div>
+                                        <textarea placeholder="Description" class="lineup-description"></textarea>
+                                        <div class="character-count">0 / 5000</div>
+                                        <div class="lineup-options">
+                                            <label class="headliner-toggle">
+                                                <input type="checkbox"> Set as headliner
+                                            </label>
+                                            <button class="social-links-btn" onclick="addSocialLinks()">🔗 Add social links</button>
+                                        </div>
+                                    </div>
+                                    <button class="delete-lineup-btn" onclick="deleteLineupItem(this)">🗑️</button>
+                                </div>
+                            </div>
+                            <button class="add-another-btn" onclick="addAnotherLineupItem()">+ Add another</button>
+                        </div>
+
+                        <!-- Agenda Section (Initially Hidden) -->
+                        <div class="agenda-section" id="agendaSection" style="display: none;">
+                            <div class="section-header">
+                                <h3>Agenda</h3>
+                                <button class="delete-section-btn" onclick="deleteAgendaSection()">Delete section</button>
+                            </div>
+                            <p class="section-description">Add an itinerary, schedule, or lineup to your event. You can include a description of what will happen, and who will host or perform during the event. (Ex. Speaker, performer, artist, guide, etc.) You can add multiple agenda items.</p>
+
+                            <div class="agenda-tabs">
+                                <button class="agenda-tab active" onclick="switchAgendaTab('agenda')">Agenda</button>
+                                <button class="agenda-tab" onclick="switchAgendaTab('new')">+ Add new agenda</button>
+                            </div>
+
+                            <div class="agenda-container" id="agendaContainer">
+                                <div class="agenda-item">
+                                    <input type="text" placeholder="Title*" class="agenda-title">
+                                    <div class="agenda-optional-fields">
+                                        <button class="add-host-btn" onclick="addHost()">👤 Host or Artist</button>
+                                        <button class="add-description-btn" onclick="addAgendaDescription()">📝 Add description</button>
+                                    </div>
+                                    <button class="delete-agenda-btn" onclick="deleteAgendaItem(this)">🗑️</button>
+                                </div>
+                            </div>
+                            <button class="add-slot-btn" onclick="addAgendaSlot()">+ Add slot</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="save-section">
+                <div class="save-status" id="saveStatus" style="display: none;">
+                    <div class="save-status-content">
+                        <span class="save-status-text"></span>
+                        <div class="save-progress-bar">
+                            <div class="save-progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="save-btn" onclick="saveAndContinue()">Save and continue</button>
+                <div class="auto-save-indicator" id="autoSaveIndicator" style="display: none;">
+                    <span class="auto-save-text">Auto-saving...</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden file inputs -->
+    <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+    <input type="file" id="videoInput" accept="video/*" style="display: none;" onchange="handleVideoUpload(event)">
+    <input type="file" id="lineupImageInput" accept="image/*" style="display: none;" onchange="handleLineupImageUpload(event)">
+
+    <!-- The JavaScript is now in js/event-builder.js -->
+</body>
+</html>

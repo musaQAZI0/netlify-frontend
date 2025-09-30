@@ -1,0 +1,2262 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <title>Online Hobbies Events | CRWOD</title>
+    <meta name="description" content="Online events are amazing opportunities to have fun and learn. Find new online hobbies events on CRWOD." />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.5;
+            color: #221d19;
+            background-color: #ffffff;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            padding-top: 70px; /* Adjust based on header height */
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border-bottom: 1px solid #eee;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Desktop Header */
+        .desktop-header {
+            display: none;
+            padding: 8px 16px;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: flex;
+            padding: 12px 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Logo Styles */
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a3247;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .mobile-header .logo {
+            width: 32px;
+            height: 32px;
+            background-color: #e53e3e;
+            border-radius: 6px;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-icon {
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-left: 0.25rem;
+        }
+
+        /* Search Section Styles */
+        .search-section {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 2rem;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .mobile-header .search-container {
+            flex: 1;
+            margin: 0 12px;
+            border-radius: 20px;
+            background-color: #f8f8f8;
+            box-shadow: none;
+            border: 1px solid #d0d0d0;
+        }
+
+        .search-section-inner,
+        .location-section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+        }
+
+        .search-icon,
+        .location-icon {
+            width: 18px;
+            height: 18px;
+            color: #666;
+        }
+
+        .mobile-header .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-input,
+        .location-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 14px;
+            color: #333;
+            width: 100%;
+        }
+
+        .mobile-header .search-input {
+            padding: 8px 12px 8px 36px;
+            width: 100%;
+        }
+
+        .search-input::placeholder,
+        .location-input::placeholder {
+            color: #999;
+        }
+
+        .mobile-header .search-input:focus {
+            border-color: #e53e3e;
+            background-color: white;
+            box-shadow: 0 0 0 2px rgba(229, 62, 62, 0.1);
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: #ddd;
+        }
+
+        .search-button {
+            background: #3a3247;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-header .search-button {
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #e53e3e;
+            width: 28px;
+            height: 28px;
+            margin-left: 0;
+            font-size: 12px;
+        }
+
+        .search-button:hover {
+            background: #2f2a3c;
+        }
+
+        .mobile-header .search-button:hover {
+            background-color: #d63031;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .search-button-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        /* Navigation Actions */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-left: auto;
+        }
+
+        /* Integrated Navigation Styles */
+        .integrated-nav-container {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: #f8f8f9;
+            transform: translateY(-1px);
+        }
+
+        .nav-item.active {
+            color: #3a3247;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* User Menu Styles */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+            transition: background 0.2s;
+            cursor: pointer;
+            color: #39364f;
+            position: relative;
+        }
+
+        .mobile-header .user-menu {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            border: 1px solid #d0d0d0;
+            justify-content: center;
+            padding: 0;
+            gap: 0;
+            font-size: 16px;
+        }
+
+        .user-menu:hover {
+            background: #f8f8f9;
+        }
+
+        .mobile-header .user-menu:hover {
+            background-color: #e8e8e8;
+            transform: scale(1.05);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3a3247;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .mobile-header .user-avatar {
+            display: none;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #585163;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: #716b7a;
+        }
+
+        .mobile-header .dropdown-arrow {
+            display: none;
+        }
+
+        /* User Dropdown Menu */
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 220px;
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(17, 24, 39, 0.08);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            padding: 8px 0;
+            z-index: 1200;
+        }
+
+        .mobile-header .user-dropdown {
+            width: 280px;
+            right: -8px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            animation: dropdownSlide 0.2s ease-out;
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .dropdown-email {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .user-dropdown .menu-group {
+            padding: 4px 0;
+        }
+
+        .user-dropdown a,
+        .dropdown-item {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #111;
+            font-size: 13px;
+            transition: background 0.12s;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .mobile-header .dropdown-item {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-dropdown a:hover,
+        .dropdown-item:hover {
+            background: #f8f8f9;
+        }
+
+        .mobile-header .dropdown-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .user-dropdown .divider,
+        .dropdown-divider {
+            height: 1px;
+            background: #f0f0f2;
+            margin: 4px 0;
+        }
+
+        .mobile-header .dropdown-divider {
+            background-color: #e9ecef;
+            margin: 8px 0;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Mobile dropdown item icons */
+        .mobile-header .dropdown-item::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            margin-right: 12px;
+            opacity: 0.7;
+        }
+
+        .mobile-header .dropdown-item.manage::before { content: '📅'; }
+        .mobile-header .dropdown-item.browse::before { content: '🔍'; }
+        .mobile-header .dropdown-item.tickets::before { content: '🎫'; }
+        .mobile-header .dropdown-item.liked::before { content: '❤️'; }
+        .mobile-header .dropdown-item.following::before { content: '👥'; }
+        .mobile-header .dropdown-item.interests::before { content: '⭐'; }
+        .mobile-header .dropdown-item.settings::before { content: '⚙️'; }
+        .mobile-header .dropdown-item.organize::before { content: '📊'; }
+        .mobile-header .dropdown-item.help::before { content: '❓'; }
+        .mobile-header .dropdown-item.logout::before { content: '🚪'; }
+
+        /* Overlay */
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(2px);
+        }
+
+        .dropdown-overlay.show {
+            display: block;
+        }
+
+        /* Desktop Media Query */
+        @media (min-width: 769px) {
+            .mobile-header {
+                display: none;
+            }
+
+            .desktop-header {
+                display: flex;
+            }
+
+            body {
+                padding-top: 80px;
+            }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .desktop-header {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            body {
+                padding-top: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-header {
+                padding: 10px 12px;
+            }
+
+            .mobile-header .search-container {
+                margin: 0 8px;
+            }
+
+            .mobile-header .user-dropdown {
+                width: 260px;
+                right: -8px;
+            }
+
+            .mobile-header .logo {
+                width: 28px;
+                height: 28px;
+                font-size: 16px;
+            }
+
+            .mobile-header .user-menu {
+                width: 28px;
+                height: 28px;
+                font-size: 14px;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            background: #f9fafb;
+            padding: 16px 0;
+        }
+
+        .breadcrumbs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            font-size: 14px;
+        }
+
+        .breadcrumb-list li {
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb-list a {
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .breadcrumb-list a:hover {
+            color: #f6682f;
+        }
+
+        .breadcrumb-separator {
+            margin: 0 8px;
+            color: #9ca3af;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #044f60 0%, #066a7a 100%);
+            color: white;
+            padding: 48px 0;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-text h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #efedab;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 24px;
+            color: #cddfd6;
+            margin-bottom: 16px;
+        }
+
+        .header-description {
+            font-size: 18px;
+            color: #cddfd6;
+        }
+
+        .header-image {
+            width: 200px;
+            height: 200px;
+            background: url('https://cdn.evbstatic.com/s3-build/fe/build/images/6bf245c68f7dd9ee5260ec2081a59e77-hobbies.webp') center/cover;
+            border-radius: 8px;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 24px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .filters-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .filter-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tag:hover {
+            border-color: #f6682f;
+            background: #fef7f5;
+        }
+
+        /* Category Section */
+        .explore-categories {
+            padding: 48px 0;
+            background: #f9fafb;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #111827;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .category-item {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .category-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .category-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .carousel-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .carousel-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Event Grid */
+        .main-content {
+            background: white;
+            padding: 48px 0;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-image {
+            width: 100%;
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .event-content {
+            padding: 20px;
+        }
+
+        .event-date {
+            color: #f6682f;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .event-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .event-summary {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .event-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .event-price {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .urgency-signal {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .promoted-tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Organizers Section */
+        .organizers-section {
+            background: #f9fafb;
+            padding: 48px 0;
+        }
+
+        .organizers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+        }
+
+        .organizer-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .organizer-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: #e5e7eb;
+        }
+
+        .organizer-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .organizer-followers {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .follow-btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .follow-btn:hover {
+            background: #4338ca;
+        }
+
+        /* Tag Cloud */
+        .tags-section {
+            padding: 48px 0;
+            background: white;
+            width: 100%;
+            overflow: hidden; /* Prevent any content overflow */
+        }
+
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .tag-item {
+            background: #f3f4f6;
+            color: #4f46e5;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap; /* Prevent text wrapping within tags */
+            display: inline-block;
+        }
+
+        .tag-item:hover {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        /* Event Formats */
+        .formats-section {
+            padding: 48px 0;
+            background: #f9fafb;
+        }
+
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .format-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .format-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .format-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #e5e7eb;
+        }
+
+        .format-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            padding: 48px 0 24px;
+            width: 100%;
+            clear: both; /* Clear any floating elements */
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .footer-section h3 {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-section a:hover {
+            color: #f6682f;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #9ca3af;
+            font-size: 14px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #f6682f;
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                display: none;
+            }
+
+            .mobile-header {
+                display: flex;
+            }
+
+            .mobile-browse-events {
+                display: block;
+            }
+
+            .mobile-search-container {
+                margin: 0 8px;
+            }
+
+            .mobile-dropdown {
+                width: 250px;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .search-container {
+                order: 2;
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .nav-actions {
+                order: 3;
+                justify-content: center;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .nav-action-item {
+                padding: 0.25rem;
+            }
+
+            .nav-action-text {
+                font-size: 10px;
+            }
+
+            .user-menu {
+                order: 4;
+                margin-top: 0.5rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .header-text h1 {
+                font-size: 36px;
+            }
+
+            .header-subtitle {
+                font-size: 20px;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-container {
+                flex-wrap: wrap;
+            }
+
+            .category-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            
+            .nav-action-item {
+                padding: 0.5rem;
+                text-align: center;
+                width: 100%;
+            }
+
+            .user-menu {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+
+        .loading-image {
+            width: 100%;
+            height: 160px;
+            background: #e5e7eb;
+        }
+
+        .loading-content {
+            padding: 20px;
+        }
+
+        .loading-line {
+            height: 16px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .loading-line.short {
+            width: 60%;
+        }
+
+        .loading-line.medium {
+            width: 80%;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Fix any potential text overflow issues */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        * {
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Unified Header -->
+    <div class="header">
+        <!-- Desktop Header -->
+        <nav class="desktop-header">
+            <a href="index.html" class="logo">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div style="display: none; align-items: center; gap: 0.25rem;">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">crowd</span>
+                </div>
+            </a>
+
+            <div class="search-section" data-search-component>
+                <div class="search-container">
+                    <div class="search-section-inner">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="search-input" placeholder="Search hobbies events" id="desktopSearchInput"
+                            aria-label="Search events">
+                    </div>
+                    <div class="divider" aria-hidden="true"></div>
+                    <div class="location-section">
+                        <svg class="location-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M11.6 11.6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-7.6C8.5 4 6 6.5 6 9.6 6 13.8 11.6 20 11.6 20s5.6-6.2 5.6-10.4c0-3.1-2.5-5.6-5.6-5.6z"
+                                fill="currentColor" />
+                        </svg>
+                        <input type="text" class="location-input" placeholder="Online" value="Online" id="desktopLocationInput"
+                            aria-label="Choose a location">
+                    </div>
+                    <button class="search-button" type="button" onclick="performSearch('desktop')" aria-label="Search">
+                        <svg class="search-button-icon" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M10 14c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm3.5.9c-1 .7-2.2 1.1-3.5 1.1-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6c0 1.3-.4 2.5-1.1 3.4l5.1 5.1-1.5 1.5-5-5.1z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <div class="integrated-nav-container">
+                    <a href="event-builder.html" class="nav-item" data-tab="create">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span class="nav-text">Create an event</span>
+                    </a>
+
+                    <a href="likes.html" class="nav-item" data-tab="likes">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                        <span class="nav-text">Likes</span>
+                    </a>
+
+                    <a href="tickets-profile.html" class="nav-item" data-tab="tickets">
+                        <svg class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="nav-text">Tickets</span>
+                    </a>
+                </div>
+
+                <div class="user-menu" id="desktopUserMenuButton">
+                    <div class="user-avatar" id="desktopUserAvatar">U</div>
+                    <div>
+                        <div class="user-email" id="desktopUserEmail">Loading...</div>
+                    </div>
+                    <span class="dropdown-arrow">▾</span>
+
+                    <div class="user-dropdown" id="desktopUserDropdown" role="menu" aria-hidden="true">
+                        <div class="menu-group">
+                            <a href="Find events.html" role="menuitem">Find events</a>
+                            <a href="get_ticket.html" role="menuitem">Browse events</a>
+                            <a href="events-calendar.html" role="menuitem">Manage my events</a>
+                            <a href="tickets-profile.html" role="menuitem">Tickets</a>
+                            <a href="likes.html" role="menuitem">Liked</a>
+                            <a href="tickets-profile.html" role="menuitem">Following</a>
+                            <a href="intrest.html" role="menuitem">Interests</a>
+                        </div>
+                        <div class="divider" aria-hidden="true"></div>
+                        <div class="menu-group">
+                            <a href="settings-new.html" role="menuitem">Account settings</a>
+                            <div style="padding:10px 16px;color:#6b6b6b;font-size:14px;">
+                                <span id="desktopDropdownUserEmail">user@example.com</span>
+                            </div>
+                            <a href="#" id="desktopLogoutLink" role="menuitem">Log out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <a href="index.html" class="logo">E</a>
+
+            <div class="search-container">
+                <div class="search-icon">🔍</div>
+                <input type="text" class="search-input" placeholder="Search hobbies events" id="mobileSearchInput">
+                <button class="search-button" onclick="performSearch('mobile')">🔍</button>
+            </div>
+
+            <div class="user-menu" id="mobileUserProfile">
+                👤
+                <div class="user-dropdown" id="mobileDropdown">
+                    <div class="dropdown-header">
+                        <div class="dropdown-email" id="mobileUserEmail">user@example.com</div>
+                    </div>
+                    <div class="dropdown-item manage" onclick="window.location.href='events-calendar.html'">Manage my events</div>
+                    <div class="dropdown-item browse" onclick="window.location.href='get_ticket.html'">Browse events</div>
+                    <div class="dropdown-item tickets">Tickets</div>
+                    <div class="dropdown-item liked">Liked</div>
+                    <div class="dropdown-item following">Following</div>
+                    <div class="dropdown-item interests">Interests</div>
+                    <div class="dropdown-item settings">Account settings</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item organize">Organize</div>
+                    <div class="dropdown-item help">Help</div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-item logout">Log out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for mobile dropdown -->
+    <div class="dropdown-overlay" id="dropdownOverlay"></div>
+
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <div class="breadcrumbs-container">
+            <ol class="breadcrumb-list">
+                <li><a href="#">Home</a><span class="breadcrumb-separator">/</span></li>
+                <li><a href="#">Online</a><span class="breadcrumb-separator">/</span></li>
+                <li><a href="#">Online Events</a><span class="breadcrumb-separator">/</span></li>
+                <li>Hobbies</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-container">
+            <div class="header-text">
+                <h1>Hobbies events</h1>
+                <div class="header-subtitle">Online</div>
+                <p class="header-description">Discover the best Hobbies events in your area and online</p>
+            </div>
+            <div class="header-image"></div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+        <div class="filters-container">
+            <div class="filter-tag">
+                Online
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7 10l5 5 5-5z"/>
+                </svg>
+            </div>
+            <div class="filter-tag">
+                Date
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7 10l5 5 5-5z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Explore Categories -->
+    <section class="explore-categories">
+        <div class="section-container">
+            <h2 class="section-title">Explore what's popular within Hobbies</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #8B5A2B, #D2B48C);"></div>
+                    <div class="category-name">DIY</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #4A5568, #CBD5E0);"></div>
+                    <div class="category-name">Books</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #E53E3E, #FEB2B2);"></div>
+                    <div class="category-name">Drawing & Painting</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #2D3748, #A0AEC0);"></div>
+                    <div class="category-name">Photography</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #5A67D8, #C3DAFE);"></div>
+                    <div class="category-name">Gaming</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #ED8936, #FEEBC8);"></div>
+                    <div class="category-name">Anime/Comics</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #E53E3E, #FED7D7);"></div>
+                    <div class="category-name">Adult</div>
+                </div>
+                <div class="category-item">
+                    <div class="category-icon" style="background: linear-gradient(45deg, #38B2AC, #B2F5EA);"></div>
+                    <div class="category-name">Knitting</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Most Popular Events -->
+    <main class="main-content">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Most popular events</h2>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" onclick="scrollCarousel('popular', -1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15 18l-6-6 6-6v12z"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn" onclick="scrollCarousel('popular', 1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 6l6 6-6 6V6z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="events-grid" id="popularEvents">
+                <!-- Popular events will be loaded here -->
+            </div>
+
+            <!-- This Weekend Section -->
+            <div class="section-header">
+                <h2>This weekend</h2>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" onclick="scrollCarousel('weekend', -1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15 18l-6-6 6-6v12z"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn" onclick="scrollCarousel('weekend', 1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 6l6 6-6 6V6z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="events-grid" id="weekendEvents">
+                <!-- Weekend events will be loaded here -->
+            </div>
+
+            <!-- Classes Section -->
+            <div class="section-header">
+                <h2>Classes</h2>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" onclick="scrollCarousel('classes', -1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15 18l-6-6 6-6v12z"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn" onclick="scrollCarousel('classes', 1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 6l6 6-6 6V6z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="events-grid" id="classesEvents">
+                <!-- Classes events will be loaded here -->
+            </div>
+
+            <!-- Seminars Section -->
+            <div class="section-header">
+                <h2>Seminars</h2>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" onclick="scrollCarousel('seminars', -1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15 18l-6-6 6-6v12z"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn" onclick="scrollCarousel('seminars', 1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 6l6 6-6 6V6z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="events-grid" id="seminarsEvents">
+                <!-- Seminars events will be loaded here -->
+            </div>
+
+            <!-- Networking Section -->
+            <div class="section-header">
+                <h2>Networking</h2>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" onclick="scrollCarousel('networking', -1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15 18l-6-6 6-6v12z"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn" onclick="scrollCarousel('networking', 1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 6l6 6-6 6V6z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="events-grid" id="networkingEvents">
+                <!-- Networking events will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Organizers to Follow -->
+    <section class="organizers-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Organizers to follow</h2>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" onclick="scrollCarousel('organizers', -1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M15 18l-6-6 6-6v12z"/>
+                        </svg>
+                    </button>
+                    <button class="carousel-btn" onclick="scrollCarousel('organizers', 1)">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 6l6 6-6 6V6z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="organizers-grid" id="organizersGrid">
+                <!-- Organizers will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Tags -->
+    <section class="tags-section">
+        <div class="section-container">
+            <h2 class="section-title">Trending event tags in your area</h2>
+            <div class="tags-cloud">
+                <a href="#" class="tag-item">#community</a>
+                <a href="#" class="tag-item">#rusty_harden_studio</a>
+                <a href="#" class="tag-item">#creativity</a>
+                <a href="#" class="tag-item">#photography</a>
+                <a href="#" class="tag-item">#beginner</a>
+                <a href="#" class="tag-item">#writinggoals</a>
+                <a href="#" class="tag-item">#doodle</a>
+                <a href="#" class="tag-item">#drawing_and_sketching</a>
+                <a href="#" class="tag-item">#ritual</a>
+                <a href="#" class="tag-item">#creative_writing</a>
+                <a href="#" class="tag-item">#course</a>
+                <a href="#" class="tag-item">#reading</a>
+                <a href="#" class="tag-item">#relaxation</a>
+                <a href="#" class="tag-item">#art</a>
+                <a href="#" class="tag-item">#craft</a>
+                <a href="#" class="tag-item">#journaling_workshop</a>
+                <a href="#" class="tag-item">#crafting</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Formats -->
+    <section class="formats-section">
+        <div class="section-container">
+            <h2 class="section-title">Explore hobbies event formats</h2>
+            <div class="formats-grid">
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #4F46E5, #A5B4FC);"></div>
+                    <div class="format-name">Classes</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #059669, #A7F3D0);"></div>
+                    <div class="format-name">Seminars</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #DC2626, #FCA5A5);"></div>
+                    <div class="format-name">Networking</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #7C3AED, #C4B5FD);"></div>
+                    <div class="format-name">Parties</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #EA580C, #FED7AA);"></div>
+                    <div class="format-name">Games</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #0891B2, #A5F3FC);"></div>
+                    <div class="format-name">Appearances</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #BE185D, #F9A8D4);"></div>
+                    <div class="format-name">Performances</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #65A30D, #BEF264);"></div>
+                    <div class="format-name">Expos</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #DB2777, #FBCFE8);"></div>
+                    <div class="format-name">Festivals</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #0D9488, #99F6E4);"></div>
+                    <div class="format-name">Conferences</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #B45309, #FDE68A);"></div>
+                    <div class="format-name">Attractions</div>
+                </div>
+                <div class="format-item">
+                    <div class="format-icon" style="background: linear-gradient(45deg, #7C2D12, #FECACA);"></div>
+                    <div class="format-name">Tours</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Use CRWOD</h3>
+                    <ul>
+                        <li><a href="#">Create Events</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Event Marketing Platform</a></li>
+                        <li><a href="#">CRWOD Mobile Ticket App</a></li>
+                        <li><a href="#">CRWOD Check-In App</a></li>
+                        <li><a href="#">Community Guidelines</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Plan Events</h3>
+                    <ul>
+                        <li><a href="#">Sell Tickets Online</a></li>
+                        <li><a href="#">Event Payment System</a></li>
+                        <li><a href="#">Event Management Software</a></li>
+                        <li><a href="#">Virtual Events Platform</a></li>
+                        <li><a href="#">QR Codes for Event Check-In</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Find Events</h3>
+                    <ul>
+                        <li><a href="#">New York Events</a></li>
+                        <li><a href="#">Chicago Events</a></li>
+                        <li><a href="#">Los Angeles Events</a></li>
+                        <li><a href="#">Washington Events</a></li>
+                        <li><a href="#">Denver Hobby Events</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="#">Contact Sales</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>© 2025 CRWOD</div>
+                <div class="footer-links">
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="Help_center_logged_in.html">Help</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                    <a href="#">Impact</a>
+                    <a href="#">Investors</a>
+                    <a href="#">Security</a>
+                    <a href="#">Developers</a>
+                    <a href="#">Status</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Accessibility</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Extended event data with all sections
+        const allEvents = {
+            popular: [
+                {
+                    id: '1045297481907',
+                    name: 'Single and Intentional (Ages 25+ preferred) **Aug 16th, Virtual Event**',
+                    summary: 'Cultivating a space for singles who are financially stable & emotionally healthy with the desire to forge genuine connections/marriage.',
+                    date: '2025-08-16',
+                    time: '14:00',
+                    price: 'From $15.00',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F708001649%2F1999088473903%2F1%2Foriginal.20240229-050947?w=512&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C1148%2C2912%2C1456&s=583581000d4b553b8354c355bdb7f322',
+                    urgency: ['Almost full']
+                },
+                {
+                    id: '1467092736869',
+                    name: 'Cosmic Cash Codes - Free Workshop',
+                    summary: 'Free 90-min astrology workshop to decode your 2nd house and discover your natural income style. Align how you earn with who you are.',
+                    date: '2025-08-19',
+                    time: '21:00',
+                    price: 'From $0.00',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1067190063%2F1689798364%2F1%2Foriginal.20250705-183117?crop=focalpoint&fit=crop&w=512&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.5&fp-y=0.5&s=b1f42cf40e12be47bfd61e0b63ce3a95',
+                    urgency: ['Going fast']
+                }
+            ],
+            weekend: [
+                {
+                    id: '1498868348579',
+                    name: 'How To Be Unreliable: a creative writing workshop',
+                    summary: 'Explore the art of unreliable narration in this hands-on creative writing workshop.',
+                    date: '2025-09-28',
+                    time: '22:00',
+                    price: 'From £28.00',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1074654853%2F206334532617%2F1%2Foriginal.20210723-105029?w=512&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C0%2C7086%2C3543&s=b5744a09ed83eff9d080d62d00988045',
+                    urgency: [],
+                    promoted: true
+                },
+                {
+                    id: '1416719970569',
+                    name: 'Come Write With Us',
+                    summary: 'Join our community writing session for writers of all levels.',
+                    date: '2025-08-17',
+                    time: '21:00',
+                    price: 'From £0.00',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F412893479%2F206334532617%2F1%2Foriginal.20191204-120754?w=512&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C0%2C7086%2C3543&s=ffd5e60c715314c4c9d811ccad48dcd3',
+                    urgency: ['Sales end soon']
+                }
+            ],
+            classes: [
+                {
+                    id: '1355303371869',
+                    name: 'Introduction to Landscape Photography with Mieke Boynton | Online',
+                    summary: 'Master the fundamentals of landscape photography in this comprehensive online course.',
+                    date: '2025-09-02',
+                    time: '13:30',
+                    price: 'From $11.22',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1024571633%2F1704596953033%2F1%2Foriginal.20250506-173501?crop=focalpoint&fit=crop&w=512&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.0170454545455&fp-y=0.375464684015&s=cbd240e1225b3512a400026f67c40bc0',
+                    urgency: ['Almost full']
+                },
+                {
+                    id: '1483047949339',
+                    name: 'PHYLLIDA BARLOW: Messy Monuments',
+                    summary: 'Explore the work of renowned sculptor Phyllida Barlow in this art appreciation class.',
+                    date: '2025-09-09',
+                    time: '22:00',
+                    price: 'Check ticket price on event',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1071410673%2F206334532617%2F1%2Foriginal.20210723-105029?w=512&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C0%2C7086%2C3543&s=717e454407ddb60a79f9f0750f68701c',
+                    urgency: [],
+                    promoted: true
+                }
+            ],
+            seminars: [
+                {
+                    id: '1252249815909',
+                    name: 'A MEAL WITH SAMIN NOSRAT',
+                    summary: 'Join acclaimed chef and author Samin Nosrat for an intimate cooking demonstration.',
+                    date: '2025-09-12',
+                    time: '04:00',
+                    price: 'Free',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F553740089%2F210934868116%2F1%2Foriginal.20230712-165410?w=512&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C0%2C2160%2C1080&s=82d2875f4280dfa5297522e9325b102c',
+                    urgency: ['Going fast']
+                },
+                {
+                    id: '1439267711469',
+                    name: 'Strangers at Home: Plant-Human Migrations, w/ Yota Batsaki & Giovanni Aloi',
+                    summary: 'Explore the complex relationships between plants, humans, and migration patterns.',
+                    date: '2025-09-18',
+                    time: '22:00',
+                    price: 'From $0.00',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1061434373%2F10515884495%2F1%2Foriginal.20250626-193132?crop=focalpoint&fit=crop&w=512&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.806402439024&fp-y=0.527710834181&s=2ff15a88c850bb6e6e483ddfe2498b70',
+                    urgency: []
+                }
+            ],
+            networking: [
+                {
+                    id: 'net001',
+                    name: 'Fall 2025 Literary First Look',
+                    summary: 'Network with fellow book lovers and preview upcoming literary releases.',
+                    date: '2025-09-10',
+                    time: '21:00',
+                    price: 'From $17.85',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F708001649%2F1999088473903%2F1%2Foriginal.20240229-050947?w=512&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C1148%2C2912%2C1456&s=583581000d4b553b8354c355bdb7f322',
+                    urgency: []
+                },
+                {
+                    id: 'net002',
+                    name: 'You Should Read: August Virtual Book Club',
+                    summary: 'Monthly book club meeting to discuss our latest selection.',
+                    date: '2025-08-26',
+                    time: '05:00',
+                    price: 'From $0.00',
+                    image: 'https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1067190063%2F1689798364%2F1%2Foriginal.20250705-183117?crop=focalpoint&fit=crop&w=512&auto=format%2Ccompress&q=75&sharp=10&fp-x=0.5&fp-y=0.5&s=b1f42cf40e12be47bfd61e0b63ce3a95',
+                    urgency: ['Going fast']
+                }
+            ]
+        };
+
+        // Organizers data
+        const organizers = [
+            {
+                name: 'Clarity Relationships',
+                followers: '1501 followers',
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=CR'
+            },
+            {
+                name: 'Carolina Velis /Quest Mystic',
+                followers: '164 followers',
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=CV'
+            },
+            {
+                name: 'Waterstones',
+                followers: '25334 followers',
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=W'
+            },
+            {
+                name: 'Random House',
+                followers: '7496 followers',
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=RH'
+            },
+            {
+                name: 'Indiana Audubon Society',
+                followers: '916 followers',
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=IA'
+            },
+            {
+                name: 'Strong Women Strange World',
+                followers: '409 followers',
+                avatar: 'https://via.placeholder.com/60x60/E5E7EB/9CA3AF?text=SW'
+            }
+        ];
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else if (date.toDateString() === tomorrow.toDateString()) {
+                return 'Tomorrow';
+            } else {
+                return date.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            }
+        }
+
+        function formatTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':');
+            const date = new Date();
+            date.setHours(parseInt(hours), parseInt(minutes));
+            return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        function createEventCard(event) {
+            const urgencyHtml = event.urgency.length > 0 ? 
+                `<span class="urgency-signal">${event.urgency[0]}</span>` : '';
+            
+            const promotedHtml = event.promoted ? 
+                `<span class="promoted-tag">Promoted</span>` : '';
+            
+            return `
+                <div class="event-card" onclick="window.open('#', '_blank')">
+                    <div class="event-image" style="background-image: url('${event.image}')"></div>
+                    <div class="event-content">
+                        <div class="event-date">${formatDate(event.date)} • ${formatTime(event.time)}</div>
+                        <h3 class="event-title">${event.name}</h3>
+                        <p class="event-summary">${event.summary}</p>
+                        <div class="event-meta">
+                            <span class="event-price">${event.price}</span>
+                            <span>Online</span>
+                            ${urgencyHtml}
+                            ${promotedHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createOrganizerCard(organizer) {
+            return `
+                <div class="organizer-card">
+                    <div class="organizer-avatar" style="background-image: url('${organizer.avatar}')"></div>
+                    <div class="organizer-name">${organizer.name}</div>
+                    <div class="organizer-followers">${organizer.followers}</div>
+                    <button class="follow-btn">Follow</button>
+                </div>
+            `;
+        }
+
+        function loadSection(sectionId, events) {
+            const grid = document.getElementById(sectionId);
+            if (grid && events) {
+                grid.innerHTML = events.map(event => createEventCard(event)).join('');
+            }
+        }
+
+        function loadOrganizers() {
+            const grid = document.getElementById('organizersGrid');
+            grid.innerHTML = organizers.map(org => createOrganizerCard(org)).join('');
+        }
+
+        function scrollCarousel(section, direction) {
+            // Carousel scroll functionality
+            console.log(`Scrolling ${section} carousel in direction: ${direction}`);
+        }
+
+        // Header Search functionality
+        function performSearch(source) {
+            const searchInput = source === 'desktop' ?
+                document.getElementById('desktopSearchInput') :
+                document.getElementById('mobileSearchInput');
+            const locationInput = document.getElementById('desktopLocationInput');
+
+            const searchTerm = searchInput?.value.trim() || '';
+            const location = locationInput?.value.trim() || '';
+
+            if (searchTerm || location) {
+                console.log(`${source} search:`, { searchTerm, location });
+                // Implement search logic here
+            }
+        }
+
+        // Desktop user menu functionality
+        function initializeDesktopMenu() {
+            const userMenuButton = document.getElementById('desktopUserMenuButton');
+            const userDropdown = document.getElementById('desktopUserDropdown');
+            const logoutLink = document.getElementById('desktopLogoutLink');
+
+            if (userMenuButton && userDropdown) {
+                userMenuButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    if (userDropdown.classList.contains('show')) {
+                        userDropdown.classList.remove('show');
+                    } else {
+                        userDropdown.classList.add('show');
+                    }
+                });
+            }
+
+            if (logoutLink) {
+                logoutLink.addEventListener('click', handleLogout);
+            }
+        }
+
+        // Mobile user menu functionality
+        function initializeMobileMenu() {
+            const userProfile = document.getElementById('mobileUserProfile');
+            const dropdown = document.getElementById('mobileDropdown');
+            const dropdownOverlay = document.getElementById('dropdownOverlay');
+
+            function showMobileDropdown() {
+                dropdown.classList.add('show');
+                dropdownOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function hideMobileDropdown() {
+                dropdown.classList.remove('show');
+                dropdownOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            if (userProfile) {
+                userProfile.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (dropdown.classList.contains('show')) {
+                        hideMobileDropdown();
+                    } else {
+                        showMobileDropdown();
+                    }
+                });
+            }
+
+            if (dropdownOverlay) {
+                dropdownOverlay.addEventListener('click', hideMobileDropdown);
+            }
+
+            // Handle mobile dropdown item clicks
+            const dropdownItems = document.querySelectorAll('.mobile-header .dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    console.log('Mobile menu clicked:', this.textContent.trim());
+
+                    if (this.classList.contains('logout')) {
+                        handleLogout(e);
+                    } else if (this.classList.contains('interests')) {
+                        window.location.href = 'intrest.html';
+                    } else if (this.classList.contains('manage')) {
+                        window.location.href = 'events-calendar.html';
+                    } else if (this.classList.contains('browse')) {
+                        window.location.href = 'get_ticket.html';
+                    }
+
+                    hideMobileDropdown();
+                });
+            });
+        }
+
+        // Shared logout functionality
+        function handleLogout(e) {
+            e.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                sessionStorage.clear();
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Global click handler to close dropdowns
+        function initializeGlobalHandlers() {
+            document.addEventListener('click', function(e) {
+                const desktopUserDropdown = document.getElementById('desktopUserDropdown');
+                const desktopUserMenuButton = document.getElementById('desktopUserMenuButton');
+                const mobileUserProfile = document.getElementById('mobileUserProfile');
+                const mobileDropdown = document.getElementById('mobileDropdown');
+
+                // Close desktop dropdown if clicking outside
+                if (!desktopUserMenuButton?.contains(e.target) && !desktopUserDropdown?.contains(e.target)) {
+                    desktopUserDropdown?.classList.remove('show');
+                }
+
+                // Close mobile dropdown if clicking outside
+                if (!mobileUserProfile?.contains(e.target) && !mobileDropdown?.contains(e.target)) {
+                    mobileDropdown?.classList.remove('show');
+                    document.getElementById('dropdownOverlay')?.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Search input enter key functionality
+            document.getElementById('desktopSearchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('desktopLocationInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('desktop');
+                }
+            });
+
+            document.getElementById('mobileSearchInput')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch('mobile');
+                }
+            });
+        }
+
+        // Load user data from localStorage
+        function loadUserData() {
+            const userStr = localStorage.getItem('currentUser');
+            const token = localStorage.getItem('authToken');
+
+            if (!token || !userStr) {
+                // Not logged in, redirect to index
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const user = JSON.parse(userStr);
+                updateUserElements(user);
+                console.log('User loaded:', user.name || user.email);
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                // Clear invalid data and redirect
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function updateUserElements(user) {
+            // Desktop elements (new header)
+            const desktopUserEmail = document.getElementById('desktopUserEmail');
+            const desktopUserAvatar = document.getElementById('desktopUserAvatar');
+            const desktopDropdownUserEmail = document.getElementById('desktopDropdownUserEmail');
+
+            // Mobile elements (new header)
+            const mobileUserEmail = document.getElementById('mobileUserEmail');
+
+            // Legacy elements (if any exist)
+            const userEmailEl = document.getElementById('userEmail');
+            const userAvatarEl = document.getElementById('userAvatar');
+            const dropdownUserEmailEl = document.getElementById('dropdownUserEmail');
+            const mobileUserAvatarEl = document.getElementById('mobileUserAvatar');
+            const mobileDropdownUserEmailEl = document.getElementById('mobileDropdownUserEmail');
+
+            const displayText = user.name || user.email || 'User';
+            const avatarText = (user.name || user.email || 'U').charAt(0).toUpperCase();
+            const emailText = user.email || user.name || 'user@example.com';
+
+            // Update new header elements
+            if (desktopUserEmail) desktopUserEmail.textContent = displayText;
+            if (desktopUserAvatar) desktopUserAvatar.textContent = avatarText;
+            if (desktopDropdownUserEmail) desktopDropdownUserEmail.textContent = emailText;
+            if (mobileUserEmail) mobileUserEmail.textContent = emailText;
+
+            // Update legacy elements if they exist
+            if (userEmailEl) userEmailEl.textContent = displayText;
+            if (userAvatarEl) userAvatarEl.textContent = avatarText;
+            if (dropdownUserEmailEl) dropdownUserEmailEl.textContent = emailText;
+            if (mobileUserAvatarEl) mobileUserAvatarEl.textContent = avatarText;
+            if (mobileDropdownUserEmailEl) mobileDropdownUserEmailEl.textContent = emailText;
+        }
+
+        // Toggle user dropdown menu
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            alert('Logged out successfully!');
+            window.location.href = 'index.html';
+        }
+        
+        // Toggle mobile user dropdown menu
+        function toggleMobileUserMenu() {
+            const dropdown = document.getElementById('mobileDropdown');
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            } else {
+                dropdown.classList.add('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = event.target.closest('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            const mobileUserMenu = event.target.closest('.mobile-user-profile');
+            const mobileDropdown = document.getElementById('mobileDropdown');
+
+            if (!userMenu && dropdown) {
+                dropdown.style.display = 'none';
+            }
+
+            if (!mobileUserMenu && mobileDropdown) {
+                mobileDropdown.classList.remove('show');
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize header functionality
+            initializeDesktopMenu();
+            initializeMobileMenu();
+            initializeGlobalHandlers();
+
+            // Load user data
+            loadUserData();
+
+            // Load all sections
+            loadSection('popularEvents', allEvents.popular);
+            loadSection('weekendEvents', allEvents.weekend);
+            loadSection('classesEvents', allEvents.classes);
+            loadSection('seminarsEvents', allEvents.seminars);
+            loadSection('networkingEvents', allEvents.networking);
+            loadOrganizers();
+        });
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const eventCards = document.querySelectorAll('.event-card');
+            
+            eventCards.forEach(card => {
+                const title = card.querySelector('.event-title').textContent.toLowerCase();
+                const summary = card.querySelector('.event-summary').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || summary.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter interactions
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                console.log('Filter clicked:', this.textContent.trim());
+            });
+        });
+
+        // Category interactions
+        document.querySelectorAll('.category-item').forEach(category => {
+            category.addEventListener('click', function() {
+                console.log('Category clicked:', this.querySelector('.category-name').textContent);
+            });
+        });
+
+        // Tag interactions
+        document.querySelectorAll('.tag-item').forEach(tag => {
+            tag.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Tag clicked:', this.textContent);
+            });
+        });
+
+        // Format interactions
+        document.querySelectorAll('.format-item').forEach(format => {
+            format.addEventListener('click', function() {
+                console.log('Format clicked:', this.querySelector('.format-name').textContent);
+            });
+        });
+    </script>
+</body>
+</html>

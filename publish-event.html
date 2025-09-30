@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publish Event - Crowd</title>
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="publish-event-styles.css">
+    <script src="js/data-manager.js"></script>
+</head>
+<body>
+    <div class="publish-container">
+        <!-- Left Sidebar -->
+        <aside class="left-sidebar">
+            <div class="sidebar-content">
+                <div class="back-link">
+                    <a href="#" onclick="goToTickets()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                        Back to tickets
+                    </a>
+                </div>
+                
+                <div class="event-summary">
+                    <div class="event-image-placeholder" id="sidebarEventImage"></div>
+                    <h2 id="sidebarEventTitle">Event Title</h2>
+                    <div class="event-datetime">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" x2="16" y1="2" y2="6"/>
+                            <line x1="8" x2="8" y1="2" y2="6"/>
+                            <line x1="3" x2="21" y1="10" y2="10"/>
+                        </svg>
+                        <span id="sidebarEventDateTime">Mon, Sep 1, 2025, 10:00 AM</span>
+                    </div>
+                    
+                    <select class="status-select" id="eventStatus">
+                        <option value="draft">Draft</option>
+                        <option value="published">Published</option>
+                    </select>
+                    
+                    <a href="#" class="preview-link" onclick="previewEvent()">Preview ↗</a>
+                </div>
+
+                <div class="steps-section">
+                    <h3>Steps</h3>
+                    <div class="step-item completed" onclick="goToBuilder()">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12l2 2 4-4"/>
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                        <div class="step-content">
+                            <h4>Build event page</h4>
+                            <p>Add all of your event details and let attendees know what to expect</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item completed" onclick="goToTickets()">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12l2 2 4-4"/>
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                        <div class="step-content">
+                            <h4>Add tickets</h4>
+                            <p>Use our suggestions to help sell more tickets or manually create your own</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-item active" id="publishStep">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="12" r="10"/>
+                            </svg>
+                        </div>
+                        <div class="step-content">
+                            <h4>Publish</h4>
+                            <p>Review your event page and settings, then publish your event</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header" style="position: fixed; top: 0; left: 320px; right: 0; z-index: 100; background: white; border-bottom: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <style>
+                @media (max-width: 768px) {
+                    .header {
+                        left: 0 !important;
+                    }
+                }
+                </style>
+                <div class="header-content">
+                    <div class="header-right">
+                        <button class="preview-btn" onclick="previewEvent()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Preview Your Event
+                        </button>
+                        <button class="publish-btn" id="publishButton" onclick="publishEvent()" disabled>
+                            Publish now
+                        </button>
+                        <div class="user-menu">
+                            <div class="user-avatar" id="userAvatar">U</div>
+                            <span class="user-name" id="userName">Loading...</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Warning Banner -->
+            <div class="warning-banner" id="warningBanner">
+                <div class="warning-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+                    </svg>
+                    <div class="warning-text">
+                        <h4>Your event isn't ready to publish yet</h4>
+                        <p id="warningMessage">Complete the requirements below to publish your event.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area" style="margin-top: 80px;">
+                <div class="content-header">
+                    <h1>Publish your event</h1>
+                    <p>Review your event details and settings before publishing to make it live for attendees.</p>
+                </div>
+
+                <div class="publish-content">
+                    <!-- Event Preview Card -->
+                    <div class="event-preview-card">
+                        <h3>Event preview</h3>
+                        <div class="preview-card">
+                            <div class="preview-image" id="previewImage">
+                                <div class="placeholder-image">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="#94a3b8">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21,15 16,10 5,21"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="preview-content">
+                                <h4 id="previewTitle">Event Title</h4>
+                                <div class="preview-datetime">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" x2="16" y1="2" y2="6"/>
+                                        <line x1="8" x2="8" y1="2" y2="6"/>
+                                        <line x1="3" x2="21" y1="10" y2="10"/>
+                                    </svg>
+                                    <span id="previewDateTime">Monday, September 1 • 10am - 12pm PKT</span>
+                                </div>
+                                <div class="preview-location" id="previewLocationContainer">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                        <circle cx="12" cy="10" r="3"/>
+                                    </svg>
+                                    <span id="previewLocation">Location not set</span>
+                                </div>
+                                <div class="preview-tickets" id="previewTickets">
+                                    <span class="ticket-count">0 ticket types</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Organizer Section -->
+                    <div class="organizer-section">
+                        <h3>Organizer</h3>
+                        <div class="organizer-card">
+                            <div class="organizer-avatar" id="organizerAvatar">U</div>
+                            <div class="organizer-info">
+                                <h4 id="organizerName">Loading...</h4>
+                                <p>Event organizer</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Publish Settings -->
+                    <div class="publish-settings">
+                        <h3>Publish settings</h3>
+                        
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <h4>Event visibility</h4>
+                                <span class="setting-status">Public</span>
+                            </div>
+                            <p>Your event will be visible to everyone and can be found in search results.</p>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <h4>Registration</h4>
+                                <span class="setting-status" id="registrationStatus">Open</span>
+                            </div>
+                            <p>Attendees can register for your event immediately after publishing.</p>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-header">
+                                <h4>Event listing</h4>
+                                <span class="setting-status">Listed</span>
+                            </div>
+                            <p>Your event will appear in public event listings and search results.</p>
+                        </div>
+                    </div>
+
+                    <!-- Event Type & Category -->
+                    <div class="event-classification">
+                        <h3>Event classification</h3>
+                        
+                        <div class="classification-grid">
+                            <div class="classification-item">
+                                <label for="eventType">Event type</label>
+                                <select id="eventType" onchange="updateClassification()">
+                                    <option value="">Select type</option>
+                                    <option value="conference">Conference</option>
+                                    <option value="workshop">Workshop</option>
+                                    <option value="seminar">Seminar</option>
+                                    <option value="networking">Networking</option>
+                                    <option value="social">Social</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="classification-item">
+                                <label for="eventCategory">Category</label>
+                                <select id="eventCategory" onchange="updateClassification()">
+                                    <option value="">Select category</option>
+                                    <option value="business">Business</option>
+                                    <option value="technology">Technology</option>
+                                    <option value="education">Education</option>
+                                    <option value="arts">Arts & Culture</option>
+                                    <option value="health">Health & Wellness</option>
+                                    <option value="sports">Sports & Fitness</option>
+                                    <option value="food">Food & Drink</option>
+                                    <option value="music">Music</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Requirements Checklist -->
+                    <div class="requirements-section">
+                        <h3>Publishing requirements</h3>
+                        <div class="requirements-list" id="requirementsList">
+                            <!-- Requirements will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            API_BASE_URL: (() => {
+                // Check if running locally
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    return 'http://localhost:3000';
+                }
+
+                // Check for development netlify URL or specific backend URL
+                if (window.location.hostname.includes('netlify.app')) {
+                    return 'https://crowd-backend-zxxp.onrender.com';
+                }
+
+                // Default production backend
+                return 'https://crowd-backend-zxxp.onrender.com';
+            })(),
+            RETRY_ATTEMPTS: 3,
+            RETRY_DELAY: 2000, // Increased delay for better reliability
+            TOKEN_KEY: 'authToken'
+        };
+
+        let currentEventData = {};
+        let eventTickets = [];
+        let publishRequirements = {
+            hasTitle: false,
+            hasDateTime: false,
+            hasLocation: false,
+            hasDescription: false,
+            hasTickets: false,
+            hasEventType: false,
+            hasCategory: false
+        };
+
+        // Utility functions
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return input;
+            return input.trim().replace(/[<>\"'&]/g, function(match) {
+                const htmlEscapes = {
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;',
+                    '&': '&amp;'
+                };
+                return htmlEscapes[match];
+            });
+        }
+
+        async function makeApiRequest(url, options = {}, retryCount = 0) {
+            try {
+                console.log(`Making API request to: ${url}`);
+
+                const response = await fetch(url, {
+                    ...options,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
+                });
+
+                console.log(`Response status: ${response.status}`);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error(`API Error Response: ${errorText}`);
+
+                    let errorMessage;
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMessage = errorJson.message || `HTTP ${response.status}: ${response.statusText}`;
+                    } catch {
+                        errorMessage = `HTTP ${response.status}: ${errorText || response.statusText}`;
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                const responseData = await response.json();
+                console.log('API Response:', responseData);
+                return responseData;
+
+            } catch (error) {
+                console.error(`API Request failed (attempt ${retryCount + 1}):`, error);
+
+                // Handle network errors and specific HTTP errors
+                if (retryCount < CONFIG.RETRY_ATTEMPTS - 1 &&
+                    (error.name === 'TypeError' ||
+                     error.message.includes('network') ||
+                     error.message.includes('Failed to fetch') ||
+                     error.message.includes('500'))) {
+                    console.log(`Retrying in ${CONFIG.RETRY_DELAY}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, CONFIG.RETRY_DELAY));
+                    return makeApiRequest(url, options, retryCount + 1);
+                }
+
+                throw error;
+            }
+        }
+
+
+        // Pure database authentication check
+        async function checkAuthenticationStatus() {
+            try {
+                const token = getAuthToken();
+                if (!token) {
+                    console.log('No auth token found');
+                    return false;
+                }
+
+                const data = await makeApiRequest(`${CONFIG.API_BASE_URL}/api/auth/verify`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                console.log('Auth verification result:', data);
+                return data.success;
+            } catch (error) {
+                console.error('Authentication check failed:', error);
+
+                // Handle network errors more gracefully
+                if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
+                    console.log('Network error during auth check, allowing offline mode');
+                    showErrorMessage('Unable to verify authentication due to network issues. Working in offline mode.', true);
+                    return true; // Allow working offline
+                }
+
+                showErrorMessage('Authentication verification failed. Please login again.');
+                return false;
+            }
+        }
+
+        function getAuthToken() {
+            // Get from URL parameters first (for direct links)
+            const urlParams = new URLSearchParams(window.location.search);
+            let token = urlParams.get('token');
+
+            // Use standardized token management
+            if (!token) {
+                token = localStorage.getItem(CONFIG.TOKEN_KEY);
+            }
+
+            // Store token consistently if found in URL
+            if (token && !localStorage.getItem(CONFIG.TOKEN_KEY)) {
+                localStorage.setItem(CONFIG.TOKEN_KEY, token);
+            }
+
+            console.log('Auth token found:', token ? 'Yes (length: ' + token.length + ')' : 'No');
+            return token || '';
+        }
+        
+        function showErrorMessage(message, isTemporary = true) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-notification';
+            errorDiv.textContent = message;
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ef4444;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                z-index: 1000;
+                max-width: 400px;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                font-size: 14px;
+                line-height: 1.4;
+            `;
+
+            document.body.appendChild(errorDiv);
+
+            if (isTemporary) {
+                setTimeout(() => {
+                    if (errorDiv.parentNode) {
+                        errorDiv.remove();
+                    }
+                }, 5000);
+            }
+
+            return errorDiv;
+        }
+
+        // Add slideIn animation to CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        async function loadUserData() {
+            try {
+                console.log('Loading user profile data...');
+
+                const data = await makeApiRequest(`${CONFIG.API_BASE_URL}/api/auth/profile`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    }
+                });
+
+                console.log('User profile response:', data);
+
+                if (data.success && data.user) {
+                    const user = data.user;
+                    const firstName = sanitizeInput(user.firstName || '');
+                    const lastName = sanitizeInput(user.lastName || '');
+                    const email = sanitizeInput(user.email || '');
+                    const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || 'U';
+                    const fullName = `${firstName} ${lastName}`.trim() || 'User';
+
+                    // Update all user profile elements
+                    document.getElementById('userAvatar').textContent = initials;
+                    document.getElementById('userName').textContent = fullName;
+                    document.getElementById('organizerAvatar').textContent = initials;
+                    document.getElementById('organizerName').textContent = fullName;
+
+                    // Store user data globally for use in other functions
+                    window.currentUser = {
+                        id: user._id || user.id,
+                        firstName,
+                        lastName,
+                        email,
+                        fullName,
+                        initials
+                    };
+
+                    // Cache user data for offline use
+                    localStorage.setItem('cachedUser', JSON.stringify(window.currentUser));
+
+                    console.log('User profile loaded successfully:', fullName);
+                    showNotification(`Welcome, ${fullName}!`);
+                } else {
+                    throw new Error(data.message || 'Invalid user data received');
+                }
+            } catch (error) {
+                console.error('Failed to load user data:', error);
+
+                // Handle network errors gracefully
+                if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
+                    console.log('Network error while loading user data, using cached/default data');
+                    showErrorMessage('Unable to load user profile due to network issues. Using cached data.', true);
+
+                    // Try to load from localStorage if available
+                    const cachedUser = localStorage.getItem('cachedUser');
+                    if (cachedUser) {
+                        try {
+                            const user = JSON.parse(cachedUser);
+                            document.getElementById('userAvatar').textContent = user.initials || 'U';
+                            document.getElementById('userName').textContent = user.fullName || 'User';
+                            document.getElementById('organizerAvatar').textContent = user.initials || 'U';
+                            document.getElementById('organizerName').textContent = user.fullName || 'User';
+                            return;
+                        } catch (parseError) {
+                            console.error('Error parsing cached user data:', parseError);
+                        }
+                    }
+                } else {
+                    showErrorMessage('Failed to load user profile. Please try refreshing the page.');
+                }
+
+                // Set default values
+                document.getElementById('userAvatar').textContent = 'U';
+                document.getElementById('userName').textContent = 'User';
+                document.getElementById('organizerAvatar').textContent = 'U';
+                document.getElementById('organizerName').textContent = 'User';
+            }
+        }
+
+        async function loadEventData() {
+            try {
+                // Get event ID from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = sanitizeInput(urlParams.get('id'));
+
+                if (!eventId) {
+                    showErrorMessage('No event ID provided. Redirecting to event builder.');
+                    setTimeout(() => window.location.href = 'event-builder.html', 2000);
+                    return;
+                }
+
+                console.log('Loading event data for ID:', eventId);
+
+                const data = await makeApiRequest(`${CONFIG.API_BASE_URL}/api/events/${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    }
+                });
+
+                console.log('Event data response:', data);
+
+                if (data.success && data.event) {
+                    currentEventData = data.event;
+                    console.log('Event data loaded successfully:', currentEventData.title);
+                    populateEventInfo();
+
+                    // Cache event data for offline use
+                    localStorage.setItem('cachedEventData', JSON.stringify(currentEventData));
+                } else {
+                    throw new Error(data.message || 'Event not found');
+                }
+            } catch (error) {
+                console.error('Failed to load event data:', error);
+
+                // Handle network errors gracefully
+                if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
+                    console.log('Network error while loading event data, trying cached data');
+                    showErrorMessage('Unable to load event data due to network issues. Using cached data if available.', true);
+
+                    // Try to load from localStorage
+                    const cachedEventData = localStorage.getItem('cachedEventData');
+                    if (cachedEventData) {
+                        try {
+                            currentEventData = JSON.parse(cachedEventData);
+                            populateEventInfo();
+                            showNotification('Using cached event data. Some information may be outdated.');
+                            return;
+                        } catch (parseError) {
+                            console.error('Error parsing cached event data:', parseError);
+                        }
+                    }
+                }
+
+                showErrorMessage(`Failed to load event data: ${error.message}. Redirecting to event builder.`);
+                setTimeout(() => {
+                    if (confirm('Would you like to go to the event builder to create or select an event?')) {
+                        window.location.href = 'event-builder.html';
+                    }
+                }, 3000);
+            }
+        }
+
+
+        function populateEventInfo() {
+            document.getElementById('sidebarEventTitle').textContent = sanitizeInput(currentEventData.title) || 'Event Title';
+            document.getElementById('eventStatus').value = currentEventData.status || 'draft';
+
+            if (currentEventData.image || currentEventData.imageUrl) {
+                const imageUrl = currentEventData.image || currentEventData.imageUrl;
+                document.getElementById('sidebarEventImage').style.backgroundImage = `url(${imageUrl})`;
+                document.getElementById('sidebarEventImage').style.backgroundSize = 'cover';
+            }
+
+            // Update date time display - handle various date formats
+            let dateValue = currentEventData.date || currentEventData.startDate || currentEventData.dateTime?.start;
+            let timeValue = currentEventData.startTime || currentEventData.time;
+
+            if (dateValue) {
+                const date = new Date(dateValue);
+                let startTime = 'Time not set';
+
+                // Try to get time from various sources
+                if (timeValue) {
+                    startTime = formatTime(timeValue);
+                } else if (dateValue.includes('T')) {
+                    // ISO format includes time
+                    startTime = formatTime(dateValue);
+                } else {
+                    startTime = 'Time not set';
+                }
+
+                const sidebarDisplay = date.toLocaleDateString('en-US', {
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }) + `, ${startTime}`;
+                document.getElementById('sidebarEventDateTime').textContent = sidebarDisplay;
+            } else {
+                document.getElementById('sidebarEventDateTime').textContent = 'Date not set';
+            }
+        }
+
+        function loadTickets() {
+            try {
+                // Handle both old and new ticket data formats
+                eventTickets = currentEventData.ticketClasses || currentEventData.pricing?.tickets || [];
+                console.log('Loaded tickets:', eventTickets.length, 'tickets');
+            } catch (error) {
+                console.error('Failed to load tickets:', error);
+                eventTickets = [];
+            }
+        }
+
+        function formatTime(timeStr) {
+            if (!timeStr) {
+                return 'Time not set';
+            }
+
+            // Handle various time formats
+            let timePart = timeStr;
+            if (timeStr.includes('T')) {
+                // ISO format like "2024-01-01T10:00:00"
+                timePart = timeStr.split('T')[1].split('.')[0]; // Get time part
+            }
+
+            const [hours, minutes] = timePart.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}${minutes !== '00' ? ':' + minutes : ''}${ampm}`;
+        }
+
+        function updateRequirements() {
+            // Check requirements
+            publishRequirements.hasTitle = currentEventData.title && currentEventData.title.trim() !== '' && currentEventData.title !== 'Event Title';
+            publishRequirements.hasDateTime = currentEventData.date && currentEventData.startTime;
+            publishRequirements.hasLocation = currentEventData.location && currentEventData.location.trim() !== '';
+            publishRequirements.hasDescription = currentEventData.description && currentEventData.description.trim() !== '';
+            publishRequirements.hasTickets = eventTickets.length > 0;
+            publishRequirements.hasEventType = document.getElementById('eventType').value !== '';
+            publishRequirements.hasCategory = document.getElementById('eventCategory').value !== '';
+
+            renderRequirements();
+            updatePublishButton();
+            updateWarningBanner();
+        }
+
+        function renderRequirements() {
+            const requirementsList = document.getElementById('requirementsList');
+            const requirements = [
+                { key: 'hasTitle', label: 'Event title', description: 'Add a clear, descriptive title for your event' },
+                { key: 'hasDateTime', label: 'Date and time', description: 'Set when your event will take place' },
+                { key: 'hasLocation', label: 'Location', description: 'Specify where your event will be held' },
+                { key: 'hasDescription', label: 'Event description', description: 'Provide details about what attendees can expect' },
+                { key: 'hasTickets', label: 'Tickets', description: 'Create at least one ticket type for your event' },
+                { key: 'hasEventType', label: 'Event type', description: 'Select the type of event you\'re hosting' },
+                { key: 'hasCategory', label: 'Category', description: 'Choose a category that best describes your event' }
+            ];
+
+            requirementsList.innerHTML = requirements.map(req => {
+                const isComplete = publishRequirements[req.key];
+                return `
+                    <div class="requirement-item ${isComplete ? 'completed' : 'incomplete'}">
+                        <div class="requirement-icon">
+                            ${isComplete ? 
+                                '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>' :
+                                '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>'
+                            }
+                        </div>
+                        <div class="requirement-content">
+                            <h4>${req.label}</h4>
+                            <p>${req.description}</p>
+                        </div>
+                        <div class="requirement-status">
+                            ${isComplete ? 'Complete' : 'Required'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updatePublishButton() {
+            const allRequirementsMet = Object.values(publishRequirements).every(req => req);
+            const publishButton = document.getElementById('publishButton');
+            
+            publishButton.disabled = !allRequirementsMet;
+            publishButton.textContent = allRequirementsMet ? 'Publish now' : 'Complete requirements to publish';
+        }
+
+        function updateWarningBanner() {
+            const allRequirementsMet = Object.values(publishRequirements).every(req => req);
+            const warningBanner = document.getElementById('warningBanner');
+            const warningMessage = document.getElementById('warningMessage');
+            
+            if (allRequirementsMet) {
+                warningBanner.style.display = 'none';
+            } else {
+                warningBanner.style.display = 'flex';
+                const incompleteCount = Object.values(publishRequirements).filter(req => !req).length;
+                warningMessage.textContent = `Complete ${incompleteCount} more requirement${incompleteCount > 1 ? 's' : ''} to publish your event.`;
+            }
+        }
+
+        function updatePreview() {
+            // Update preview card
+            document.getElementById('previewTitle').textContent = currentEventData.title || 'Event Title';
+            
+            if (currentEventData.image) {
+                const previewImage = document.getElementById('previewImage');
+                previewImage.innerHTML = `<img src="${currentEventData.image}" alt="Event image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`;
+            }
+            
+            // Update date time
+            if (currentEventData.date && currentEventData.startTime && currentEventData.endTime) {
+                const date = new Date(currentEventData.date);
+                const startTime = formatTime(currentEventData.startTime);
+                const endTime = formatTime(currentEventData.endTime);
+                const dateStr = date.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                document.getElementById('previewDateTime').textContent = `${dateStr} • ${startTime} - ${endTime} PKT`;
+            }
+            
+            // Update location
+            const locationContainer = document.getElementById('previewLocationContainer');
+            const locationSpan = document.getElementById('previewLocation');
+            if (currentEventData.location && currentEventData.location.trim() !== '') {
+                locationSpan.textContent = currentEventData.location;
+                locationContainer.style.display = 'flex';
+            } else {
+                locationContainer.style.display = 'none';
+            }
+            
+            // Update tickets
+            const ticketCount = eventTickets.length;
+            document.getElementById('previewTickets').innerHTML = `
+                <span class="ticket-count">${ticketCount} ticket type${ticketCount !== 1 ? 's' : ''}</span>
+            `;
+            
+            // Update registration status
+            const hasTickets = eventTickets.length > 0;
+            document.getElementById('registrationStatus').textContent = hasTickets ? 'Open' : 'Closed';
+        }
+
+        function updateClassification() {
+            updateRequirements();
+        }
+
+        async function publishEvent() {
+            const allRequirementsMet = Object.values(publishRequirements).every(req => req);
+
+            if (!allRequirementsMet) {
+                showErrorMessage('Please complete all requirements before publishing.');
+                return;
+            }
+
+            try {
+                // Get event ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = sanitizeInput(urlParams.get('id'));
+
+                // Verify authentication before publishing
+                const token = getAuthToken();
+                if (!token) {
+                    showErrorMessage('You must be logged in to publish an event.');
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                    return;
+                }
+
+                // Disable publish button during request
+                const publishButton = document.getElementById('publishButton');
+                const originalText = publishButton.textContent;
+                publishButton.disabled = true;
+                publishButton.textContent = 'Publishing...';
+
+                console.log('Publishing event with ID:', eventId);
+
+                // Update event data
+                const updateData = {
+                    status: 'published',
+                    eventType: sanitizeInput(document.getElementById('eventType').value),
+                    category: sanitizeInput(document.getElementById('eventCategory').value),
+                    publishedAt: new Date().toISOString()
+                };
+
+                const data = await makeApiRequest(`${CONFIG.API_BASE_URL}/api/events/${eventId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(updateData)
+                });
+
+                if (data.success) {
+                    // Update local event data
+                    currentEventData.status = 'published';
+                    currentEventData.publishedAt = updateData.publishedAt;
+
+                    // Update cached data
+                    localStorage.setItem('cachedEventData', JSON.stringify(currentEventData));
+
+                    // Show success message and redirect
+                    showNotification('Event published successfully! Redirecting to dashboard...');
+                    setTimeout(() => window.location.href = 'dashboard-home.html', 2000);
+                } else {
+                    throw new Error(data.message || 'Failed to publish event');
+                }
+            } catch (error) {
+                console.error('Failed to publish event:', error);
+
+                // Re-enable publish button
+                const publishButton = document.getElementById('publishButton');
+                publishButton.disabled = false;
+                publishButton.textContent = 'Publish now';
+
+                // Handle different types of errors
+                if (error.message.includes('401') || error.message.includes('unauthorized')) {
+                    showErrorMessage('Your session has expired. Please log in again.');
+                    setTimeout(() => window.location.href = 'login.html', 2000);
+                } else if (error.message.includes('403') || error.message.includes('forbidden')) {
+                    showErrorMessage('You do not have permission to publish this event.');
+                } else if (error.message.includes('404')) {
+                    showErrorMessage('Event not found. It may have been deleted.');
+                    setTimeout(() => window.location.href = 'event-builder.html', 2000);
+                } else {
+                    showErrorMessage('Failed to publish event: ' + error.message);
+                }
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function previewEvent() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `event-preview.html?id=${eventId}`;
+            } else {
+                alert('Event ID not found');
+            }
+        }
+
+        function goToBuilder() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `event-builder.html?id=${eventId}`;
+            } else {
+                window.location.href = 'event-builder.html';
+            }
+        }
+
+        function goToTickets() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const eventId = urlParams.get('id');
+            if (eventId) {
+                window.location.href = `add-tickets.html?id=${eventId}`;
+            } else {
+                alert('Event ID not found');
+            }
+        }
+
+
+        // Utility function to show loading state
+        function showLoadingState(show = true) {
+            const elements = ['userAvatar', 'userName', 'organizerAvatar', 'organizerName'];
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (show) {
+                        element.classList.add('loading');
+                        if (id.includes('Avatar')) {
+                            element.textContent = '...';
+                        } else {
+                            element.textContent = 'Loading...';
+                        }
+                    } else {
+                        element.classList.remove('loading');
+                    }
+                }
+            });
+        }
+
+        // Function to display connection status
+        function updateConnectionStatus(status) {
+            // Remove existing status indicator
+            const existingStatus = document.querySelector('.auth-status');
+            if (existingStatus) {
+                existingStatus.remove();
+            }
+
+            // Create new status indicator
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `auth-status ${status}`;
+
+            let statusText = '';
+            switch (status) {
+                case 'authenticated':
+                    statusText = '🟢 Connected';
+                    break;
+                case 'offline':
+                    statusText = '🟡 Offline Mode';
+                    break;
+                case 'error':
+                    statusText = '🔴 Connection Error';
+                    break;
+            }
+
+            statusDiv.textContent = statusText;
+
+            // Add to header
+            const headerRight = document.querySelector('.header-right');
+            if (headerRight) {
+                headerRight.insertBefore(statusDiv, headerRight.firstChild);
+            }
+        }
+
+        // Initialize authentication status on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            showLoadingState(true);
+            updateConnectionStatus('offline');
+
+            try {
+                // Pure database authentication check
+                const isAuthenticated = await checkAuthenticationStatus();
+                if (!isAuthenticated) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                updateConnectionStatus('authenticated');
+                await loadUserData();
+                await loadEventData();
+                loadTickets();
+                updateRequirements();
+                updatePreview();
+
+                showLoadingState(false);
+            } catch (error) {
+                console.error('Initialization error:', error);
+                updateConnectionStatus('error');
+                showLoadingState(false);
+            }
+        });
+
+        // Update requirements when page loads and when data changes
+        setInterval(updateRequirements, 1000);
+
+        // Monitor online/offline status
+        window.addEventListener('online', () => {
+            console.log('Connection restored');
+            updateConnectionStatus('authenticated');
+            showNotification('Connection restored! Syncing data...');
+            // Optionally reload data when back online
+            loadUserData().catch(console.error);
+            loadEventData().catch(console.error);
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('Connection lost');
+            updateConnectionStatus('offline');
+            showErrorMessage('Connection lost. Working in offline mode.', true);
+        });
+    </script>
+</body>
+</html>

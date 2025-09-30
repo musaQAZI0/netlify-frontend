@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety & Trust Dashboard - CROWD</title>
+    <link rel="stylesheet" href="safety-trust-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .verification-badge {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="safety-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#f05537">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span>crowd</span>
+                    <span class="safety-badge">Safety & Trust</span>
+                </div>
+                <div class="header-right">
+                    <button class="back-btn" onclick="goBack()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15 18l-6-6 6-6"/>
+                        </svg>
+                        Back
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <span class="user-name" id="userName">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Trust Level Overview -->
+            <section class="trust-overview">
+                <div class="trust-card">
+                    <div class="trust-header">
+                        <h2><i class="fas fa-shield-check"></i> Your Trust Level</h2>
+                        <div class="trust-level verified" id="trustLevel">
+                            <span class="badge verified-badge">
+                                <i class="fas fa-certificate"></i>
+                                Verified Host
+                            </span>
+                        </div>
+                    </div>
+                    <div class="trust-metrics">
+                        <div class="metric">
+                            <span class="metric-value" id="hostRating">4.9</span>
+                            <span class="metric-label">Host Rating</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="eventsHosted">47</span>
+                            <span class="metric-label">Events Hosted</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-value" id="verificationScore">95%</span>
+                            <span class="metric-label">Trust Score</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Verification Center -->
+            <section class="verification-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-award"></i> Verification Center</h2>
+                    <p>Boost your credibility and attract more attendees</p>
+                </div>
+
+                <div class="verification-grid">
+                    <!-- Identity Verification -->
+                    <div class="verification-card completed">
+                        <div class="verification-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div class="verification-content">
+                            <h3>Identity Verification</h3>
+                            <p>Government ID and personal information verified</p>
+                            <div class="verification-status">
+                                <i class="fas fa-check-circle"></i>
+                                Verified
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Business Verification -->
+                    <div class="verification-card pending">
+                        <div class="verification-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="verification-content">
+                            <h3>Business Verification</h3>
+                            <p>Business registration and tax ID verification</p>
+                            <div class="verification-status">
+                                <i class="fas fa-clock"></i>
+                                Pending Review
+                            </div>
+                        </div>
+                        <button class="verify-btn" onclick="startBusinessVerification()">
+                            Continue Verification
+                        </button>
+                    </div>
+
+                    <!-- Background Check -->
+                    <div class="verification-card available">
+                        <div class="verification-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="verification-content">
+                            <h3>Background Check</h3>
+                            <p>Enhanced safety screening for premium events</p>
+                            <div class="verification-status">
+                                <i class="fas fa-plus-circle"></i>
+                                Available
+                            </div>
+                        </div>
+                        <button class="verify-btn" onclick="startBackgroundCheck()">
+                            Start Verification
+                        </button>
+                    </div>
+
+                    <!-- Social Media Verification -->
+                    <div class="verification-card available">
+                        <div class="verification-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="verification-content">
+                            <h3>Social Media Verification</h3>
+                            <p>Link and verify your social media presence</p>
+                            <div class="verification-status">
+                                <i class="fas fa-plus-circle"></i>
+                                Available
+                            </div>
+                        </div>
+                        <button class="verify-btn" onclick="verifySocialMedia()">
+                            Connect Accounts
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Safety Tools -->
+            <section class="safety-tools">
+                <div class="section-header">
+                    <h2><i class="fas fa-tools"></i> Safety Tools</h2>
+                    <p>Manage reports and ensure safe events</p>
+                </div>
+
+                <div class="tools-grid">
+                    <!-- Block/Report Management -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3><i class="fas fa-ban"></i> Block & Report Center</h3>
+                            <span class="alert-count" id="alertCount">3</span>
+                        </div>
+                        <div class="tool-content">
+                            <div class="recent-reports">
+                                <div class="report-item">
+                                    <div class="report-avatar">JD</div>
+                                    <div class="report-details">
+                                        <strong>Spam behavior reported</strong>
+                                        <span>John Doe - 2 hours ago</span>
+                                    </div>
+                                    <div class="report-actions">
+                                        <button class="action-btn review" onclick="reviewReport('rep001')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn block" onclick="blockUser('user123')">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="report-item">
+                                    <div class="report-avatar">SM</div>
+                                    <div class="report-details">
+                                        <strong>Inappropriate content</strong>
+                                        <span>Sarah Miller - 5 hours ago</span>
+                                    </div>
+                                    <div class="report-actions">
+                                        <button class="action-btn review" onclick="reviewReport('rep002')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn block" onclick="blockUser('user456')">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="full-width-btn" onclick="openReportCenter()">
+                                View All Reports
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Photo/Video Consent -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3><i class="fas fa-camera"></i> Photo/Video Consent</h3>
+                            <span class="status-indicator active">Active</span>
+                        </div>
+                        <div class="tool-content">
+                            <div class="consent-settings">
+                                <div class="setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="requireConsent" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="setting-info">
+                                        <strong>Require Photo Consent</strong>
+                                        <span>Attendees must agree before being photographed</span>
+                                    </div>
+                                </div>
+                                <div class="setting-item">
+                                    <label class="switch">
+                                        <input type="checkbox" id="consentReminders" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                    <div class="setting-info">
+                                        <strong>Consent Reminders</strong>
+                                        <span>Send periodic reminders during event</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="full-width-btn" onclick="manageConsents()">
+                                Manage Consent Forms
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Blocked Users -->
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3><i class="fas fa-user-slash"></i> Blocked Users</h3>
+                            <span class="count-badge" id="blockedCount">12</span>
+                        </div>
+                        <div class="tool-content">
+                            <div class="blocked-users-list">
+                                <div class="blocked-user">
+                                    <div class="user-avatar">AB</div>
+                                    <div class="user-details">
+                                        <strong>Alex Brown</strong>
+                                        <span>Blocked 3 days ago</span>
+                                    </div>
+                                    <button class="unblock-btn" onclick="unblockUser('user789')">
+                                        Unblock
+                                    </button>
+                                </div>
+                                <div class="blocked-user">
+                                    <div class="user-avatar">MJ</div>
+                                    <div class="user-details">
+                                        <strong>Mike Johnson</strong>
+                                        <span>Blocked 1 week ago</span>
+                                    </div>
+                                    <button class="unblock-btn" onclick="unblockUser('user321')">
+                                        Unblock
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="full-width-btn" onclick="viewAllBlocked()">
+                                View All Blocked Users
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Safety Guidelines -->
+            <section class="safety-guidelines">
+                <div class="section-header">
+                    <h2><i class="fas fa-book"></i> Safety Guidelines</h2>
+                    <p>Best practices for safe and successful events</p>
+                </div>
+
+                <div class="guidelines-grid">
+                    <div class="guideline-card">
+                        <div class="guideline-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Attendee Screening</h3>
+                        <ul>
+                            <li>Enable identity verification for sensitive events</li>
+                            <li>Use wait lists for better attendee control</li>
+                            <li>Set clear event guidelines and rules</li>
+                        </ul>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="guideline-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Event Security</h3>
+                        <ul>
+                            <li>Use QR code scanning for entry control</li>
+                            <li>Have clear emergency procedures</li>
+                            <li>Designate trusted team members</li>
+                        </ul>
+                    </div>
+
+                    <div class="guideline-card">
+                        <div class="guideline-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3>Legal Compliance</h3>
+                        <ul>
+                            <li>Obtain proper photo/video consent</li>
+                            <li>Follow local event regulations</li>
+                            <li>Maintain incident documentation</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Report Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Report Details</h3>
+                <button class="close-btn" onclick="closeModal('reportModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-summary" id="reportSummary">
+                    <!-- Report details will be loaded here -->
+                </div>
+                <div class="report-actions-panel">
+                    <button class="action-button dismiss" onclick="dismissReport()">
+                        <i class="fas fa-times"></i> Dismiss
+                    </button>
+                    <button class="action-button warn" onclick="warnUser()">
+                        <i class="fas fa-exclamation-triangle"></i> Warn User
+                    </button>
+                    <button class="action-button block" onclick="blockReportedUser()">
+                        <i class="fas fa-ban"></i> Block User
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consent Management Modal -->
+    <div id="consentModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>Photo/Video Consent Management</h3>
+                <button class="close-btn" onclick="closeModal('consentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="consent-tabs">
+                    <button class="tab-btn active" onclick="switchConsentTab('forms')">Consent Forms</button>
+                    <button class="tab-btn" onclick="switchConsentTab('attendees')">Attendee Status</button>
+                    <button class="tab-btn" onclick="switchConsentTab('settings')">Settings</button>
+                </div>
+
+                <div id="consentForms" class="consent-tab-content active">
+                    <div class="form-templates">
+                        <h4>Available Consent Forms</h4>
+                        <div class="template-list">
+                            <div class="template-item">
+                                <div class="template-info">
+                                    <strong>Standard Photo Consent</strong>
+                                    <span>Basic photography and video recording consent</span>
+                                </div>
+                                <button class="use-template-btn" onclick="useTemplate('standard')">Use Template</button>
+                            </div>
+                            <div class="template-item">
+                                <div class="template-info">
+                                    <strong>Commercial Use Consent</strong>
+                                    <span>Consent for commercial and marketing use</span>
+                                </div>
+                                <button class="use-template-btn" onclick="useTemplate('commercial')">Use Template</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="consentAttendees" class="consent-tab-content">
+                    <div class="attendee-consent-list">
+                        <h4>Attendee Consent Status</h4>
+                        <div class="consent-filters">
+                            <button class="filter-btn active" onclick="filterConsent('all')">All</button>
+                            <button class="filter-btn" onclick="filterConsent('consented')">Consented</button>
+                            <button class="filter-btn" onclick="filterConsent('declined')">Declined</button>
+                            <button class="filter-btn" onclick="filterConsent('pending')">Pending</button>
+                        </div>
+                        <div class="attendee-list" id="attendeeConsentList">
+                            <!-- Attendee consent status will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="consentSettings" class="consent-tab-content">
+                    <div class="consent-configuration">
+                        <h4>Consent Configuration</h4>
+                        <div class="config-sections">
+                            <div class="config-section">
+                                <label>Default Consent Requirement</label>
+                                <select id="defaultConsentType">
+                                    <option value="required">Required for all events</option>
+                                    <option value="optional">Optional (host decides)</option>
+                                    <option value="none">No consent required</option>
+                                </select>
+                            </div>
+                            <div class="config-section">
+                                <label>Reminder Frequency</label>
+                                <select id="reminderFrequency">
+                                    <option value="once">Once at registration</option>
+                                    <option value="event-start">At event start</option>
+                                    <option value="hourly">Hourly during event</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="safety-trust-dashboard.js"></script>
+</body>
+</html>

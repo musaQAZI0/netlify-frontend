@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Features Integration Example - CROWD</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .demo-section h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .demo-section p {
+            color: #718096;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .event-title {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .organizer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 1rem 0;
+        }
+
+        .organizer-avatar {
+            width: 40px;
+            height: 40px;
+            background: #4299e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .organizer-details {
+            flex: 1;
+        }
+
+        .organizer-name {
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 2px;
+        }
+
+        .organizer-role {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .attendee-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .attendee-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            background: white;
+        }
+
+        .attendee-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .attendee-avatar {
+            width: 36px;
+            height: 36px;
+            background: #48bb78;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .attendee-info {
+            flex: 1;
+        }
+
+        .attendee-name {
+            font-weight: 500;
+            color: #2d3748;
+            margin-bottom: 2px;
+        }
+
+        .attendee-email {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            padding: 8px 16px;
+            border: 1px solid #4299e1;
+            border-radius: 6px;
+            background: white;
+            color: #4299e1;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .demo-btn:hover {
+            background: #4299e1;
+            color: white;
+        }
+
+        .integration-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 14px;
+            margin-top: 1rem;
+            overflow-x: auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f7fafc;
+        }
+
+        .feature-item h4 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-implemented {
+            background: #c6f6d5;
+            color: #22543d;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <h1>🛡️ CROWD Safety & Trust Features</h1>
+    <p>This page demonstrates the implementation of safety and trust features in the CROWD platform.</p>
+
+    <!-- Verification Badges Demo -->
+    <div class="demo-section">
+        <h2>
+            <i class="fas fa-certificate"></i>
+            Verification Badges
+        </h2>
+        <p>Trusted host badges that appear throughout the platform to build attendee confidence.</p>
+
+        <div class="event-card">
+            <div class="event-header">
+                <div class="event-title">Summer Music Festival 2024</div>
+                <span class="status-implemented">Implemented</span>
+            </div>
+            <div class="organizer-info" id="organizerWithBadges">
+                <div class="organizer-avatar">MJ</div>
+                <div class="organizer-details">
+                    <div class="organizer-name">Music Events Inc.</div>
+                    <div class="organizer-role">Event Organizer</div>
+                </div>
+                <!-- Verification badges will be added here automatically -->
+            </div>
+        </div>
+
+        <div class="demo-buttons">
+            <button class="demo-btn" onclick="showVerificationDetails()">View Verification Details</button>
+            <button class="demo-btn" onclick="addMoreBadges()">Add More Badges</button>
+        </div>
+
+        <div class="integration-code">
+// Add verification badges to any element
+VerificationBadges.addBadgesToElement(
+    element,
+    ['identity', 'business', 'trusted'],
+    { size: 'small', maxBadges: 3 }
+);
+
+// Add single badge
+VerificationBadges.addSingleBadge(
+    element,
+    'trusted',
+    { clickable: true, showText: false }
+);
+        </div>
+    </div>
+
+    <!-- Report/Block System Demo -->
+    <div class="demo-section">
+        <h2>
+            <i class="fas fa-shield-alt"></i>
+            Report & Block System
+        </h2>
+        <p>Easy-to-use reporting and blocking functionality to maintain community safety.</p>
+
+        <div class="attendee-list">
+            <div class="attendee-card">
+                <div class="attendee-header">
+                    <div class="attendee-avatar">JD</div>
+                    <div class="attendee-info">
+                        <div class="attendee-name">John Doe</div>
+                        <div class="attendee-email">john@example.com</div>
+                    </div>
+                </div>
+                <div id="reportBlockButtons1"></div>
+            </div>
+
+            <div class="attendee-card">
+                <div class="attendee-header">
+                    <div class="attendee-avatar">SM</div>
+                    <div class="attendee-info">
+                        <div class="attendee-name">Sarah Miller</div>
+                        <div class="attendee-email">sarah@example.com</div>
+                    </div>
+                </div>
+                <div id="reportBlockButtons2"></div>
+            </div>
+
+            <div class="attendee-card">
+                <div class="attendee-header">
+                    <div class="attendee-avatar">AB</div>
+                    <div class="attendee-info">
+                        <div class="attendee-name">Alex Brown</div>
+                        <div class="attendee-email">alex@example.com</div>
+                    </div>
+                </div>
+                <div id="reportBlockButtons3"></div>
+            </div>
+        </div>
+
+        <div class="integration-code">
+// Add report/block buttons to user elements
+ReportBlockSystem.addToElement(
+    userElement,
+    userId,
+    userName,
+    { style: 'minimal' } // or 'default', 'dropdown'
+);
+
+// Check if user is blocked
+if (ReportBlockSystem.isBlocked(userId)) {
+    // Hide content or show different UI
+}
+        </div>
+    </div>
+
+    <!-- Consent Management Demo -->
+    <div class="demo-section">
+        <h2>
+            <i class="fas fa-camera"></i>
+            Photo/Video Consent Management
+        </h2>
+        <p>Comprehensive consent collection and management for photography and video recording.</p>
+
+        <div class="attendee-list">
+            <div class="attendee-card">
+                <div class="attendee-header">
+                    <div class="attendee-avatar">MK</div>
+                    <div class="attendee-info">
+                        <div class="attendee-name">Mike Kim</div>
+                        <div class="attendee-email">mike@example.com</div>
+                    </div>
+                </div>
+                <div id="consentBadge1"></div>
+            </div>
+
+            <div class="attendee-card">
+                <div class="attendee-header">
+                    <div class="attendee-avatar">LW</div>
+                    <div class="attendee-info">
+                        <div class="attendee-name">Lisa Wang</div>
+                        <div class="attendee-email">lisa@example.com</div>
+                    </div>
+                </div>
+                <div id="consentBadge2"></div>
+            </div>
+
+            <div class="attendee-card">
+                <div class="attendee-header">
+                    <div class="attendee-avatar">RJ</div>
+                    <div class="attendee-info">
+                        <div class="attendee-name">Robert Johnson</div>
+                        <div class="attendee-email">robert@example.com</div>
+                    </div>
+                </div>
+                <div id="consentBadge3"></div>
+            </div>
+        </div>
+
+        <div class="demo-buttons">
+            <button class="demo-btn" onclick="requestConsent()">Request Consent</button>
+            <button class="demo-btn" onclick="showConsentReport()">View Consent Report</button>
+            <button class="demo-btn" onclick="openSafetyDashboard()">Open Safety Dashboard</button>
+        </div>
+
+        <div class="integration-code">
+// Request consent from attendee
+ConsentManagement.requestConsent(
+    attendeeId,
+    eventId,
+    { eventName: 'Summer Festival', organizer: 'Music Events Inc.' }
+);
+
+// Add consent badge to attendee element
+ConsentManagement.addBadgeToElement(
+    attendeeElement,
+    attendeeId,
+    { clickable: true }
+);
+
+// Check specific consent
+if (ConsentManagement.hasConsented(attendeeId, 'photo')) {
+    // Allow photography
+}
+        </div>
+    </div>
+
+    <!-- Features Overview -->
+    <div class="demo-section">
+        <h2>
+            <i class="fas fa-list-check"></i>
+            Implementation Status
+        </h2>
+        <p>Overview of all safety and trust features implemented in the CROWD platform.</p>
+
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h4>
+                    <i class="fas fa-certificate"></i>
+                    Verified Badges
+                    <span class="status-implemented">✓ Implemented</span>
+                </h4>
+                <p>Identity, business, background check, and social media verification badges for trusted hosts.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>
+                    <i class="fas fa-flag"></i>
+                    Report System
+                    <span class="status-implemented">✓ Implemented</span>
+                </h4>
+                <p>Comprehensive reporting system with categorized report types and evidence collection.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>
+                    <i class="fas fa-ban"></i>
+                    Block/Unblock
+                    <span class="status-implemented">✓ Implemented</span>
+                </h4>
+                <p>User blocking functionality with content hiding and management interface.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>
+                    <i class="fas fa-camera"></i>
+                    Photo/Video Consent
+                    <span class="status-implemented">✓ Implemented</span>
+                </h4>
+                <p>Granular consent collection for different types of media usage with attendee management.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>
+                    <i class="fas fa-shield-check"></i>
+                    Safety Dashboard
+                    <span class="status-implemented">✓ Implemented</span>
+                </h4>
+                <p>Centralized dashboard for managing all safety and trust features.</p>
+            </div>
+
+            <div class="feature-item">
+                <h4>
+                    <i class="fas fa-chart-line"></i>
+                    Trust Analytics
+                    <span class="status-implemented">✓ Implemented</span>
+                </h4>
+                <p>Trust scores, verification levels, and safety metrics tracking.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Safety Features -->
+    <script src="js/verification-badges.js"></script>
+    <script src="js/report-block-system.js"></script>
+    <script src="js/consent-management.js"></script>
+
+    <script>
+        // Demo functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDemoFeatures();
+        });
+
+        function initializeDemoFeatures() {
+            // Add verification badges to organizer
+            const organizerElement = document.getElementById('organizerWithBadges');
+            if (organizerElement && window.VerificationBadges) {
+                VerificationBadges.addBadgesToElement(
+                    organizerElement,
+                    ['identity', 'business', 'trusted'],
+                    { size: 'small', maxBadges: 3 }
+                );
+            }
+
+            // Add report/block buttons to attendees
+            const reportBlockButtons1 = document.getElementById('reportBlockButtons1');
+            if (reportBlockButtons1 && window.ReportBlockSystem) {
+                ReportBlockSystem.addToElement(
+                    reportBlockButtons1,
+                    'user123',
+                    'John Doe',
+                    { style: 'minimal' }
+                );
+            }
+
+            const reportBlockButtons2 = document.getElementById('reportBlockButtons2');
+            if (reportBlockButtons2 && window.ReportBlockSystem) {
+                ReportBlockSystem.addToElement(
+                    reportBlockButtons2,
+                    'user456',
+                    'Sarah Miller',
+                    { style: 'default' }
+                );
+            }
+
+            const reportBlockButtons3 = document.getElementById('reportBlockButtons3');
+            if (reportBlockButtons3 && window.ReportBlockSystem) {
+                ReportBlockSystem.addToElement(
+                    reportBlockButtons3,
+                    'user789',
+                    'Alex Brown',
+                    { style: 'dropdown' }
+                );
+            }
+
+            // Add consent badges
+            const consentBadge1 = document.getElementById('consentBadge1');
+            if (consentBadge1 && window.ConsentManagement) {
+                ConsentManagement.addBadgeToElement(
+                    consentBadge1,
+                    'attendee123',
+                    { clickable: true }
+                );
+            }
+
+            const consentBadge2 = document.getElementById('consentBadge2');
+            if (consentBadge2 && window.ConsentManagement) {
+                ConsentManagement.addBadgeToElement(
+                    consentBadge2,
+                    'attendee456',
+                    { clickable: true }
+                );
+            }
+
+            const consentBadge3 = document.getElementById('consentBadge3');
+            if (consentBadge3 && window.ConsentManagement) {
+                ConsentManagement.addBadgeToElement(
+                    consentBadge3,
+                    'attendee789',
+                    { clickable: true }
+                );
+            }
+        }
+
+        function showVerificationDetails() {
+            alert('This would show detailed verification information in a modal.');
+        }
+
+        function addMoreBadges() {
+            const organizerElement = document.getElementById('organizerWithBadges');
+            if (organizerElement && window.VerificationBadges) {
+                VerificationBadges.addBadgesToElement(
+                    organizerElement,
+                    ['social', 'background'],
+                    { size: 'small' }
+                );
+            }
+        }
+
+        function requestConsent() {
+            if (window.ConsentManagement) {
+                ConsentManagement.requestConsent(
+                    'demo_attendee',
+                    'demo_event',
+                    {
+                        eventName: 'Summer Music Festival 2024',
+                        organizer: 'Music Events Inc.'
+                    }
+                );
+            }
+        }
+
+        function showConsentReport() {
+            alert('This would show a detailed consent compliance report.');
+        }
+
+        function openSafetyDashboard() {
+            window.location.href = 'safety-trust-dashboard.html';
+        }
+    </script>
+</body>
+</html>

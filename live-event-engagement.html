@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Event Engagement - CROWD</title>
+    <link rel="stylesheet" href="live-event-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        .live-indicator {
+            animation: pulse 2s infinite;
+        }
+        .typing-indicator {
+            animation: typing 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="live-event-container">
+        <!-- Header -->
+        <header class="live-header">
+            <div class="header-content">
+                <div class="event-info">
+                    <div class="live-indicator">
+                        <span class="live-dot"></span>
+                        <span class="live-text">LIVE</span>
+                    </div>
+                    <div class="event-details">
+                        <h1 id="eventTitle">Summer Music Festival 2024</h1>
+                        <p id="eventLocation">Central Park, New York</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="attendee-count">
+                        <i class="fas fa-users"></i>
+                        <span id="attendeeCount">247</span> attending
+                    </div>
+                    <button class="back-btn" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Event
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="live-main">
+            <!-- Sidebar Navigation -->
+            <aside class="live-sidebar">
+                <nav class="sidebar-nav">
+                    <button class="nav-tab active" data-tab="icebreakers" onclick="switchTab('icebreakers')">
+                        <i class="fas fa-comments"></i>
+                        <span>Icebreakers</span>
+                        <span class="activity-badge" id="icebreakerActivity">3</span>
+                    </button>
+                    <button class="nav-tab" data-tab="polls" onclick="switchTab('polls')">
+                        <i class="fas fa-poll"></i>
+                        <span>Polls</span>
+                        <span class="activity-badge" id="pollActivity">2</span>
+                    </button>
+                    <button class="nav-tab" data-tab="qna" onclick="switchTab('qna')">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Q&A</span>
+                        <span class="activity-badge" id="qnaActivity">12</span>
+                    </button>
+                    <button class="nav-tab" data-tab="photos" onclick="switchTab('photos')">
+                        <i class="fas fa-camera"></i>
+                        <span>Photo Wall</span>
+                        <span class="activity-badge" id="photoActivity">8</span>
+                    </button>
+                    <button class="nav-tab" data-tab="chat" onclick="switchTab('chat')">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Live Chat</span>
+                        <span class="activity-badge" id="chatActivity">45</span>
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <section class="live-content">
+                <!-- Icebreakers Tab -->
+                <div id="icebreakers" class="tab-content active">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-comments"></i> Icebreaker Questions</h2>
+                        <button class="create-btn" onclick="createIcebreaker()">
+                            <i class="fas fa-plus"></i>
+                            New Question
+                        </button>
+                    </div>
+
+                    <div class="icebreaker-list">
+                        <div class="icebreaker-card active">
+                            <div class="icebreaker-header">
+                                <div class="question-info">
+                                    <h3>What's your favorite music genre and why?</h3>
+                                    <span class="question-meta">
+                                        <i class="fas fa-users"></i> 45 responses
+                                        <i class="fas fa-clock"></i> 5 min ago
+                                    </span>
+                                </div>
+                                <div class="question-actions">
+                                    <button class="action-btn" onclick="viewResponses('icebreaker1')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn" onclick="endQuestion('icebreaker1')">
+                                        <i class="fas fa-stop"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="response-preview">
+                                <div class="response-item">
+                                    <div class="response-avatar">MJ</div>
+                                    <div class="response-content">
+                                        <strong>Mike Johnson:</strong> "Jazz, because it's so improvisational and exciting!"
+                                    </div>
+                                </div>
+                                <div class="response-item">
+                                    <div class="response-avatar">SL</div>
+                                    <div class="response-content">
+                                        <strong>Sarah Lee:</strong> "Electronic music - it gets me pumped up for events like this!"
+                                    </div>
+                                </div>
+                                <div class="view-all-responses">
+                                    <button onclick="viewAllResponses('icebreaker1')">View all 45 responses</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="icebreaker-card">
+                            <div class="icebreaker-header">
+                                <div class="question-info">
+                                    <h3>Where are you traveling from today?</h3>
+                                    <span class="question-meta">
+                                        <i class="fas fa-users"></i> 78 responses
+                                        <i class="fas fa-clock"></i> 15 min ago
+                                    </span>
+                                </div>
+                                <div class="question-actions">
+                                    <button class="action-btn" onclick="viewResponses('icebreaker2')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn" onclick="archiveQuestion('icebreaker2')">
+                                        <i class="fas fa-archive"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="response-preview">
+                                <div class="location-map">
+                                    <div class="location-stats">
+                                        <span class="stat-item">NYC: 32</span>
+                                        <span class="stat-item">Brooklyn: 18</span>
+                                        <span class="stat-item">Queens: 12</span>
+                                        <span class="stat-item">Other: 16</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="suggested-questions">
+                        <h3>Suggested Questions</h3>
+                        <div class="suggestion-chips">
+                            <button class="suggestion-chip" onclick="useQuestion('What brought you to this event today?')">
+                                What brought you to this event today?
+                            </button>
+                            <button class="suggestion-chip" onclick="useQuestion('Share a fun fact about yourself!')">
+                                Share a fun fact about yourself!
+                            </button>
+                            <button class="suggestion-chip" onclick="useQuestion('What are you most excited about?')">
+                                What are you most excited about?
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Polls Tab -->
+                <div id="polls" class="tab-content">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-poll"></i> Live Polls</h2>
+                        <button class="create-btn" onclick="createPoll()">
+                            <i class="fas fa-plus"></i>
+                            New Poll
+                        </button>
+                    </div>
+
+                    <div class="poll-list">
+                        <div class="poll-card active">
+                            <div class="poll-header">
+                                <h3>Which performance are you most excited for?</h3>
+                                <div class="poll-meta">
+                                    <span><i class="fas fa-users"></i> 156 votes</span>
+                                    <span><i class="fas fa-clock"></i> 2 min ago</span>
+                                </div>
+                            </div>
+                            <div class="poll-options">
+                                <div class="poll-option">
+                                    <div class="option-bar">
+                                        <div class="option-fill" style="width: 45%"></div>
+                                    </div>
+                                    <div class="option-details">
+                                        <span class="option-text">The Midnight Express</span>
+                                        <span class="option-votes">70 votes (45%)</span>
+                                    </div>
+                                </div>
+                                <div class="poll-option">
+                                    <div class="option-bar">
+                                        <div class="option-fill" style="width: 32%"></div>
+                                    </div>
+                                    <div class="option-details">
+                                        <span class="option-text">Electric Dreams</span>
+                                        <span class="option-votes">50 votes (32%)</span>
+                                    </div>
+                                </div>
+                                <div class="poll-option">
+                                    <div class="option-bar">
+                                        <div class="option-fill" style="width: 23%"></div>
+                                    </div>
+                                    <div class="option-details">
+                                        <span class="option-text">Jazz Collective</span>
+                                        <span class="option-votes">36 votes (23%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="poll-actions">
+                                <button class="poll-action-btn" onclick="closePoll('poll1')">
+                                    <i class="fas fa-stop"></i> Close Poll
+                                </button>
+                                <button class="poll-action-btn" onclick="sharePollResults('poll1')">
+                                    <i class="fas fa-share"></i> Share Results
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="poll-card">
+                            <div class="poll-header">
+                                <h3>Rate today's weather for outdoor events</h3>
+                                <div class="poll-meta">
+                                    <span><i class="fas fa-users"></i> 89 votes</span>
+                                    <span><i class="fas fa-clock"></i> 8 min ago</span>
+                                </div>
+                            </div>
+                            <div class="poll-rating">
+                                <div class="rating-display">
+                                    <div class="rating-stars">
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star filled"></i>
+                                        <i class="fas fa-star-half-alt filled"></i>
+                                    </div>
+                                    <span class="rating-score">4.3/5</span>
+                                </div>
+                                <div class="rating-breakdown">
+                                    <div class="rating-bar">
+                                        <span>5★</span>
+                                        <div class="bar"><div class="fill" style="width: 60%"></div></div>
+                                        <span>53</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>4★</span>
+                                        <div class="bar"><div class="fill" style="width: 25%"></div></div>
+                                        <span>22</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>3★</span>
+                                        <div class="bar"><div class="fill" style="width: 10%"></div></div>
+                                        <span>9</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>2★</span>
+                                        <div class="bar"><div class="fill" style="width: 3%"></div></div>
+                                        <span>3</span>
+                                    </div>
+                                    <div class="rating-bar">
+                                        <span>1★</span>
+                                        <div class="bar"><div class="fill" style="width: 2%"></div></div>
+                                        <span>2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Q&A Tab -->
+                <div id="qna" class="tab-content">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-question-circle"></i> Live Q&A</h2>
+                        <div class="qna-controls">
+                            <button class="control-btn" onclick="toggleQuestionSubmission()">
+                                <i class="fas fa-pause"></i>
+                                Pause Questions
+                            </button>
+                            <button class="control-btn" onclick="moderateQuestions()">
+                                <i class="fas fa-filter"></i>
+                                Moderate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="qna-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">47</div>
+                            <div class="stat-label">Total Questions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Pending Review</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Answered</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Total Votes</div>
+                        </div>
+                    </div>
+
+                    <div class="question-filters">
+                        <button class="filter-tab active" onclick="filterQuestions('all')">All (47)</button>
+                        <button class="filter-tab" onclick="filterQuestions('pending')">Pending (12)</button>
+                        <button class="filter-tab" onclick="filterQuestions('answered')">Answered (8)</button>
+                        <button class="filter-tab" onclick="filterQuestions('popular')">Most Voted</button>
+                    </div>
+
+                    <div class="question-list">
+                        <div class="question-card pending">
+                            <div class="question-header">
+                                <div class="question-votes">
+                                    <button class="vote-btn upvote" onclick="upvoteQuestion('q1')">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <span class="vote-count">23</span>
+                                    <button class="vote-btn downvote" onclick="downvoteQuestion('q1')">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="question-content">
+                                    <div class="question-text">
+                                        "Will there be any acoustic sets during the festival? I love unplugged performances!"
+                                    </div>
+                                    <div class="question-meta">
+                                        <span class="asker">Asked by Sarah M.</span>
+                                        <span class="time">3 minutes ago</span>
+                                        <span class="status-badge pending">Pending</span>
+                                    </div>
+                                </div>
+                                <div class="question-actions">
+                                    <button class="action-btn answer" onclick="answerQuestion('q1')">
+                                        <i class="fas fa-microphone"></i>
+                                        Answer Live
+                                    </button>
+                                    <button class="action-btn approve" onclick="approveQuestion('q1')">
+                                        <i class="fas fa-check"></i>
+                                        Approve
+                                    </button>
+                                    <button class="action-btn reject" onclick="rejectQuestion('q1')">
+                                        <i class="fas fa-times"></i>
+                                        Reject
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-card answered">
+                            <div class="question-header">
+                                <div class="question-votes">
+                                    <button class="vote-btn upvote voted">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <span class="vote-count">45</span>
+                                    <button class="vote-btn downvote">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="question-content">
+                                    <div class="question-text">
+                                        "What time does the main stage performances start?"
+                                    </div>
+                                    <div class="question-meta">
+                                        <span class="asker">Asked by Mike R.</span>
+                                        <span class="time">8 minutes ago</span>
+                                        <span class="status-badge answered">Answered</span>
+                                    </div>
+                                    <div class="answer-content">
+                                        <div class="answer-text">
+                                            <i class="fas fa-reply"></i>
+                                            "Main stage performances begin at 7:30 PM with The Midnight Express! 🎸"
+                                        </div>
+                                        <div class="answer-meta">
+                                            Answered by Event Organizer • 5 minutes ago
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-card pending">
+                            <div class="question-header">
+                                <div class="question-votes">
+                                    <button class="vote-btn upvote">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <span class="vote-count">18</span>
+                                    <button class="vote-btn downvote">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                </div>
+                                <div class="question-content">
+                                    <div class="question-text">
+                                        "Are there vegetarian food options available at the food trucks?"
+                                    </div>
+                                    <div class="question-meta">
+                                        <span class="asker">Asked by Alex P.</span>
+                                        <span class="time">6 minutes ago</span>
+                                        <span class="status-badge pending">Pending</span>
+                                    </div>
+                                </div>
+                                <div class="question-actions">
+                                    <button class="action-btn answer" onclick="answerQuestion('q3')">
+                                        <i class="fas fa-microphone"></i>
+                                        Answer Live
+                                    </button>
+                                    <button class="action-btn approve" onclick="approveQuestion('q3')">
+                                        <i class="fas fa-check"></i>
+                                        Approve
+                                    </button>
+                                    <button class="action-btn reject" onclick="rejectQuestion('q3')">
+                                        <i class="fas fa-times"></i>
+                                        Reject
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Wall Tab -->
+                <div id="photos" class="tab-content">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-camera"></i> Photo Wall</h2>
+                        <div class="photo-controls">
+                            <button class="control-btn" onclick="togglePhotoSubmission()">
+                                <i class="fas fa-camera"></i>
+                                Enable Uploads
+                            </button>
+                            <button class="control-btn" onclick="moderatePhotos()">
+                                <i class="fas fa-filter"></i>
+                                Moderate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="photo-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">127</div>
+                            <div class="stat-label">Photos Shared</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Pending Review</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">89</div>
+                            <div class="stat-label">Participants</div>
+                        </div>
+                    </div>
+
+                    <div class="photo-grid">
+                        <div class="photo-item featured">
+                            <div class="photo-image">
+                                <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=300&h=300&fit=crop" alt="Concert crowd">
+                                <div class="photo-overlay">
+                                    <button class="photo-action" onclick="featurePhoto('photo1')">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                    <button class="photo-action" onclick="moderatePhoto('photo1')">
+                                        <i class="fas fa-flag"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="photo-details">
+                                <div class="photo-meta">
+                                    <div class="photo-user">
+                                        <div class="user-avatar">JM</div>
+                                        <span class="user-name">Jessica M.</span>
+                                    </div>
+                                    <div class="photo-stats">
+                                        <span><i class="fas fa-heart"></i> 34</span>
+                                        <span><i class="fas fa-comment"></i> 7</span>
+                                    </div>
+                                </div>
+                                <div class="photo-caption">
+                                    "The energy here is incredible! 🎵 #SummerFest2024"
+                                </div>
+                                <div class="photo-badges">
+                                    <span class="badge featured">Featured</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="photo-item">
+                            <div class="photo-image">
+                                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop" alt="Festival stage">
+                                <div class="photo-overlay">
+                                    <button class="photo-action" onclick="featurePhoto('photo2')">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                    <button class="photo-action" onclick="moderatePhoto('photo2')">
+                                        <i class="fas fa-flag"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="photo-details">
+                                <div class="photo-meta">
+                                    <div class="photo-user">
+                                        <div class="user-avatar">RK</div>
+                                        <span class="user-name">Robert K.</span>
+                                    </div>
+                                    <div class="photo-stats">
+                                        <span><i class="fas fa-heart"></i> 28</span>
+                                        <span><i class="fas fa-comment"></i> 5</span>
+                                    </div>
+                                </div>
+                                <div class="photo-caption">
+                                    "Perfect view of the main stage! 🎸"
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="photo-item">
+                            <div class="photo-image">
+                                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop" alt="Festival food">
+                                <div class="photo-overlay">
+                                    <button class="photo-action" onclick="featurePhoto('photo3')">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                    <button class="photo-action" onclick="moderatePhoto('photo3')">
+                                        <i class="fas fa-flag"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="photo-details">
+                                <div class="photo-meta">
+                                    <div class="photo-user">
+                                        <div class="user-avatar">ML</div>
+                                        <span class="user-name">Maria L.</span>
+                                    </div>
+                                    <div class="photo-stats">
+                                        <span><i class="fas fa-heart"></i> 19</span>
+                                        <span><i class="fas fa-comment"></i> 3</span>
+                                    </div>
+                                </div>
+                                <div class="photo-caption">
+                                    "Amazing food truck selection! 🌮"
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="photo-item pending">
+                            <div class="photo-image">
+                                <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=300&h=300&fit=crop" alt="Concert performance">
+                                <div class="photo-overlay">
+                                    <button class="photo-action approve" onclick="approvePhoto('photo4')">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button class="photo-action reject" onclick="rejectPhoto('photo4')">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="photo-details">
+                                <div class="photo-meta">
+                                    <div class="photo-user">
+                                        <div class="user-avatar">DW</div>
+                                        <span class="user-name">David W.</span>
+                                    </div>
+                                    <div class="photo-stats">
+                                        <span class="pending-text">Pending Review</span>
+                                    </div>
+                                </div>
+                                <div class="photo-caption">
+                                    "Electric Dreams killing it on stage!"
+                                </div>
+                                <div class="photo-badges">
+                                    <span class="badge pending">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Chat Tab -->
+                <div id="chat" class="tab-content">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-comment-dots"></i> Live Chat</h2>
+                        <div class="chat-controls">
+                            <button class="control-btn" onclick="toggleChat()">
+                                <i class="fas fa-pause"></i>
+                                Pause Chat
+                            </button>
+                            <button class="control-btn" onclick="clearChat()">
+                                <i class="fas fa-trash"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="chat-message">
+                                <div class="message-avatar">SJ</div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Sarah J.</span>
+                                        <span class="message-time">2:34 PM</span>
+                                    </div>
+                                    <div class="message-text">So excited for this festival! The lineup is incredible! 🎵</div>
+                                </div>
+                            </div>
+
+                            <div class="chat-message">
+                                <div class="message-avatar">MR</div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Mike R.</span>
+                                        <span class="message-time">2:35 PM</span>
+                                    </div>
+                                    <div class="message-text">Anyone know where the VIP area is located?</div>
+                                </div>
+                            </div>
+
+                            <div class="chat-message organizer">
+                                <div class="message-avatar organizer">EO</div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Event Organizer</span>
+                                        <span class="organizer-badge">Organizer</span>
+                                        <span class="message-time">2:36 PM</span>
+                                    </div>
+                                    <div class="message-text">VIP area is located near the main stage, stage left. Look for the red tent! 🎪</div>
+                                </div>
+                            </div>
+
+                            <div class="chat-message">
+                                <div class="message-avatar">AL</div>
+                                <div class="message-content">
+                                    <div class="message-header">
+                                        <span class="message-author">Alex L.</span>
+                                        <span class="message-time">2:37 PM</span>
+                                    </div>
+                                    <div class="message-text">Weather is perfect today! ☀️</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-container">
+                            <div class="chat-input-wrapper">
+                                <input type="text" id="chatInput" placeholder="Type a message..." class="chat-input">
+                                <button class="send-btn" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="chat-features">
+                                <button class="feature-btn" onclick="addEmoji()">
+                                    <i class="fas fa-smile"></i>
+                                </button>
+                                <button class="feature-btn" onclick="shareLocation()">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </button>
+                                <button class="feature-btn" onclick="sharePhoto()">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals will go here -->
+    <div id="createIcebreakerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Icebreaker Question</h3>
+                <button class="close-btn" onclick="closeModal('createIcebreakerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="icebreakerForm">
+                    <div class="form-group">
+                        <label for="questionText">Question</label>
+                        <textarea id="questionText" placeholder="What question would you like to ask attendees?" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="questionType">Response Type</label>
+                        <select id="questionType">
+                            <option value="text">Text Response</option>
+                            <option value="multiple_choice">Multiple Choice</option>
+                            <option value="rating">Rating (1-5)</option>
+                            <option value="location">Location Based</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="multipleChoiceOptions" style="display: none;">
+                        <label>Options</label>
+                        <div class="option-inputs">
+                            <input type="text" placeholder="Option 1" class="option-input">
+                            <input type="text" placeholder="Option 2" class="option-input">
+                            <button type="button" onclick="addOption()">+ Add Option</button>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeModal('createIcebreakerModal')">Cancel</button>
+                        <button type="submit">Launch Question</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/live-event-engagement.js"></script>
+    <!-- Include safety features for integration -->
+    <script src="js/verification-badges.js"></script>
+    <script src="js/report-block-system.js"></script>
+    <script src="js/consent-management.js"></script>
+</body>
+</html>
