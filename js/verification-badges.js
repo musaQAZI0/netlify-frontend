@@ -255,27 +255,31 @@ class VerificationBadges {
 
     // Auto-inject badges into common selectors
     autoInjectBadges() {
-        const isMobile = window.innerWidth <= 768;
+        // Inject into dropdown menu only
+        const dropdown = document.querySelector('.dropdown, #dropdown');
+        if (dropdown && !dropdown.querySelector('.verification-badge-group')) {
+            const badgeGroup = this.createBadgeGroup(['identity', 'trusted'], {
+                size: 'small',
+                maxBadges: 2
+            });
+            // Insert at the top of dropdown
+            const firstItem = dropdown.querySelector('.dropdown-item');
+            if (firstItem) {
+                dropdown.insertBefore(badgeGroup, firstItem);
+                // Add some styling
+                badgeGroup.style.padding = '10px 16px';
+                badgeGroup.style.borderBottom = '1px solid #eee';
+            }
+        }
 
-        // Inject into user profile areas
-        document.querySelectorAll('.user-profile, .host-info, .organizer-card').forEach(element => {
+        // Inject into host-info and organizer-card (not user-profile in header)
+        document.querySelectorAll('.host-info, .organizer-card').forEach(element => {
             if (!element.querySelector('.verification-badge-group')) {
                 const badgeGroup = this.createBadgeGroup(['identity', 'business', 'trusted'], {
                     size: 'small',
                     maxBadges: 3
                 });
                 element.appendChild(badgeGroup);
-
-                // On mobile, fade out and remove after 3 seconds
-                if (isMobile) {
-                    setTimeout(() => {
-                        badgeGroup.style.transition = 'opacity 0.5s ease-out';
-                        badgeGroup.style.opacity = '0';
-                        setTimeout(() => {
-                            badgeGroup.remove();
-                        }, 500);
-                    }, 3000);
-                }
             }
         });
 
@@ -288,17 +292,6 @@ class VerificationBadges {
                 });
                 if (trustedBadge) {
                     element.appendChild(trustedBadge);
-
-                    // On mobile, fade out and remove after 3 seconds
-                    if (isMobile) {
-                        setTimeout(() => {
-                            trustedBadge.style.transition = 'opacity 0.5s ease-out';
-                            trustedBadge.style.opacity = '0';
-                            setTimeout(() => {
-                                trustedBadge.remove();
-                            }, 500);
-                        }, 3000);
-                    }
                 }
             }
         });
