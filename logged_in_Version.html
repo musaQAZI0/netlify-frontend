@@ -379,6 +379,8 @@
             margin: 80px 0 0 0;
             border-radius: 0px;
             z-index: 1;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
         }
 
         /* Banner Carousel */
@@ -449,6 +451,12 @@
                 z-index: 2;
                 border-radius: 0;
             }
+        }
+
+        .hero .container {
+            max-width: 100%;
+            padding: 0;
+            width: 100%;
         }
 
         .hero-content {
@@ -598,7 +606,14 @@
         .categories {
             padding: 30px 0 1rem 0;
             background: var(--secondary-color);
-            margin: 0 20px;
+            margin: 0;
+            width: 100%;
+        }
+
+        .categories .container {
+            max-width: 100%;
+            padding: 0;
+            width: 100%;
         }
 
         .category-navigation {
@@ -772,9 +787,13 @@
             /* Mobile hero styles to match index.html */
             .hero {
                 min-height: 500px;
-                margin: 60px 0 0 0;
+                margin: 0;
+                margin-top: 80px;
                 border-radius: 0;
                 overflow: hidden;
+                width: 100vw;
+                margin-left: 0;
+                left: 0;
             }
 
             .banner-carousel {
@@ -3213,22 +3232,6 @@
                             <span class="btn-icon">🔍</span>
                             <span class="btn-text">Browse Events</span>
                         </button>
-                    </div>
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <div class="stat-number">50K+</div>
-                            <div class="stat-label">Events</div>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <div class="stat-number">2M+</div>
-                            <div class="stat-label">Users</div>
-                        </div>
-                        <div class="stat-divider"></div>
-                        <div class="stat-item">
-                            <div class="stat-number">150+</div>
-                            <div class="stat-label">Cities</div>
-                        </div>
                     </div>
                 </div>
             </div>
