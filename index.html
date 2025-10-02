@@ -2206,7 +2206,14 @@
         </div>
         <div class="nav-container">
             <!-- Logo -->
-            H
+            <a href="index.html" class="logo" aria-label="Crowd - Home">
+                <img src="logo.jpg" alt="Crowd Logo" class="logo-img"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="logo-fallback" style="display: none;">
+                    <span class="logo-icon">🎟️</span>
+                    <span class="logo-text">crowd</span>
+                </div>
+            </a>
 
             <!-- Mobile inline search (visible on small screens) -->
             <div class="header-search-mobile" aria-hidden="true">
