@@ -792,8 +792,8 @@
 
             /* Mobile hero styles to match index.html */
             .hero {
-                min-height: 500px;
-                margin: 60px 0 0 0;
+                min-height: 420px;
+                margin: 0;
                 border-radius: 0;
                 overflow: hidden;
             }
@@ -808,6 +808,15 @@
                 border-radius: 0;
             }
 
+            .hero-overlay {
+                display: block;
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, rgba(8, 7, 15, 0.18) 20%, rgba(8, 7, 15, 0.55) 70%);
+                z-index: 2;
+                border-radius: 0;
+            }
+
             .hero-content {
                 padding: 20px 16px;
                 max-width: 100%;
@@ -816,8 +825,6 @@
                 flex-direction: column;
                 justify-content: flex-end;
                 height: 100%;
-                position: relative;
-                z-index: 3;
             }
 
             .hero-badge {
@@ -905,7 +912,38 @@
             }
 
             .categories {
-                padding: 1.5rem 0;
+                padding: 2rem 0;
+            }
+
+            .category-navigation {
+                padding: 30px 15px;
+                margin: 0 1rem;
+            }
+
+            .category-grid {
+                gap: 12px;
+                justify-content: flex-start;
+                padding-right: 20px;
+            }
+
+            .category-card {
+                padding: 12px 8px;
+                min-width: 100px;
+            }
+
+            .icon-wrapper {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 8px;
+            }
+
+            .category-icon {
+                width: 32px;
+                height: 32px;
+            }
+
+            .category-title {
+                font-size: 12px;
             }
 
             /* Hide desktop nav on mobile */
