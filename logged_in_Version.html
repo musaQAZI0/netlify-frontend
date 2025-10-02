@@ -715,6 +715,12 @@
             border-bottom: 1px solid #eee;
         }
 
+        /* Hide verification badges in header user-profile */
+        .header .user-profile .verification-badge-group,
+        .header .user-profile .verification-badge {
+            display: none !important;
+        }
+
         /* Mobile responsive styles */
         @media (max-width: 768px) {
             .header {
@@ -1955,6 +1961,12 @@
 
             .mobile-nav-container .user-profile:hover {
                 background-color: #e8e8e8;
+            }
+
+            /* Hide verification badges in header user-profile */
+            .user-profile .verification-badge-group,
+            .user-profile .verification-badge {
+                display: none !important;
             }
 
             .mobile-nav-container .dropdown {
