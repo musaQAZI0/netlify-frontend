@@ -729,6 +729,11 @@
         @media (max-width: 768px) {
             body {
                 padding-top: 60px;
+                overflow-x: hidden;
+            }
+
+            html {
+                overflow-x: hidden;
             }
 
             .header {
@@ -802,11 +807,12 @@
             /* Mobile hero styles to match index.html */
             .hero {
                 min-height: 70vh;
-                margin: 0;
+                margin: 0 !important;
                 border-radius: 0;
                 overflow: hidden;
                 width: 100vw;
-                margin-left: 0;
+                margin-left: calc(-50vw + 50%) !important;
+                position: relative;
             }
 
             .banner-carousel {
