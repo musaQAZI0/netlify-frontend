@@ -1368,8 +1368,122 @@
             }
         `;
         document.head.appendChild(style);
+
+        // Backend Integration for Dashboard Statistics and Events
+        async function loadOrganizerEvents() {
+            try {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+                if (!token || !currentUser.id) {
+                    console.error('No auth token or user ID found');
+                    return [];
+                }
+
+                const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:3000'
+                    : 'https://crowd-backend-zxxp.onrender.com';
+
+                const response = await fetch(`${API_BASE_URL}/api/events/organizer/${currentUser.id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        console.log('No events found for organizer');
+                        return [];
+                    }
+                    throw new Error(`Failed to fetch events: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const events = data.events || data || [];
+                console.log(`✅ Loaded ${events.length} events for organizer`);
+                return events;
+            } catch (error) {
+                console.error('❌ Error loading organizer events:', error);
+                return [];
+            }
+        }
+
+        async function loadDashboardAnalytics() {
+            try {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+
+                if (!token) {
+                    console.error('No auth token found');
+                    return null;
+                }
+
+                const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:3000'
+                    : 'https://crowd-backend-zxxp.onrender.com';
+
+                const response = await fetch(`${API_BASE_URL}/api/analytics/overview`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        console.log('No analytics data available');
+                        return null;
+                    }
+                    throw new Error(`Failed to fetch analytics: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('✅ Loaded dashboard analytics');
+                return data;
+            } catch (error) {
+                console.error('❌ Error loading dashboard analytics:', error);
+                return null;
+            }
+        }
+
+        // Initialize dashboard data on page load
+        async function initializeDashboard() {
+            try {
+                console.log('📊 Initializing dashboard...');
+
+                // Load organizer's events
+                const events = await loadOrganizerEvents();
+
+                // Load analytics/statistics
+                const analytics = await loadDashboardAnalytics();
+
+                // Store in window for access by other components
+                window.organizerEvents = events;
+                window.dashboardAnalytics = analytics;
+
+                console.log('✅ Dashboard initialized successfully');
+            } catch (error) {
+                console.error('❌ Error initializing dashboard:', error);
+            }
+        }
+
+        // Call initialization after page load and auth
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(initializeDashboard, 1000); // Wait for auth to load
+            });
+        } else {
+            setTimeout(initializeDashboard, 1000);
+        }
+
+        // Make functions globally available
+        window.loadOrganizerEvents = loadOrganizerEvents;
+        window.loadDashboardAnalytics = loadDashboardAnalytics;
+        window.initializeDashboard = initializeDashboard;
     </script>
-    
+
     <!-- MongoDB Auth API -->
     <script src="js/auth-mongodb.js"></script>
 </body>

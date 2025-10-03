@@ -269,26 +269,73 @@
             setTimeout(() => errorDiv.remove(), 5000);
         }
 
-        function loadEventData() {
-            // Try to get event data from localStorage
-            let eventData = JSON.parse(localStorage.getItem('editingEvent') || '{}');
-            
-            if (!eventData.id) {
-                // If no event data found, redirect back to dashboard
-                window.location.href = 'organizer-dashboard.html';
-                return;
-            }
+        async function loadEventData() {
+            try {
+                // Get event ID from URL or localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = urlParams.get('id') || JSON.parse(localStorage.getItem('editingEvent') || '{}').id;
 
-            // Get the latest event data from dataManager
-            const userEvent = window.dataManager.getEventById(eventData.id);
-            if (!userEvent) {
-                alert('Event not found or access denied.');
-                window.location.href = 'organizer-dashboard.html';
-                return;
-            }
+                if (!eventId) {
+                    console.error('No event ID found');
+                    window.location.href = 'organizer-dashboard.html';
+                    return;
+                }
 
-            currentEventData = userEvent;
-            displayEventData(userEvent);
+                // Get auth token
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('No auth token found');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Fetch event data from backend
+                const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:3000'
+                    : 'https://crowd-backend-zxxp.onrender.com';
+
+                const response = await fetch(`${API_BASE_URL}/api/events/${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        alert('Event not found.');
+                    } else if (response.status === 401) {
+                        alert('Session expired. Please login again.');
+                        window.location.href = 'login.html';
+                        return;
+                    } else {
+                        throw new Error(`Failed to fetch event: ${response.statusText}`);
+                    }
+                    window.location.href = 'organizer-dashboard.html';
+                    return;
+                }
+
+                const data = await response.json();
+                const eventData = data.event || data;
+
+                currentEventData = eventData;
+                displayEventData(eventData);
+            } catch (error) {
+                console.error('Error loading event data:', error);
+                // Fallback to localStorage
+                let eventData = JSON.parse(localStorage.getItem('editingEvent') || '{}');
+                if (eventData.id) {
+                    const userEvent = window.dataManager.getEventById(eventData.id);
+                    if (userEvent) {
+                        currentEventData = userEvent;
+                        displayEventData(userEvent);
+                        return;
+                    }
+                }
+                alert('Failed to load event data. Please try again.');
+                window.location.href = 'organizer-dashboard.html';
+            }
         }
 
         function displayEventData(eventData) {
