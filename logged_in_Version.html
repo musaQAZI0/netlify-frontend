@@ -1013,15 +1013,17 @@
 
             .category-navigation {
                 padding: 1rem 0.5rem;
-                margin-top: 1rem;
+                margin-top: 0;
                 background: transparent;
             }
 
             .category-grid {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 1rem;
-                padding: 0 0.5rem;
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 12px;
+                padding: 0 15px;
+                justify-content: flex-start;
             }
 
             .category-card {
@@ -1030,6 +1032,7 @@
                 align-items: center;
                 text-align: center;
                 gap: 0.5rem;
+                flex-shrink: 0;
             }
 
             .category-icon-wrapper {
