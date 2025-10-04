@@ -976,43 +976,63 @@
 
         async function loadOrdersDataAndSetup() {
             try {
-                // For now, create mock order data since finance endpoint doesn't exist yet
-                // In a real implementation, this would fetch from /api/finance/orders
                 const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-                
-                if (currentUser.id) {
-                    await generateSampleOrders();
-                    // Create some mock orders for demo
-                    allOrders = [
-                        {
-                            id: 'ORD-001',
-                            eventTitle: 'Sample Music Festival',
-                            buyerName: 'John Doe',
-                            buyerEmail: 'john.doe@email.com',
-                            orderDate: '2025-01-20',
-                            orderTime: '14:30',
-                            ticketType: 'VIP Pass',
-                            quantity: 2,
-                            total: 150.00,
-                            status: 'completed',
-                            paymentMethod: 'Credit Card',
-                            paymentStatus: 'paid',
-                            guestList: ['John Doe', 'Jane Doe']
-                        }
-                    ];
-                } else {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+
+                if (!currentUser.id || !token) {
+                    console.error('No user or token found');
                     allOrders = [];
+                    filteredOrders = [];
+                    renderOrders();
+                    return;
                 }
-                
+
+                // Fetch orders from backend
+                console.log('📦 Fetching orders from backend...');
+                const response = await fetch(`${window.Config.API_BASE_URL}/api/orders`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        // No orders found - use empty array
+                        console.log('No orders found, generating sample data');
+                        await generateSampleOrders();
+                        allOrders = [];
+                    } else if (response.status === 401) {
+                        console.error('Unauthorized - redirecting to login');
+                        window.location.href = 'login.html';
+                        return;
+                    } else {
+                        throw new Error(`Failed to fetch orders: ${response.statusText}`);
+                    }
+                } else {
+                    const data = await response.json();
+                    allOrders = data.orders || data || [];
+                    console.log(`✅ Loaded ${allOrders.length} orders from backend`);
+                }
+
                 filteredOrders = [...allOrders];
                 renderOrders();
+                updateRevenueDashboard();
             } catch (error) {
-                console.error('Error loading orders:', error);
+                console.error('❌ Error loading orders:', error);
+                // Fallback to sample data on error
+                console.log('Falling back to sample orders due to error');
+                try {
+                    await generateSampleOrders();
+                } catch (sampleError) {
+                    console.error('Failed to generate sample orders:', sampleError);
+                }
                 allOrders = [];
                 filteredOrders = [];
                 renderOrders();
+                updateRevenueDashboard();
             }
-            updateRevenueDashboard();
         }
 
         async function generateSampleOrders() {
@@ -1875,6 +1895,99 @@
             const displayHour = hour % 12 || 12;
             return `${displayHour}:${minutes} ${ampm}`;
         }
+
+        // Backend API Functions for Order Management
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const response = await fetch(`${window.Config.API_BASE_URL}/api/orders/${orderId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to update order: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('✅ Order updated successfully');
+                showNotification('Order status updated successfully!', 'success');
+
+                // Reload orders to reflect changes
+                await loadOrdersDataAndSetup();
+                return data;
+            } catch (error) {
+                console.error('❌ Error updating order:', error);
+                showNotification('Failed to update order status', 'error');
+                throw error;
+            }
+        }
+
+        async function processRefund(orderId, refundAmount, refundReason) {
+            try {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const response = await fetch(`${window.Config.API_BASE_URL}/api/orders/${orderId}/refund`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: refundAmount,
+                        reason: refundReason
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to process refund: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('✅ Refund processed successfully');
+                showNotification('Refund processed successfully!', 'success');
+
+                // Reload orders to reflect changes
+                await loadOrdersDataAndSetup();
+                return data;
+            } catch (error) {
+                console.error('❌ Error processing refund:', error);
+                showNotification('Failed to process refund', 'error');
+                throw error;
+            }
+        }
+
+        async function getOrderDetails(orderId) {
+            try {
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const response = await fetch(`${window.Config.API_BASE_URL}/api/orders/${orderId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch order details: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data.order || data;
+            } catch (error) {
+                console.error('❌ Error fetching order details:', error);
+                showNotification('Failed to load order details', 'error');
+                throw error;
+            }
+        }
+
+        // Make functions globally available
+        window.updateOrderStatus = updateOrderStatus;
+        window.processRefund = processRefund;
+        window.getOrderDetails = getOrderDetails;
     </script>
 </body>
 </html>

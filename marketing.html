@@ -4315,10 +4315,156 @@
       window.location.href = 'Help_center_logged_in.html';
     }
 
+    // Backend Integration Functions
+    async function loadEmailCampaigns() {
+      try {
+        console.log('📧 Loading email campaigns from backend...');
+
+        const response = await fetch(`${window.Config.API_BASE_URL}/api/marketing/campaigns`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.warn('No campaigns found or API error:', response.status);
+          return [];
+        }
+
+        const data = await response.json();
+        const campaigns = data.campaigns || data || [];
+        console.log('✅ Email campaigns loaded:', campaigns.length);
+
+        return campaigns;
+      } catch (error) {
+        console.error('❌ Error loading campaigns:', error);
+        return [];
+      }
+    }
+
+    async function saveCampaign(campaignData) {
+      try {
+        console.log('💾 Saving campaign to backend...');
+
+        const response = await fetch(`${window.Config.API_BASE_URL}/api/marketing/campaigns`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(campaignData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save campaign');
+        }
+
+        const data = await response.json();
+        console.log('✅ Campaign saved successfully');
+        return data;
+      } catch (error) {
+        console.error('❌ Error saving campaign:', error);
+        throw error;
+      }
+    }
+
+    async function loadSocialPosts() {
+      try {
+        console.log('📱 Loading social posts from backend...');
+
+        const response = await fetch(`${window.Config.API_BASE_URL}/api/marketing/social-posts`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.warn('No social posts found or API error:', response.status);
+          return [];
+        }
+
+        const data = await response.json();
+        const posts = data.posts || data || [];
+        console.log('✅ Social posts loaded:', posts.length);
+
+        return posts;
+      } catch (error) {
+        console.error('❌ Error loading social posts:', error);
+        return [];
+      }
+    }
+
+    async function createSocialPost(postData) {
+      try {
+        console.log('📤 Creating social post...');
+
+        const response = await fetch(`${window.Config.API_BASE_URL}/api/marketing/social-posts`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to create social post');
+        }
+
+        const data = await response.json();
+        console.log('✅ Social post created successfully');
+        return data;
+      } catch (error) {
+        console.error('❌ Error creating social post:', error);
+        throw error;
+      }
+    }
+
+    async function loadAdCampaigns() {
+      try {
+        console.log('📊 Loading ad campaigns from backend...');
+
+        const response = await fetch(`${window.Config.API_BASE_URL}/api/marketing/ad-campaigns`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.warn('No ad campaigns found or API error:', response.status);
+          return [];
+        }
+
+        const data = await response.json();
+        const adCampaigns = data.campaigns || data || [];
+        console.log('✅ Ad campaigns loaded:', adCampaigns.length);
+
+        return adCampaigns;
+      } catch (error) {
+        console.error('❌ Error loading ad campaigns:', error);
+        return [];
+      }
+    }
+
     // Initialize with email campaigns tab active
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', async function () {
       loadUserProfile();
       switchTab('email-campaigns');
+
+      // Load marketing data from backend
+      try {
+        await loadEmailCampaigns();
+        await loadSocialPosts();
+        await loadAdCampaigns();
+      } catch (error) {
+        console.error('Error loading marketing data:', error);
+      }
 
       // Paid ads nav button click handlers
       document.querySelectorAll('.paid-ads-nav-btn').forEach(button => {

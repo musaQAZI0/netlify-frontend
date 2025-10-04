@@ -450,53 +450,142 @@
     </div>
 
         <script>
-            // Sample event data (replace with actual data from your backend)
-            const events = [
-                { id: 1, name: "Tech Conference 2024", date: "2024-03-15" },
-                { id: 2, name: "Marketing Summit", date: "2024-04-20" }
-            ];
+            // Backend Integration for Organizer Dashboard
+            let events = [];
+            const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:3000'
+                : 'https://crowd-backend-zxxp.onrender.com';
 
-            function displayEvents() {
+            // Load events from backend
+            async function loadEvents() {
+                try {
+                    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+                    if (!token || !currentUser.id) {
+                        console.error('No auth token or user ID found');
+                        displayEvents([]);
+                        return;
+                    }
+
+                    console.log('📦 Fetching organizer events from backend...');
+                    const response = await fetch(`${API_BASE_URL}/api/events/organizer/${currentUser.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            console.log('No events found');
+                            events = [];
+                        } else if (response.status === 401) {
+                            console.error('Unauthorized - redirecting to login');
+                            window.location.href = 'login.html';
+                            return;
+                        } else {
+                            throw new Error(`Failed to fetch events: ${response.statusText}`);
+                        }
+                    } else {
+                        const data = await response.json();
+                        events = data.events || data || [];
+                        console.log(`✅ Loaded ${events.length} events`);
+                    }
+
+                    displayEvents(events);
+                } catch (error) {
+                    console.error('❌ Error loading events:', error);
+                    events = [];
+                    displayEvents(events);
+                }
+            }
+
+            function displayEvents(eventsToDisplay) {
                 const upcomingEventsDiv = document.getElementById("upcoming-events");
                 upcomingEventsDiv.innerHTML = ""; // Clear existing content
 
-                events.forEach(event => {
+                if (!eventsToDisplay || eventsToDisplay.length === 0) {
+                    upcomingEventsDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #666;">
+                            <p>No events yet. Create your first event!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                eventsToDisplay.forEach(event => {
                     const eventCard = document.createElement("div");
                     eventCard.classList.add("event-card");
+                    const eventDate = event.date ? new Date(event.date).toLocaleDateString() : event.startDate ? new Date(event.startDate).toLocaleDateString() : 'Date TBD';
+                    const eventName = event.name || event.title || 'Untitled Event';
+                    const eventId = event.id || event._id;
+
                     eventCard.innerHTML = `
-                        <h3>${event.name}</h3>
-                        <p>Date: ${event.date}</p>
-                        <button class="button" onclick="editEvent(${event.id})">Edit</button>
-                        <button class="button delete" onclick="deleteEvent(${event.id})">Delete</button>
+                        <h3>${eventName}</h3>
+                        <p>Date: ${eventDate}</p>
+                        <p>Status: ${event.status || 'draft'}</p>
+                        <button class="button" onclick="editEvent('${eventId}')">Edit</button>
+                        <button class="button delete" onclick="deleteEvent('${eventId}')">Delete</button>
                     `;
                     upcomingEventsDiv.appendChild(eventCard);
                 });
             }
 
-            function editEvent(eventId) {
-                // Placeholder for edit functionality
+            async function editEvent(eventId) {
                 console.log("Edit event:", eventId);
-                // Store the event ID in local storage
-                localStorage.setItem('editingEvent', eventId);
-                // Redirect to the event builder page
-                window.location.href = 'event-builder.html';
+                localStorage.setItem('editingEventId', eventId);
+                window.location.href = `event-builder.html?id=${eventId}`;
             }
 
-            function deleteEvent(eventId) {
-                // Placeholder for delete functionality
-                console.log("Delete event:", eventId);
-                // Implement your delete logic here (e.g., API call)
+            async function deleteEvent(eventId) {
+                if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+                    return;
+                }
+
+                try {
+                    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                    console.log(`🗑️ Deleting event ${eventId}...`);
+
+                    const response = await fetch(`${API_BASE_URL}/api/events/${eventId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Failed to delete event: ${response.statusText}`);
+                    }
+
+                    console.log('✅ Event deleted successfully');
+                    alert('Event deleted successfully!');
+
+                    // Reload events
+                    await loadEvents();
+                } catch (error) {
+                    console.error('❌ Error deleting event:', error);
+                    alert('Failed to delete event. Please try again.');
+                }
             }
 
             function startEventFromScratch() {
-                // Clear any existing editing event
                 localStorage.removeItem('editingEvent');
-                // Redirect to event builder
+                localStorage.removeItem('editingEventId');
                 window.location.href = 'event-builder.html';
             }
 
-            // Initial display of events
-            displayEvents();
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                loadEvents();
+            });
+
+            // Make functions globally available
+            window.editEvent = editEvent;
+            window.deleteEvent = deleteEvent;
+            window.startEventFromScratch = startEventFromScratch;
         </script>
     </div>
 </body>

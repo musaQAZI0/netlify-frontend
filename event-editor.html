@@ -380,7 +380,7 @@
             }
         }
 
-        function saveEventData() {
+        async function saveEventData() {
             try {
                 // Collect updated data
                 const updatedData = {
@@ -397,17 +397,48 @@
                     closingMessage: document.getElementById('closingMessage').value.trim()
                 };
 
-                // Update event using data manager
-                currentEventData = window.dataManager.updateEvent(currentEventData.id, updatedData);
-                
+                // Get API base URL
+                const API_BASE_URL = window.Config ? window.Config.API_BASE_URL :
+                    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000'
+                        : 'https://crowd-backend-zxxp.onrender.com');
+
+                // Get auth token
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    console.error('No auth token found');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Update event in backend
+                const response = await fetch(`${API_BASE_URL}/api/events/${currentEventData.id || currentEventData._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to update event: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                currentEventData = data.event || data;
+
+                console.log('✅ Event saved to backend successfully');
+
                 // Update sidebar
                 updateSidebarDateTime();
-                
+
                 // Update localStorage for preview
                 localStorage.setItem('editingEvent', JSON.stringify(currentEventData));
-                
+
             } catch (error) {
-                console.error('Failed to save event data:', error);
+                console.error('❌ Failed to save event data:', error);
+                alert('Failed to save event. Please try again.');
             }
         }
 
@@ -481,22 +512,54 @@
             window.location.href = 'event-preview.html';
         }
 
-        function publishEvent() {
+        async function publishEvent() {
             try {
-                saveEventData();
-                
-                const updatedEvent = window.dataManager.updateEvent(currentEventData.id, {
-                    status: 'published',
-                    publishedAt: new Date().toISOString()
+                // First save any pending changes
+                await saveEventData();
+
+                // Get API base URL
+                const API_BASE_URL = window.Config ? window.Config.API_BASE_URL :
+                    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000'
+                        : 'https://crowd-backend-zxxp.onrender.com');
+
+                // Get auth token
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    console.error('No auth token found');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Publish event in backend
+                const response = await fetch(`${API_BASE_URL}/api/events/${currentEventData.id || currentEventData._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        status: 'published',
+                        publishedAt: new Date().toISOString()
+                    })
                 });
-                
-                currentEventData = updatedEvent;
+
+                if (!response.ok) {
+                    throw new Error(`Failed to publish event: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                currentEventData = data.event || data;
+
                 document.getElementById('eventStatus').value = 'published';
-                localStorage.setItem('editingEvent', JSON.stringify(updatedEvent));
-                
+                localStorage.setItem('editingEvent', JSON.stringify(currentEventData));
+
                 alert('Event published successfully!');
-                
+
+                console.log('✅ Event published to backend successfully');
+
             } catch (error) {
+                console.error('❌ Failed to publish event:', error);
                 alert('Failed to publish event: ' + error.message);
             }
         }
