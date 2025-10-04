@@ -1533,33 +1533,8 @@
 
     // Display collections
     function displayCollections() {
-      const grid = document.getElementById('collectionsGrid');
-      const newCollectionCard = grid.querySelector('.collection-card.new');
-
-      // Clear existing collections (keep new card)
-      const existingCards = grid.querySelectorAll('.collection-card:not(.new)');
-      existingCards.forEach(card => card.remove());
-
-      // Ensure collections is an array before using forEach
-      if (Array.isArray(collections) && collections.length > 0) {
-        collections.forEach(collection => {
-          const collectionCard = createCollectionCard(collection);
-          grid.appendChild(collectionCard);
-        });
-      } else {
-        // Show empty state if no collections
-        const emptyMessage = document.createElement('div');
-        emptyMessage.className = 'empty-collections-message';
-        emptyMessage.innerHTML = '<p>No collections found. Create your first collection!</p>';
-        emptyMessage.style.cssText = `
-          grid-column: 1 / -1;
-          text-align: center;
-          padding: 2rem;
-          color: #666;
-          font-style: italic;
-        `;
-        grid.appendChild(emptyMessage);
-      }
+      // Apply the current filter when displaying collections
+      applyEventFilter(currentFilter);
     }
 
     // Create collection card element
@@ -1892,6 +1867,67 @@
       document.getElementById('filterMenu').classList.remove('show');
 
       console.log('Filter selected:', filterName);
+
+      // Apply the filter to displayed events
+      applyEventFilter(filterName);
+    }
+
+    function applyEventFilter(filterName) {
+      const now = new Date();
+      let filtered = [];
+
+      switch(filterName) {
+        case 'Upcoming events':
+          filtered = collections.filter(event => {
+            const eventDate = new Date(event.dateTime?.start || event.date);
+            return eventDate >= now && event.status !== 'draft';
+          });
+          break;
+        case 'Draft':
+          filtered = collections.filter(event => event.status === 'draft');
+          break;
+        case 'Past events':
+          filtered = collections.filter(event => {
+            const eventDate = new Date(event.dateTime?.end || event.dateTime?.start || event.date);
+            return eventDate < now && event.status !== 'draft';
+          });
+          break;
+        case 'All events':
+        default:
+          filtered = collections;
+          break;
+      }
+
+      displayFilteredEvents(filtered);
+    }
+
+    function displayFilteredEvents(filteredEvents) {
+      const grid = document.getElementById('collectionsGrid');
+      const newCollectionCard = grid.querySelector('.collection-card.new');
+
+      // Clear existing collections (keep new card)
+      const existingCards = grid.querySelectorAll('.collection-card:not(.new)');
+      existingCards.forEach(card => card.remove());
+
+      if (filteredEvents.length > 0) {
+        filteredEvents.forEach(collection => {
+          const collectionCard = createCollectionCard(collection);
+          grid.appendChild(collectionCard);
+        });
+      } else {
+        // Show empty state
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'empty-collections-message';
+        emptyMessage.innerHTML = `<p>No events found for "${currentFilter}"</p>`;
+        emptyMessage.style.cssText = `
+          grid-column: 1 / -1;
+          text-align: center;
+          padding: 2rem;
+          color: #666;
+          font-style: italic;
+        `;
+        grid.appendChild(emptyMessage);
+      }
     }
 
     document.addEventListener('click', function (e) {
