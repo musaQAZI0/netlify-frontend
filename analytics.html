@@ -474,40 +474,42 @@
       async function loadAnalytics() {
         try {
           console.log('📊 Loading analytics data from backend...');
-          
+
           // Fetch analytics data from backend API
           const token = localStorage.getItem('authToken');
           if (!token) {
             throw new Error('No authentication token found');
           }
 
-          // Since analytics endpoint doesn't exist, use available endpoints to generate analytics
           const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-          
-          // Get user events data from backend
-          const eventsResponse = await fetch(`${window.Config.API_BASE_URL}/events?organizerId=${currentUser.id}`, {
+
+          // Get analytics data from backend
+          const analyticsResponse = await fetch(`${window.Config.API_BASE_URL}/api/analytics/overview`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
             }
           });
-          
-          const response = eventsResponse;
 
-          if (!response.ok) {
-            throw new Error(`Analytics API error: ${response.status}`);
+          if (!analyticsResponse.ok) {
+            if (analyticsResponse.status === 404) {
+              // No analytics data available yet
+              showEmptyState();
+              return;
+            }
+            throw new Error(`Analytics API error: ${analyticsResponse.status}`);
           }
 
-          const eventsData = await response.json();
-          console.log('✅ Events data received:', eventsData);
+          const analyticsData = await analyticsResponse.json();
+          console.log('✅ Analytics data received:', analyticsData);
 
-          // Generate analytics data from events data
-          const events = eventsData.events || [];
-          const analyticsData = generateAnalyticsFromEvents(events);
-          
           // Check if user has any data
-          if (analyticsData.overview.totalEvents === 0 && analyticsData.overview.totalTicketsSold === 0) {
+          const hasData = analyticsData.overview &&
+                         (analyticsData.overview.totalEvents > 0 ||
+                          analyticsData.overview.totalTicketsSold > 0);
+
+          if (!hasData) {
             showEmptyState();
           } else {
             showAnalyticsDashboard();
@@ -523,42 +525,6 @@
         }
       }
 
-      function generateAnalyticsFromEvents(events) {
-        // Generate mock analytics data based on events
-        const totalEvents = events.length;
-        const totalTicketsSold = totalEvents * Math.floor(Math.random() * 100) + 50; // Mock ticket sales
-        const totalRevenue = totalTicketsSold * (Math.random() * 50 + 25); // Mock revenue
-        const totalAttendees = Math.floor(totalTicketsSold * 0.85); // Mock attendance rate
-        
-        return {
-          overview: {
-            totalEvents,
-            totalTicketsSold,
-            totalRevenue,
-            totalAttendees
-          },
-          revenue: {
-            monthly: [15000, 18000, 22000, 25000, 30000, 35000], // Mock monthly data
-            daily: [1200, 1500, 1800, 2200, 1900, 2100, 2400] // Mock daily data
-          },
-          attendance: {
-            averageAttendance: Math.floor(totalAttendees / Math.max(totalEvents, 1)),
-            attendanceRate: 85 // Mock attendance rate percentage
-          },
-          events: {
-            performance: events.map((event, index) => ({
-              name: event.title || `Event ${index + 1}`,
-              ticketsSold: Math.floor(Math.random() * 150) + 50,
-              revenue: Math.floor(Math.random() * 5000) + 1000,
-              attendanceRate: Math.floor(Math.random() * 30) + 70
-            }))
-          },
-          ticketSales: {
-            categories: ['VIP', 'General', 'Early Bird'],
-            data: [30, 50, 20] // Mock percentage distribution
-          }
-        };
-      }
 
       function showEmptyState() {
         document.getElementById("emptyState").style.display = "flex";
@@ -572,16 +538,27 @@
 
       function updateSummaryCardsFromAPI(overview, revenue, attendance) {
         // Update summary cards with API data
-        document.getElementById("totalRevenue").textContent = `PKR ${overview.totalRevenue.toLocaleString()}`;
-        document.getElementById("totalTickets").textContent = overview.totalTicketsSold.toLocaleString();
-        document.getElementById("totalEvents").textContent = overview.totalEvents.toString();
-        document.getElementById("totalAttendees").textContent = overview.totalAttendees.toLocaleString();
-        
-        // Update conversion rate if element exists
-        const conversionElement = document.getElementById("conversionRate");
-        if (conversionElement) {
-          conversionElement.textContent = `${overview.conversionRate}%`;
-        }
+        document.getElementById("totalRevenue").textContent = `$${(overview.totalRevenue || 0).toLocaleString()}`;
+        document.getElementById("totalTickets").textContent = (overview.totalTicketsSold || 0).toLocaleString();
+        document.getElementById("totalEvents").textContent = (overview.totalEvents || 0).toString();
+
+        // Calculate average ticket price
+        const avgPrice = overview.totalTicketsSold > 0 ? overview.totalRevenue / overview.totalTicketsSold : 0;
+        document.getElementById("avgTicketPrice").textContent = `$${avgPrice.toFixed(2)}`;
+
+        // Update change indicators
+        document.getElementById("revenueChange").textContent =
+          `${overview.revenueChange >= 0 ? '+' : ''}${(overview.revenueChange || 0).toFixed(1)}% from last period`;
+        document.getElementById("revenueChange").className =
+          overview.revenueChange >= 0 ? 'card-change positive' : 'card-change negative';
+
+        document.getElementById("ticketsChange").textContent =
+          `${overview.ticketsChange >= 0 ? '+' : ''}${(overview.ticketsChange || 0).toFixed(1)}% from last period`;
+        document.getElementById("ticketsChange").className =
+          overview.ticketsChange >= 0 ? 'card-change positive' : 'card-change negative';
+
+        const publishedCount = overview.publishedEvents || 0;
+        document.getElementById("eventsChange").textContent = `${publishedCount} published`;
       }
 
       function updateSummaryCards(orders, events) {
@@ -625,9 +602,9 @@
       }
 
       function createChartsFromAPI(revenue, events, ticketSales) {
-        createSalesByMonthChartFromAPI(revenue.monthly || []);
-        createTopEventsChartFromAPI(events.topPerforming || []);
-        createRevenueBreakdownChartFromAPI(ticketSales);
+        createSalesByMonthChartFromAPI(revenue?.monthly || []);
+        createTopEventsChartFromAPI(events?.topPerforming || []);
+        createRevenueBreakdownChartFromAPI(ticketSales || {});
       }
 
       function createCharts(orders, events) {
@@ -915,10 +892,8 @@
             this.classList.add("active");
             currentMetric = this.dataset.metric;
 
-            // Use mock data for orders and events since dataManager is removed
-            const orders = []; // Mock orders data
-            const events = []; // Mock events data
-            createTopEventsChart(orders, events);
+            // Reload analytics to update chart
+            loadAnalytics();
           });
         });
 
@@ -957,13 +932,22 @@
       // API-specific chart functions
       function createSalesByMonthChartFromAPI(monthlyData) {
         const ctx = document.getElementById("salesByMonthChart").getContext("2d");
-        
+
+        if (!monthlyData || monthlyData.length === 0) {
+          // Show empty chart
+          monthlyData = Array(6).fill({ month: '', revenue: 0, tickets: 0 });
+        }
+
         // Prepare data for the chart
-        const labels = monthlyData.map(item => {
-          const date = new Date(item.month + '-01');
-          return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        const labels = monthlyData.map((item, idx) => {
+          if (item.month) {
+            const date = new Date(item.month);
+            return date.toLocaleDateString('en-US', { month: 'short' });
+          }
+          return '';
         });
-        const data = monthlyData.map(item => item.revenue);
+        const revenueData = monthlyData.map(item => item.revenue || 0);
+        const ticketsData = monthlyData.map(item => item.tickets || 0);
 
         if (salesChart) salesChart.destroy();
 
@@ -971,28 +955,63 @@
           type: "line",
           data: {
             labels: labels,
-            datasets: [{
-              label: "Revenue (PKR)",
-              data: data,
-              borderColor: "#f05537",
-              backgroundColor: "rgba(240, 85, 55, 0.1)",
-              borderWidth: 3,
-              fill: true,
-              tension: 0.4,
-            }]
+            datasets: [
+              {
+                label: "Revenue ($)",
+                data: revenueData,
+                borderColor: "#10b981",
+                backgroundColor: "rgba(16, 185, 129, 0.1)",
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                yAxisID: 'y1',
+              },
+              {
+                label: "Tickets Sold",
+                data: ticketsData,
+                borderColor: "#3b82f6",
+                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+              }
+            ]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-              legend: { display: false }
+              legend: {
+                position: 'top',
+                display: true
+              }
             },
             scales: {
               y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
                 beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Tickets'
+                }
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Revenue ($)'
+                },
+                grid: {
+                  drawOnChartArea: false,
+                },
                 ticks: {
                   callback: function(value) {
-                    return 'PKR ' + value.toLocaleString();
+                    return '$' + value.toLocaleString();
                   }
                 }
               }
@@ -1003,10 +1022,19 @@
 
       function createTopEventsChartFromAPI(topEvents) {
         const ctx = document.getElementById("topEventsChart").getContext("2d");
-        
-        // Prepare data
-        const labels = topEvents.map(event => event.eventTitle || 'Untitled Event');
-        const data = topEvents.map(event => event.revenue || 0);
+
+        if (!topEvents || topEvents.length === 0) {
+          topEvents = [{ eventTitle: 'No events yet', revenue: 0, ticketsSold: 0 }];
+        }
+
+        // Prepare data based on current metric
+        const labels = topEvents.map(event => {
+          const title = event.eventTitle || event.title || 'Untitled Event';
+          return title.length > 20 ? title.substring(0, 20) + '...' : title;
+        });
+        const data = topEvents.map(event =>
+          currentMetric === 'tickets' ? (event.ticketsSold || 0) : (event.revenue || 0)
+        );
 
         if (topEventsChart) topEventsChart.destroy();
 
@@ -1015,12 +1043,11 @@
           data: {
             labels: labels,
             datasets: [{
-              label: "Revenue (PKR)",
+              label: currentMetric === 'tickets' ? 'Tickets Sold' : 'Revenue ($)',
               data: data,
-              backgroundColor: [
-                "#f05537", "#ff7849", "#ff9a6b", "#ffbc8d", "#ffdeaf"
-              ],
-              borderWidth: 0,
+              backgroundColor: "#f97316",
+              borderColor: "#ea580c",
+              borderWidth: 1,
             }]
           },
           options: {
@@ -1032,9 +1059,16 @@
             scales: {
               y: {
                 beginAtZero: true,
+                title: {
+                  display: true,
+                  text: currentMetric === 'tickets' ? 'Tickets' : 'Revenue ($)'
+                },
                 ticks: {
                   callback: function(value) {
-                    return 'PKR ' + value.toLocaleString();
+                    if (currentMetric === 'revenue') {
+                      return '$' + value.toLocaleString();
+                    }
+                    return value;
                   }
                 }
               }
@@ -1045,10 +1079,16 @@
 
       function createRevenueBreakdownChartFromAPI(ticketSales) {
         const ctx = document.getElementById("revenueBreakdownChart").getContext("2d");
-        
+
         // Prepare data from ticket sales
-        const labels = ticketSales.byType ? ticketSales.byType.map(item => item.type) : ['General Admission'];
-        const data = ticketSales.byType ? ticketSales.byType.map(item => item.count) : [ticketSales.total || 0];
+        let labels, data;
+        if (ticketSales.byType && ticketSales.byType.length > 0) {
+          labels = ticketSales.byType.map(item => item.type || item.ticketType || 'General');
+          data = ticketSales.byType.map(item => item.revenue || item.count || 0);
+        } else {
+          labels = ['No data'];
+          data = [1];
+        }
 
         if (revenueChart) revenueChart.destroy();
 
@@ -1059,9 +1099,10 @@
             datasets: [{
               data: data,
               backgroundColor: [
-                "#f05537", "#ff7849", "#ff9a6b", "#ffbc8d", "#ffdeaf", "#e8e8e8"
+                "#f97316", "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899"
               ],
-              borderWidth: 0,
+              borderWidth: 2,
+              borderColor: '#ffffff',
             }]
           },
           options: {
@@ -1075,6 +1116,16 @@
                   usePointStyle: true,
                 },
               },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    if (labels[0] === 'No data') return 'No data available';
+                    const label = context.label || '';
+                    const value = context.parsed || 0;
+                    return label + ': $' + value.toLocaleString();
+                  }
+                }
+              }
             },
           }
         });
@@ -1084,29 +1135,40 @@
         const tbody = document.getElementById("eventsTableBody");
         tbody.innerHTML = "";
 
+        if (!eventsData || eventsData.length === 0) {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td colspan="6" style="text-align: center; padding: 40px; color: #9ca3af;">
+              No event data available yet
+            </td>
+          `;
+          tbody.appendChild(row);
+          return;
+        }
+
         eventsData.forEach((event) => {
+          const eventDate = event.eventDate || event.date;
+          const conversionRate = event.conversionRate ||
+                                ((event.ticketsSold / Math.max(event.capacity || event.totalTickets || 100, 1)) * 100);
+
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>
               <div class="event-cell">
-                <div class="event-title">${event.eventTitle || 'Untitled Event'}</div>
+                <div class="event-title">${event.eventTitle || event.title || 'Untitled Event'}</div>
                 <div class="event-location">${event.location || 'Location TBD'}</div>
               </div>
             </td>
-            <td>${event.eventDate ? new Date(event.eventDate).toLocaleDateString() : 'Date TBD'}</td>
+            <td>${eventDate ? new Date(eventDate).toLocaleDateString() : 'Date TBD'}</td>
             <td>
-              <span class="status-badge published">Active</span>
+              <span class="status-badge ${event.status || 'published'}">${
+                (event.status || 'published').charAt(0).toUpperCase() +
+                (event.status || 'published').slice(1)
+              }</span>
             </td>
-            <td>${event.ticketsSold || 0}</td>
-            <td>PKR ${(event.revenue || 0).toLocaleString()}</td>
-            <td>
-              <div class="conversion-cell">
-                <span class="conversion-rate">${((event.ticketsSold / Math.max(event.capacity, 100)) * 100).toFixed(1)}%</span>
-                <div class="conversion-bar">
-                  <div class="conversion-fill" style="width: ${((event.ticketsSold / Math.max(event.capacity, 100)) * 100)}%"></div>
-                </div>
-              </div>
-            </td>
+            <td>${(event.ticketsSold || 0).toLocaleString()}</td>
+            <td>$${(event.revenue || 0).toFixed(2)}</td>
+            <td>${conversionRate.toFixed(1)}%</td>
           `;
           tbody.appendChild(row);
         });
