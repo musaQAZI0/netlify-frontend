@@ -18,6 +18,7 @@ class DatabaseAuth {
     async init() {
         if (this.isInitialized) return;
 
+        console.log('🔐 Initializing Database Authentication System...');
 
         // Check for session from URL parameters (from logged_in_Version.html)
         const urlParams = new URLSearchParams(window.location.search);
@@ -40,6 +41,7 @@ class DatabaseAuth {
         this.startSessionMonitoring();
 
         this.isInitialized = true;
+        console.log('✅ Database Authentication System initialized');
     }
 
     /**
@@ -73,9 +75,11 @@ class DatabaseAuth {
                 this.currentToken = token;
                 this.storeSession(token, data.user);
                 this.updateUI(true);
+                console.log('✅ Session verified and set:', data.user.firstName);
                 return true;
             } else {
                 this.clearSession();
+                console.log('❌ Session verification failed:', data.message);
                 return false;
             }
         } catch (error) {
@@ -105,8 +109,10 @@ class DatabaseAuth {
                 this.currentToken = data.token;
                 this.storeSession(data.token, data.user);
                 this.updateUI(true);
+                console.log('✅ Login successful:', data.user.firstName);
                 return { success: true, user: data.user };
             } else {
+                console.log('❌ Login failed:', data.message);
                 return { success: false, message: data.message };
             }
         } catch (error) {
@@ -135,8 +141,10 @@ class DatabaseAuth {
                 this.currentToken = data.token;
                 this.storeSession(data.token, data.user);
                 this.updateUI(true);
+                console.log('✅ Registration successful:', data.user.firstName);
                 return { success: true, user: data.user };
             } else {
+                console.log('❌ Registration failed:', data.message);
                 return { success: false, message: data.message };
             }
         } catch (error) {
@@ -164,6 +172,7 @@ class DatabaseAuth {
         }
 
         this.clearSession();
+        console.log('✅ Logout successful');
         return { success: true };
     }
 
