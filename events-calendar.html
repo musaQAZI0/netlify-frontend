@@ -1371,27 +1371,35 @@
     // Create new collection via API
     async function createCollection(event) {
       event.preventDefault();
-      
+
       const createBtn = document.getElementById('createCollectionBtn');
       createBtn.disabled = true;
       createBtn.textContent = 'Creating...';
-      
+
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        showNotification('Please log in to create a collection', 'error');
+        createBtn.disabled = false;
+        createBtn.textContent = 'Create Collection';
+        return;
+      }
+
       const formData = {
         name: document.getElementById('collectionName').value,
         description: document.getElementById('collectionDescription').value,
         organizer: document.getElementById('collectionOrganizer').value,
-        organizerId: 'org_12345', // This would come from user session
         visibility: document.getElementById('collectionVisibility').value,
         tags: document.getElementById('collectionTags').value
           .split(',')
           .map(tag => tag.trim())
           .filter(tag => tag.length > 0)
       };
-      
+
       try {
         const response = await fetch(`${API_BASE}/events`, {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${authToken}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(formData)
