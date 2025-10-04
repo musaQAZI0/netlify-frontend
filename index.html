@@ -58,11 +58,13 @@
             min-height: 80vh;
             display: flex;
             align-items: center;
+            justify-content: center;
             color: var(--white);
             text-align: center;
             overflow: hidden;
             margin: 0;
             border-radius: 0px;
+            padding: 140px 0 240px;
         }
 
         .banner-carousel {
@@ -281,6 +283,7 @@
                 margin: 0;
                 border-radius: 0;
                 overflow: hidden;
+                padding: 90px 0 160px;
             }
 
             .banner-slide img {
@@ -988,47 +991,52 @@
         /* Categories Section */
         /* Updated Categories Section CSS - Replace the existing categories styles with these */
         .categories {
+            position: relative;
+            margin: -140px auto 80px;
+            padding: 0 1.5rem;
+            max-width: 1200px;
+            z-index: 5;
+        }
+
+        .categories .container {
             padding: 0;
-            background: var(--secondary-color);
             margin: 0;
-            width: 100vw;
-            margin-left: calc(-50vw + 50%);
+            max-width: none;
         }
 
         .category-navigation {
-            padding: 80px 0px;
-            margin: 0 auto;
             width: 100%;
+            margin: 0 auto;
+            padding: 32px 40px;
+            background: var(--secondary-dark);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(13, 39, 56, 0.35);
         }
 
         .category-grid {
-            display: flex;
-            justify-content: space-between;
-            gap: 0px;
-            align-items: center;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            align-items: stretch;
         }
 
         .category-card {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             text-decoration: none;
             color: inherit;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            padding: 8px 6px;
-            border-radius: 8px;
-            min-width: 95px;
-            flex-shrink: 0;
-            flex: 1;
-            max-width: 110px;
+            padding: 16px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .category-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
         }
 
         .category-card:focus {
@@ -1037,25 +1045,21 @@
         }
 
         .icon-wrapper {
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             border-radius: 50%;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.12);
             transition: background-color 0.2s ease, border-color 0.2s ease;
-            border: 3px solid transparent;
         }
 
-        .category-card:hover .icon-wrapper {
-            background-color: #f8f8f8;
-        }
-
-        /* Active state - orange border like Holidays */
+        .category-card:hover .icon-wrapper,
         .category-card.active .icon-wrapper {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.18);
             border-color: var(--primary-color);
         }
 
@@ -1070,73 +1074,74 @@
 
         .category-card.active .category-title {
             color: var(--primary-color);
-            font-weight: 700;
         }
 
         .category-icon {
-            width: 36px;
-            height: 36px;
-            fill: var(--secondary-color);
+            width: 32px;
+            height: 32px;
+            fill: var(--white);
             transition: fill 0.2s ease;
         }
 
-        .category-card.active .category-icon {
+        .category-card.active .category-icon,
+        .category-card:hover .category-icon {
             fill: var(--primary-color);
         }
 
-        /* Mobile responsive styles */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .categories {
-                padding: 2rem 0;
+                margin: -120px auto 70px;
+                padding: 0 1.25rem;
             }
 
             .category-navigation {
-                padding: 30px 15px;
-                margin: 0 1rem;
+                padding: 28px 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .categories {
+                margin: 24px auto 48px;
+                padding: 0 1rem;
+                max-width: 100%;
+            }
+
+            .category-navigation {
+                padding: 24px;
             }
 
             .category-grid {
-                gap: 12px;
-                justify-content: flex-start;
-                padding-right: 20px;
-            }
-
-            .category-card {
-                padding: 12px 8px;
-                min-width: 100px;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 16px;
             }
 
             .icon-wrapper {
                 width: 56px;
                 height: 56px;
-                margin-bottom: 8px;
             }
 
             .category-icon {
-                width: 32px;
-                height: 32px;
-            }
-
-            .category-title {
-                font-size: 12px;
+                width: 28px;
+                height: 28px;
             }
         }
 
         @media (max-width: 480px) {
-            .category-grid {
-                gap: 10px;
-                justify-content: flex-start;
-                padding-right: 20px;
+            .categories {
+                margin: 20px auto 40px;
+                padding: 0 0.75rem;
             }
 
             .category-navigation {
-                padding: 20px 10px;
+                padding: 20px;
             }
 
-            .category-card {
-                min-width: 90px;
+            .category-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 14px;
             }
         }
+
 
 
 
@@ -1720,6 +1725,7 @@
 
             .hero {
                 min-height: 70vh;
+                padding: 120px 0 200px;
             }
 
             .hero-actions {
@@ -1777,7 +1783,7 @@
 
             .hero {
                 min-height: 50vh;
-                padding-top: 0;
+                padding: 90px 0 150px;
             }
 
             .hero-content {
@@ -1815,7 +1821,9 @@
             }
 
             .categories {
-                padding: 2rem 0;
+                margin: 24px auto 48px;
+                padding: 0 1rem;
+                max-width: 100%;
             }
 
             .category-container {
@@ -2160,7 +2168,7 @@
             }
 
             .categories {
-                background: #111827;
+                background: transparent;
             }
 
             .interests-section {
