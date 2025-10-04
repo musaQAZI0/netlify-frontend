@@ -955,9 +955,15 @@
                 document.getElementById('usersEmptyState').style.display = 'none';
                 document.getElementById('usersList').style.display = 'none';
 
+                // Get API base URL
+                const API_BASE_URL = window.Config ? window.Config.API_BASE_URL :
+                    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000'
+                        : 'https://crowd-backend-zxxp.onrender.com');
+
                 // Fetch team members from backend
                 const token = localStorage.getItem('authToken');
-                const response = await fetch('/api/team/members', {
+                const response = await fetch(`${API_BASE_URL}/api/team/members`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -972,6 +978,8 @@
                 const data = await response.json();
                 teamMembers = data.members || [];
 
+                console.log('✅ Team members loaded:', teamMembers.length);
+
                 document.getElementById('usersLoading').style.display = 'none';
 
                 if (teamMembers.length === 0) {
@@ -982,7 +990,7 @@
                 }
 
             } catch (error) {
-                console.error('Error loading team members:', error);
+                console.error('❌ Error loading team members:', error);
                 document.getElementById('usersLoading').style.display = 'none';
                 document.getElementById('usersEmptyState').style.display = 'block';
             }
@@ -993,9 +1001,15 @@
                 document.getElementById('rolesLoading').style.display = 'flex';
                 document.getElementById('rolesList').style.display = 'none';
 
+                // Get API base URL
+                const API_BASE_URL = window.Config ? window.Config.API_BASE_URL :
+                    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000'
+                        : 'https://crowd-backend-zxxp.onrender.com');
+
                 // Fetch team roles from backend
                 const token = localStorage.getItem('authToken');
-                const response = await fetch('/api/team/roles', {
+                const response = await fetch(`${API_BASE_URL}/api/team/roles`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -1010,12 +1024,14 @@
                 const data = await response.json();
                 teamRoles = data.roles || [];
 
+                console.log('✅ Team roles loaded:', teamRoles.length);
+
                 document.getElementById('rolesLoading').style.display = 'none';
                 document.getElementById('rolesList').style.display = 'block';
                 renderTeamRoles();
 
             } catch (error) {
-                console.error('Error loading team roles:', error);
+                console.error('❌ Error loading team roles:', error);
                 document.getElementById('rolesLoading').style.display = 'none';
                 showNotification('Failed to load team roles', 'error');
             }
