@@ -1047,19 +1047,43 @@
             document.getElementById('minimumPayoutAmount').value = financialData.minimumPayout;
         }
 
-        function loadPayoutsData() {
+        async function loadPayoutsData() {
             const payoutsTable = document.getElementById('payoutsTable');
             const emptyState = document.getElementById('payoutsEmptyState');
-            
+
+            try {
+                console.log('🔄 Fetching payouts from backend...');
+
+                const response = await fetch(`${window.Config.API_BASE_URL}/api/finance/payouts`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load payouts');
+                }
+
+                const data = await response.json();
+                payoutsData = data.payouts || data || [];
+                console.log('✅ Payouts loaded:', payoutsData.length);
+
+            } catch (error) {
+                console.error('❌ Error loading payouts:', error);
+                payoutsData = [];
+            }
+
             if (payoutsData.length === 0) {
                 payoutsTable.style.display = 'none';
                 emptyState.style.display = 'block';
                 return;
             }
-            
+
             payoutsTable.style.display = 'block';
             emptyState.style.display = 'none';
-            
+
             // Render payouts table
             payoutsTable.innerHTML = `
                 <div class="table-header">
@@ -1071,13 +1095,13 @@
                 <div class="table-body">
                     ${payoutsData.map(payout => `
                         <div class="table-row">
-                            <div class="table-cell">${formatDate(payout.date)}</div>
-                            <div class="table-cell">$${payout.amount.toFixed(2)}</div>
+                            <div class="table-cell">${formatDate(payout.date || payout.payoutDate)}</div>
+                            <div class="table-cell">$${(payout.amount || 0).toFixed(2)}</div>
                             <div class="table-cell">
-                                <span class="status-badge ${payout.status}">${payout.status}</span>
+                                <span class="status-badge ${payout.status}">${payout.status || 'pending'}</span>
                             </div>
                             <div class="table-cell">
-                                <button class="action-btn" onclick="viewPayoutDetails('${payout.id}')">View</button>
+                                <button class="action-btn" onclick="viewPayoutDetails('${payout.id || payout._id}')">View</button>
                             </div>
                         </div>
                     `).join('')}
@@ -1085,25 +1109,52 @@
             `;
         }
 
-        function loadChargesData() {
-            // Load charges and fees data
+        async function loadChargesData() {
             const chargesTable = document.getElementById('chargesTable');
-            if (window.dataManager && window.dataManager.getOrders) {
-                const orders = window.dataManager.getOrders() || [];
-                const totalFees = orders.reduce((sum, order) => {
-                    return sum + (order.platformFee || 0) + (order.processingFee || 0);
-                }, 0);
-                
+
+            try {
+                console.log('🔄 Fetching charges from backend...');
+
+                const response = await fetch(`${window.Config.API_BASE_URL}/api/finance/charges`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load charges');
+                }
+
+                const data = await response.json();
+                const charges = data.charges || data || [];
+                console.log('✅ Charges loaded:', charges.length);
+
+                // Calculate totals
+                const totalFees = charges.reduce((sum, charge) => sum + (charge.amount || 0), 0);
+
                 const thisMonth = new Date().getMonth();
-                const monthlyFees = orders.filter(order => {
-                    return new Date(order.orderDate).getMonth() === thisMonth;
-                }).reduce((sum, order) => {
-                    return sum + (order.platformFee || 0) + (order.processingFee || 0);
-                }, 0);
-                
-                document.getElementById('totalFees').textContent = '$' + totalFees.toFixed(2);
-                document.getElementById('monthlyFees').textContent = '$' + monthlyFees.toFixed(2);
-                
+                const monthlyFees = charges.filter(charge => {
+                    return new Date(charge.date).getMonth() === thisMonth;
+                }).reduce((sum, charge) => sum + (charge.amount || 0), 0);
+
+                if (document.getElementById('totalFees')) {
+                    document.getElementById('totalFees').textContent = '$' + totalFees.toFixed(2);
+                }
+                if (document.getElementById('monthlyFees')) {
+                    document.getElementById('monthlyFees').textContent = '$' + monthlyFees.toFixed(2);
+                }
+
+                if (charges.length === 0) {
+                    chargesTable.innerHTML = `
+                        <div class="empty-state">
+                            <p>No charges to display</p>
+                        </div>
+                    `;
+                    return;
+                }
+
                 chargesTable.innerHTML = `
                     <div class="table-header">
                         <div class="header-cell">Date</div>
@@ -1112,26 +1163,20 @@
                         <div class="header-cell">Amount</div>
                     </div>
                     <div class="table-body">
-                        ${orders.map(order => `
+                        ${charges.map(charge => `
                             <div class="table-row">
-                                <div class="table-cell">${formatDate(order.orderDate)}</div>
-                                <div class="table-cell">Platform Fee - ${order.eventTitle}</div>
-                                <div class="table-cell">Platform Fee</div>
-                                <div class="table-cell">$${(order.platformFee || 0).toFixed(2)}</div>
+                                <div class="table-cell">${formatDate(charge.date)}</div>
+                                <div class="table-cell">${charge.description || 'Platform Fee'}</div>
+                                <div class="table-cell">${charge.type || 'Fee'}</div>
+                                <div class="table-cell">$${(charge.amount || 0).toFixed(2)}</div>
                             </div>
-                            ${order.processingFee ? `
-                            <div class="table-row">
-                                <div class="table-cell">${formatDate(order.orderDate)}</div>
-                                <div class="table-cell">Processing Fee - ${order.eventTitle}</div>
-                                <div class="table-cell">Processing Fee</div>
-                                <div class="table-cell">$${order.processingFee.toFixed(2)}</div>
-                            </div>
-                            ` : ''}
                         `).join('')}
                     </div>
                 `;
-            } else {
-                chargesTable.innerHTML = '<p>No charges to display</p>';
+
+            } catch (error) {
+                console.error('❌ Error loading charges:', error);
+                chargesTable.innerHTML = '<p>Failed to load charges. Please try again later.</p>';
             }
         }
 
