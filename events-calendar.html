@@ -1347,7 +1347,7 @@
     let currentFilter = 'Upcoming events';
     let collections = [];
 
-    const API_BASE = window.Config ? window.Config.API_BASE_URL : 'https://crowd-backend-zxxp.onrender.com/api';
+    const API_BASE = window.Config ? `${window.Config.API_BASE_URL}/api` : 'https://crowd-backend-zxxp.onrender.com/api';
 
     // Collection Modal Functions
     function openCollectionModal() {
