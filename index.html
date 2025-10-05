@@ -44,6 +44,7 @@
             color: var(--text-dark);
             background-color: var(--white);
             overflow-x: hidden;
+            padding-top: 0;
         }
 
         .container {
@@ -379,8 +380,10 @@
         .header {
             background: var(--white);
             box-shadow: var(--shadow);
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
             border-bottom: 1px solid var(--border-color);
         }
@@ -1446,7 +1449,7 @@
             padding: 2rem;
         }
 
-        .header {
+        .cities-section .section-header {
             margin-bottom: 3rem;
         }
 
