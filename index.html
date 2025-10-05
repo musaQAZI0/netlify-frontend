@@ -992,7 +992,7 @@
 
 
         /* Categories Section */
-        /* Updated Categories Section CSS - Replace the existing categories styles with these */
+                /* Updated Categories Section CSS - Replace the existing categories styles with these */
         .categories {
             position: relative;
             margin: -140px auto 80px;
@@ -1017,10 +1017,17 @@
         }
 
         .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            align-items: stretch;
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+            margin: 0;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .category-grid::-webkit-scrollbar {
+            display: none;
         }
 
         .category-card {
@@ -1035,6 +1042,8 @@
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.08);
+            flex: 0 0 160px;
+            scroll-snap-align: center;
         }
 
         .category-card:hover {
@@ -1100,6 +1109,10 @@
             .category-navigation {
                 padding: 28px 32px;
             }
+
+            .category-grid {
+                gap: 1.1rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1114,8 +1127,13 @@
             }
 
             .category-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-                gap: 16px;
+                gap: 1rem;
+                padding-bottom: 0.75rem;
+            }
+
+            .category-card {
+                flex: 0 0 150px;
+                padding: 14px 10px;
             }
 
             .icon-wrapper {
@@ -1134,6 +1152,21 @@
                 margin: 20px auto 40px;
                 padding: 0 0.75rem;
             }
+
+            .category-navigation {
+                padding: 20px;
+            }
+
+            .category-grid {
+                gap: 0.85rem;
+                padding-bottom: 0.65rem;
+            }
+
+            .category-card {
+                flex: 0 0 130px;
+            }
+        }
+
 
             .category-navigation {
                 padding: 20px;
