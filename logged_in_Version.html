@@ -43,7 +43,7 @@
             line-height: 1.6;
             color: var(--text-dark);
             background-color: #fff;
-            padding-top: 0px;
+            padding-top: 72px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -602,6 +602,32 @@
             width: 1px;
             height: 40px;
             background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 1rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
 
         /* Categories Section */
@@ -1653,6 +1679,11 @@
                 gap: 12px;
                 background-color: white;
                 border-bottom: 1px solid #e0e0e0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
             }
 
             .mobile-nav-container .logo img {
