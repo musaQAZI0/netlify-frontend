@@ -4383,7 +4383,11 @@
         });
 
         if (!response.ok) {
-          console.warn('No social posts found or API error:', response.status);
+          if (response.status === 404) {
+            console.info('ℹ️ Social posts endpoint not available - using local data');
+          } else {
+            console.warn('⚠️ Social posts API returned status:', response.status);
+          }
           return [];
         }
 
@@ -4393,7 +4397,7 @@
 
         return posts;
       } catch (error) {
-        console.error('❌ Error loading social posts:', error);
+        console.info('ℹ️ Social posts not available - using demo mode');
         return [];
       }
     }
@@ -4437,7 +4441,11 @@
         });
 
         if (!response.ok) {
-          console.warn('No ad campaigns found or API error:', response.status);
+          if (response.status === 404) {
+            console.info('ℹ️ Ad campaigns endpoint not available - using local data');
+          } else {
+            console.warn('⚠️ Ad campaigns API returned status:', response.status);
+          }
           return [];
         }
 
@@ -4447,7 +4455,7 @@
 
         return adCampaigns;
       } catch (error) {
-        console.error('❌ Error loading ad campaigns:', error);
+        console.info('ℹ️ Ad campaigns not available - using demo mode');
         return [];
       }
     }
