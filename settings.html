@@ -2307,9 +2307,54 @@
       }
     }
 
+    // Load organizer profile from backend
+    async function loadOrganizerProfile() {
+      try {
+        const API_BASE_URL = window.Config?.API_BASE_URL ||
+          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000'
+            : 'https://crowd-backend-zxxp.onrender.com');
+
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+
+        if (!token) {
+          console.log('No auth token found, skipping organizer profile load');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/organizer/profile`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.log('No organizer profile found');
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.success && data.organizerProfile) {
+          // Update display with loaded profile
+          updateOrganizerDisplay(data.organizerProfile);
+
+          // Store in localStorage
+          localStorage.setItem('organizerProfile', JSON.stringify(data.organizerProfile));
+
+          console.log('✅ Organizer profile loaded successfully');
+        }
+      } catch (error) {
+        console.error('Error loading organizer profile:', error);
+      }
+    }
+
     // Call this when page loads
     document.addEventListener('DOMContentLoaded', function () {
       displaySavedPaymentMethod();
+      loadOrganizerProfile();
     });
 
     async function addOrganizerProfile() {
@@ -2478,41 +2523,65 @@
         website: document.getElementById("organizerWebsite").value,
         bio: document.getElementById("organizerBio").innerHTML,
         eventDescription: document.getElementById("eventDescription").innerHTML,
-        facebookId: document.getElementById("facebookId").value,
-        twitterHandle: document.getElementById("twitterHandle").value,
-        emailOptIn: document.getElementById("emailOptIn").checked,
-        organizationName: document.getElementById("organizationName").value,
-        preferredCountry: document.getElementById("preferredCountry").value,
-        updatedAt: new Date().toISOString()
+        socialMedia: {
+          facebook: document.getElementById("facebookId")?.value || '',
+          twitter: document.getElementById("twitterHandle")?.value || ''
+        },
+        emailOptIn: document.getElementById("emailOptIn")?.checked || false,
+        organizationName: document.getElementById("organizationName")?.value || '',
+        preferredCountry: document.getElementById("preferredCountry")?.value || ''
       };
 
+      // Validate required fields
+      if (!profileData.name || profileData.name.trim() === '') {
+        alert('Organizer name is required');
+        return;
+      }
+
       try {
-        // Update profile data using authAPI if available
-        if (window.authAPI) {
-          const currentUser = await window.authAPI.getCurrentUser();
-          const updatedUser = {
-            ...currentUser,
-            organizerProfile: { ...currentUser.organizerProfile, ...profileData }
-          };
-          await window.authAPI.updateUser(updatedUser);
-        } else {
-          // Fallback
-          console.log('⚠️ Using localStorage fallback for profile update');
-          const existingProfile = JSON.parse(localStorage.getItem('organizerProfile') || '{}');
-          localStorage.setItem('organizerProfile', JSON.stringify({ ...existingProfile, ...profileData }));
+        const API_BASE_URL = window.Config?.API_BASE_URL ||
+          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000'
+            : 'https://crowd-backend-zxxp.onrender.com');
+
+        const token = localStorage.getItem('authToken') || localStorage.getItem('token');
+
+        if (!token) {
+          alert('Please log in to update your organizer profile');
+          return;
         }
+
+        const response = await fetch(`${API_BASE_URL}/api/organizer/profile`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(profileData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to update organizer profile');
+        }
+
+        console.log('✅ Organizer profile updated:', data);
 
         // Update organizer name display
         if (profileData.name) {
           document.getElementById("organizerName").textContent = profileData.name;
         }
 
+        // Store in localStorage for quick access
+        localStorage.setItem('organizerProfile', JSON.stringify(data.organizerProfile));
+
         closeEditModal();
         showSuccessMessage("Organizer profile updated successfully!");
 
       } catch (error) {
-        console.error('Error updating organizer profile:', error);
-        alert('Failed to update organizer profile. Please try again.');
+        console.error('❌ Error updating organizer profile:', error);
+        alert('Failed to update organizer profile: ' + error.message);
       }
     }
 
