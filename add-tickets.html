@@ -421,7 +421,8 @@
                             return makeApiRequest(url, options, retryCount + 1);
                         } else {
                             console.log('Token refresh failed, redirecting to login...');
-                            window.location.href = 'login.html';
+                            const currentPage = window.location.pathname.split('/').pop() + window.location.search;
+                            window.location.href = `login.html?redirect=${encodeURIComponent(currentPage)}`;
                             return;
                         }
                     }
@@ -462,7 +463,9 @@
             // Pure database authentication check
             const isAuthenticated = await checkAuthenticationStatus();
             if (!isAuthenticated) {
-                window.location.href = 'login.html';
+                // Redirect to login with the current page URL to return after login
+                const currentPage = window.location.pathname.split('/').pop() + window.location.search;
+                window.location.href = `login.html?redirect=${encodeURIComponent(currentPage)}`;
                 return;
             }
 

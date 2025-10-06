@@ -13,6 +13,9 @@ const pageMapping = {
     'NIGHTLIFE.html': 'NIGHTLIFE.html',  // Assuming no logged-in version yet
     'Performing & Visual Arts events.html': 'Performing & Visual Arts events.html',  // Assuming no logged-in version yet
     'analytics.html': 'analytics.html',  // Analytics page - requires login
+    'add-tickets.html': 'add-tickets.html',  // Add tickets page - requires login
+    'event-builder.html': 'event-builder.html',  // Event builder - requires login
+    'publish-event.html': 'publish-event.html',  // Publish event - requires login
     // Add more mappings as needed
 };
 
