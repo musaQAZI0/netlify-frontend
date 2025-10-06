@@ -12,6 +12,7 @@ const pageMapping = {
     'DATING.html': 'DATING.html',  // Assuming no logged-in version yet
     'NIGHTLIFE.html': 'NIGHTLIFE.html',  // Assuming no logged-in version yet
     'Performing & Visual Arts events.html': 'Performing & Visual Arts events.html',  // Assuming no logged-in version yet
+    'analytics.html': 'analytics.html',  // Analytics page - requires login
     // Add more mappings as needed
 };
 
