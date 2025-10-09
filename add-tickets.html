@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Tickets - Crowd</title>
     <link rel="stylesheet" href="add-tickets-styles.css">
+    <script src="js/config.js"></script>
+    <script src="js/auth-utils.js"></script>
     <style>
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
@@ -644,20 +646,13 @@
     </div>
 
     <script>
-        // Configuration
+        // Configuration - Use shared Config or fallback
         const CONFIG = {
-            API_BASE_URL: (() => {
-                // Check if running locally
+            API_BASE_URL: window.Config ? window.Config.API_BASE_URL : (() => {
+                // Fallback if Config.js not loaded
                 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                     return 'http://localhost:3000';
                 }
-
-                // Check for development netlify URL or specific backend URL
-                if (window.location.hostname.includes('netlify.app')) {
-                    return 'https://crowd-backend-zxxp.onrender.com';
-                }
-
-                // Default production backend
                 return 'https://crowd-backend-zxxp.onrender.com';
             })(),
             RETRY_ATTEMPTS: 3,
@@ -787,14 +782,29 @@
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
-            // Pure database authentication check
-            const isAuthenticated = await checkAuthenticationStatus();
-            if (!isAuthenticated) {
-                window.location.href = 'login.html';
-                return;
+            // Use shared authentication utilities for consistent auth across pages
+            if (window.authUtils) {
+                const isAuthenticated = await window.authUtils.isAuthenticated();
+                if (!isAuthenticated) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Load and display user data using auth-utils
+                const user = await window.authUtils.getCurrentUser();
+                if (user) {
+                    window.authUtils.updateUserInterfaceElements(user);
+                }
+            } else {
+                // Fallback authentication check
+                const isAuthenticated = await checkAuthenticationStatus();
+                if (!isAuthenticated) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                await loadUserData();
             }
 
-            await loadUserData();
             await loadEventData();
             loadTickets();
             initializeForm();
@@ -1016,7 +1026,12 @@
         }
 
         function getAuthToken() {
-            // Get from URL parameters first (for direct links)
+            // Use shared auth-utils for consistent token management
+            if (window.authUtils) {
+                return window.authUtils.getAuthToken();
+            }
+
+            // Fallback to inline implementation
             const urlParams = new URLSearchParams(window.location.search);
             let token = urlParams.get('token');
 
