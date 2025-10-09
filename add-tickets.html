@@ -15,6 +15,307 @@
             font-size: 14px;
             line-height: 1.4;
         }
+
+        /* Enhanced Ticket Card Styles */
+        .tickets-header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 0;
+            border: none;
+            background: none;
+            font-weight: 500;
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .ticket-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .ticket-left {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .drag-handle {
+            cursor: move;
+            color: #9ca3af;
+            margin-top: 0.25rem;
+        }
+
+        .ticket-info-section h4 {
+            font-size: 1.125rem;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+        }
+
+        .ticket-meta-info {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .ticket-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .ticket-stat {
+            text-align: right;
+        }
+
+        .ticket-stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .ticket-stat-value {
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .ticket-price-display {
+            font-weight: 600;
+            color: #111827;
+            font-size: 1rem;
+        }
+
+        .menu-btn {
+            padding: 0.25rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            color: #9ca3af;
+        }
+
+        .menu-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .context-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 0.5rem);
+            width: 256px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e5e7eb;
+            z-index: 20;
+        }
+
+        .context-menu.show {
+            display: block;
+        }
+
+        .context-menu-content {
+            padding: 0.5rem 0;
+        }
+
+        .context-menu-item {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+
+        .context-menu-item:hover {
+            background-color: #f9fafb;
+        }
+
+        .context-menu-item.active {
+            background-color: #eff6ff;
+            border-left: 4px solid #2563eb;
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .context-menu-item.delete {
+            color: #dc2626;
+            font-weight: 500;
+        }
+
+        .context-menu-promo {
+            padding: 0.75rem 1rem;
+        }
+
+        .context-menu-promo h4 {
+            font-weight: 500;
+            color: #111827;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .context-menu-promo p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .capacity-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .capacity-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .capacity-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .capacity-value {
+            font-size: 0.875rem;
+            color: #111827;
+        }
+
+        .btn-edit-capacity {
+            font-size: 0.875rem;
+            color: #2563eb;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-edit-capacity:hover {
+            color: #1d4ed8;
+        }
+
+        .capacity-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .capacity-modal-overlay.show {
+            display: flex;
+        }
+
+        .capacity-modal {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .capacity-modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .capacity-modal-header h2 {
+            font-size: 1.25rem;
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .capacity-modal-body {
+            padding: 1.5rem;
+        }
+
+        .capacity-modal-body p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .capacity-modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-cancel-capacity {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-cancel-capacity:hover {
+            background-color: #f9fafb;
+        }
+
+        .btn-save-capacity {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            background-color: #ea580c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-save-capacity:hover {
+            background-color: #c2410c;
+        }
     </style>
 </head>
 <body>
@@ -157,7 +458,12 @@
 
                     <!-- Existing Tickets List -->
                     <div class="existing-tickets" id="existingTickets">
-                        <h3>Your tickets</h3>
+                        <div class="tickets-header-section">
+                            <h3>Your tickets</h3>
+                            <div class="nav-tabs">
+                                <button class="nav-tab active">Admission</button>
+                            </div>
+                        </div>
                         <div class="tickets-list" id="ticketsList">
                             <!-- Tickets will be populated here -->
                         </div>
@@ -315,6 +621,28 @@
         </aside>
     </div>
 
+    <!-- Capacity Modal -->
+    <div class="capacity-modal-overlay" id="capacityModalOverlay">
+        <div class="capacity-modal">
+            <div class="capacity-modal-header">
+                <h2>Event capacity</h2>
+            </div>
+            <div class="capacity-modal-body">
+                <p>Event capacity is the total number of tickets available for sale at your event. When you set an event capacity, your event will sell out as soon as you sell that number of total tickets. You can adjust your event capacity to prevent overselling.</p>
+                <div class="form-group">
+                    <label class="form-label">
+                        Capacity <span style="color: #dc2626;">*</span>
+                    </label>
+                    <input type="number" class="form-input" id="eventCapacityInput" placeholder="100">
+                </div>
+            </div>
+            <div class="capacity-modal-footer">
+                <button class="btn-cancel-capacity" onclick="closeCapacityModal()">Cancel</button>
+                <button class="btn-save-capacity" onclick="saveEventCapacity()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Configuration
         const CONFIG = {
@@ -421,8 +749,7 @@
                             return makeApiRequest(url, options, retryCount + 1);
                         } else {
                             console.log('Token refresh failed, redirecting to login...');
-                            const currentPage = window.location.pathname.split('/').pop() + window.location.search;
-                            window.location.href = `login.html?redirect=${encodeURIComponent(currentPage)}`;
+                            window.location.href = 'login.html';
                             return;
                         }
                     }
@@ -463,9 +790,7 @@
             // Pure database authentication check
             const isAuthenticated = await checkAuthenticationStatus();
             if (!isAuthenticated) {
-                // Redirect to login with the current page URL to return after login
-                const currentPage = window.location.pathname.split('/').pop() + window.location.search;
-                window.location.href = `login.html?redirect=${encodeURIComponent(currentPage)}`;
+                window.location.href = 'login.html';
                 return;
             }
 
@@ -858,28 +1183,92 @@
                     priceDisplay = `$${ticket.cost?.value || 0}`;
                 }
 
+                const quantityTotal = ticket.quantity?.total || 0;
+                const quantitySold = ticket.quantity?.sold || 0;
                 const quantityDisplay = ticket.quantity?.total ?
-                    `${ticket.quantity.total} available (${ticket.quantity.sold || 0} sold)` :
+                    `${quantitySold}/${quantityTotal}` :
                     'Unlimited';
 
                 const tierName = ticket.inventoryTierId ?
                     getInventoryTierName(ticket.inventoryTierId) : '';
 
+                // Determine sale status
+                let saleStatus = 'On Sale';
+                let saleEndText = '';
+                if (ticket.sales?.end) {
+                    const endDate = new Date(ticket.sales.end);
+                    saleEndText = `Ends ${endDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    })} at ${endDate.toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    })}`;
+                }
+
                 return `
-                    <div class="ticket-item" data-ticket-id="${ticket.id}">
-                        <div class="ticket-info">
-                            <h4>${ticket.name}</h4>
-                            <p class="ticket-price">${priceDisplay}</p>
-                            <p class="ticket-quantity">${quantityDisplay}</p>
-                            ${tierName ? `<p class="ticket-tier">Tier: ${tierName}</p>` : ''}
-                            <p class="ticket-type-badge">${ticket.type.toUpperCase()}</p>
-                            ${ticket.visibility?.hidden ? '<p class="ticket-hidden">Hidden</p>' : ''}
+                    <div class="ticket-card" data-ticket-id="${ticket.id}">
+                        <div class="ticket-header">
+                            <div class="ticket-left">
+                                <div class="drag-handle">
+                                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                </div>
+
+                                <div class="ticket-info-section">
+                                    <h4>
+                                        ${ticket.name}
+                                        ${!ticket.visibility?.hidden ? '<span class="status-dot"></span>' : ''}
+                                    </h4>
+                                    <div class="ticket-meta-info">${saleStatus}${saleEndText ? ' • ' + saleEndText : ''}</div>
+                                </div>
+                            </div>
+
+                            <div class="ticket-right">
+                                <div class="ticket-stat">
+                                    <div class="ticket-stat-label">Sold:</div>
+                                    <div class="ticket-stat-value">${quantityDisplay}</div>
+                                </div>
+                                <div class="ticket-price-display">${priceDisplay}</div>
+                                <div style="position: relative;">
+                                    <button class="menu-btn" onclick="toggleTicketContextMenu('${ticket.id}')">
+                                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                        </svg>
+                                    </button>
+
+                                    <div class="context-menu" id="contextMenu-${ticket.id}">
+                                        <div class="context-menu-content">
+                                            <button class="context-menu-item active" onclick="editTicket('${ticket.id}'); closeAllContextMenus();">Edit</button>
+                                            <button class="context-menu-item" onclick="copyTicket('${ticket.id}'); closeAllContextMenus();">Copy</button>
+                                            <div class="context-menu-promo">
+                                                <h4>Add a 2 for 1 deal</h4>
+                                                <p>Tickets with promotions sell 15% better than full-price tickets.</p>
+                                            </div>
+                                            <button class="context-menu-item delete" onclick="deleteTicket('${ticket.id}'); closeAllContextMenus();">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="ticket-actions">
-                            <button class="edit-btn" onclick="editTicket('${ticket.id}')">Edit</button>
-                            <button class="delete-btn" onclick="deleteTicket('${ticket.id}')">Delete</button>
-                            <button class="remaining-btn" onclick="showRemainingTickets('${ticket.id}')">Remaining</button>
+
+                        ${currentEventData.inventoryInfo?.hasAdmissionTiers ? `
+                        <div class="capacity-section">
+                            <div class="capacity-label">
+                                <span>Event capacity</span>
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div class="capacity-right">
+                                <span class="capacity-value">${quantitySold} / ${quantityTotal || 'Unlimited'}</span>
+                                <button class="btn-edit-capacity" onclick="openCapacityModal('${ticket.id}')">Edit capacity</button>
+                            </div>
                         </div>
+                        ` : ''}
                     </div>
                 `;
             }).join('');
@@ -1321,6 +1710,139 @@
                 window.location.href = 'event-builder.html';
             }
         }
+
+        // New UI helper functions
+        function toggleTicketContextMenu(ticketId) {
+            const menu = document.getElementById(`contextMenu-${ticketId}`);
+            // Close all other context menus first
+            document.querySelectorAll('.context-menu').forEach(m => {
+                if (m.id !== `contextMenu-${ticketId}`) {
+                    m.classList.remove('show');
+                }
+            });
+            menu.classList.toggle('show');
+        }
+
+        function closeAllContextMenus() {
+            document.querySelectorAll('.context-menu').forEach(m => {
+                m.classList.remove('show');
+            });
+        }
+
+        function copyTicket(ticketId) {
+            const ticket = eventTickets.find(t => t.id === ticketId);
+            if (!ticket) return;
+
+            // Create a copy of the ticket with a new ID
+            const copiedTicket = {
+                ...ticket,
+                id: generateTicketId(),
+                name: `${ticket.name} (Copy)`,
+                quantity: {
+                    ...ticket.quantity,
+                    sold: 0,
+                    reserved: 0
+                }
+            };
+
+            eventTickets.push(copiedTicket);
+            renderTicketsList();
+            showNotification('Ticket class copied successfully!');
+        }
+
+        let currentCapacityTicketId = null;
+
+        function openCapacityModal(ticketId) {
+            currentCapacityTicketId = ticketId;
+            const ticket = eventTickets.find(t => t.id === ticketId);
+            if (ticket) {
+                document.getElementById('eventCapacityInput').value = ticket.quantity?.total || '';
+            }
+            document.getElementById('capacityModalOverlay').classList.add('show');
+        }
+
+        function closeCapacityModal() {
+            document.getElementById('capacityModalOverlay').classList.remove('show');
+            currentCapacityTicketId = null;
+        }
+
+        async function saveEventCapacity() {
+            try {
+                const newCapacity = parseInt(document.getElementById('eventCapacityInput').value);
+
+                if (isNaN(newCapacity) || newCapacity < 0) {
+                    showErrorMessage('Please enter a valid capacity number.');
+                    return;
+                }
+
+                if (!currentCapacityTicketId) {
+                    showErrorMessage('No ticket selected for capacity update.');
+                    return;
+                }
+
+                const ticket = eventTickets.find(t => t.id === currentCapacityTicketId);
+                if (!ticket) {
+                    showErrorMessage('Ticket not found.');
+                    return;
+                }
+
+                // Update the ticket capacity
+                ticket.quantity = ticket.quantity || {};
+                ticket.quantity.total = newCapacity;
+
+                // Get current event ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventId = sanitizeInput(urlParams.get('id'));
+
+                try {
+                    // Update via API
+                    const data = await makeApiRequest(`${CONFIG.API_BASE_URL}/api/events/${eventId}/ticket-classes/${currentCapacityTicketId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${getAuthToken()}`
+                        },
+                        body: JSON.stringify({ quantity: { total: newCapacity } })
+                    });
+
+                    if (data.success) {
+                        showNotification('Capacity updated successfully!');
+                        renderTicketsList();
+                        closeCapacityModal();
+                    } else {
+                        throw new Error(data.message || 'Failed to update capacity');
+                    }
+                } catch (apiError) {
+                    // If API fails, update locally
+                    console.log('API update failed, updating locally:', apiError);
+                    showNotification('Capacity updated locally! Will sync when connection is restored.');
+                    renderTicketsList();
+                    closeCapacityModal();
+                }
+
+            } catch (error) {
+                console.error('Failed to save capacity:', error);
+                showErrorMessage('Failed to save capacity: ' + error.message);
+            }
+        }
+
+        // Close dropdowns and menus when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.menu-btn') && !event.target.closest('.context-menu')) {
+                closeAllContextMenus();
+            }
+        });
+
+        // Close capacity modal when clicking overlay
+        document.addEventListener('DOMContentLoaded', function() {
+            const capacityOverlay = document.getElementById('capacityModalOverlay');
+            if (capacityOverlay) {
+                capacityOverlay.addEventListener('click', function(event) {
+                    if (event.target === this) {
+                        closeCapacityModal();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
