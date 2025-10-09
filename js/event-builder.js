@@ -655,12 +655,27 @@ class EventBuilderAPI {
             delete dataToSend.country;
             delete dataToSend.zipCode;
 
-            // Remove undefined/null values
-            Object.keys(dataToSend).forEach(key => {
-                if (dataToSend[key] === undefined || dataToSend[key] === null) {
-                    delete dataToSend[key];
-                }
-            });
+            // Remove undefined/null values recursively
+            const cleanNullValues = (obj) => {
+                if (obj === null || obj === undefined) return undefined;
+                if (typeof obj !== 'object') return obj;
+                if (Array.isArray(obj)) return obj;
+
+                Object.keys(obj).forEach(key => {
+                    if (obj[key] === undefined || obj[key] === null) {
+                        delete obj[key];
+                    } else if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                        cleanNullValues(obj[key]);
+                        // Remove empty objects
+                        if (Object.keys(obj[key]).length === 0) {
+                            delete obj[key];
+                        }
+                    }
+                });
+                return obj;
+            };
+
+            cleanNullValues(dataToSend);
 
             console.log('Saving event (cleaned):', dataToSend);
             console.log('Category removed:', !('category' in dataToSend));
